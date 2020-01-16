@@ -159,6 +159,9 @@
     <ClInclude Include="tileNode.h">
       <Filter>playGround\A%2aScene</Filter>
     </ClInclude>
+    <ClInclude Include="jump.h">
+      <Filter>playGround\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -240,6 +243,9 @@
       <Filter>playGround\player</Filter>
     </ClCompile>
     <ClCompile Include="playerTestTile.cpp">
+      <Filter>playGround\player</Filter>
+    </ClCompile>
+    <ClCompile Include="jump.cpp">
       <Filter>playGround\player</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,9 +1,10 @@
 #pragma once
 #include "gameNode.h"
 #include "animation.h"
+#include "jump.h"
 #include "action.h"		    // 보간개념 이동할때 사용하기 위한 
 
-enum PLAYERSTATE
+enum PLAYERSTATE	// (미사용) 추후 수정 예정 
 {
 	PLAYERSTATE_LEFTSTOP,
 	PLAYERSTATE_RIGHTSTOP,
@@ -15,9 +16,11 @@ enum PLAYERSTATE
 
 struct tagPlayer
 {
-	animation* ani;		 	// 애니매이션
+	animation* headAni;		// 머리 애니매이션
+	animation* bodyAni;		// 몸   애니매이션 
 	PLAYERSTATE state;		// 플레이어의 상태
-	image* image;			// 이미지 
+	image* headImage;		// 머리 이미지 
+	image* bodyImage;		// 몸통 
 	RECT rc;				// RECT
 	float x, y;				// 좌표 X,Y  
 	int idx, idy;			// 타일의 인덱스 번호 
@@ -29,16 +32,17 @@ struct tagPlayer
 class player : public gameNode
 {
 private:
-	tagPlayer _head;	//  머리
-	tagPlayer _body;	//  몸 
+	tagPlayer _player;	//  머리
 
-	action* _action;
+	jump* _jump;		// 점프 
+	action* _action;    // 선형보간
 
-	float _distance;
-	float _time;
-	float _angle;
-	float _worldTimeCount;
-	bool _isMoving;
+	float _distance;	// 타일 중점 거리 
+	float _time;		// 시간 
+	float _angle;		// 각도 
+	float _worldTimeCount;	// 월드 타임 
+
+	bool _isMoving;			// BOOL 이동 
 public:
 	player();
 	~player();

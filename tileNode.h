@@ -1,5 +1,5 @@
 #pragma once
-#define TESTTILESIZE 26
+#define TESTTILESIZE 52
 
 #define TESTTILEX 30
 #define TESTTILEY 30
