@@ -162,9 +162,6 @@
     <ClInclude Include="tileNode.h">
       <Filter>playGround\A%2aScene</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy_Bat.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
@@ -202,6 +199,9 @@
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="EnemyManager.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

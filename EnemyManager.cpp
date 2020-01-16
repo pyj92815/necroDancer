@@ -4,6 +4,10 @@
 HRESULT EnemyManager::init()
 {
 	
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
+	{
+		(*_viEnemy)->init();
+	}
 	return S_OK;
 }
 
@@ -17,8 +21,10 @@ void EnemyManager::update()
 
 void EnemyManager::render()
 {
-	
-
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
+	{
+		(*_viEnemy)->render();
+	}
 }
 
 void EnemyManager::EnemyCreate()
@@ -27,7 +33,7 @@ void EnemyManager::EnemyCreate()
 
 void EnemyManager::EnemyCreate(float x, float y, const char* EnemyName)
 {
-
+	
 }
 
 void EnemyManager::imageReset()

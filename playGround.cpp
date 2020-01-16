@@ -33,6 +33,11 @@ HRESULT playGround::init()
 
 	_pm = new playerManager;
 	_pm->init();
+
+	_em = new EnemyManager;
+	_em->init();
+
+	
 	return S_OK;
 }
 
@@ -50,7 +55,7 @@ void playGround::update()
 	gameNode::update();
 
 	_pm->update();
-	
+	_em->update();
 
 }
 
@@ -61,6 +66,8 @@ void playGround::render()
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//===========================================================
 	_pm->render();
+	_em->render();
+	//ENEMYMANAGER->render(getMemDC());
 	//===========================================================
 	_backBuffer->render(getHDC(), 0, 0);
 }

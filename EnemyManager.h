@@ -1,5 +1,5 @@
 #pragma once
-#include"singletonBase.h"
+#include"gameNode.h"
 #include"Enemy_Bat.h"
 #include"Enemy_Bat_MiniBoss.h"
 #include"Enemy_Dragon.h"
@@ -12,9 +12,13 @@
 #include"Enemy_Slime_Orange.h"
 #include"Enemy_Warith.h"
 #include"Enemy_Zombie.h"
-class EnemyManager:public singletonBase<EnemyManager>
+#include<vector>
+class EnemyManager:public gameNode
 {
 private:
+	vector<Enemy*> _vEnemy;
+	vector<Enemy*>::iterator _viEnemy;
+
 public:
 	EnemyManager() {};
 	~EnemyManager() {};
