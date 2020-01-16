@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "animation.h"
+#include "action.h"		    // 보간개념 이동할때 사용하기 위한 
 
 enum PLAYERSTATE
 {
@@ -30,16 +31,24 @@ class player : public gameNode
 private:
 	tagPlayer _head;	//  머리
 	tagPlayer _body;	//  몸 
+
+	action* _action;
+
+	float _distance;
+	float _time;
+	float _angle;
+	float _worldTimeCount;
+	bool _isMoving;
 public:
 	player();
 	~player();
 
-	HRESULT init();
+	HRESULT init(int idx, int idy, int tileSizeX, int tileSizeY);
 	void release();
 	void update();
 	void render();
 
+	void playerMove();
 	void keyControl();
-	void setAnimation();
 };
 

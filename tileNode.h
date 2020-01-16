@@ -1,5 +1,13 @@
 #pragma once
+#define TESTTILESIZE 26
 
+#define TESTTILEX 30
+#define TESTTILEY 30
+
+
+
+
+//=========================================
 //한 타일의 사이즈는 32로 한다. 32 X 32
 #define TILESIZE 32
 

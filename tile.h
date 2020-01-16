@@ -4,6 +4,8 @@
 class tile : public gameNode
 {
 private:
+	image* _image;		 // 플레이어 테스트 
+
 	int _idX;
 	int _idY;
 
@@ -30,9 +32,12 @@ public:
 	~tile();
 
 	HRESULT init(int idX, int idY);
+	HRESULT init(const char* imageName, int idX, int idY, int tileWidth, int tileHeight);  // 플레이어 테스트 
 	void release();
 	void update();
 	void render();
+	void render(HDC hdc);  // 플레이어 테스트 렌더
+
 
 	int getIdX() { return _idX; }
 	int getIdY() { return _idY; }
