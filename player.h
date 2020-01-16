@@ -42,7 +42,8 @@ private:
 	float _angle;		// 각도 
 	float _worldTimeCount;	// 월드 타임 
 
-	bool _isMoving;			// BOOL 이동 
+	bool _isMoving;			// BOOL 선형보간이동
+	bool _isKeyPress;		// KEY 입력중 판단 
 public:
 	player();
 	~player();

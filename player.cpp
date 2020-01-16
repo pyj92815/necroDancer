@@ -61,6 +61,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_jump = new jump;
 	_jump->init();
 
+	_isKeyPress = false;     // key 눌렸을때를 판단하는 
 	return S_OK;
 }
 
@@ -105,59 +106,67 @@ void player::playerMove()
 		_player.x = _player.idx * _distance + (_distance / 2);
 		_player.y = _player.idy * _distance + (_distance / 2);
 
-		_isMoving = false;
+		_isMoving = false;	  // 선형 보간 
+		_isKeyPress = false;  // key 입력 초기화 
 	}
 }
 
 void player::keyControl()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	if (!_isKeyPress)
 	{
-		_player.idy--;	// 좌표Y값--
+		if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		{
+			_player.idy--;			// 좌표Y값--
+			_isKeyPress = true;		// key 입력 
+			//선형보간
+			_angle = getAngle(_player.x, _player.y, _player.x, _player.y - _distance);  // 방향 
+			_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
+			_isMoving = true;															// MOVE
 
-		_angle = getAngle(_player.x, _player.y, _player.x, _player.y - _distance);  // 방향 
-		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
-		_isMoving = true;															// MOVE
+			_jump->jumping(&_player.x, &_player.y, 2, 1, true); //점프 
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+		{
+			_player.idy++;	// 좌표Y값++
+			_isKeyPress = true;		// key 입력 
+			//선형보간
+			_angle = getAngle(_player.x, _player.y, _player.x, _player.y + _distance);  // 방향 
+			_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
+			_isMoving = true;															// MOVE
 
-		_jump->jumping(&_player.x, &_player.y, 2, 1, true); //점프 
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
-	{
-		_player.idy++;	// 좌표Y값++
-		//선형보간
-		_angle = getAngle(_player.x, _player.y, _player.x, _player.y + _distance);  // 방향 
-		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
-		_isMoving = true;															// MOVE
+			_jump->jumping(&_player.x, &_player.y, 8, 1);	//점프 
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			_isKeyPress = true;		// key 입력 
+			//이미지 관련
+			_player.headAni = KEYANIMANAGER->findAnimation("headLeft");
+			_player.bodyAni = KEYANIMANAGER->findAnimation("bodyLeft");
+			_player.headAni->start();
+			_player.bodyAni->start();
+			_player.idx--;	// 좌표 X값--
+			//선형보간
+			_angle = getAngle(_player.x, _player.y, _player.x - _distance, _player.y);	// 방향 
+			_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
+			_isMoving = true;															// MOVE
 
-		_jump->jumping(&_player.x, &_player.y, 8, 1);	//점프 
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
-	{
-		//이미지 관련
-		_player.headAni = KEYANIMANAGER->findAnimation("headLeft");
-		_player.bodyAni = KEYANIMANAGER->findAnimation("bodyLeft");
-		_player.headAni->start();
-		_player.bodyAni->start();
-		_player.idx--;	// 좌표 X값--
-		//선형보간
-		_angle = getAngle(_player.x, _player.y, _player.x - _distance, _player.y);	// 방향 
-		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
-		_isMoving = true;															// MOVE
-
-		_jump->jumping(&_player.x, &_player.y, 6, 1);	//점프 
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
-	{
-		//이미지 관련
-		_player.headAni = KEYANIMANAGER->findAnimation("headRight");
-		_player.bodyAni = KEYANIMANAGER->findAnimation("bodyRight");
-		_player.headAni->start();
-		_player.bodyAni->start();
-		_player.idx++;	// 좌표 X값++
-		//선형보간
-		_angle = getAngle(_player.x, _player.y, _player.x + _distance, _player.y);  // 방향 
-		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
-		_isMoving = true;															// MOVE
-		_jump->jumping(&_player.x, &_player.y, 6, 1);	// 점프
+			_jump->jumping(&_player.x, &_player.y, 6, 1);	//점프 
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			_isKeyPress = true;		// key 입력 
+			//이미지 관련
+			_player.headAni = KEYANIMANAGER->findAnimation("headRight");
+			_player.bodyAni = KEYANIMANAGER->findAnimation("bodyRight");
+			_player.headAni->start();
+			_player.bodyAni->start();
+			_player.idx++;	// 좌표 X값++
+			//선형보간
+			_angle = getAngle(_player.x, _player.y, _player.x + _distance, _player.y);  // 방향 
+			_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
+			_isMoving = true;															// MOVE
+			_jump->jumping(&_player.x, &_player.y, 6, 1);	// 점프
+		}
 	}
 }
