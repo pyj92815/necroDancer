@@ -158,11 +158,10 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Enemy_Bat.h" />
-    <ClInclude Include="Enemy_Bat_MiniBoss.h" />
+    <ClInclude Include="Enemy_Boss.h" />
     <ClInclude Include="Enemy_Dragon.h" />
     <ClInclude Include="Enemy_Ghost.h" />
     <ClInclude Include="Enemy_Minotaur.h" />
-    <ClInclude Include="Enemy_Monkey.h" />
     <ClInclude Include="Enemy_Skeleton.h" />
     <ClInclude Include="Enemy_Skeleton_Yellow.h" />
     <ClInclude Include="Enemy_Slime_Blue.h" />
@@ -207,11 +206,10 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Enemy_Bat.cpp" />
-    <ClCompile Include="Enemy_Bat_MiniBoss.cpp" />
+    <ClCompile Include="Enemy_Boss.cpp" />
     <ClCompile Include="Enemy_Dragon.cpp" />
     <ClCompile Include="Enemy_Ghost.cpp" />
     <ClCompile Include="Enemy_Minotaur.cpp" />
-    <ClCompile Include="Enemy_Monkey.cpp" />
     <ClCompile Include="Enemy_Skeleton.cpp" />
     <ClCompile Include="Enemy_Skeleton_Yellow.cpp" />
     <ClCompile Include="Enemy_Slime_Blue.cpp" />
