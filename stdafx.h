@@ -37,8 +37,8 @@ using namespace SEVENTEEN_UTIL;
 #define WINNAME (LPCTSTR)(TEXT("SevenTeen Class"))
 #define WINSTARTX 50
 #define WINSTARTY 50
-#define WINSIZEX 960
-#define WINSIZEY 540
+#define WINSIZEX 780
+#define WINSIZEY 780
 #define WINSTYLE WS_CAPTION | WS_SYSMENU
 
 #define RND randomFunction::getSingleton()

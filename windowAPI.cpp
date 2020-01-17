@@ -87,7 +87,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		}
 	}
 	
-
 	//루프문이 다돌면 플레이그라운드 해제
 	_pg.release();
 	UnregisterClass(WINNAME, hInstance);
@@ -116,4 +115,5 @@ void setWindowsSize(int x, int y, int width, int height)
 		(winRect.right - winRect.left),
 		(winRect.bottom - winRect.top),
 		SWP_NOZORDER | SWP_NOMOVE);
+
 }

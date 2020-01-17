@@ -32,9 +32,28 @@ HRESULT tile::init(int idX, int idY)
 	return S_OK;
 }
 
+HRESULT tile::init(const char* imageName, int idX, int idY, int tileWidth, int tileHeight)
+{
+	_image = IMAGEMANAGER->findImage(imageName);
+	_color = RGB(0, 0, 0);
+	_brush = CreateSolidBrush(_color);
+	_pen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
+
+	_center = PointMake(idX * tileWidth + (tileWidth / 2),
+		idY * tileHeight + (tileHeight / 2));
+
+	_idX = idX;
+	_idY = idY;
+
+	_rc = RectMakeCenter(_center.x, _center.y, tileWidth, tileHeight);
+
+	return S_OK;
+}
+
 void tile::release()
 {
 	DeleteObject(_brush);
+
 	DeleteObject(_pen);
 }
 
@@ -49,4 +68,32 @@ void tile::render()
 
 	SelectObject(getMemDC(), (HPEN)_pen);
 	RectangleMake(getMemDC(), _rc.left, _rc.top, _rc.right, _rc.bottom);
+}
+
+void tile::render(HDC hdc)
+{
+	RectangleMake(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
+	
+	if ((_idY + (int)TIMEMANAGER->getWorldTime()) % 2 == 0)
+	{
+		if (_idX % 2 == 0)
+		{
+			_image->frameRender(hdc, _rc.left, _rc.top, 0, 0);
+		}
+		else if (_idX % 2 == 1)
+		{
+			_image->frameRender(hdc, _rc.left, _rc.top, 2, 0);
+		}
+	}
+	else
+	{
+		if (_idX % 2 == 0)
+		{
+			_image->frameRender(hdc, _rc.left, _rc.top, 2, 0);
+		}
+		else if (_idX % 2 == 1)
+		{
+			_image->frameRender(hdc, _rc.left, _rc.top, 0, 0);
+		}
+	}
 }
