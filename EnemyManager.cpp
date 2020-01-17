@@ -51,3 +51,10 @@ void EnemyManager::imageReset()
 	IMAGEMANAGER->addFrameImage("Enemy_wraith", "./image./Enemy/wraith.bmp", 72, 48, 3, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_zombie", "./image./Enemy/zombie.bmp", 576, 50, 24, 2, true, RGB(255, 0, 255));
 }
+
+
+
+
+
+
+// ==================================================================================================================================
