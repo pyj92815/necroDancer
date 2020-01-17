@@ -171,9 +171,6 @@
     <ClInclude Include="Enemy_Bat.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy_Bat_MiniBoss.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy_Dragon.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
@@ -184,9 +181,6 @@
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Enemy_Skeleton.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Monkey.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Enemy_Skeleton_Yellow.h">
@@ -205,6 +199,9 @@
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="EnemyManager.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Boss.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
@@ -296,9 +293,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy_Bat_MiniBoss.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy_Bat.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
@@ -306,9 +300,6 @@
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Enemy_Dragon.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Monkey.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Enemy_Minotaur.cpp">
@@ -333,6 +324,9 @@
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Boss.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
