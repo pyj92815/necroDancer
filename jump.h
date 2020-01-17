@@ -13,6 +13,7 @@ private:
 	float _startX, _startY;
 
 	bool _isJumping;
+	bool _isUpJumping;
 
 public:
 	jump();
@@ -23,6 +24,6 @@ public:
 	void update();
 	void render();
 
-	void jumping(float* x, float* y, float jumpPower, float gravity);
+	void jumping(float* x, float* y, float jumpPower, float gravity, bool upJump = false);
 };
 
