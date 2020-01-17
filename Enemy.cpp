@@ -3,7 +3,6 @@
 
 HRESULT Enemy::init()
 {
-	
 	return S_OK;
 }
 

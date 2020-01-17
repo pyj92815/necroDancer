@@ -116,7 +116,6 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 				case VK_ESCAPE:
 					PostQuitMessage(0);
 				break;
-
 			}
 		}
 		break;

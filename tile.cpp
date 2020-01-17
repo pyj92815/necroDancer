@@ -47,6 +47,8 @@ HRESULT tile::init(const char* imageName, int idX, int idY, int tileWidth, int t
 
 	_rc = RectMakeCenter(_center.x, _center.y, tileWidth, tileHeight);
 
+	_alphaValue = 255;  // 
+
 	return S_OK;
 }
 
@@ -72,28 +74,28 @@ void tile::render()
 
 void tile::render(HDC hdc)
 {
-	RectangleMake(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
+	//RectangleMake(hdc, _rc.left, _rc.top, _rc.right, _rc.bottom);
 	
 	if ((_idY + (int)TIMEMANAGER->getWorldTime()) % 2 == 0)
 	{
 		if (_idX % 2 == 0)
 		{
-			_image->frameRender(hdc, _rc.left, _rc.top, 0, 0);
+			_image->alphaFrameRender(hdc, _rc.left, _rc.top, 0, 0, _alphaValue);
 		}
 		else if (_idX % 2 == 1)
 		{
-			_image->frameRender(hdc, _rc.left, _rc.top, 2, 0);
+			_image->alphaFrameRender(hdc, _rc.left, _rc.top, 2, 0, _alphaValue);
 		}
 	}
 	else
 	{
 		if (_idX % 2 == 0)
 		{
-			_image->frameRender(hdc, _rc.left, _rc.top, 2, 0);
+			_image->alphaFrameRender(hdc, _rc.left, _rc.top, 2, 0,_alphaValue);
 		}
 		else if (_idX % 2 == 1)
 		{
-			_image->frameRender(hdc, _rc.left, _rc.top, 0, 0);
+			_image->alphaFrameRender(hdc, _rc.left, _rc.top, 0, 0,_alphaValue);
 		}
 	}
 }

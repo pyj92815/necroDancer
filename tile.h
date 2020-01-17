@@ -27,6 +27,8 @@ private:
 
 	const char* _attribute;	//타일속성
 
+	int _alphaValue;		// 알파블랜더 값 
+
 public:
 	tile();
 	~tile();
@@ -38,9 +40,11 @@ public:
 	void render();
 	void render(HDC hdc);  // 플레이어 테스트 렌더
 
-
 	int getIdX() { return _idX; }
 	int getIdY() { return _idY; }
+
+	int getAlphaValue() { return _alphaValue; }
+	void setAlphaValue(int value) { _alphaValue = value; }
 
 	void setColor(COLORREF color)
 	{

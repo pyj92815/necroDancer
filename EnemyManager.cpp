@@ -3,7 +3,6 @@
 
 HRESULT EnemyManager::init()
 {
-	
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->init();
@@ -17,6 +16,7 @@ void EnemyManager::release()
 
 void EnemyManager::update()
 {
+	
 }
 
 void EnemyManager::render()

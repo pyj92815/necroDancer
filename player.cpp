@@ -17,6 +17,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 
 	// 플레이어 상태
 	_player.state = PLAYERSTATE_RIGHT;
+	_player.sight = 1;
 
 	//오른쪽 
 	int headRight[] = { 0,1,2,3,4,5,6,7 };
@@ -126,7 +127,7 @@ void player::keyControl()
 
 			_jump->jumping(&_player.x, &_player.y, 2, 1, true); //점프 
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+		else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
 			_player.idy++;	// 좌표Y값++
 			_isKeyPress = true;		// key 입력 
@@ -137,7 +138,7 @@ void player::keyControl()
 
 			_jump->jumping(&_player.x, &_player.y, 8, 1);	//점프 
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		else if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
 			_isKeyPress = true;		// key 입력 
 			//이미지 관련
@@ -153,7 +154,7 @@ void player::keyControl()
 
 			_jump->jumping(&_player.x, &_player.y, 6, 1);	//점프 
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
 			_isKeyPress = true;		// key 입력 
 			//이미지 관련

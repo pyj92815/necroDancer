@@ -5,13 +5,14 @@
 struct info
 {
 	image* image;
-
 };
+
 class Enemy:public gameNode
 {
 protected:
 	vector<info> _vInfo;
 	vector<info>::iterator _viInfo;
+
 
 public:
 	Enemy() {};

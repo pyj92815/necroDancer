@@ -4,11 +4,12 @@
 HRESULT playerManager::init()
 {
 	// ¹Ù´Ú Å×½ºÆ® 
-	IMAGEMANAGER->addFrameImage("floor", "./image/player/floor.bmp", 156, 104, 3, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("floor", "./image/player/floor.bmp", 156, 104, 3, 2, true, RGB(255, 0, 255),true);
 	_player = new player;
 	_player->init(10,10,TESTTILESIZE, TESTTILESIZE);
 
 	_ptt = new playerTestTile;
+	_ptt->setPlayerAddressLink(_player);
 	_ptt->init();
 
 	return S_OK;

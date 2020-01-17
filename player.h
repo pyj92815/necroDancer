@@ -27,6 +27,7 @@ struct tagPlayer
 	int count;				// 프레임 카운터 
 	int currnetFrameX, currnetFrameY;	// 프레임 X,Y
 	int direction;			// 플레이어의 방향   1 ( 좌 , 우 ) 0 
+	int sight;				// 플레이어의 시야값 기본 1
 };
 
 class player : public gameNode
@@ -55,5 +56,7 @@ public:
 
 	void playerMove();
 	void keyControl();
+	//접근자 
+	tagPlayer getPlayer() { return _player; }	// 플레이어 값 반환 
+	int getSight() { return _player.sight; }	// 시야 값 반환 
 };
-

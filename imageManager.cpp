@@ -21,7 +21,7 @@ void imageManager::release()
 	deleteAll();
 }
 
-image* imageManager::addImage(string strKey, int width, int height)
+image* imageManager::addImage(string strKey, int width, int height, BOOL blend)
 {
 	image* img = findImage(strKey);
 
@@ -30,7 +30,7 @@ image* imageManager::addImage(string strKey, int width, int height)
 
 	img = new image;
 
-	if (FAILED(img->init(width, height)))
+	if (FAILED(img->init(width, height, blend)))
 	{
 		SAFE_DELETE(img);
 
@@ -42,7 +42,7 @@ image* imageManager::addImage(string strKey, int width, int height)
 	return img;
 }
 
-image * imageManager::addImage(string strKey, const char * fileName, int width, int height, bool trans, COLORREF transColor)
+image * imageManager::addImage(string strKey, const char * fileName, int width, int height, bool trans, COLORREF transColor, BOOL blend)
 {
 	image* img = findImage(strKey);
 
@@ -51,7 +51,7 @@ image * imageManager::addImage(string strKey, const char * fileName, int width, 
 
 	img = new image;
 
-	if (FAILED(img->init(fileName, width, height, trans, transColor)))
+	if (FAILED(img->init(fileName, width, height, trans, transColor, blend)))
 	{
 		SAFE_DELETE(img);
 
@@ -63,7 +63,7 @@ image * imageManager::addImage(string strKey, const char * fileName, int width, 
 	return img;
 }
 
-image * imageManager::addFrameImage(string strKey, const char * fileName, float x, float y, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor)
+image * imageManager::addFrameImage(string strKey, const char * fileName, float x, float y, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor, BOOL blend)
 {
 	image* img = findImage(strKey);
 
@@ -72,7 +72,7 @@ image * imageManager::addFrameImage(string strKey, const char * fileName, float 
 
 	img = new image;
 
-	if (FAILED(img->init(fileName, x, y, width, height, frameX, frameY, trans, transColor)))
+	if (FAILED(img->init(fileName, x, y, width, height, frameX, frameY, trans, transColor, blend)))
 	{
 		SAFE_DELETE(img);
 
@@ -84,7 +84,7 @@ image * imageManager::addFrameImage(string strKey, const char * fileName, float 
 	return img;
 }
 
-image * imageManager::addFrameImage(string strKey, const char * fileName, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor)
+image * imageManager::addFrameImage(string strKey, const char * fileName, int width, int height, int frameX, int frameY, bool trans, COLORREF transColor, BOOL blend)
 {
 	image* img = findImage(strKey);
 
@@ -93,7 +93,7 @@ image * imageManager::addFrameImage(string strKey, const char * fileName, int wi
 
 	img = new image;
 
-	if (FAILED(img->init(fileName, width, height, frameX, frameY, trans, transColor)))
+	if (FAILED(img->init(fileName, width, height, frameX, frameY, trans, transColor, blend)))
 	{
 		SAFE_DELETE(img);
 

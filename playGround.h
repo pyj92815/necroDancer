@@ -8,6 +8,7 @@ class playGround : public gameNode
 private:
 	playerManager* _pm;
 	EnemyManager* _em;
+
 public:
 	virtual HRESULT init();
 	virtual void release();
