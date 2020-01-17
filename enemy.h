@@ -24,6 +24,7 @@ public:
 	~Enemy() {};
 
 	virtual HRESULT init();
+	//virtual HRESULT init(int idx, int idy, string enemyName);
 	virtual void relase();
 	virtual void update();
 	virtual void render();
