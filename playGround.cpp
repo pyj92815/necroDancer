@@ -53,7 +53,7 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
-
+	KEYANIMANAGER->update();		// 플레이어 애니매이션 
 	_pm->update();
 	_em->update();
 

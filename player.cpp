@@ -71,7 +71,6 @@ void player::release()
 
 void player::update()
 {
-	KEYANIMANAGER->update();		// 플레이어 애니매이션 
 	_jump->update();				// JUMP
 	keyControl();					// KEY
 	playerMove();					// MOVE
