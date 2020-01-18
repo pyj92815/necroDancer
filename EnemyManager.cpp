@@ -66,9 +66,6 @@ void EnemyManager::EnemyCreate(float x, float y,EnemyType enemyType)
 	case EnemyType::ZOMBIE:
 		Enemy_Zombie_Create(x, y);
 		break;
-	case EnemyType::DEATH_METAL:
-		Enemy_Death_Metal_Create(x, y);
-		break;
 	default:
 		break;
 	}
@@ -143,13 +140,4 @@ void EnemyManager::Enemy_Zombie_Create(float x, float y)
 	Zombie = new Enemy_Zombie;
 	Zombie->init();
 	_vEnemy.push_back(Zombie);
-}
-
-void EnemyManager::Enemy_Death_Metal_Create(float x, float y)
-{
-	Enemy* Death_Metal;
-	Death_Metal = new Enemy_Boss;
-	Death_Metal->init();
-	_vEnemy.push_back(Death_Metal);
-
 }

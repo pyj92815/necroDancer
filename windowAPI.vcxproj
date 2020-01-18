@@ -151,8 +151,12 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStarScene.h" />
     <ClInclude Include="aStarTest.h" />
+    <ClInclude Include="boss.h" />
+    <ClInclude Include="bossStageScene.h" />
+    <ClInclude Include="bossStageTestTile.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="deathMetal.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="Enemy.h" />
@@ -184,6 +188,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
+    <ClInclude Include="slave.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -200,7 +205,11 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStarScene.cpp" />
     <ClCompile Include="aStarTest.cpp" />
+    <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bossStageScene.cpp" />
+    <ClCompile Include="bossStageTestTile.cpp" />
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="deathMetal.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="Enemy.cpp" />

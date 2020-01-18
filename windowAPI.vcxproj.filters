@@ -61,6 +61,18 @@
     <Filter Include="playGround\Enemy">
       <UniqueIdentifier>{73fb92ce-3f96-42ef-977c-b3a781e949da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\Boss">
+      <UniqueIdentifier>{1a7cd43a-529a-4ed0-853c-28e8a410d531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss File">
+      <UniqueIdentifier>{1611baaf-68be-4d2c-a0d8-6fb91130894e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss Stage Scene">
+      <UniqueIdentifier>{50e63f25-6357-40d7-855c-0ec54543d8fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss Stage Test Tile">
+      <UniqueIdentifier>{5ac5a0c0-fff0-4a03-83a4-7ac0bb4944dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -204,6 +216,21 @@
     <ClInclude Include="Enemy_Boss.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="boss.h">
+      <Filter>playGround\Boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="deathMetal.h">
+      <Filter>playGround\Boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slave.h">
+      <Filter>playGround\Boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageScene.h">
+      <Filter>playGround\Boss\boss Stage Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageTestTile.h">
+      <Filter>playGround\Boss\boss Stage Test Tile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -328,6 +355,18 @@
     </ClCompile>
     <ClCompile Include="Enemy_Boss.cpp">
       <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.cpp">
+      <Filter>playGround\Boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="deathMetal.cpp">
+      <Filter>playGround\Boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageScene.cpp">
+      <Filter>playGround\Boss\boss Stage Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageTestTile.cpp">
+      <Filter>playGround\Boss\boss Stage Test Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
