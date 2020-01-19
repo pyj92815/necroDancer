@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "playGround.h"
+
 #include <map>
 
 playGround::playGround()
@@ -11,11 +12,9 @@ playGround::~playGround()
 {
 }
 
-
 HRESULT playGround::init()
 {
 	gameNode::init(true);
-	
 	/*multimap<string, int> mm;
 
 
@@ -30,12 +29,8 @@ HRESULT playGround::init()
 	{
 		cout <<miter->first<<","<< miter->second << endl;
 	}*/
-
-	_pm = new playerManager;
-	_pm->init();
-
-	_em = new EnemyManager;
-	_em->init();
+	_sm = new scene_Manager;
+	_sm->init();
 
 	
 	return S_OK;
@@ -45,7 +40,7 @@ HRESULT playGround::init()
 void playGround::release()
 {
 	gameNode::release();
-
+	_sm->release();
 }
 
 
@@ -53,8 +48,7 @@ void playGround::update()
 {
 	gameNode::update();
 	KEYANIMANAGER->update();		// 플레이어 애니매이션 
-	_pm->update();
-	_em->update();
+	_sm->update();
 
 }
 
@@ -64,9 +58,9 @@ void playGround::render()
 {
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
 	//===========================================================
-	_pm->render();
-	_em->render();
-	//ENEMYMANAGER->render(getMemDC());
+
+	_sm->render();
 	//===========================================================
-	_backBuffer->render(getHDC(), 0, 0);
+	if(!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
+
 }

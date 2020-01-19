@@ -11,12 +11,21 @@ gameNode::~gameNode()
 {
 }
 
+void CallBackFunc(int event, int x, int y, int flags, void* userdata)
+{
+	if (event == CV_EVENT_MOUSEMOVE)
+	{
+		cout << "마우스 좌표" << "x:" << x << "y :" << y << endl;
+		_ptMouse.x = x;
+		_ptMouse.y = y;
+	}
+}
+
 HRESULT gameNode::init()
 {
 
 	_hdc = GetDC(_hWnd);
 	_managerInit = false;
-
 	
 	return S_OK;
 }
@@ -67,7 +76,6 @@ void gameNode::release()
 		KEYANIMANAGER->releaseSingleton();
 		INIDATAMANAGER->release();
 		INIDATAMANAGER->releaseSingleton();
-	
 	}
 
 	ReleaseDC(_hWnd, _hdc);
@@ -75,7 +83,7 @@ void gameNode::release()
 
 void gameNode::update()
 {
-	
+	cvSetMouseCallback(WINNAME, CallBackFunc, NULL); // 위치 좌표를 넣기 위한 값 
 	SOUNDMANAGER->update();
 }
 
@@ -108,7 +116,7 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 
 		
 		break;
-
+	
 		case WM_KEYDOWN:
 		{
 			switch (wParam)
@@ -128,3 +136,4 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 
 	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
+

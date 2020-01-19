@@ -61,11 +61,11 @@ void action::moveTo(image * image, float endX, float endY, float time)
 
 }
 
-void action::moveTo(image * image, float endX, float endY, float time, CALLBACK_FUNCTION cbFunction)
+void action::moveTo(image * image, float endX, float endY, float time, CALLBACK_FUNCTION_STUDY cbFunction)
 {
 	if (!_isMoving)
 	{
-		_callbackFunction = static_cast<CALLBACK_FUNCTION>(cbFunction);
+		_callbackFunction = static_cast<CALLBACK_FUNCTION_STUDY>(cbFunction);
 
 		_image = image;
 

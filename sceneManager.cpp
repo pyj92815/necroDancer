@@ -16,7 +16,7 @@ gameNode* sceneManager::_currentScene = NULL;
 HRESULT sceneManager::init()
 {
 	_currentScene = NULL;
-
+	_videoPlay = false;
 	return S_OK;
 }
 
@@ -48,7 +48,7 @@ void sceneManager::render()
 	if (_currentScene) _currentScene->render();
 }
 
-gameNode * sceneManager::addScene(string sceneName, gameNode * scene)
+gameNode* sceneManager::addScene(string sceneName, gameNode* scene)
 {
 	if(!scene) return nullptr;
 

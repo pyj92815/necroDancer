@@ -2,7 +2,7 @@
 #include "gameNode.h"
 
 //콜백함수 == 함수포인터
-typedef void(*CALLBACK_FUNCTION)(void);
+typedef void(*CALLBACK_FUNCTION_STUDY)(void);
 
 //<Functional> 라이브러리를 사용하면 글로벌 영역에 선언한 콜백함수에 매개변수를 사용할 수 있음.
 //std::bind, std::move, std::Function 
@@ -31,7 +31,7 @@ private:
 	POINT _btnDownFramePoint;
 	POINT _btnUpFramePoint;
 
-	CALLBACK_FUNCTION _callbackFunction;
+	CALLBACK_FUNCTION_STUDY _callbackFunction;
 
 public:
 	button();
@@ -39,7 +39,7 @@ public:
 
 	HRESULT init(const char* imageName, int x, int y,
 		POINT btnDownFramePoint, POINT btnUpFramePoint,
-		CALLBACK_FUNCTION cbFunction);
+		CALLBACK_FUNCTION_STUDY cbFunction);
 
 	void release();
 	void update();

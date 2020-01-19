@@ -11,9 +11,9 @@ button::~button()
 {
 }
 
-HRESULT button::init(const char * imageName, int x, int y, POINT btnDownFramePoint, POINT btnUpFramePoint, CALLBACK_FUNCTION cbFunction)
+HRESULT button::init(const char * imageName, int x, int y, POINT btnDownFramePoint, POINT btnUpFramePoint, CALLBACK_FUNCTION_STUDY cbFunction)
 {
-	_callbackFunction = static_cast<CALLBACK_FUNCTION>(cbFunction);
+	_callbackFunction = static_cast<CALLBACK_FUNCTION_STUDY>(cbFunction);
 
 	_direction = BUTTONDIRECTION_NULL;
 

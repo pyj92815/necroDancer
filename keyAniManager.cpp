@@ -61,7 +61,7 @@ void keyAniManager::addDefaultFrameAnimation(string animationKeyName, const char
 	animation* ani = new animation;
 
 	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
-	ani->setDefPlayFrame(reverse, loop, CALLBACK_FUNCTION(cbFunction));
+	ani->setDefPlayFrame(reverse, loop, CALLBACK_FUNCTION_STUDY(cbFunction));
 	ani->setFPS(fps);
 
 	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
@@ -100,7 +100,7 @@ void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char *
 	animation* ani = new animation;
 
 	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
-	ani->setPlayFrame(arr, arrLen, loop, CALLBACK_FUNCTION(cbFunction));
+	ani->setPlayFrame(arr, arrLen, loop, CALLBACK_FUNCTION_STUDY(cbFunction));
 	ani->setFPS(fps);
 
 	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
@@ -140,7 +140,7 @@ void keyAniManager::addCoordinateFrameAnimation(string animationKeyName, const c
 	animation* ani = new animation;
 
 	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
-	ani->setPlayFrame(start, end, reverse, loop, (CALLBACK_FUNCTION)cbFunction);
+	ani->setPlayFrame(start, end, reverse, loop, (CALLBACK_FUNCTION_STUDY)cbFunction);
 	ani->setFPS(fps);
 
 	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
