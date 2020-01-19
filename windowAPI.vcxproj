@@ -152,6 +152,8 @@
     <ClInclude Include="aStarScene.h" />
     <ClInclude Include="aStarTest.h" />
     <ClInclude Include="boss.h" />
+    <ClInclude Include="bossLibrary.h" />
+    <ClInclude Include="bossMove.h" />
     <ClInclude Include="bossStageScene.h" />
     <ClInclude Include="bossStageTestTile.h" />
     <ClInclude Include="button.h" />
@@ -206,6 +208,7 @@
     <ClCompile Include="aStarScene.cpp" />
     <ClCompile Include="aStarTest.cpp" />
     <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bossMove.cpp" />
     <ClCompile Include="bossStageScene.cpp" />
     <ClCompile Include="bossStageTestTile.cpp" />
     <ClCompile Include="button.cpp" />

@@ -2,7 +2,7 @@
 #include "boss.h"
 
 boss::boss()
-	: hp(0), shield(0), attack(0), magicAttack(0), skill_Casting_Cnt(0)
+	: hp(0), shield(0), attack(0), magicAttack(0), skill_Casting_Cnt(0), angle(0), speed(0), worldTime(0)
 {
 }
 
@@ -16,7 +16,7 @@ HRESULT boss::init(string bossName, int _idx, int _idy, int _tileSizeX, int _til
 	findBossType(bossName);											// 보스의 타입을 저장한다.
 	findBossImage();												// 보스의 타입을 이용하여 이미지를 찾아 넣는다.
 	settingBossPos(_idx, _idy, _tileSizeX, _tileSizeY);				// 보스의 좌표 변수들을 초기화 한다.
-	settingBossBaseState();											// 보스의 기본 상태 초기화
+	settingBossMoveVariable(_tileSizeX, _tileSizeY);				// 보스의 이동에 필요한 변수를 초기화한다.
 
 	return S_OK;
 }
@@ -31,12 +31,19 @@ void boss::update()
 
 void boss::render()
 {
+	// aniRender는 센터 중심으로 그려진다.
 	image->aniRender(getMemDC(), center.x, center.y - (image->getFrameHeight() / 3), animation);
+
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
-		Rectangle(getMemDC(), center.x - image->getFrameWidth() / 2, center.y - image->getFrameHeight() / 2,
-			center.x + image->getFrameWidth() / 2, center.y + image->getFrameHeight() / 2);
+		// 보스가 위치한 타일의 렉트
+		Rectangle(getMemDC(), rc);
 	}
+}
+
+void boss::render(ThrowShield info)
+{
+	info.image->render(getMemDC(), info.rc.left, info.rc.top);
 }
 
 void boss::addBossImage()
@@ -85,28 +92,37 @@ void boss::settingBossPos(int idx, int idy, int tileSizeX, int tileSizeY)
 	// 보스의 이미지 크기가 타일보다 크기 때문에 중점 - 이미지 절반으로 렉트 left를 구하고, 렉트 bottom - 이미지 높이를 이용하여 top을 구한다.
 	rc = RectMake(idx * tileSizeX, idy * tileSizeY, tileSizeX, tileSizeY);
 
+	// 중점을 만든다.
 	center.x = (rc.left + rc.right) / 2;
 	center.y = (rc.top + rc.bottom) / 2;
-
-	//rc = RectMake(center.x - image->getFrameWidth() / 2, rc.bottom - image->getFrameHeight(), image->getFrameWidth(), image->getFrameHeight());
 
 	_tileSize_X = tileSizeX;
 	_tileSize_Y = tileSizeY;
 }
 
-void boss::settingBossBaseState()
+void boss::settingBossMoveVariable(int tileSizeX, int tileSizeY)
 {
-
+	angle = 0;										// 보스가 이동 해야 하는 각도
+	time = 0.2f;									// 다음 타일까지 이동 시간
+	distance = tileSizeX;							// 다음 타일까지의 거리
+	speed = move.getMoveSpeed(time, distance);		// 다음 타일까지 이동 속도
 }
 
 void boss::Info_Update()
 {
-	// 보스의 이미지 크기가 타일보다 크기 때문에 중점 - 이미지 절반으로 렉트 left를 구하고, 렉트 bottom - 이미지 높이를 이용하여 top을 구한다.
-	rc = RectMake(index.x * _tileSize_X, index.y * _tileSize_Y, _tileSize_X, _tileSize_Y);
+	if (!isMove)
+	{
+		// 보스의 이미지 크기가 타일보다 크기 때문에 중점 - 이미지 절반으로 렉트 left를 구하고, 렉트 bottom - 이미지 높이를 이용하여 top을 구한다.
+		rc = RectMake(index.x * _tileSize_X, index.y * _tileSize_Y, _tileSize_X, _tileSize_Y);
 
-	center.x = (rc.left + rc.right) / 2;
-	center.y = (rc.top + rc.bottom) / 2;
+		center.x = (rc.left + rc.right) / 2;
+		center.y = (rc.top + rc.bottom) / 2;
+	}
+}
 
-	//rc = RectMake(center.x - image->getFrameWidth() / 2, rc.bottom - image->getFrameHeight(), image->getFrameWidth(), image->getFrameHeight());
+void boss::boss_Move()
+{
+	// 보스가 움직였다면 true
+	if (isMove) move.startMove(&time, &distance, &angle, &speed, &worldTime, &center, &index, direction, &isMove);
 }
 

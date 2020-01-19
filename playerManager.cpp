@@ -11,9 +11,6 @@ HRESULT playerManager::init()
 	_ptt = new playerTestTile;
 	_ptt->setPlayerAddressLink(_player);
 	_ptt->init();
-
-	_bossStageScene = new bossStageScene;				 // 보스 스테이지에서 플레이어 정보를 링크하기 위해 만들었음.
-	_bossStageScene->setPlayerAddressLink(_player);		 // 보스 스테이지에서 플레이어 정보를 링크하기 위해 만들었음.
 	
 	return S_OK;
 }

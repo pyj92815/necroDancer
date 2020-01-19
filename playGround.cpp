@@ -33,8 +33,8 @@ HRESULT playGround::init()
 	_pm = new playerManager;
 	_pm->init();
 	//
-	//_em = new EnemyManager;
-	//_em->init();
+	_em = new EnemyManager;
+	_em->init();
 
 	_bss = new bossStageScene;
 	_bss->init();
@@ -54,8 +54,8 @@ void playGround::update()
 {
 	gameNode::update();
 	KEYANIMANAGER->update();		// 플레이어 애니매이션 
-	//_pm->update();
-	//_em->update();
+	_pm->update();
+	_em->update();
 	_bss->update();
 
 }
@@ -66,8 +66,8 @@ void playGround::render()
 {
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
 	//===========================================================
-	//_pm->render();
-	//_em->render();
+	_pm->render();
+	_em->render();
 	//ENEMYMANAGER->render(getMemDC());
 	_bss->render();
 	//===========================================================

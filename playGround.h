@@ -4,6 +4,12 @@
 #include "EnemyManager.h"
 #include "bossStageScene.h"
 
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:consol")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+
 class playGround : public gameNode
 {
 private:

@@ -1,57 +1,46 @@
 #pragma once
 #include "gameNode.h"
 #include "enemy.h"
-
-enum BOSSTYPE
-{
-	EMPTY,
-	DEATH_METAL
-};
-
-enum BOSS_PHASESTATE	// 보스의 페이즈 상태
-{
-	BP_NORMAL,
-	BP_PHASE_1,
-	BP_PHASE_2,
-	BP_PHASE_3,
-	BP_PHASE_4
-};
-
-enum BOSS_DIRECTION		// 보스의 방향
-{
-	BD_LEFT,
-	BD_UP,
-	BD_RIGHT,
-	BD_DOWN
-};
+#include "bossLibrary.h"
+#include "bossMove.h"
 
 class boss : gameNode
 {
 protected:
 	// 보스 스테이터스
-	BOSSTYPE			type;				// 보스 타입
-	BOSS_PHASESTATE		phase;				// 보스 페이즈 상태
-	BOSS_DIRECTION		direction;			// 보스 방향
-	int					hp;					// HP 포인트
-	int					shield;				// 실드 포인트
-	float				attack;				// 보스의 공격력
-	float				magicAttack;		// 보스의 마법공격력
-	int					skill_Casting_Cnt;	// 스킬 캐스팅 시간
-	bool				isCasting;			// 스킬 시전 유무를 저장
-	bool				isClosePlayer;		// 플레이어가 근처에 있는지 저장
+	BOSSTYPE			type;					// 보스 타입
+	BOSS_PHASESTATE		phase;					// 보스 페이즈 상태
+	BOSS_DIRECTION		direction;				// 보스 방향
+	int					hp;						// HP 포인트
+	int					shield;					// 실드 포인트
+	float				attack;					// 보스의 공격력
+	float				magicAttack;			// 보스의 마법공격력
 
 	// 보스 좌표
-	RECT		rc;							// 보스의 렉트		  (타일의 left, bottom 기준으로 계산해서 만들것)
-	POINTFLOAT	center;						// 보스의 중심 좌표	  (타일의 중심)
-	POINT		index;						// 보스의 배열 인덱스	  (어느 타일에 있는지 인덱스)
+	RECT		rc;								// 보스의 렉트		  (타일의 left, bottom 기준으로 계산해서 만들것)
+	POINTFLOAT	center;							// 보스의 중심 좌표	  (타일의 중심)
+	POINT		index;							// 보스의 배열 인덱스	  (어느 타일에 있는지 인덱스)
 
 	// 보스 이미지
-	animation*  animation;					// 보스의 에니메이션 정보
-	image*		image;						// 보스의 이미지를 담는다.
+	animation*  animation;						// 보스의 에니메이션 정보
+	image*		image;							// 보스의 이미지를 담는다.
+
 
 	// 자주 연산하는 값 저장하는 변수
-	int		_tileSize_X, _tileSize_Y;		// 타일의 사이즈를 담아둔다.
-	bool	isMove;						// 보스가 움직였는지 여부
+	int			_tileSize_X, _tileSize_Y;		// 타일의 사이즈를 담아둔다.
+	int			skill_Casting_Cnt;				// 스킬 캐스팅 시간
+	bool		isMove;							// 보스가 움직였는지 여부
+	bool		isChangeAni;					// 보스가 움직였다면 애니메이션을 바꿔줘야한다.
+	bool		isCasting;						// 스킬 시전 유무를 저장
+	bool		isClosePlayer;					// 플레이어가 근처에 있는지 저장
+	bool		isThrowShield;					// 실드를 던졌는지 여부
+
+	float		angle;							// 보스가 이동할때 쓰일각도
+	float       time;							// 보스가 다음 타일까지 이동할때 걸리는 시간
+	float		speed;							// 보스가 다음 타일까지 이동하는 속도
+	float		distance;						// 타일 사이즈
+	float       worldTime;						// 월드 타임 
+	bossMove	move;							// 보스 이동에 필요한 연산 함수
 
 public:
 	boss();
@@ -61,12 +50,13 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
+	virtual void render(ThrowShield info);
 
 	void addBossImage();																							// 보스전에 필요한 이미지를 추가한다.
 	void findBossType(string bossname);																				// 보스 타입을 찾아준다.
 	void findBossImage();																							// 타입 정보로 보스 이미지를 찾아 넣는다.
 	void settingBossPos(int idx, int idy, int tileSizeX, int tileSizeY);											// 보스의 각종 좌표 변수 초기화
-	void settingBossBaseState();																					// 보스의 기본 상태 초기화
+	void settingBossMoveVariable(int tileSizeX, int tileSizeY);														// 보스의 이동 변수 초기화
 
 	// 보스 정보 겟터 함수
 	int getBoss_HP() { return hp; }																					// 보스의 HP를 받아온다.
@@ -95,9 +85,9 @@ public:
 
 	void setBoss_Attack(float _atk) { attack = _atk; if (attack < 0) attack = 0; }									// 보스의 공격력을 수정한다. (공격력이 0 이하로 내려가지 않게 예외처리)
 	void setBoss_Attack_Plus() { attack++; }																		// 보스의 공격력을 1 증가시킨다.
-	void setBoss_Attack_Plus(float buff) { attack += buff; }															// 보스의 공격력을 해당 수치만큼 증가시킨다.
+	void setBoss_Attack_Plus(float buff) { attack += buff; }														// 보스의 공격력을 해당 수치만큼 증가시킨다.
 
-	void setBoss_MagicAttack(float _matk) { magicAttack = _matk; if (magicAttack < 0) magicAttack = 0; }				// 보스의 마법공격력을 수정한다. (마법공격력이0 이하로 넘어가지 않게 예외처리)
+	void setBoss_MagicAttack(float _matk) { magicAttack = _matk; if (magicAttack < 0) magicAttack = 0; }			// 보스의 마법공격력을 수정한다. (마법공격력이0 이하로 넘어가지 않게 예외처리)
 	void setBoss_MagicAttack_Plus() { magicAttack++; }																// 보스의 마법공격력을 1 증가시킨다.
 	void setBoss_MagicAttack_Plus(float buff) { magicAttack += buff; }												// 보스의 마법공격력을 해당 수치만큼 증가시킨다.
 
@@ -115,5 +105,14 @@ public:
 
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수
+	void boss_Move();																								// 보스 이동 연산 함수
 };
 
+// 선형보간 (inear intetpolation)
+// lerp() 럴프 함수
+// lerp(min, max, 비율)을 해주면 min ~ max 사이에 원하는 비율의 값을 찾을 수 있는 함수
+// 시작과 끝의 값을 알고 있을때 그 사이의 어떤 값도 선형적으로 찾을 수 있음
+// 공식 : (max - min) * 비율 + min
+// 
+// 비율 공식 : 구하고자 하는 개수 - 1을 분모로 두고 분자에 1을 두면 비율을 찾을 수 있다.
+// 

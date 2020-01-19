@@ -73,6 +73,12 @@
     <Filter Include="playGround\Boss\boss Stage Test Tile">
       <UniqueIdentifier>{5ac5a0c0-fff0-4a03-83a4-7ac0bb4944dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\Boss\boss Library">
+      <UniqueIdentifier>{af88e48f-64c0-424c-b4ef-b949257355c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss Action">
+      <UniqueIdentifier>{cace189f-d9bb-4bfc-8c47-2d74a44c95fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -231,6 +237,12 @@
     <ClInclude Include="bossStageTestTile.h">
       <Filter>playGround\Boss\boss Stage Test Tile</Filter>
     </ClInclude>
+    <ClInclude Include="bossLibrary.h">
+      <Filter>playGround\Boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="bossMove.h">
+      <Filter>playGround\Boss\boss Action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -367,6 +379,9 @@
     </ClCompile>
     <ClCompile Include="bossStageTestTile.cpp">
       <Filter>playGround\Boss\boss Stage Test Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="bossMove.cpp">
+      <Filter>playGround\Boss\boss Action</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
