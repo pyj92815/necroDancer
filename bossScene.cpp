@@ -24,5 +24,5 @@ void bossScene::update()
 
 void bossScene::render()
 {
-	_backBuffer->render(getHDC(), 0, 0);
+	//_backBuffer->render(getHDC(), 0, 0);
 }

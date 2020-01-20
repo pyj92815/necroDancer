@@ -19,6 +19,8 @@ HRESULT scene_Manager::init()
 	SCENEMANAGER->addScene("End", _end = new endScene);
 	SCENEMANAGER->addScene("Boss", _boss = new bossStageScene);
 
+	SCENEMANAGER->addScene("MAPTOOL", new mapTool);
+
 	SCENEMANAGER->changeScene("Intro");
 
 	return S_OK;
@@ -46,6 +48,10 @@ void scene_Manager::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F6))
 	{
 		SCENEMANAGER->changeScene("Loading");
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	{
+		SCENEMANAGER->changeScene("MAPTOOL");
 	}
 
 

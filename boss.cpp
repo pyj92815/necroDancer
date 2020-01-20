@@ -32,13 +32,14 @@ void boss::update()
 
 void boss::render()
 {
+	//PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY, BLACKNESS);
 	// aniRender는 센터 중심으로 그려진다.
-	image->aniRender(getMemDC(), center.x, center.y - (image->getFrameHeight() / 3), animation);
+	image->aniRender(CAMERAMANAGER->getWorldDC(), center.x, center.y - (image->getFrameHeight() / 3), animation);
 
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
 		// 보스가 위치한 타일의 렉트
-		Rectangle(getMemDC(), rc);
+		Rectangle(CAMERAMANAGER->getWorldDC(), rc);
 	}
 }
 

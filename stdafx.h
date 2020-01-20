@@ -19,7 +19,7 @@
 #include <opencv2/cvconfig.h>
 #include "opencv2/opencv.hpp"	
 #include <opencv2/highgui/highgui_c.h>
-
+	
 #pragma comment (lib,"opencv_world420d.lib")
 
 // #include <opencv2/videoio.hpp> // 동영상 처리 

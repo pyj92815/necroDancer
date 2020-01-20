@@ -6,6 +6,7 @@
 #include "bossScene.h"
 #include "endScene.h"
 #include "bossStageScene.h" // 보스 스테이지 
+#include "mapTool.h"
 
 class scene_Manager:public gameNode
 {

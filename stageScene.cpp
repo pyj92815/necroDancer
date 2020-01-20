@@ -25,7 +25,7 @@ void stageScene::update()
 void stageScene::render()
 {
 	_pm->render();
-	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 	_em->render();
+	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 	//ENEMYMANAGER->render(getMemDC());
 }

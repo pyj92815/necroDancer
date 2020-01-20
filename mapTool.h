@@ -21,6 +21,8 @@ private:
 	tagSampleTile _trapTile[TRAPTILEX * TRAPTILEY];
 	tagTile		 _tiles[TILEX * TILEY];
 
+	int _pos[2];
+
 public:
 	mapTool();
 	~mapTool();

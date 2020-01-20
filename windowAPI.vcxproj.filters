@@ -264,6 +264,9 @@
     <ClInclude Include="deathMetal.h">
       <Filter>playGround\boss</Filter>
     </ClInclude>
+    <ClInclude Include="mapToolScene.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -433,6 +436,9 @@
     </ClCompile>
     <ClCompile Include="deathMetal.cpp">
       <Filter>playGround\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="mapToolScene.cpp">
+      <Filter>playGround\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

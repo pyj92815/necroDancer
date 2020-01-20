@@ -2,7 +2,7 @@
 #include "gameNode.h"
 #include "deathMetal.h"
 #include "bossStageTestTile.h"											// 이후에 영주가 만든 타일 헤더로 교체 해야한다.
-#include "player.h"
+
 class bossStageScene : public gameNode
 {
 private:
@@ -13,7 +13,6 @@ private:
 	vector<tile*>			_vBSTList;									// 보스 스테이지 타일 리스트를 담는다. (벡터 자료형은 영주가 만든 타일 자료형으로 교체해야한다.)
 
 	deathMetal*				_deathMetal;								// 데스메탈
-	player* _player;
 public:
 	bossStageScene();
 	~bossStageScene();

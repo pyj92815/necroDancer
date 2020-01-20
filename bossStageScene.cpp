@@ -19,8 +19,6 @@ HRESULT bossStageScene::init()
 	_deathMetal->init("데스메탈", 5, 5, TESTTILESIZE, TESTTILESIZE);
 
 	// bossStageMap_Load();	// 이후에 영주맵 받아와서 실행 해봐야함 (경로 수정 해야함)
-	_player = new player;
-	_player->init(10,10,52,52);
 
 	return S_OK;
 }
@@ -34,7 +32,6 @@ void bossStageScene::update()
 	//_bossStageTile->setTotalTile(_vTotalList);		// 맵 타일 갱신 함수
 
 	_deathMetal->update();
-	_player->update();
 }
 
 void bossStageScene::render()
@@ -42,7 +39,8 @@ void bossStageScene::render()
 	//_bossStageTile->render();			// 맵 타일 출력
 
 	_deathMetal->render();
-	_player->render();
+	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
+
 }
 
 void bossStageScene::bossStageMap_Load()

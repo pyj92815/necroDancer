@@ -26,7 +26,7 @@
 #define TESTTILESIZE 52
 
 //타일 갯수는 가로 40 / 세로 40
-#define TILEX 20
+#define TILEX 40
 #define TILEY 40
 
 //타일 총 사이즈는 640 X 640
