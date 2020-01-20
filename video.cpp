@@ -53,7 +53,7 @@ void video::render()
 				if (_aviName == "intro.avi")
 				{
 					// 로딩씬으로 가기 
-					SCENEMANAGER->changeScene("Stage");  // 로딩씬으로 수정 예정 
+					SCENEMANAGER->changeScene("Loading");  // 로딩씬으로 수정 예정 
 				}
 				else // endScene이면 스테이지로  
 				{
@@ -71,7 +71,7 @@ void video::render()
 				if (_aviName == "intro.avi")
 				{
 					//로딩씬으로 
-					SCENEMANAGER->changeScene("Stage"); // 로딩씬으로 수정 예정 
+					SCENEMANAGER->changeScene("Loading"); // 로딩씬으로 수정 예정 
 				}
 				else // endScene이면 스테이지로  
 				{

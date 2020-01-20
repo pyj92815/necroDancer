@@ -231,6 +231,9 @@
     <ClInclude Include="aStarManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="loadingScene.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -376,6 +379,9 @@
     </ClCompile>
     <ClCompile Include="aStarManager.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingScene.cpp">
+      <Filter>playGround\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
