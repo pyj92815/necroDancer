@@ -26,7 +26,6 @@ void Enemy::update()
 
 void Enemy::render()
 {
-	
 	_enemyInfo->image->aniRender(getMemDC(),WINSIZEX/2,WINSIZEY/2,_enemyInfo->animation);
 }
 
@@ -39,11 +38,4 @@ void Enemy::EnemyCreate(float x, float y, float HP, float damage, const char* en
 	_enemyInfo->HP = HP;
 	_enemyInfo->damage = damage;
 	_enemyInfo->image = IMAGEMANAGER->findImage(enemyName);
-
 }
-
-void Enemy::EnemyAnimationAdd()
-{
-	
-}
-
