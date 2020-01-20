@@ -58,8 +58,8 @@ using namespace SEVENTEEN_UTIL;
 #define WINNAME (LPCTSTR)(TEXT("SevenTeen Class"))
 #define WINSTARTX 50
 #define WINSTARTY 50
-#define WINSIZEX 960
-#define WINSIZEY 640
+#define WINSIZEX 950  // 동영상 크기만큼 10줄임 
+#define WINSIZEY 630
 #define WINSTYLE WS_CAPTION | WS_SYSMENU
 
 #define RND randomFunction::getSingleton()
@@ -92,3 +92,7 @@ extern BOOL			_leftButtonDown;
 #else
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #endif
+
+
+//===========================================
+#include <map>

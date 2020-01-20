@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "playGround.h"
 
-#include <map>
-
 playGround::playGround()
 {
 }
@@ -47,9 +45,7 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
-	KEYANIMANAGER->update();		// 플레이어 애니매이션 
 	_sm->update();
-
 }
 
 
@@ -57,12 +53,12 @@ void playGround::update()
 void playGround::render()
 {
 	//PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
-	//	PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY, BLACKNESS);
+	PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY, BLACKNESS);
 	//===========================================================
-
+	
 	_sm->render();
+
 	//===========================================================
-	//if(!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
 	if (!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
 
 }

@@ -11,16 +11,19 @@ mapTool::~mapTool()
 }
 
 void setWindowsSize(int x, int y, int width, int height);
-
+LRESULT MainProc(HWND, UINT, WPARAM, LPARAM);
 
 HRESULT mapTool::init()
 {
-	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 0, 0, 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("wallTiles", "./image/mapTool/wall/wall.bmp", 0, 0, 832, 416, WALLTILEX, WALLTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("trapTiles", "./image/mapTool/trap/trap.bmp", 0, 0, 312, 364, TRAPTILEX, TRAPTILEY, true, RGB(255, 0, 255));
-	setWindowsSize(WINSTARTX, WINSTARTY, 1500, 1000);
-	resizeWindow(WINNAME, 1500, 1000);
-	_backBuffer->init(1500, 1000);
+	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("wallTiles", "./image/mapTool/wall/wall.bmp", 832, 416, WALLTILEX, WALLTILEY, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("trapTiles", "./image/mapTool/trap/trap.bmp", 312, 364, TRAPTILEX, TRAPTILEY, true, RGB(255, 0, 255));
+	// 맵툴 사이즈를 정의 
+	_WINSIZEX = 1880;
+	_WINSIZEY = 900;
+	setWindowsSize(WINSTARTX, WINSTARTY, _WINSIZEX, _WINSIZEY);
+	resizeWindow(WINNAME, _WINSIZEX, _WINSIZEY);
+	_backBuffer->init(_WINSIZEX, _WINSIZEY);
 	setup();
 
 	return S_OK;
@@ -41,13 +44,12 @@ void mapTool::update()
 
 void mapTool::render()
 {
-	//PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
-
-
+	//PatBlt(CAMERAMANAGER->getWorldDC(), 0, 0, _WINSIZEX, _WINSIZEY, WHITENESS);
 	//TextOut(getMemDC(), 700, 700, str,strlen(str));
 	//지형
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
+		Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
 		IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
 			_tiles[i].rc.left, _tiles[i].rc.top,
 			_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
@@ -70,20 +72,33 @@ void mapTool::render()
 			_tiles[i].rc.left, _tiles[i].rc.top,
 			_tiles[i].trapFrameX, _tiles[i].trapFrameY);
 	}
+	//RECT 잘그림
 	if (_crtSelect == CTRL_TERRAINDRAW)
 	{
-		IMAGEMANAGER->render("terrainTiles", CAMERAMANAGER->getWorldDC(), WINSIZEX - IMAGEMANAGER->findImage("terrainTiles")->getWidth(), 0);
+		IMAGEMANAGER->render("terrainTiles", CAMERAMANAGER->getWorldDC(), _WINSIZEX - IMAGEMANAGER->findImage("terrainTiles")->getWidth(), 0);
+		/*for (int i = 0; i < TERRAINTILEX * TERRAINTILEY; ++i)
+		{
+			Rectangle(CAMERAMANAGER->getWorldDC(), _terrainTile[i].rcTile);
+		}*/
 	}
 
-
+	//RECT 잘그림
 	if (_crtSelect == CTRL_TRAP)
 	{
-		IMAGEMANAGER->render("trapTiles", CAMERAMANAGER->getWorldDC(), WINSIZEX - IMAGEMANAGER->findImage("trapTiles")->getWidth(), 0);
+		for (int i = 0; i < TRAPTILEX * TRAPTILEY; ++i)
+		{
+			Rectangle(CAMERAMANAGER->getWorldDC(), _trapTile[i].rcTile);
+		}
+		IMAGEMANAGER->render("trapTiles", CAMERAMANAGER->getWorldDC(), _WINSIZEX - IMAGEMANAGER->findImage("trapTiles")->getWidth(), 0);
 	}
 
 	if (_crtSelect == CTRL_WALLDRAW)
 	{
-		IMAGEMANAGER->render("wallTiles", CAMERAMANAGER->getWorldDC(), WINSIZEX - IMAGEMANAGER->findImage("wallTiles")->getWidth(), 0);
+		IMAGEMANAGER->render("wallTiles", CAMERAMANAGER->getWorldDC(), _WINSIZEX - IMAGEMANAGER->findImage("wallTiles")->getWidth(), 0);
+		for (int i = 0; i < WALLTILEX * WALLTILEY; ++i)
+		{
+			Rectangle(CAMERAMANAGER->getWorldDC(), _wallTile[i].rcTile);
+		}
 		/*	for (int i = 0; i < TILEX * TILEY; ++i)
 			{
 				Rectangle(getMemDC(), _wallTile[i].rcTile);
@@ -91,27 +106,23 @@ void mapTool::render()
 	}
 
 	CAMERAMANAGER->getWorldImage()->render(getMemDC());
-
+	// 카메라 뒤에 그려줌 
+	_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
+	_btnLoad = CreateWindow("button", "불러오기", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON , 1200, 500, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
+	_btnObjectDraw = CreateWindow("button", "오브젝트", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 700, 100, 30, _hWnd, HMENU(2), _hInstance, NULL);
+	_btnTerrainDraw = CreateWindow("button", "지형", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1200, 700, 100, 30, _hWnd, HMENU(3), _hInstance, NULL);
+	_btnWallDraw = CreateWindow("button", "벽", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1300, 700, 100, 30, _hWnd, HMENU(5), _hInstance, NULL);
+	_btnTrap = CreateWindow("button", "함정", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1400, 700, 100, 30, _hWnd, HMENU(8), _hInstance, NULL);
+	_btnEraser = CreateWindow("button", "지우개", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1500, 700, 100, 30, _hWnd, HMENU(10), _hInstance, NULL);
+	_btnPlay = CreateWindow("button", "게임 창", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1600, 700, 100, 30, _hWnd, HMENU(9), _hInstance, NULL);
 	//===========================================================
 	//_backBuffer->render(getHDC(), 0, 0);
 }
 
 void mapTool::setup()
 {
-
-	_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
-	_btnLoad = CreateWindow("button", "불러오기", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 210, 500, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
-	_btnObjectDraw = CreateWindow("button", "오브젝트", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 210, 550, 100, 30, _hWnd, HMENU(2), _hInstance, NULL);
-	_btnTerrainDraw = CreateWindow("button", "지형", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 320, 550, 100, 30, _hWnd, HMENU(3), _hInstance, NULL);
-	_btnWallDraw = CreateWindow("button", "벽", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 430, 550, 100, 30, _hWnd, HMENU(5), _hInstance, NULL);
-	_btnTrap = CreateWindow("button", "함정", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 540, 550, 100, 30, _hWnd, HMENU(8), _hInstance, NULL);
-	_btnEraser = CreateWindow("button", "지우개", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 650, 550, 100, 30, _hWnd, HMENU(10), _hInstance, NULL);
-	_btnPlay = CreateWindow("button", "게임 창", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 100, 550, 100, 30, _hWnd, HMENU(9), _hInstance, NULL);
-
 	//처음에는 지형으로 둔다
-	_crtSelect = CTRL_TRAP;
-
-
+	_crtSelect = CTRL_TERRAINDRAW;
 
 	//지형 오브젝트 타일셋팅 (샘플타일)
 	for (int i = 0; i < TERRAINTILEY; ++i)
@@ -123,9 +134,9 @@ void mapTool::setup()
 
 			//RectMake -> SetRect()
 			SetRect(&_terrainTile[i * TERRAINTILEX + j].rcTile,
-				(WINSIZEX - IMAGEMANAGER->findImage("terrainTiles")->getWidth()) + j * TILESIZE,
+				(_WINSIZEX - IMAGEMANAGER->findImage("terrainTiles")->getWidth()) + j * TILESIZE,
 				i * TILESIZE,
-				(WINSIZEX - IMAGEMANAGER->findImage("terrainTiles")->getWidth()) + j * TILESIZE + TILESIZE,
+				(_WINSIZEX - IMAGEMANAGER->findImage("terrainTiles")->getWidth()) + j * TILESIZE + TILESIZE,
 				i * TILESIZE + TILESIZE);
 		}
 	}
@@ -139,14 +150,14 @@ void mapTool::setup()
 
 			//RectMake -> SetRect()
 			SetRect(&_trapTile[i * TRAPTILEX + j].rcTile,
-				(WINSIZEX - IMAGEMANAGER->findImage("trapTiles")->getWidth()) + j * TILESIZE,
+				(_WINSIZEX - IMAGEMANAGER->findImage("trapTiles")->getWidth()) + j * TILESIZE,
 				i * TILESIZE,
-				(WINSIZEX - IMAGEMANAGER->findImage("trapTiles")->getWidth()) + j * TILESIZE + TILESIZE,
+				(_WINSIZEX - IMAGEMANAGER->findImage("trapTiles")->getWidth()) + j * TILESIZE + TILESIZE,
 				i * TILESIZE + TILESIZE);
 		}
 	}
 
-	//벽 타일 셋팅
+	//벽 타일 셋팅 추후 수정 필요함 
 	for (int i = 0; i < WALLTILEY; ++i)
 	{
 		for (int j = 0; j < WALLTILEX; ++j)
@@ -156,10 +167,10 @@ void mapTool::setup()
 
 			//RectMake -> SetRect()
 			SetRect(&_wallTile[i * WALLTILEX + j].rcTile,
-				(WINSIZEX - IMAGEMANAGER->findImage("wallTiles")->getWidth()) + j * TILESIZE,
-				i * TILESIZE,
-				(WINSIZEX - IMAGEMANAGER->findImage("wallTiles")->getWidth()) + j * TILESIZE + TILESIZE,
-				i * (TILESIZE + TILESIZE) + (TILESIZE + TILESIZE));
+				(_WINSIZEX - IMAGEMANAGER->findImage("wallTiles")->getWidth()) + j * TILESIZE,
+				(i*2) * TILESIZE,
+				(_WINSIZEX - IMAGEMANAGER->findImage("wallTiles")->getWidth()) + j * TILESIZE + TILESIZE,
+				(i*2) * TILESIZE + (TILESIZE*2));
 		}
 	}
 	//타일 영역셋팅
@@ -178,7 +189,6 @@ void mapTool::setup()
 			//인덱스 x / y좌표 값
 			_tiles[i * TILEX + j].idX = _tiles[i * TILEX + j].XY.x / 52;
 			_tiles[i * TILEX + j].idY = _tiles[i * TILEX + j].XY.y / 52;
-
 		}
 	}
 
@@ -195,7 +205,6 @@ void mapTool::setup()
 		_tiles[i].wall = W_NONE;
 		_tiles[i].trap = TRAP_NONE;
 	}
-
 }
 
 void mapTool::setMap()

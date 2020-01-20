@@ -21,6 +21,7 @@ private:
 	tagSampleTile _trapTile[TRAPTILEX * TRAPTILEY];
 	tagTile		 _tiles[TILEX * TILEY];
 
+	float _WINSIZEX, _WINSIZEY;
 	int _pos[2];
 
 public:

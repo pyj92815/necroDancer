@@ -48,7 +48,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		(HMENU)NULL,
 		hInstance,
 		NULL);
-
+	
 	setWindowsSize(WINSTARTX, WINSTARTY, WINSIZEX, WINSIZEY);
 	
 	//방법 1
@@ -60,16 +60,17 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	//_hWnd = GetParent(_hWnd);	
 	// 
 
-	//방법2 
+	//방법2 	
 	cv::namedWindow(WINNAME);
 	HWND cvWnd = (HWND)cvGetWindowHandle(WINNAME);
 	if (!cvWnd) return false;
 	HWND oldParent = ::GetParent(cvWnd);
-	::SetParent(cvWnd, _hWnd);
-	::ShowWindow(oldParent, SW_HIDE);
-	
+	::SetParent(cvWnd, oldParent);
+	//::ShowWindow(oldParent, SW_HIDE);
+	// resizeWindow(WINNAME, WINSIZEX + 100, WINSIZEY+ 50); //동영상 크기라서 안됌 
+	moveWindow(WINNAME, -74, -120);		// 이동시키기 
+	::SetParent(oldParent, _hWnd);
 	ShowWindow(_hWnd, cmdShow);
-
 	
 	//메시지 루프 돌기이전에
 	if (FAILED(_pg.init()))

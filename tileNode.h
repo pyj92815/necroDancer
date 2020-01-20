@@ -4,7 +4,7 @@
 #define TESTTILEY 30
 //=========================================
 //한 타일의 사이즈는 32로 한다. 32 X 32
-#define TILESIZE 32
+#define TILESIZE 52
 
 //타일셋 범위(타일을 찍어올 팔레트 같은 역할)
 #define SAMPLETILEX 20
@@ -26,8 +26,8 @@
 #define TESTTILESIZE 52
 
 //타일 갯수는 가로 40 / 세로 40
-#define TILEX 40
-#define TILEY 40
+#define TILEX 20
+#define TILEY 20
 
 //타일 총 사이즈는 640 X 640
 #define TILESIZEX TILESIZE * TILEX

@@ -15,9 +15,13 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 {
 	if (event == CV_EVENT_MOUSEMOVE)
 	{
-		cout << "마우스 좌표" << "x:" << x << "y :" << y << endl;
+		//cout << "마우스 좌표" << "x:" << x << "y :" << y << endl;
 		_ptMouse.x = x;
 		_ptMouse.y = y;
+	}
+	if (event == CV_EVENT_LBUTTONDOWN)
+	{
+		//cout << "qjsjsjqj" << endl;
 	}
 }
 
@@ -89,9 +93,14 @@ void gameNode::update()
 {
 	cvSetMouseCallback(WINNAME, CallBackFunc, NULL); // 위치 좌표를 넣기 위한 값 
 	SOUNDMANAGER->update();
+	KEYANIMANAGER->update();
 }
 
 void gameNode::render()
+{
+}
+
+void gameNode::setMap()
 {
 }
 
@@ -105,7 +114,7 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 	switch (iMessage)
 	{
 		case WM_CREATE:
-
+		
 		break;
 
 		//목이 아파서 잠시 주석으로 남김 감기조심해라
@@ -117,10 +126,12 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		case WM_MOUSEMOVE:
 			_ptMouse.x = static_cast<float>(LOWORD(lParam));
 			_ptMouse.y = static_cast<float>(HIWORD(lParam));
-
-		
+			cout << "마우스 좌표" << "x:" << _ptMouse.x << "y :" << _ptMouse.y << endl;
+			
 		break;
-	
+		case WM_LBUTTONDOWN:
+			cout << "qjsjsjqj" << endl;
+		break;
 		case WM_KEYDOWN:
 		{
 			switch (wParam)
@@ -128,10 +139,12 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 				case VK_ESCAPE:
 					PostQuitMessage(0);
 				break;
+				case VK_LBUTTON:
+					cout << "qjsjsjqj" << endl;
+				break;
 			}
 		}
 		break;
-
 
 		case WM_DESTROY:
 			PostQuitMessage(0);

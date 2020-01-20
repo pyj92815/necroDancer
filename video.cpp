@@ -27,7 +27,6 @@ HRESULT video::init(const char* videoName)
 
 void video::release()
 {
-	cap.release();
 }
 
 void video::update()
@@ -49,36 +48,41 @@ void video::render()
 			// 만약 동영상이 비어있으면 
 			if (frame.empty())
 			{
+				_play = false;
+				SCENEMANAGER->setVideoPlay(false);  // 씬 매니저에 비디오 값을 수정해줌 
+				cap.release();
+				frame.release();
+				destroyAllWindows();	// opencv 창해제 
 				// 인트로 이면 
 				if (_aviName == "intro.avi")
 				{
 					// 로딩씬으로 가기 
-					SCENEMANAGER->changeScene("Loading");  // 로딩씬으로 수정 예정 
+					SCENEMANAGER->changeScene("Loading");  
 				}
 				else // endScene이면 스테이지로  
 				{
 					SCENEMANAGER->changeScene("Stage");
 				}
-
-				_play = false;
-				SCENEMANAGER->setVideoPlay(false);  // 씬 매니저에 비디오 값을 수정해줌 
 				return;
 			}
-
+			Mat edges;
 			// 빨리감으면 로딩씬으로 
 			if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 			{
+				_play = false;
+				SCENEMANAGER->setVideoPlay(false); // 씬 매니저에 비디오 값을 수정해줌 
+				cap.release();
+				frame.release();
+				destroyAllWindows();			// opencv 창해제 
 				if (_aviName == "intro.avi")
 				{
 					//로딩씬으로 
-					SCENEMANAGER->changeScene("Loading"); // 로딩씬으로 수정 예정 
+					SCENEMANAGER->changeScene("Loading"); 
 				}
 				else // endScene이면 스테이지로  
 				{
 					SCENEMANAGER->changeScene("Stage");
 				}
-				_play = false;
-				SCENEMANAGER->setVideoPlay(false); // 씬 매니저에 비디오 값을 수정해줌 
 				return;
 			}
 			imshow(WINNAME, frame);  // 윈도우창에 프레임을 띄운다 -> 실제로 동영상을 띄우는 코드 
