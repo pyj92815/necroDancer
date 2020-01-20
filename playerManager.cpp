@@ -11,7 +11,7 @@ HRESULT playerManager::init()
 	_ptt = new playerTestTile;
 	_ptt->setPlayerAddressLink(_player);
 	_ptt->init();
-
+	
 	return S_OK;
 }
 
