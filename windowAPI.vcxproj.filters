@@ -70,8 +70,23 @@
     <Filter Include="playGround\MapTool">
       <UniqueIdentifier>{cd7060e9-3639-49b0-a374-5f738b819ffe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\boss">
+    <Filter Include="playGround\Boss">
       <UniqueIdentifier>{22ada17d-d20c-4e65-9e82-ae5522171c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss Action">
+      <UniqueIdentifier>{38ecbbab-1989-4ceb-8e4f-ffb4d60b61f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss File">
+      <UniqueIdentifier>{dd9e4a65-3bce-4582-b182-68f541956fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss Library">
+      <UniqueIdentifier>{886169d8-1d74-4b93-a5c5-8308ec4c2532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss Stage Scene">
+      <UniqueIdentifier>{9b3a2504-dd39-4708-9189-d6c380f07c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss Stage Test Tile">
+      <UniqueIdentifier>{50b1773f-1a1b-4943-becd-55f3452cda73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -246,23 +261,26 @@
     <ClInclude Include="mapTool.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="boss.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="bossLibrary.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
     <ClInclude Include="bossMove.h">
-      <Filter>playGround\boss</Filter>
+      <Filter>playGround\Boss\boss Action</Filter>
     </ClInclude>
-    <ClInclude Include="bossStageScene.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="bossStageTestTile.h">
-      <Filter>playGround\boss</Filter>
+    <ClInclude Include="boss.h">
+      <Filter>playGround\Boss\boss File</Filter>
     </ClInclude>
     <ClInclude Include="deathMetal.h">
-      <Filter>playGround\boss</Filter>
+      <Filter>playGround\Boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slave.h">
+      <Filter>playGround\Boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="bossLibrary.h">
+      <Filter>playGround\Boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageScene.h">
+      <Filter>playGround\Boss\boss Stage Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageTestTile.h">
+      <Filter>playGround\Boss\boss Stage Test Tile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -419,20 +437,20 @@
     <ClCompile Include="mapTool.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="boss.cpp">
-      <Filter>playGround\boss</Filter>
-    </ClCompile>
     <ClCompile Include="bossMove.cpp">
-      <Filter>playGround\boss</Filter>
+      <Filter>playGround\Boss\boss Action</Filter>
     </ClCompile>
-    <ClCompile Include="bossStageScene.cpp">
-      <Filter>playGround\boss</Filter>
-    </ClCompile>
-    <ClCompile Include="bossStageTestTile.cpp">
-      <Filter>playGround\boss</Filter>
+    <ClCompile Include="boss.cpp">
+      <Filter>playGround\Boss\boss File</Filter>
     </ClCompile>
     <ClCompile Include="deathMetal.cpp">
-      <Filter>playGround\boss</Filter>
+      <Filter>playGround\Boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageScene.cpp">
+      <Filter>playGround\Boss\boss Stage Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageTestTile.cpp">
+      <Filter>playGround\Boss\boss Stage Test Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
