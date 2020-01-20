@@ -39,3 +39,12 @@ typedef struct tagThrowShield
 	bool			isOut;				// 이 값이 true라면 삭제
 	BOSS_DIRECTION	direction;			// 보스가 바라보는 방향을 저장한다. (방향에 따라 방패를 날리는 각도가 다르다.)
 }ThrowShield;
+
+// 보스의 점프 함수
+struct tagBossJump
+{
+	float			 jumpPow;							// 점프 변수
+	float			 gravity;							// 중력 변수
+	POINTFLOAT		 start;								// 시작 위치
+	bool			 isJumping;							// 점프중이라면 true
+};

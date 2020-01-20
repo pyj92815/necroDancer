@@ -3,6 +3,7 @@
 
 boss::boss()
 	: hp(0), shield(0), attack(0), magicAttack(0), skill_Casting_Cnt(0), angle(0), speed(0), worldTime(0)
+	
 {
 }
 
@@ -124,5 +125,11 @@ void boss::boss_Move()
 {
 	// 보스가 움직였다면 true
 	if (isMove) move.startMove(&time, &distance, &angle, &speed, &worldTime, &center, &index, direction, &isMove);
+
+	// 보스가 움직였다면 점프 상태가 true
+	// 보스가 점프를 했을때 필요한 값은
+	// 보스의 좌표, 값을 저장 수정 가능한 속도?, 방향에 맞게 수치는 다르게
+	// 값을 주면 계속 연산을 해야한다. 해당 bool값이 꺼질때까지
+	if (isJump) move.jumping(&direction, &center, &jump);
 }
 

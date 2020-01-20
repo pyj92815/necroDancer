@@ -15,6 +15,7 @@ HRESULT deathMetal::init(string bossName, int idx, int idy, int TILE_SIZEX, int 
 	boss::animation = KEYANIMANAGER->findAnimation("deathMetal_SDown");  // 데스메탈의 시작 애니메이션은 쉐도우다운
 	boss::animation->start();											 // 애니메이션을 시작한다.
 	boss::isMove = false;												 // 데스메탈이 움직이면 이 값이 true로 바뀐다.
+	boss::isJump = false;												 // 데스메탈이 움직이면 이 값이 true로 바뀐다. (살짝 점프 하는 효과)
 	boss::isChangeAni = false;											 // 데스메탈이 움직이면 이 값이 true로 바뀐다.
 	boss::isCasting = false;											 // 데스메탈이 마법을 캐스팅 중이라면 이 값이 true로 바뀐다.
 	boss::isClosePlayer = false;										 // 데스메탈이 플레이어 근처에 있다면 이 값이 true로 바뀐다.
@@ -103,52 +104,60 @@ void deathMetal::deathMetal_Animation_Test()
 {
 	// 애니메이션 테스트 함수
 
-	// 데스메탈의 방향을 바꾸고, 애니메이션을 바꾸기 위해 true값으로 수정
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+	// 데스메탈이 이동이 끝나기 전까지는 키 입력을 막는다.
+	if (!boss::isMove)
 	{
-		boss::direction = BD_LEFT;
-		worldTime = TIMEMANAGER->getWorldTime();	// 월드 타임을 저장한다.
-													// 점프 함수 만들어야함
 
-		//boss::index.x--; // 이동이 모두 끝났으면 인덱스를 옴겨준다?
-		boss::isChangeAni = true;	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
-		boss::isMove = true;
-	}
+		// 데스메탈의 방향을 바꾸고, 애니메이션을 바꾸기 위해 true값으로 수정
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+		{
+			boss::direction = BD_LEFT;
+			worldTime = TIMEMANAGER->getWorldTime();	// 월드 타임을 저장한다.
+														// 점프 함수 만들어야함
 
-	// 데스메탈의 방향을 바꾸고, 애니메이션을 바꾸기 위해 true값으로 수정
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
-	{
-		boss::direction = BD_UP;
-		worldTime = TIMEMANAGER->getWorldTime();	// 월드 타임을 저장한다.
-													// 점프 함수 만들어야함
+			boss::isChangeAni = true;	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
+			boss::isMove = true;		// 보스가 움직였다면 Move를 true로
+			boss::isJump = true;		// 보스는 움직일때 살짝 점프한다. 값을 true로
+		}
 
-		//boss::index.y--;
-		boss::isChangeAni = true;	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
-		boss::isMove = true;
-	}
+		// 데스메탈의 방향을 바꾸고, 애니메이션을 바꾸기 위해 true값으로 수정
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		{
+			boss::direction = BD_UP;
+			worldTime = TIMEMANAGER->getWorldTime();	// 월드 타임을 저장한다.
+														// 점프 함수 만들어야함
 
-	// 데스메탈의 방향을 바꾸고, 애니메이션을 바꾸기 위해 true값으로 수정
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
-	{
-		boss::direction = BD_RIGHT;
-		worldTime = TIMEMANAGER->getWorldTime();	// 월드 타임을 저장한다.
-													// 점프 함수 만들어야함
+			//boss::index.y--;
+			boss::isChangeAni = true;	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
+			boss::isMove = true;		// 보스가 움직였다면 Move를 true로
+			boss::isJump = true;		// 보스는 움직일때 살짝 점프한다. 값을 true로
+		}
 
-		//boss::index.x++;
-		boss::isChangeAni = true;	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
-		boss::isMove = true;
-	}
+		// 데스메탈의 방향을 바꾸고, 애니메이션을 바꾸기 위해 true값으로 수정
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
+		{
+			boss::direction = BD_RIGHT;
+			worldTime = TIMEMANAGER->getWorldTime();	// 월드 타임을 저장한다.
+														// 점프 함수 만들어야함
 
-	// 데스메탈의 방향을 바꾸고, 애니메이션을 바꾸기 위해 true값으로 수정
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
-	{
-		boss::direction = BD_DOWN;
-		worldTime = TIMEMANAGER->getWorldTime();	// 월드 타임을 저장한다.
-													// 점프 함수 만들어야함
+			//boss::index.x++;
+			boss::isChangeAni = true;	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
+			boss::isMove = true;		// 보스가 움직였다면 Move를 true로
+			boss::isJump = true;		// 보스는 움직일때 살짝 점프한다. 값을 true로
+		}
 
-		//boss::index.y++;
-		boss::isChangeAni = true;	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
-		boss::isMove = true;
+		// 데스메탈의 방향을 바꾸고, 애니메이션을 바꾸기 위해 true값으로 수정
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
+		{
+			boss::direction = BD_DOWN;
+			worldTime = TIMEMANAGER->getWorldTime();	// 월드 타임을 저장한다.
+														// 점프 함수 만들어야함
+
+			//boss::index.y++;
+			boss::isChangeAni = true;	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
+			boss::isMove = true;		// 보스가 움직였다면 Move를 true로
+			boss::isJump = true;		// 보스는 움직일때 살짝 점프한다. 값을 true로
+		}
 	}
 
 	// 데스메탈의 애니메이션을 공격 모션으로 바꾸고 실행
@@ -175,7 +184,7 @@ void deathMetal::deathMetal_Animation_Test()
 	// 플레이어가 근처에 있으면 true 없으면 false (테스트용)
 	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
 	{
-		boss::isClosePlayer = true;	// 플레이어가 가까이 있다면 true
+		boss::isClosePlayer = !boss::isClosePlayer;	// 플레이어가 가까이 있다면 true
 		boss::isChangeAni = true;
 	}
 

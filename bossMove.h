@@ -4,7 +4,6 @@
 class bossMove
 {
 private:
-	int xx;
 	
 public:
 	bossMove();
@@ -18,5 +17,9 @@ public:
 	void startMove(float* time, float* distance, float* angle, float* speed,
 		float* worldTime, POINTFLOAT* _center, POINT* index, BOSS_DIRECTION direction, bool* Move);
 
+	// 보스의 방향을 이용하여 어느 방향으로 이동을 하는지를 구할 수 있다.
+	// 보스의 중점 x, y를 이용하여 위치 계산을 한다.
+	// 보스가 점프 연산하는중에 필요한 변수를 이용한다. (속도, 중력 등)
+	void jumping(BOSS_DIRECTION* direction, POINTFLOAT* center, tagBossJump* jump);
 };
 

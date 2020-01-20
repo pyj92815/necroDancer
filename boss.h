@@ -30,6 +30,7 @@ protected:
 	int			_tileSize_X, _tileSize_Y;		// 타일의 사이즈를 담아둔다.
 	int			skill_Casting_Cnt;				// 스킬 캐스팅 시간
 	bool		isMove;							// 보스가 움직였는지 여부
+	bool		isJump;							// 보스가 이동을 할때 점프 여부
 	bool		isChangeAni;					// 보스가 움직였다면 애니메이션을 바꿔줘야한다.
 	bool		isCasting;						// 스킬 시전 유무를 저장
 	bool		isClosePlayer;					// 플레이어가 근처에 있는지 저장
@@ -41,6 +42,7 @@ protected:
 	float		distance;						// 타일 사이즈
 	float       worldTime;						// 월드 타임 
 	bossMove	move;							// 보스 이동에 필요한 연산 함수
+	tagBossJump jump;							// 보스 점프에 필요한 연산 함수
 
 public:
 	boss();
