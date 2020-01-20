@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "introScene.h"
+#include "loadingScene.h"
 #include "stageScene.h"
 #include "bossScene.h"
 #include "endScene.h"

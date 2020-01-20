@@ -14,13 +14,13 @@
 // 다양한 영상처리 알고리즘을 쉽게 사용 가능 
 // MAT api 사용시 사용되는 이미지 정보가 저장되는 클래스 
 // IplImage 이미지 정보가 저장되는 구조체 (지금 사용안됨)
+
 #include <opencv2/highgui.hpp>  // 고급 GUI 
 #include <opencv2/cvconfig.h>
-#include "opencv2/opencv.hpp"
+#include "opencv2/opencv.hpp"	
 #include <opencv2/highgui/highgui_c.h>
 
 #pragma comment (lib,"opencv/build/x64/vc15/lib/opencv_world420d.lib")
-
 
 // #include <opencv2/videoio.hpp> // 동영상 처리 
 // 주요 함수 https://jangjy.tistory.com/18?category=625807

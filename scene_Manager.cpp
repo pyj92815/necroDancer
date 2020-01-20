@@ -14,6 +14,7 @@ HRESULT scene_Manager::init()
 {
 
 	SCENEMANAGER->addScene("Intro", _intro = new introScene);
+	SCENEMANAGER->addScene("Loading", new loadingScene);
 	SCENEMANAGER->addScene("Stage", _stage = new stageScene);
 	SCENEMANAGER->addScene("End", _end = new endScene);
 	SCENEMANAGER->addScene("Boss", _boss = new bossScene);
@@ -42,6 +43,11 @@ void scene_Manager::update()
 	{
 		SCENEMANAGER->changeScene("End");
 	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F6))
+	{
+		SCENEMANAGER->changeScene("Loading");
+	}
+
 
 }
 
