@@ -159,6 +159,7 @@
     <ClInclude Include="aStarManager.h" />
     <ClInclude Include="aStarScene.h" />
     <ClInclude Include="aStarTest.h" />
+    <ClInclude Include="Beat.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossLibrary.h" />
     <ClInclude Include="bossMove.h" />
@@ -225,6 +226,7 @@
     <ClCompile Include="aStarManager.cpp" />
     <ClCompile Include="aStarScene.cpp" />
     <ClCompile Include="aStarTest.cpp" />
+    <ClCompile Include="Beat.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossMove.cpp" />
     <ClCompile Include="bossScene.cpp" />

@@ -73,6 +73,15 @@
     <Filter Include="playGround\boss">
       <UniqueIdentifier>{22ada17d-d20c-4e65-9e82-ae5522171c9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\GameSettingManager">
+      <UniqueIdentifier>{eea3e2d0-acf8-49fa-a302-d101f1c11226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\GameSettingManager\Option">
+      <UniqueIdentifier>{4d40f321-88e3-4524-ab6d-7b361c88c3a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\GameSettingManager\Beat">
+      <UniqueIdentifier>{e9b0f420-8eab-452d-b96e-483946f1eaf5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -267,6 +276,9 @@
     <ClInclude Include="mapToolScene.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Beat.h">
+      <Filter>playGround\GameSettingManager\Beat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -439,6 +451,9 @@
     </ClCompile>
     <ClCompile Include="mapToolScene.cpp">
       <Filter>playGround\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Beat.cpp">
+      <Filter>playGround\GameSettingManager\Beat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
