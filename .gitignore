@@ -1,3 +1,5 @@
 .vs/
 opencv/
 x64/
+opencv2/
+opencv_world420d.dll
