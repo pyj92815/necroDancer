@@ -44,7 +44,7 @@ void boss::render()
 
 void boss::render(ThrowShield info)
 {
-	info.image->render(getMemDC(), info.rc.left, info.rc.top);
+	info.image->render(CAMERAMANAGER->getWorldDC(), info.rc.left, info.rc.top);
 }
 
 void boss::addBossImage()

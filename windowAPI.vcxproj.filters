@@ -70,6 +70,9 @@
     <Filter Include="playGround\MapTool">
       <UniqueIdentifier>{cd7060e9-3639-49b0-a374-5f738b819ffe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\boss">
+      <UniqueIdentifier>{22ada17d-d20c-4e65-9e82-ae5522171c9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -243,6 +246,24 @@
     <ClInclude Include="mapTool.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="boss.h">
+      <Filter>playGround\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="bossLibrary.h">
+      <Filter>playGround\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="bossMove.h">
+      <Filter>playGround\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageScene.h">
+      <Filter>playGround\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageTestTile.h">
+      <Filter>playGround\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="deathMetal.h">
+      <Filter>playGround\boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -397,6 +418,21 @@
     </ClCompile>
     <ClCompile Include="mapTool.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.cpp">
+      <Filter>playGround\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="bossMove.cpp">
+      <Filter>playGround\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageScene.cpp">
+      <Filter>playGround\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageTestTile.cpp">
+      <Filter>playGround\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="deathMetal.cpp">
+      <Filter>playGround\boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

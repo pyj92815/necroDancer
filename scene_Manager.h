@@ -5,6 +5,7 @@
 #include "stageScene.h"
 #include "bossScene.h"
 #include "endScene.h"
+#include "bossStageScene.h" // 보스 스테이지 
 
 class scene_Manager:public gameNode
 {
@@ -12,7 +13,7 @@ private:
 	introScene* _intro;
 	stageScene* _stage;
 	endScene* _end;
-	bossScene* _boss;
+	bossStageScene* _boss;
 
 public:
 	scene_Manager();

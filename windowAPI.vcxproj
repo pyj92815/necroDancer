@@ -72,9 +72,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;./lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;./lib/;</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);./inc;</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -90,6 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\KGA-17\Desktop\teamProject;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,10 +159,16 @@
     <ClInclude Include="aStarManager.h" />
     <ClInclude Include="aStarScene.h" />
     <ClInclude Include="aStarTest.h" />
+    <ClInclude Include="boss.h" />
+    <ClInclude Include="bossLibrary.h" />
+    <ClInclude Include="bossMove.h" />
     <ClInclude Include="bossScene.h" />
+    <ClInclude Include="bossStageScene.h" />
+    <ClInclude Include="bossStageTestTile.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="deathMetal.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="endScene.h" />
@@ -214,9 +224,14 @@
     <ClCompile Include="aStarManager.cpp" />
     <ClCompile Include="aStarScene.cpp" />
     <ClCompile Include="aStarTest.cpp" />
+    <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bossMove.cpp" />
     <ClCompile Include="bossScene.cpp" />
+    <ClCompile Include="bossStageScene.cpp" />
+    <ClCompile Include="bossStageTestTile.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="cameraManager.cpp" />
+    <ClCompile Include="deathMetal.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="endScene.cpp" />

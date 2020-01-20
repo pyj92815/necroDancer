@@ -1,5 +1,11 @@
 .vs/
-opencv/
 x64/
-opencv2/
-opencv_world420d.dll
+./opencvBuild/
+./Debug/
+*.obj
+*.res
+*.pch
+*.pdb
+*.tlog
+*.log
+*.idb

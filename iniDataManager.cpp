@@ -43,7 +43,7 @@ void iniDataManager::iniSave(const char* fileName)
 	char dir[256];
 
 	ZeroMemory(dir, sizeof(dir));
-	sprintf(dir, "\\%s.ini", fileName);
+	sprintf_s(dir, "\\%s.ini", fileName);
 
 	//현재 디렉토리 경로를 받아와주는 함수 (버퍼, 문자열)
 	GetCurrentDirectory(256, str);
@@ -68,7 +68,7 @@ char* iniDataManager::loadDataString(const char* fileName, const char* subject, 
 	char dir[256];
 
 	ZeroMemory(dir, sizeof(dir));
-	sprintf(dir, "\\%s.ini", fileName);
+	sprintf_s(dir, "\\%s.ini", fileName);
 
 	GetCurrentDirectory(256, str);
 	strncat_s(str, 256, dir, 254);
@@ -86,7 +86,7 @@ int iniDataManager::loadDataInterger(const char* fileName, const char* subject, 
 	char dir[256];
 
 	ZeroMemory(dir, sizeof(dir));
-	sprintf(dir, "\\%s.ini", fileName);
+	sprintf_s(dir, "\\%s.ini", fileName);
 
 	GetCurrentDirectory(256, str);
 	strncat_s(str, 256, dir, 254);

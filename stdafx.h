@@ -20,7 +20,7 @@
 #include "opencv2/opencv.hpp"	
 #include <opencv2/highgui/highgui_c.h>
 
-#pragma comment (lib,"opencv/build/x64/vc15/lib/opencv_world420d.lib")
+#pragma comment (lib,"opencv_world420d.lib")
 
 // #include <opencv2/videoio.hpp> // 동영상 처리 
 // 주요 함수 https://jangjy.tistory.com/18?category=625807
