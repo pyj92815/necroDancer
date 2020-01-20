@@ -14,6 +14,8 @@ public:
 	gameNode();
 	virtual ~gameNode();
 
+	int _crtSelect;  // 맵툴 만드는 중 
+
 	virtual HRESULT init();			//초기화 전용 함수
 	virtual HRESULT init(bool managerInit);
 	virtual void release();			//메모리 해제 함수

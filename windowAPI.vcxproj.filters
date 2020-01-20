@@ -67,6 +67,9 @@
     <Filter Include="2DGameFramework\video">
       <UniqueIdentifier>{0d3642fe-ba18-4ab0-bab4-7ebd096f9641}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\MapTool">
+      <UniqueIdentifier>{cd7060e9-3639-49b0-a374-5f738b819ffe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -237,6 +240,9 @@
     <ClInclude Include="cameraManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="mapTool.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -387,6 +393,9 @@
       <Filter>playGround\Scene</Filter>
     </ClCompile>
     <ClCompile Include="cameraManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="mapTool.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

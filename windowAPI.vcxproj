@@ -23,7 +23,7 @@
     <ProjectGuid>{28B4DAE8-5578-4957-B006-3CD8EAE245FC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>windowAPI</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -184,6 +184,7 @@
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="loadingScene.h" />
+    <ClInclude Include="mapTool.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerManager.h" />
     <ClInclude Include="playerTestTile.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="loadingScene.cpp" />
+    <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerManager.cpp" />
     <ClCompile Include="playerTestTile.cpp" />

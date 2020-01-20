@@ -25,7 +25,6 @@
 // #include <opencv2/videoio.hpp> // 동영상 처리 
 // 주요 함수 https://jangjy.tistory.com/18?category=625807
 // 마우스 함수 https://cinema4dr12.tistory.com/809
-using namespace cv;
 // C 런타임 헤더 파일입니다.
 #include <stdlib.h>
 #include <malloc.h>
@@ -33,6 +32,7 @@ using namespace cv;
 #include <tchar.h>
 #include <iostream>
 
+using namespace cv;
 using namespace std;
 
 #include "commonMacroFunction.h"
