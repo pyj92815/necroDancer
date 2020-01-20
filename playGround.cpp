@@ -56,11 +56,13 @@ void playGround::update()
 
 void playGround::render()
 {
-	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
+	//PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
+	PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY, BLACKNESS);
 	//===========================================================
 
 	_sm->render();
 	//===========================================================
-	if(!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
+	//if(!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
+	if (!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
 
 }

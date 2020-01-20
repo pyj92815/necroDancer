@@ -157,6 +157,7 @@
     <ClInclude Include="aStarTest.h" />
     <ClInclude Include="bossScene.h" />
     <ClInclude Include="button.h" />
+    <ClInclude Include="cameraManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="aStarTest.cpp" />
     <ClCompile Include="bossScene.cpp" />
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="endScene.cpp" />

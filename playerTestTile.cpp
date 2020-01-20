@@ -30,7 +30,7 @@ void playerTestTile::render()
 {
 	for (_viTiles = _vTiles.begin(); _viTiles != _vTiles.end(); ++_viTiles)
 	{
-		(*_viTiles)->render(getMemDC());
+		(*_viTiles)->render(CAMERAMANAGER->getWorldDC());
 	}
 }
 

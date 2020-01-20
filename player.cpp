@@ -75,12 +75,13 @@ void player::update()
 	_jump->update();				// JUMP
 	keyControl();					// KEY
 	playerMove();					// MOVE
+	CAMERAMANAGER->set_CameraXY(_player.x, _player.y);
 }
 
 void player::render()
 {
-	_player.bodyImage->aniRender(getMemDC(), _player.x, _player.y, _player.bodyAni);	// ¸ö
-	_player.headImage->aniRender(getMemDC(), _player.x, _player.y, _player.headAni);	// ¾ó±¼ 
+	_player.bodyImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.bodyAni);	// ¸ö
+	_player.headImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.headAni);	// ¾ó±¼ 
 }
 
 void player::playerMove()

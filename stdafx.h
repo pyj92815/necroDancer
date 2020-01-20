@@ -47,6 +47,7 @@ using namespace std;
 #include "sceneManager.h"
 #include "keyAniManager.h"
 #include "iniDataManager.h"
+#include "cameraManager.h"
 
 using namespace SEVENTEEN_UTIL;
 
@@ -71,7 +72,7 @@ using namespace SEVENTEEN_UTIL;
 #define SCENEMANAGER sceneManager::getSingleton()
 #define KEYANIMANAGER keyAniManager::getSingleton()
 #define INIDATAMANAGER iniDataManager::getSingleton()
-
+#define CAMERAMANAGER cameraManager::getSingleton()
 
 #define SAFE_DELETE(p) {if(p) {delete(p); (p)=NULL;}}
 #define SAFE_RELEASE(p) {if(p) {(p)->release(); (p) = NULL;}}
