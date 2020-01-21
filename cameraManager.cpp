@@ -11,8 +11,8 @@ cameraManager::cameraManager()
 	_worldImage = IMAGEMANAGER->addImage("worldMap",4000, 2000);
 	_worldDC = _worldImage->getMemDC();
 
-	_cameraWorldSizeX = 4000;
-	_cameraWorldSizeY = 2000;
+	_cameraWorldSizeX = 5200;
+	_cameraWorldSizeY = 5200;
 }
 
 cameraManager::~cameraManager()
