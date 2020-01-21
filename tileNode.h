@@ -102,8 +102,20 @@ enum POS
 	POS_PLAYER
 };
 
+enum TYPE
+{
+	TYPE_TERRAIN,
+	TYPE_WALL,
+	TYPE_TRAP,
+	TYPE_OBJECT,
+	TYPE_ENEMY,
+	TYPE_CHARACTER,
+	TYPE_NONE
+};
+
 struct tagTile
 {
+	TYPE type;				//상태
 	TERRAIN terrain;		//지형
 	WALL wall;				//벽
 	TRAP trap;				//함정

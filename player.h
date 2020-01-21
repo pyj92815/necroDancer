@@ -59,4 +59,5 @@ public:
 	//접근자 
 	tagPlayer getPlayer() { return _player; }	// 플레이어 값 반환 
 	int getSight() { return _player.sight; }	// 시야 값 반환 
+	PLAYERSTATE getState() { return _player.state; }	// 플레이어의 상태 값 반환 (HG가 추가했음)
 };

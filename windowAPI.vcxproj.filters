@@ -97,6 +97,9 @@
     <Filter Include="playGround\boss\boss Stage Test Tile">
       <UniqueIdentifier>{eb686c76-ab7f-48fe-beec-ea403cb2cd89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\Collision">
+      <UniqueIdentifier>{6425a4cd-9763-49c8-91c9-5e3cb0cdd5c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -297,6 +300,15 @@
     <ClInclude Include="bossStageTestTile.h">
       <Filter>playGround\boss\boss Stage Test Tile</Filter>
     </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>playGround\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="bossKinds.h">
+      <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision_Library.h">
+      <Filter>playGround\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -472,6 +484,9 @@
     </ClCompile>
     <ClCompile Include="bossStageTestTile.cpp">
       <Filter>playGround\boss\boss Stage Test Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>playGround\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

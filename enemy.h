@@ -31,6 +31,7 @@ public:
 	virtual void EnemyCreate(float x, float y, float HP,float damage,const char* enemyName);
 
 	//vector Á¢±ÙÀÚ
-	virtual EnemyInfo*	getVEnemyInfo() { return _enemyInfo; }
+	virtual EnemyInfo*	getEnemyInfo() { return _enemyInfo; }
+
 };
 
