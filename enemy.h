@@ -44,7 +44,9 @@ public:
 	//Enemy생성 함수 (float x, float y, float HP, float damage, const char* enemyName)
 	virtual void EnemyCreate(float x, float y, float HP,float damage,const char* enemyName1,const char* enemyName2);
 
+
 	//Enemy정보 접근자
 	virtual EnemyInfo* getEnemyInfo() { return _enemyInfo; }
+
 };
 

@@ -162,6 +162,7 @@
     <ClInclude Include="aStarTest.h" />
     <ClInclude Include="Beat.h" />
     <ClInclude Include="boss.h" />
+    <ClInclude Include="bossKinds.h" />
     <ClInclude Include="bossLibrary.h" />
     <ClInclude Include="bossMove.h" />
     <ClInclude Include="bossScene.h" />
@@ -169,6 +170,8 @@
     <ClInclude Include="bossStageTestTile.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="cameraManager.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="Collision_Library.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="deathMetal.h" />
     <ClInclude Include="effect.h" />
@@ -237,6 +240,7 @@
     <ClCompile Include="bossStageTestTile.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="cameraManager.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="deathMetal.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
