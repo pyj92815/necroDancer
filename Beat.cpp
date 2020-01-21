@@ -49,8 +49,16 @@ void Beat::render()
     {
         for (int i = 0; i < _noteLeft.size(); i++)
         {
-            Rectangle(getMemDC(), _noteLeft[i].rc);
+            //Rectangle(getMemDC(), _noteLeft[i].rc);
             _noteLeft[i].img->render(getMemDC(), _noteLeft[i].rc.left, _noteLeft[i].rc.top);
+        }
+    }
+    if (_noteRight.size() > 0)
+    {
+        for (int i = 0; i < _noteRight.size(); i++)
+        {
+            //Rectangle(getMemDC(), _noteRight[i].rc);
+            _noteRight[i].img->render(getMemDC(), _noteRight[i].rc.left, _noteRight[i].rc.top);
         }
     }
 
@@ -63,12 +71,11 @@ void Beat::render()
 
 void Beat::init_AddSoundAndImg()
 {
-    //SOUNDMANAGER->addSound("BGM_LOBBY", "Music/lobby.ogg", false, true); // 원래 상태
-    SOUNDMANAGER->addSound("BGM_LOBBY", "Music/lobby.ogg", true, false);
+    SOUNDMANAGER->addSound("BGM_LOBBY", "Music/lobby.ogg", false, true); // 원래 상태
     SOUNDMANAGER->addSound("BGM_STAGE_1_1", "Music/zone1_1.ogg", true, false);
     SOUNDMANAGER->addSound("BGM_STAGE_1_2", "Music/zone1_2.ogg", true, false);
     SOUNDMANAGER->addSound("BGM_STAGE_1_3", "Music/zone1_3.ogg", true, false);
-    SOUNDMANAGER->addSound("BGM_BOSS", "Music/boss_2.ogg", true, false);
+    SOUNDMANAGER->addSound("BGM_BOSS", "Music/boss_2.ogg", false, true);
 
     SOUNDMANAGER->addSound("NPC_Stage_1_1_shopkeeper", "Music/zone1_1_shopkeeper.ogg", true, false);
     SOUNDMANAGER->addSound("NPC_Stage_1_2_shopkeeper", "Music/zone1_2_shopkeeper.ogg", true, false);
@@ -76,14 +83,14 @@ void Beat::init_AddSoundAndImg()
 
     IMAGEMANAGER->addImage("GreenNote", "image/player/TEMP_beat_marker.bmp", 12, 64, true, RGB(255, 0, 255));
     IMAGEMANAGER->addImage("RedNote", "image/player/TEMP_beat_marker_red.bmp", 12, 64, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addFrameImage("Heart", "image/player/TEMP_beat_heart.bmp", 164, 104, 2, 1, true, RGB(255, 0, 255));
+    IMAGEMANAGER->addFrameImage("Heart", "image/player/TEMP_beat_heart.bmp", 205, 130, 2, 1, true, RGB(255, 0, 255));
 }
 
 void Beat::init_SetObjs()
 {
     _currentStage = STAGE_LOBBY;
     _noteFileName = _currentSongName = _oldSongName = "";
-    heartFrameCount = heartFrameRate = _isBeating = _activeAction = _deltaTime = _countNote = _countComma = _oldStageID = _currentStageID = _songPos = _pitch = _noteSpeed = 0;
+    _songLeftTime = heartFrameCount = heartFrameRate = _isBeating = _activeAction = _deltaTime = _countNote = _countComma = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = _noteSpeed = 0;
 
     test_ShopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
     test_ShopKeeper = RectMakeCenter(test_ShopKeeperPos.x, test_ShopKeeperPos.y, 50, 50);
@@ -105,11 +112,11 @@ void Beat::init_SetObjs()
 
 void Beat::update_SceneCheck()
 {
-    if (KEYMANAGER->isOnceKeyDown('E')) _currentStage = STAGE_LOBBY, _currentStageID = (int)_currentStage, _currentSongName = "BGM_LOBBY", _currentShopkeeper = "", _noteFileName = "Music/lobby.txt", Load();
-    else if (KEYMANAGER->isOnceKeyDown('R')) _currentStage = STAGE_1_1, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_1", _currentShopkeeper = "NPC_Stage_1_1_shopkeeper", _noteFileName = "Music/zone1_1.txt", Load();
-    else if (KEYMANAGER->isOnceKeyDown('T')) _currentStage = STAGE_1_2, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_2", _currentShopkeeper = "NPC_Stage_1_2_shopkeeper", _noteFileName = "Music/zone1_2.txt", Load();
-    else if (KEYMANAGER->isOnceKeyDown('Y')) _currentStage = STAGE_1_3, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_3", _currentShopkeeper = "NPC_Stage_1_3_shopkeeper", _noteFileName = "Music/zone1_3.txt", Load();
-    else if (KEYMANAGER->isOnceKeyDown('U')) _currentStage = BOSS, _currentStageID = (int)_currentStage, _currentSongName = "BGM_BOSS", _currentShopkeeper = "", _noteFileName = "Music/boss_2.txt", Load();
+    if (KEYMANAGER->isOnceKeyDown('E')) _currentStage = STAGE_LOBBY, _currentStageID = (int)_currentStage, _currentSongName = "BGM_LOBBY", _currentShopkeeper = "", _noteFileName = "Music/lobby.txt", Load(), _loopSong = true;
+    else if (KEYMANAGER->isOnceKeyDown('R')) _currentStage = STAGE_1_1, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_1", _currentShopkeeper = "NPC_Stage_1_1_shopkeeper", _noteFileName = "Music/zone1_1.txt", Load(), _loopSong = false;
+    else if (KEYMANAGER->isOnceKeyDown('T')) _currentStage = STAGE_1_2, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_2", _currentShopkeeper = "NPC_Stage_1_2_shopkeeper", _noteFileName = "Music/zone1_2.txt", Load(), _loopSong = false;
+    else if (KEYMANAGER->isOnceKeyDown('Y')) _currentStage = STAGE_1_3, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_3", _currentShopkeeper = "NPC_Stage_1_3_shopkeeper", _noteFileName = "Music/zone1_3.txt", Load(), _loopSong = false;
+    else if (KEYMANAGER->isOnceKeyDown('U')) _currentStage = BOSS, _currentStageID = (int)_currentStage, _currentSongName = "BGM_BOSS", _currentShopkeeper = "", _noteFileName = "Music/boss_2.txt", Load(), _loopSong = true;
 }
 
 void Beat::update_PlayerMoveTest()
@@ -123,6 +130,9 @@ void Beat::update_PlayerMoveTest()
 
 void Beat::update_SongAndNoteControl()
 {
+    SOUNDMANAGER->getSongPosition(_currentSongName, _songPos);
+    _songLeftTime = GetSongVariousTime(_songPos, _songLength);
+
     // 프로그램 최초 실행 후 재생한 곡이 아직 아무것도 없는 경우에 키를 입력한 경우
     if (_currentSongName != "" && _oldSongName == "")
     {
@@ -137,7 +147,9 @@ void Beat::update_SongAndNoteControl()
     if (_currentStageID != _oldStageID)
     {
         _noteSpeed = 0;
+        _songLeftTime = 0;
         _noteLeft.clear();
+        _noteRight.clear();
         SOUNDMANAGER->stop(_oldSongName), SOUNDMANAGER->stop(_oldShopKeeper);
         SOUNDMANAGER->play(_currentSongName), SOUNDMANAGER->play(_currentShopkeeper);
         _oldSongName = _currentSongName;
@@ -145,38 +157,113 @@ void Beat::update_SongAndNoteControl()
         _oldStageID = _currentStageID;
         _deltaTime = TIMEMANAGER->getElapsedTime();
 
-        for (int i = 0; i < 4; i++) // 새 노트로 리셋
+        for (int i = 0; i < 4; i++) // 새 노트로 리셋, 오른쪽
         {
-            tagNote setStartNote;
-            setStartNote.pos = { (float)WINSIZEX_HALF - (NOTE_INTERVAL * (i + 1)), WINSIZEY - 100 };
-            setStartNote.img = new image;
-            setStartNote.img = IMAGEMANAGER->findImage("GreenNote");
-            setStartNote.img->setX(setStartNote.pos.x - setStartNote.img->getWidth() / 2);
-            setStartNote.img->setY(setStartNote.pos.y - setStartNote.img->getHeight() / 2);
-            setStartNote.rc = RectMakeCenter(setStartNote.pos.x, setStartNote.pos.y, setStartNote.img->getWidth(), setStartNote.img->getHeight());
-            setStartNote.speed = _deltaTime / ((_msTimeInfo[_countNote + 1] - _msTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
-            setStartNote.isCol = false;
-            _noteLeft.push_back(setStartNote);
-            ++_countNote;
+            tagNote setRightNote;
+            setRightNote.pos = { (float)WINSIZEX_HALF + (NOTE_INTERVAL * (i + 1)), (float)(heartRC.top + heartRC.bottom) / 2 };
+            setRightNote.img = new image;
+            setRightNote.img = IMAGEMANAGER->findImage("GreenNote");
+            setRightNote.img->setX(setRightNote.pos.x - setRightNote.img->getWidth() / 2);
+            setRightNote.img->setY(setRightNote.pos.y - setRightNote.img->getHeight() / 2);
+            setRightNote.rc = RectMakeCenter(setRightNote.pos.x, setRightNote.pos.y, setRightNote.img->getWidth(), setRightNote.img->getHeight());
+            setRightNote.speed = _deltaTime / ((_msTimeInfo[_countNote + 1] - _msTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+            setRightNote.isCol = false;
+            _noteRight.push_back(setRightNote);
+        }
+
+        for (int i = 0; i < 4; i++) // 새 노트로 리셋, 왼쪽
+        {
+            tagNote setLeftNote;
+            setLeftNote.pos = { (float)WINSIZEX_HALF - (NOTE_INTERVAL * (i + 1)), (float)(heartRC.top + heartRC.bottom) / 2 };
+            setLeftNote.img = new image;
+            setLeftNote.img = IMAGEMANAGER->findImage("GreenNote");
+            setLeftNote.img->setX(setLeftNote.pos.x - setLeftNote.img->getWidth() / 2);
+            setLeftNote.img->setY(setLeftNote.pos.y - setLeftNote.img->getHeight() / 2);
+            setLeftNote.rc = RectMakeCenter(setLeftNote.pos.x, setLeftNote.pos.y, setLeftNote.img->getWidth(), setLeftNote.img->getHeight());
+            setLeftNote.speed = _deltaTime / ((_msTimeInfo[_countNote + 1] - _msTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+            setLeftNote.isCol = false;
+            _noteLeft.push_back(setLeftNote);
+            ++_countNote; // *카운트 노트는 왼쪽 기준으로만 세주자! 양쪽다 하면 두 번 일하는거니깐!
         }
     }
 
     if (_songPos > 0) // 곡이 시작되었을때
     {
-        for (int i = 0; i < _noteLeft.size(); i++)
+        for (int i = 0; i < _noteRight.size(); i++) // 오른쪽 노트
+        {
+            if (_noteRight[i].pos.x <= WINSIZEX / 2)
+            {
+                _noteRight.erase(_noteRight.begin() + i);
+
+                if (_noteRight.size() <= 0) break;
+
+                if (_countNote < _countComma - 3) // 노트 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌)
+                {
+                    tagNote newNote;
+                    newNote.pos = { WINSIZEX, (float)(heartRC.top + heartRC.bottom) / 2 };
+
+                    if (_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                    else if (_songLeftTime > (float)(_songLength / 1000) * 0.15f && !_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                    else newNote.img = IMAGEMANAGER->findImage("RedNote");
+
+                    newNote.img->setX(newNote.pos.x - newNote.img->getWidth() / 2);
+                    newNote.img->setY(newNote.pos.y - newNote.img->getHeight() / 2);
+                    newNote.rc = RectMakeCenter(newNote.pos.x, newNote.pos.y, newNote.img->getWidth(), newNote.img->getHeight());
+                    newNote.speed = _deltaTime / ((_msTimeInfo[_countNote + 1] - _msTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+                    newNote.isCol = false;
+                    _noteRight.push_back(newNote);
+                }
+                else
+                {
+                    if (_loopSong)
+                    {
+                        _countNote = 0;
+                        tagNote newNote;
+                        newNote.pos = { WINSIZEX, (float)(heartRC.top + heartRC.bottom) / 2 };
+
+                        if (_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                        else if (_songLeftTime > (float)(_songLength / 1000) * 0.15f && !_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                        else newNote.img = IMAGEMANAGER->findImage("RedNote");
+
+                        newNote.img->setX(newNote.pos.x - newNote.img->getWidth() / 2);
+                        newNote.img->setY(newNote.pos.y - newNote.img->getHeight() / 2);
+                        newNote.rc = RectMakeCenter(newNote.pos.x, newNote.pos.y, newNote.img->getWidth(), newNote.img->getHeight());
+                        newNote.speed = _deltaTime / ((_msTimeInfo[_countNote + 1] - _msTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+                        newNote.isCol = false;
+                        _noteRight.push_back(newNote);
+                    }
+                }
+            }
+            _noteRight[i].pos.x -= _deltaTime / ((_msTimeInfo[_countNote + 1] - _msTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+            _noteRight[i].img->setX(_noteRight[i].pos.x - _noteRight[i].img->getWidth() / 2);
+            _noteRight[i].img->setY(_noteRight[i].pos.y - _noteRight[i].img->getHeight() / 2);
+            _noteRight[i].rc = RectMakeCenter(_noteRight[i].pos.x, _noteRight[i].pos.y, _noteRight[i].img->getWidth(), _noteRight[i].img->getHeight());
+
+            RECT temp;
+            if (IntersectRect(&temp, &_noteRight[i].rc, &heartRC))
+            {
+                if (!_noteRight[i].isCol) _isBeating = true;
+                _noteRight[i].isCol = true;
+            }
+        }
+
+        for (int i = 0; i < _noteLeft.size(); i++) // 왼쪽 노트
         {
             if (_noteLeft[i].pos.x >= WINSIZEX / 2)
             {
                 _noteLeft.erase(_noteLeft.begin() + i);
-                _activeAction = true;
 
                 if (_noteLeft.size() <= 0) break;
 
                 if (_countNote < _countComma - 3) // 노트 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌)
                 {
                     tagNote newNote;
-                    newNote.pos = { 0, WINSIZEY - 100 };
-                    newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                    newNote.pos = { 0, (float)(heartRC.top + heartRC.bottom) / 2 };
+
+                    if (_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                    else if (_songLeftTime > (float)(_songLength / 1000) * 0.15f && !_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                    else newNote.img = IMAGEMANAGER->findImage("RedNote");
+
                     newNote.img->setX(newNote.pos.x - newNote.img->getWidth() / 2);
                     newNote.img->setY(newNote.pos.y - newNote.img->getHeight() / 2);
                     newNote.rc = RectMakeCenter(newNote.pos.x, newNote.pos.y, newNote.img->getWidth(), newNote.img->getHeight());
@@ -184,6 +271,27 @@ void Beat::update_SongAndNoteControl()
                     newNote.isCol = false;
                     _noteLeft.push_back(newNote);
                     ++_countNote;
+                }
+                else
+                {
+                    if (_loopSong)
+                    {
+                        _countNote = 0;
+                        tagNote newNote;
+                        newNote.pos = { 0, (float)(heartRC.top + heartRC.bottom) / 2 };
+
+                        if(_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                        else if (_songLeftTime > (float)(_songLength / 1000) * 0.15f  &&  !_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote");
+                        else newNote.img = IMAGEMANAGER->findImage("RedNote");
+
+                        newNote.img->setX(newNote.pos.x - newNote.img->getWidth() / 2);
+                        newNote.img->setY(newNote.pos.y - newNote.img->getHeight() / 2);
+                        newNote.rc = RectMakeCenter(newNote.pos.x, newNote.pos.y, newNote.img->getWidth(), newNote.img->getHeight());
+                        newNote.speed = _deltaTime / ((_msTimeInfo[_countNote + 1] - _msTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+                        newNote.isCol = false;
+                        _noteLeft.push_back(newNote);
+                        ++_countNote;
+                    }
                 }
             }
             _noteLeft[i].pos.x += _deltaTime / ((_msTimeInfo[_countNote + 1] - _msTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
@@ -194,7 +302,7 @@ void Beat::update_SongAndNoteControl()
             RECT temp;
             if (IntersectRect(&temp, &_noteLeft[i].rc, &heartRC))
             {
-                _isBeating = true;
+                if (!_noteLeft[i].isCol) _isBeating = true;
                 _noteLeft[i].isCol = true;
             }
         }
@@ -253,11 +361,11 @@ void Beat::render_DebugLog(HDC getMemDC)
         char display_Pitch[128];
         sprintf_s(display_Pitch, sizeof(display_Pitch), "%f", SOUNDMANAGER->getPitch(_currentSongName, _pitch));
         TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
-
+        
         char display_songPos[256];
-        sprintf_s(display_songPos, sizeof(display_songPos), "%d", SOUNDMANAGER->getSongPosition(_currentSongName, _songPos));
+        sprintf_s(display_songPos, sizeof(display_songPos), "%d", _songPos);
         TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
-
+        
         char display_endVec[256];
         sprintf_s(display_endVec, sizeof(display_endVec), "%d", _noteLeft.size());
         TextOut(getMemDC, 100, 140, display_endVec, strlen(display_endVec));
@@ -266,9 +374,9 @@ void Beat::render_DebugLog(HDC getMemDC)
         sprintf_s(display_noteInfoLength, sizeof(display_noteInfoLength), "%d", _msTimeInfo.size());
         TextOut(getMemDC, 100, 160, display_noteInfoLength, strlen(display_noteInfoLength));
 
-        char display_countComma[256];
-        sprintf_s(display_countComma, sizeof(display_countComma), "%d", heartFrameRate);
-        TextOut(getMemDC, 100, 180, display_countComma, strlen(display_countComma));
+        char display_songLength[256];
+        sprintf_s(display_songLength, sizeof(display_songLength), "%f", _songLeftTime);
+        TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
 
         char display_checkInfo[256];
         sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _countNote);
@@ -284,6 +392,7 @@ void Beat::Load()
         _msTimeInfo.clear(); // 벡터 재사용을 위한 클리어
         _countNote = _countComma = 0;
     }
+    _songLength = 0;
 
     ifstream readFile;
     string tempWord;
@@ -308,4 +417,17 @@ void Beat::Load()
         //_msTimeInfo.erase(_msTimeInfo.begin() + (_msTimeInfo.size() - 1)); // 현재 구조상 맨 마지막 부분에 0을 항상 저장하므로 맨 마지막 요소를 제거함
         readFile.close();
     }
+
+    for (int i = 0; i < _msTimeInfo.size() - 2; i++) // FMOD::SOUND에 getLength() 함수가 망가져서 만들었음 ㅠㅠ... 아마 원인이 함수도 음악 파일 확장자에 따라서 잘 작동되는 함수가 있는 반면 아닌 함수도 있다. 예를 들어 getVolume함수 같은 경우에도 일부 확장자만 함수 사용이 가능함
+    {
+        int getMS = _msTimeInfo[i + 1] - _msTimeInfo[i];
+        _songLength += getMS;
+    }
+}
+
+float Beat::GetSongVariousTime(unsigned int playTime, unsigned int songLength)
+{
+    float songLeftLength = songLength - playTime;
+    songLeftLength /= 1000;
+    return songLeftLength;
 }
