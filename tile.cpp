@@ -47,7 +47,7 @@ HRESULT tile::init(const char* imageName, int idX, int idY, int tileWidth, int t
 
 	_rc = RectMakeCenter(_center.x, _center.y, tileWidth, tileHeight);
 
-	_alphaValue = 255;  // 
+	_alphaValue = 255;  //
 
 	return S_OK;
 }

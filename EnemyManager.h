@@ -23,7 +23,9 @@ class EnemyManager :public gameNode
 private:
 	vector<Enemy*> _vEnemy;
 	vector<Enemy*>::iterator _viEnemy;
+
 	EnemyType _enemyType;
+
 
 public:
 	EnemyManager() {};
@@ -47,82 +49,8 @@ public:
 	void Enemy_Wraith_Create(float x, float y);
 	void Enemy_Zombie_Create(float x, float y);
 
-
 	//이미지 추가 함수
-	void imageAdd()
-	{
-		IMAGEMANAGER->addFrameImage("Enemy_bat", "./image./Enemy/bat.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_dragon", "./image./Enemy/dragon.bmp", 216, 204, 2, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_ghost", "./image./Enemy/ghost.bmp", 48 * 2, 48 * 2, 2, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_minotaur", "./image./Enemy/minotaur.bmp", 450 * 2, 98 * 2, 9, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_skeleton", "./image./Enemy/skeleton.bmp", 192 * 2, 50 * 2, 8, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_skeleton_yellow", "./image./Enemy/skeleton_yellow.bmp", 216 * 2, 50 * 2, 9, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_slime_blue", "./image./Enemy/slime_blue.bmp", 208 * 2, 50 * 2, 8, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_slime_orange", "./image./Enemy/slime_orange.bmp", 104 * 2, 52 * 2, 4, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_wraith", "./image./Enemy/wraith.bmp", 72 * 2, 48 * 2, 3, 2, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("Enemy_zombie", "./image./Enemy/zombie.bmp", 576 * 2, 50 * 2, 24, 2, true, RGB(255, 0, 255));
-	}
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	void imageAdd();
+	void AnimationAdd();
 
 };

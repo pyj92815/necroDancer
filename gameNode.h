@@ -1,6 +1,6 @@
 #pragma once
-#include "image.h"
 
+#include "image.h"
 
 //백버퍼는 어차피 한개만 있으면 되니 전역으로 빼봅시당
 static image* _backBuffer = IMAGEMANAGER->addImage("backBuffer", WINSIZEX, WINSIZEY);

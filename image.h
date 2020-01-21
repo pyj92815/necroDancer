@@ -123,6 +123,8 @@ public:
 
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
+	inline HBITMAP getHBit() { return _imageInfo->hBit; }
+	inline DWORD getResID() { return _imageInfo->resID; }
 
 	//===================================
 	// ## 이미지 관련 접근자, 설정자 ##
