@@ -11,7 +11,6 @@ mapTool::~mapTool()
 }
 
 void setWindowsSize(int x, int y, int width, int height);
-LRESULT MainProc(HWND, UINT, WPARAM, LPARAM);
 
 HRESULT mapTool::init()
 {
@@ -37,7 +36,10 @@ void mapTool::release()
 
 void mapTool::update()
 {
-
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+	{
+		setMap();
+	}
 }
 
 
@@ -72,7 +74,7 @@ void mapTool::render()
 			_tiles[i].rc.left, _tiles[i].rc.top,
 			_tiles[i].trapFrameX, _tiles[i].trapFrameY);
 	}
-	//RECT 잘그림
+	
 	if (_crtSelect == CTRL_TERRAINDRAW)
 	{
 		IMAGEMANAGER->render("terrainTiles", CAMERAMANAGER->getWorldDC(), _WINSIZEX - IMAGEMANAGER->findImage("terrainTiles")->getWidth(), 0);
@@ -82,47 +84,53 @@ void mapTool::render()
 		}*/
 	}
 
-	//RECT 잘그림
+	
 	if (_crtSelect == CTRL_TRAP)
 	{
-		for (int i = 0; i < TRAPTILEX * TRAPTILEY; ++i)
+		/*for (int i = 0; i < TRAPTILEX * TRAPTILEY; ++i)
 		{
 			Rectangle(CAMERAMANAGER->getWorldDC(), _trapTile[i].rcTile);
-		}
+		}*/
 		IMAGEMANAGER->render("trapTiles", CAMERAMANAGER->getWorldDC(), _WINSIZEX - IMAGEMANAGER->findImage("trapTiles")->getWidth(), 0);
 	}
 
 	if (_crtSelect == CTRL_WALLDRAW)
 	{
 		IMAGEMANAGER->render("wallTiles", CAMERAMANAGER->getWorldDC(), _WINSIZEX - IMAGEMANAGER->findImage("wallTiles")->getWidth(), 0);
-		for (int i = 0; i < WALLTILEX * WALLTILEY; ++i)
+		/*for (int i = 0; i < WALLTILEX * WALLTILEY; ++i)
 		{
 			Rectangle(CAMERAMANAGER->getWorldDC(), _wallTile[i].rcTile);
-		}
+		}*/
 		/*	for (int i = 0; i < TILEX * TILEY; ++i)
 			{
 				Rectangle(getMemDC(), _wallTile[i].rcTile);
 			}*/
 	}
+	Rectangle(CAMERAMANAGER->getWorldDC(), _saveButton.rc);
+	Rectangle(CAMERAMANAGER->getWorldDC(), _loadButton.rc);
 
 	CAMERAMANAGER->getWorldImage()->render(getMemDC());
 	// 카메라 뒤에 그려줌 
-	_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
+	/*_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
 	_btnLoad = CreateWindow("button", "불러오기", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON , 1200, 500, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
 	_btnObjectDraw = CreateWindow("button", "오브젝트", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 700, 100, 30, _hWnd, HMENU(2), _hInstance, NULL);
 	_btnTerrainDraw = CreateWindow("button", "지형", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1200, 700, 100, 30, _hWnd, HMENU(3), _hInstance, NULL);
 	_btnWallDraw = CreateWindow("button", "벽", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1300, 700, 100, 30, _hWnd, HMENU(5), _hInstance, NULL);
 	_btnTrap = CreateWindow("button", "함정", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1400, 700, 100, 30, _hWnd, HMENU(8), _hInstance, NULL);
 	_btnEraser = CreateWindow("button", "지우개", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1500, 700, 100, 30, _hWnd, HMENU(10), _hInstance, NULL);
-	_btnPlay = CreateWindow("button", "게임 창", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1600, 700, 100, 30, _hWnd, HMENU(9), _hInstance, NULL);
+	_btnPlay = CreateWindow("button", "게임 창", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1600, 700, 100, 30, _hWnd, HMENU(9), _hInstance, NULL);*/
 	//===========================================================
 	//_backBuffer->render(getHDC(), 0, 0);
 }
 
 void mapTool::setup()
 {
+	_saveButton.rc = RectMake(1100, 500, 100, 30);
+	_loadButton.rc = RectMake(1210, 500, 100, 30);
+	_terrainButton.rc = RectMake(1100, WINSIZEY - 20, 100, 30);
+	_wallButton.rc = RectMake(1210, WINSIZEY - 20, 100, 30);
 	//처음에는 지형으로 둔다
-	_crtSelect = CTRL_TERRAINDRAW;
+	_crtSelect = CTRL_WALLDRAW;
 
 	//지형 오브젝트 타일셋팅 (샘플타일)
 	for (int i = 0; i < TERRAINTILEY; ++i)
@@ -253,16 +261,6 @@ void mapTool::setMap()
 	//위에 클릭하여 저장한 타일을 맵 상에 그려라
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
-		{
-			_tiles[i].rc.left;
-			_tiles[i].rc.top;
-		}
-		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
-		{
-			_tiles[i].rc.right;
-			_tiles[i].rc.bottom;
-		}
 
 		if (PtInRect(&_tiles[i].rc, _ptMouse))
 		{
@@ -318,11 +316,12 @@ void mapTool::save()
 
 }
 
+
 void mapTool::load()
 {
 	HANDLE file;
 	DWORD read;
-
+	
 	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 

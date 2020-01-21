@@ -96,9 +96,6 @@
     <ClInclude Include="windowAPI.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="commonMacroFunction.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="gameNode.h">
       <Filter>2DGameFramework</Filter>
     </ClInclude>
@@ -249,12 +246,6 @@
     <ClInclude Include="loadingScene.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="cameraManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="mapTool.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="boss.h">
       <Filter>playGround\boss</Filter>
     </ClInclude>
@@ -278,6 +269,15 @@
     </ClInclude>
     <ClInclude Include="Beat.h">
       <Filter>playGround\GameSettingManager\Beat</Filter>
+    </ClInclude>
+    <ClInclude Include="mapTool.h">
+      <Filter>playGround\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="commonMacroFunction.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -428,12 +428,6 @@
     <ClCompile Include="loadingScene.cpp">
       <Filter>playGround\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="cameraManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="mapTool.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="boss.cpp">
       <Filter>playGround\boss</Filter>
     </ClCompile>
@@ -454,6 +448,12 @@
     </ClCompile>
     <ClCompile Include="Beat.cpp">
       <Filter>playGround\GameSettingManager\Beat</Filter>
+    </ClCompile>
+    <ClCompile Include="mapTool.cpp">
+      <Filter>playGround\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cameraManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
