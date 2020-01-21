@@ -31,10 +31,10 @@
 #include <memory.h>
 #include <tchar.h>
 #include <iostream>
-
 using namespace cv;
 using namespace std;
 
+#include "tileNode.h"
 #include "commonMacroFunction.h"
 #include "randomFunction.h"
 #include "keyManager.h"

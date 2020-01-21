@@ -25,7 +25,7 @@
 
 #define TESTTILESIZE 52
 
-//타일 갯수는 가로 40 / 세로 40
+//타일 갯수는 가로 100 / 세로 100
 #define TILEX 20
 #define TILEY 20
 
@@ -45,7 +45,16 @@
 #define TRAPTILEX 6
 #define TRAPTILEY 7
 
+#define ROBYSIZE 40 * 40
+#define STAGESIZE 100 * 100
+#define BOSSSTAGESIZE 40 * 80
 
+enum STAGE
+{
+	LOBY_STAGE,
+	BASIC_STAGE,
+	BOSSS_STAGE
+};
 //지형
 enum TERRAIN
 {
@@ -114,15 +123,15 @@ struct tagTile
 	int itemFrameY;			//아이템 번호
 	int trapFrameX;			//함정 번호
 	int trapFrameY;			//함정 번호
+	
 	int alphaValue;			//시야 값 정하기 위한 알파 블랜더 변수
-	bool alphaEyeSight;			//플레이어 시야
+	bool alphaEyesight;			//플레이어 시야
 	
 	bool isRender;
 
 	int idX;
 	int idY;
 	POINT XY;
-
 };
 
 //타일셋 
@@ -138,4 +147,10 @@ struct tagCurrentTile
 {
 	int x;
 	int y;
+};
+
+struct tagButton
+{
+	RECT rc;
+	POINT XY;
 };

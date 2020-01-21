@@ -1,6 +1,6 @@
 #pragma once
 #include "gameNode.h"
-#include "tileNode.h"
+#include <string>
 
 class mapTool: public gameNode
 {
@@ -24,6 +24,13 @@ private:
 	float _WINSIZEX, _WINSIZEY;
 	int _pos[2];
 
+private:
+	tagButton _saveButton;		//저장
+	tagButton _loadButton;		//로드
+	tagButton _terrainButton;	//지형
+	tagButton _wallButton;		//벽
+	tagButton _trapButton;		//함정
+	tagButton _itemButton;		//아이템
 public:
 	mapTool();
 	~mapTool();

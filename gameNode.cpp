@@ -96,9 +96,71 @@ void gameNode::render()
 {
 }
 
-void gameNode::setMap()
-{
-}
+//void gameNode::loadSet(STAGE stage, int stageNum)
+//{
+//	HANDLE file;
+//	DWORD read;
+//
+//	char str[256];
+//	switch (stage)
+//	{
+//	case LOBY_STAGE:
+//
+//		sprintf_s(str, "SaveFile.map");
+//		tagTile* tile;
+//		tile = new tagTile;
+//
+//		load(str, tile);
+//
+//		break;
+//	case BASIC_STAGE:
+//		switch (stageNum)
+//		{
+//			case 1:
+//				sprintf_s(str, "stage01Map.map");
+//			break;
+//			case 2:
+//				sprintf_s(str, "stage02Map.map");
+//				break;
+//			case 3:
+//				sprintf_s(str, "stage03Map.map");
+//				break;
+//		}
+//		tagTile tile[STAGESIZE];
+//		load(str, tile);
+//		break;
+//	case BOSSS_STAGE:
+//		sprintf_s(str, "boss3Map.map");
+//		tagTile tile[BOSSSTAGESIZE];
+//		load(str, tile);
+//		break;
+//
+//	}
+//
+//	//file = CreateFile(str, GENERIC_READ, 0, NULL,
+//	//	OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//	//	//tagTile _tiles[40 * 40];
+//	//ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+//	////ReadFile(file, _pos, sizeof(int) * 2, &read, NULL);
+//
+//	////맵을 불로온 직후 타일의 속성을 매겨준다
+//
+//
+//	//CloseHandle(file);
+//
+//}
+//
+//void gameNode::load(char* str, tagTile* _tile)
+//{
+//	HANDLE file;
+//	DWORD read;
+//	
+//
+//	file = CreateFile(str, GENERIC_READ, 0, NULL,
+//		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//	//tagTile _tiles[40 * 40];
+//	ReadFile(file, _tile, sizeof(tagTile) * 1, &read, NULL);
+//}
 
 
 LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
