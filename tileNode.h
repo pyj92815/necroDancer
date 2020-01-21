@@ -21,7 +21,7 @@
 //팀프로젝트할땐 걍 이넘으로 속성처리해도 무방할듯
 
 
-//영주 MAPTOOP 
+//영주 MAPTOOL
 
 #define TESTTILESIZE 52
 
@@ -33,17 +33,21 @@
 #define TILESIZEX TILESIZE * TILEX
 #define TILESIZEY TILESIZE * TILEY
 
-//지형타일셋 범위(타일을 찍어올 팔레트 같은 역할)
+//지형 타일 셋 범위(타일을 찍어올 팔레트 같은 역할)
 #define TERRAINTILEX 6
 #define TERRAINTILEY 6
 
-//벽타일셋 범위(타일을 찍어올 팔레트 같은 역할)
+//벽 타일 셋 범위(타일을 찍어올 팔레트 같은 역할)
 #define WALLTILEX 16
 #define WALLTILEY 4
 
-//타일셋 범위(타일을 찍어올 팔레트 같은 역할)
+//함정 타일 셋 범위(타일을 찍어올 팔레트 같은 역할)
 #define TRAPTILEX 6
 #define TRAPTILEY 7
+
+//아이템 타일 셋 범위(타일을 찍어올 팔레트 같은 역할)
+#define ITEMTILEX 4
+#define ITEMTILEY 5
 
 #define ROBYSIZE 40 * 40
 #define STAGESIZE 100 * 100
@@ -102,8 +106,20 @@ enum POS
 	POS_PLAYER
 };
 
+enum TYPE
+{
+	TYPE_TERRAIN,
+	TYPE_WALL,
+	TYPE_TRAP,
+	TYPE_OBJECT,
+	TYPE_ENEMY,
+	TYPE_CHARACTER,
+	TYPE_NONE
+};
+
 struct tagTile
 {
+	TYPE type;				//상태
 	TERRAIN terrain;		//지형
 	WALL wall;				//벽
 	TRAP trap;				//함정
@@ -150,6 +166,12 @@ struct tagCurrentTile
 };
 
 struct tagButton
+{
+	RECT rc;
+	POINT XY;
+};
+
+struct tagMouse
 {
 	RECT rc;
 	POINT XY;

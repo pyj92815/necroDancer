@@ -58,9 +58,6 @@
     <Filter Include="playGround\player">
       <UniqueIdentifier>{67f0544e-e72b-4038-9ee8-4f47cd1dc644}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\Enemy">
-      <UniqueIdentifier>{73fb92ce-3f96-42ef-977c-b3a781e949da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\Scene">
       <UniqueIdentifier>{52638d6b-cb2b-4827-8928-e713add1546a}</UniqueIdentifier>
     </Filter>
@@ -81,6 +78,24 @@
     </Filter>
     <Filter Include="playGround\GameSettingManager\Beat">
       <UniqueIdentifier>{e9b0f420-8eab-452d-b96e-483946f1eaf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss File">
+      <UniqueIdentifier>{644cebfa-86ce-4f21-b4c1-13f1b340e8cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss Action">
+      <UniqueIdentifier>{ceebd8b8-ae04-4290-a9da-66a69e29cd65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss Library">
+      <UniqueIdentifier>{7e812bde-278b-4be7-9841-588b778ddc35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss Stage Scene">
+      <UniqueIdentifier>{8d90ffdb-3234-49ff-aa12-ab952a8477ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss Stage Test Tile">
+      <UniqueIdentifier>{6cdfcd5e-7529-41db-9b31-0c1741036c6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Enemy">
+      <UniqueIdentifier>{73fb92ce-3f96-42ef-977c-b3a781e949da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -246,24 +261,6 @@
     <ClInclude Include="loadingScene.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="boss.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="bossLibrary.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="bossMove.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="bossStageScene.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="bossStageTestTile.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="deathMetal.h">
-      <Filter>playGround\boss</Filter>
-    </ClInclude>
     <ClInclude Include="mapToolScene.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
@@ -279,11 +276,26 @@
     <ClInclude Include="commonMacroFunction.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="slave.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="bossMove.h">
+      <Filter>playGround\boss\boss Action</Filter>
     </ClInclude>
-    <ClInclude Include="UImanager.h">
-      <Filter>playGround\player</Filter>
+    <ClInclude Include="boss.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="deathMetal.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slave.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="bossLibrary.h">
+      <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageScene.h">
+      <Filter>playGround\boss\boss Stage Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageTestTile.h">
+      <Filter>playGround\boss\boss Stage Test Tile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -434,21 +446,6 @@
     <ClCompile Include="loadingScene.cpp">
       <Filter>playGround\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="boss.cpp">
-      <Filter>playGround\boss</Filter>
-    </ClCompile>
-    <ClCompile Include="bossMove.cpp">
-      <Filter>playGround\boss</Filter>
-    </ClCompile>
-    <ClCompile Include="bossStageScene.cpp">
-      <Filter>playGround\boss</Filter>
-    </ClCompile>
-    <ClCompile Include="bossStageTestTile.cpp">
-      <Filter>playGround\boss</Filter>
-    </ClCompile>
-    <ClCompile Include="deathMetal.cpp">
-      <Filter>playGround\boss</Filter>
-    </ClCompile>
     <ClCompile Include="mapToolScene.cpp">
       <Filter>playGround\Scene</Filter>
     </ClCompile>
@@ -461,8 +458,20 @@
     <ClCompile Include="cameraManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="UImanager.cpp">
-      <Filter>playGround\player</Filter>
+    <ClCompile Include="bossMove.cpp">
+      <Filter>playGround\boss\boss Action</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="deathMetal.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageScene.cpp">
+      <Filter>playGround\boss\boss Stage Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageTestTile.cpp">
+      <Filter>playGround\boss\boss Stage Test Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

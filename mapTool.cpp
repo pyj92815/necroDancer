@@ -15,13 +15,15 @@ void setWindowsSize(int x, int y, int width, int height);
 HRESULT mapTool::init()
 {
 	// 맵툴 사이즈를 정의 
-	_WINSIZEX = 1880;
+	_WINSIZEX = 1800;
 	_WINSIZEY = 900;
 	setWindowsSize(WINSTARTX, WINSTARTY, _WINSIZEX, _WINSIZEY);
 	resizeWindow(WINNAME, _WINSIZEX, _WINSIZEY);
 	_backBuffer->init(_WINSIZEX, _WINSIZEY);
 	setup();
-
+	_startL = 0;
+	_startT = 0;
+	_isClick = false;
 	return S_OK;
 }
 
@@ -35,43 +37,88 @@ void mapTool::update()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
+	
 		setMap();
+				
+		if (PtInRect(&_terrainButton.rc, _ptMouse))	{ _crtSelect = CTRL_TERRAINDRAW; }
+		if (PtInRect(&_wallButton.rc, _ptMouse)) { _crtSelect = CTRL_WALLDRAW; }
+		if (PtInRect(&_trapButton.rc, _ptMouse)) { _crtSelect = CTRL_TRAP; }
+		if (PtInRect(&_saveButton.rc, _ptMouse))
+		{
+			_crtSelect = CTRL_SAVE;
+			save();
+		}
+		if (PtInRect(&_loadButton.rc, _ptMouse))
+		{
+			_crtSelect = CTRL_LOAD;
+			load();
+		}
+	
 	}
+	if (KEYMANAGER->isStayKeyDown(VK_RBUTTON))
+	{
+		if (!_isClick)
+		{
+			_startL = _ptMouse.x;
+			_startT = _ptMouse.y;
+			_isClick = true;
+		}
+		if (_isClick == true)
+		{
+			_endR = _ptMouse.x;
+			_endB = _ptMouse.y;
+		}
+	}
+	if (KEYMANAGER->isOnceKeyUp(VK_RBUTTON))
+	{
+		_isClick = false;
+	}
+	
+	
 }
 
 
 
 void mapTool::render()
 {
-	//PatBlt(CAMERAMANAGER->getWorldDC(), 0, 0, _WINSIZEX, _WINSIZEY, WHITENESS);
-	//TextOut(getMemDC(), 700, 700, str,strlen(str));
+	PatBlt(CAMERAMANAGER->getWorldDC(), 0, 0, _WINSIZEX, _WINSIZEY, BLACKNESS);
+	//TextOut(getMemDC(), 700, 700, str,strlen(str)); 
 	//지형
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-		IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
-			_tiles[i].rc.left, _tiles[i].rc.top,
-			_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		if (_tiles[i].isRender == true)
+		{
+			_tiles[i].type = TYPE_TERRAIN;
+			Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
+			IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
+				_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		}
 	}
 	//벽 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		if (_tiles[i].wall == W_NONE) continue;
-
-		IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
-			_tiles[i].rc.left, _tiles[i].rc.top - 32,
-			_tiles[i].wallFrameX, _tiles[i].wallFrameY);
+		if (_tiles[i].isRender == true)
+		{
+			_tiles[i].type = TYPE_WALL;
+			IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top - 32,
+				_tiles[i].wallFrameX, _tiles[i].wallFrameY);
+		}
 	}
 	//함정
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		if (_tiles[i].trap == TRAP_NONE) continue;
-
-		IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
-			_tiles[i].rc.left, _tiles[i].rc.top,
-			_tiles[i].trapFrameX, _tiles[i].trapFrameY);
+		if (_tiles[i].isRender == true)
+		{
+			_tiles[i].type = TYPE_TRAP;
+			IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
+				_tiles[i].trapFrameX, _tiles[i].trapFrameY);
+		}
 	}
-	
 	if (_crtSelect == CTRL_TERRAINDRAW)
 	{
 		IMAGEMANAGER->render("terrainTiles", CAMERAMANAGER->getWorldDC(), _WINSIZEX - IMAGEMANAGER->findImage("terrainTiles")->getWidth(), 0);
@@ -80,7 +127,6 @@ void mapTool::render()
 			Rectangle(CAMERAMANAGER->getWorldDC(), _terrainTile[i].rcTile);
 		}*/
 	}
-
 	
 	if (_crtSelect == CTRL_TRAP)
 	{
@@ -103,9 +149,17 @@ void mapTool::render()
 				Rectangle(getMemDC(), _wallTile[i].rcTile);
 			}*/
 	}
+	
 	Rectangle(CAMERAMANAGER->getWorldDC(), _saveButton.rc);
 	Rectangle(CAMERAMANAGER->getWorldDC(), _loadButton.rc);
+	Rectangle(CAMERAMANAGER->getWorldDC(), _terrainButton.rc);
+	Rectangle(CAMERAMANAGER->getWorldDC(), _wallButton.rc); 
+	Rectangle(CAMERAMANAGER->getWorldDC(), _trapButton.rc);
 
+	if (_isClick == true)
+	{
+		Rectangle(CAMERAMANAGER->getWorldDC(), _startL, _startT, _endR, _endB);
+	}
 	CAMERAMANAGER->getWorldImage()->render(getMemDC());
 	// 카메라 뒤에 그려줌 
 	/*_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
@@ -124,10 +178,11 @@ void mapTool::setup()
 {
 	_saveButton.rc = RectMake(1100, 500, 100, 30);
 	_loadButton.rc = RectMake(1210, 500, 100, 30);
-	_terrainButton.rc = RectMake(1100, WINSIZEY - 20, 100, 30);
-	_wallButton.rc = RectMake(1210, WINSIZEY - 20, 100, 30);
+	_terrainButton.rc = RectMake(1100, _WINSIZEY - 50, 100, 30);
+	_wallButton.rc = RectMake(1210, _WINSIZEY - 50, 100, 30);
+	_trapButton.rc = RectMake(1320, _WINSIZEY - 50, 100, 30);
 	//처음에는 지형으로 둔다
-	_crtSelect = CTRL_WALLDRAW;
+	//_crtSelect = CTRL_WALLDRAW;
 
 	//지형 오브젝트 타일셋팅 (샘플타일)
 	for (int i = 0; i < TERRAINTILEY; ++i)
@@ -199,6 +254,8 @@ void mapTool::setup()
 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
+		//_tiles[i].type = TYPE_NONE;
+		_tiles[i].isRender = false;
 		_tiles[i].terrainFrameX = 5;
 		_tiles[i].terrainFrameY = 5;
 		_tiles[i].wallFrameX = 0;
@@ -259,10 +316,13 @@ void mapTool::setMap()
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 
+
 		if (PtInRect(&_tiles[i].rc, _ptMouse))
 		{
+			_tiles[i].isRender = true;
 			if (_crtSelect == CTRL_TERRAINDRAW)
 			{
+				_tiles[i].type = TYPE_TERRAIN;
 				_tiles[i].terrainFrameX = _currentTile.x;
 				_tiles[i].terrainFrameY = _currentTile.y;
 
@@ -270,6 +330,7 @@ void mapTool::setMap()
 			}
 			else if (_crtSelect == CTRL_WALLDRAW)
 			{
+				_tiles[i].type = TYPE_WALL;
 				_tiles[i].wallFrameX = _currentTile.x;
 				_tiles[i].wallFrameY = _currentTile.y;
 
@@ -277,6 +338,7 @@ void mapTool::setMap()
 			}
 			else if (_crtSelect == CTRL_TRAP)
 			{
+				_tiles[i].type = TYPE_TRAP;
 				_tiles[i].trapFrameX = _currentTile.x;
 				_tiles[i].trapFrameY = _currentTile.y;
 
@@ -331,10 +393,7 @@ void mapTool::load()
 	CloseHandle(file);
 }
 
-//void mapTool::clickLeft()
-//{
-//	setMap()
-//}
+
 
 TERRAIN mapTool::terrainSelect(int frameX, int frameY)
 {
@@ -356,7 +415,7 @@ TERRAIN mapTool::terrainSelect(int frameX, int frameY)
 		if (frameX == i && frameY == 5) return TR_STAIR;
 	}
 	if (frameX == 3 && frameY == 5) return TR_SHOP;
-	//if (frameX == 5 && frameY == 5) return TR_NONE;
+	if (frameX == 5 && frameY == 5) return TR_NONE;
 
 	return TR_BASIC_STAGE_TILE;
 }
@@ -379,12 +438,12 @@ WALL mapTool::wallSelect(int frameX, int frameY)
 
 	for (int i = 0; i < 3; i++)
 	{
-		//if (frameX == i + 13 && frameY == 1) return W_NONE;
-		//if (frameX == i + 13 && frameY == 2) return W_NONE;
+		if (frameX == i + 13 && frameY == 1) return W_NONE;
+		if (frameX == i + 13 && frameY == 2) return W_NONE;
 	}
 	for (int i = 0; i < 5; i++)
 	{
-		//if (frameX == i + 11 && frameY == 3) return W_NONE;
+		if (frameX == i + 11 && frameY == 3) return W_NONE;
 	}
 	return W_WALL;
 }
@@ -416,7 +475,7 @@ TRAP mapTool::trapSelect(int frameX, int frameY)
 	{
 		if (frameX == i && frameY == 5) return TRAP_NIDDLE;
 		if (frameX == i && frameY == 6) return TRAP_NIDDLE_SHADOW;
-		//if (frameX == i + 3 && frameY == 6) return TRAP_NONE;
+		if (frameX == i + 3 && frameY == 6) return TRAP_NONE;
 	}
 
 	return TRAP_SLOW_BEAT;
