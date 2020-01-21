@@ -19,10 +19,6 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 		_ptMouse.x = x;
 		_ptMouse.y = y;
 	}
-	if (event == CV_EVENT_LBUTTONDOWN)
-	{
-		//cout << "qjsjsjqj" << endl;
-	}
 }
 
 HRESULT gameNode::init()
@@ -129,18 +125,12 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			cout << "¸¶¿ì½º ÁÂÇ¥" << "x:" << _ptMouse.x << "y :" << _ptMouse.y << endl;
 			
 		break;
-		case WM_LBUTTONDOWN:
-			cout << "qjsjsjqj" << endl;
-		break;
 		case WM_KEYDOWN:
 		{
 			switch (wParam)
 			{
 				case VK_ESCAPE:
 					PostQuitMessage(0);
-				break;
-				case VK_LBUTTON:
-					cout << "qjsjsjqj" << endl;
 				break;
 			}
 		}

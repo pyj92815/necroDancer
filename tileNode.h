@@ -115,10 +115,14 @@ struct tagTile
 	int trapFrameX;			//함정 번호
 	int trapFrameY;			//함정 번호
 	int alphaValue;			//시야 값 정하기 위한 알파 블랜더 변수
-	bool eyesight;			//플레이어 시야
+	bool alphaEyeSight;			//플레이어 시야
+	
+	bool isRender;
+
 	int idX;
 	int idY;
 	POINT XY;
+
 };
 
 //타일셋 

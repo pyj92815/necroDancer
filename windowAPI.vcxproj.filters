@@ -61,12 +61,6 @@
     <Filter Include="playGround\Enemy">
       <UniqueIdentifier>{73fb92ce-3f96-42ef-977c-b3a781e949da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\Scene">
-      <UniqueIdentifier>{52638d6b-cb2b-4827-8928-e713add1546a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\video">
-      <UniqueIdentifier>{0d3642fe-ba18-4ab0-bab4-7ebd096f9641}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\MapTool">
       <UniqueIdentifier>{cd7060e9-3639-49b0-a374-5f738b819ffe}</UniqueIdentifier>
     </Filter>
@@ -87,6 +81,12 @@
     </Filter>
     <Filter Include="playGround\Boss\boss Stage Test Tile">
       <UniqueIdentifier>{50b1773f-1a1b-4943-becd-55f3452cda73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Boss\boss File\Scene">
+      <UniqueIdentifier>{52638d6b-cb2b-4827-8928-e713add1546a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\video">
+      <UniqueIdentifier>{0d3642fe-ba18-4ab0-bab4-7ebd096f9641}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -232,28 +232,28 @@
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="stageScene.h">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClInclude>
     <ClInclude Include="introScene.h">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClInclude>
     <ClInclude Include="endScene.h">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClInclude>
     <ClInclude Include="bossScene.h">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClInclude>
     <ClInclude Include="scene_Manager.h">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClInclude>
     <ClInclude Include="video.h">
-      <Filter>2DGameFramework\video</Filter>
+      <Filter>playGround\video</Filter>
     </ClInclude>
     <ClInclude Include="aStarManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="loadingScene.h">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClInclude>
     <ClInclude Include="cameraManager.h">
       <Filter>헤더 파일</Filter>
@@ -281,6 +281,12 @@
     </ClInclude>
     <ClInclude Include="bossStageTestTile.h">
       <Filter>playGround\Boss\boss Stage Test Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="Beat.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="mapToolScene.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -408,28 +414,28 @@
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="stageScene.cpp">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClCompile>
     <ClCompile Include="introScene.cpp">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClCompile>
     <ClCompile Include="endScene.cpp">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClCompile>
     <ClCompile Include="bossScene.cpp">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClCompile>
     <ClCompile Include="scene_Manager.cpp">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClCompile>
     <ClCompile Include="video.cpp">
-      <Filter>2DGameFramework\video</Filter>
+      <Filter>playGround\video</Filter>
     </ClCompile>
     <ClCompile Include="aStarManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="loadingScene.cpp">
-      <Filter>playGround\Scene</Filter>
+      <Filter>playGround\Boss\boss File\Scene</Filter>
     </ClCompile>
     <ClCompile Include="cameraManager.cpp">
       <Filter>소스 파일</Filter>
@@ -451,6 +457,12 @@
     </ClCompile>
     <ClCompile Include="bossStageTestTile.cpp">
       <Filter>playGround\Boss\boss Stage Test Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="Beat.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="mapToolScene.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

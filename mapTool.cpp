@@ -11,7 +11,7 @@ mapTool::~mapTool()
 }
 
 void setWindowsSize(int x, int y, int width, int height);
-LRESULT MainProc(HWND, UINT, WPARAM, LPARAM);
+//LRESULT MainProc(HWND, UINT, WPARAM, LPARAM);
 
 HRESULT mapTool::init()
 {
@@ -25,7 +25,7 @@ HRESULT mapTool::init()
 	resizeWindow(WINNAME, _WINSIZEX, _WINSIZEY);
 	_backBuffer->init(_WINSIZEX, _WINSIZEY);
 	setup();
-
+	
 	return S_OK;
 }
 
@@ -37,40 +37,50 @@ void mapTool::release()
 
 void mapTool::update()
 {
-
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+	{
+		setMap();
+	}
 }
 
 
 
 void mapTool::render()
 {
-	//PatBlt(CAMERAMANAGER->getWorldDC(), 0, 0, _WINSIZEX, _WINSIZEY, WHITENESS);
+	PatBlt(CAMERAMANAGER->getWorldDC(), 0, 0, _WINSIZEX, _WINSIZEY, WHITENESS);
 	//TextOut(getMemDC(), 700, 700, str,strlen(str));
 	//지형
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-		IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
-			_tiles[i].rc.left, _tiles[i].rc.top,
-			_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		if (_tiles[i].isRender == true)
+		{
+			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
+			IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
+				_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		}
 	}
 	//벽 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		if (_tiles[i].wall == W_NONE) continue;
-
-		IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
-			_tiles[i].rc.left, _tiles[i].rc.top - 32,
-			_tiles[i].wallFrameX, _tiles[i].wallFrameY);
+		if (_tiles[i].isRender == true)
+		{
+			IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top - 32,
+				_tiles[i].wallFrameX, _tiles[i].wallFrameY);
+		}
 	}
 	//함정
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		if (_tiles[i].trap == TRAP_NONE) continue;
-
-		IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
-			_tiles[i].rc.left, _tiles[i].rc.top,
-			_tiles[i].trapFrameX, _tiles[i].trapFrameY);
+		if (_tiles[i].isRender == true)
+		{
+			IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
+				_tiles[i].trapFrameX, _tiles[i].trapFrameY);
+		}
 	}
 	//RECT 잘그림
 	if (_crtSelect == CTRL_TERRAINDRAW)
@@ -194,16 +204,17 @@ void mapTool::setup()
 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		_tiles[i].terrainFrameX = 5;
-		_tiles[i].terrainFrameY = 5;
+		/*_tiles[i].terrainFrameX = 0;
+		_tiles[i].terrainFrameY = 0;
 		_tiles[i].wallFrameX = 0;
 		_tiles[i].wallFrameY = 0;
 		_tiles[i].trapFrameX = 0;
-		_tiles[i].trapFrameY = 0;
+		_tiles[i].trapFrameY = 0;*/
 		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		_tiles[i].terrain = TR_NONE;
 		_tiles[i].wall = W_NONE;
 		_tiles[i].trap = TRAP_NONE;
+		_tiles[i].isRender = false;
 	}
 }
 
@@ -222,8 +233,7 @@ void mapTool::setMap()
 			}
 		}
 	}
-
-	if (_crtSelect == CTRL_WALLDRAW)
+	else if (_crtSelect == CTRL_WALLDRAW)
 	{
 		for (int i = 0; i < WALLTILEX * WALLTILEY; i++)
 		{//벽
@@ -235,8 +245,7 @@ void mapTool::setMap()
 			}
 		}
 	}
-
-	if (_crtSelect == CTRL_TRAP)
+	else if (_crtSelect == CTRL_TRAP)
 	{
 		for (int i = 0; i < TRAPTILEX * TRAPTILEY; i++)
 		{//함정
@@ -253,19 +262,9 @@ void mapTool::setMap()
 	//위에 클릭하여 저장한 타일을 맵 상에 그려라
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
-		{
-			_tiles[i].rc.left;
-			_tiles[i].rc.top;
-		}
-		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
-		{
-			_tiles[i].rc.right;
-			_tiles[i].rc.bottom;
-		}
-
 		if (PtInRect(&_tiles[i].rc, _ptMouse))
 		{
+			_tiles[i].isRender = true;
 			if (_crtSelect == CTRL_TERRAINDRAW)
 			{
 				_tiles[i].terrainFrameX = _currentTile.x;
@@ -297,7 +296,7 @@ void mapTool::setMap()
 				_tiles[i].trap = TRAP_NONE;
 			}
 
-			InvalidateRect(_hWnd, NULL, false);
+			//InvalidateRect(_hWnd, NULL, false);
 			break;
 		}
 	}
@@ -334,11 +333,6 @@ void mapTool::load()
 
 	CloseHandle(file);
 }
-
-//void mapTool::clickLeft()
-//{
-//	setMap()
-//}
 
 TERRAIN mapTool::terrainSelect(int frameX, int frameY)
 {

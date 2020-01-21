@@ -11,9 +11,7 @@ mapToolScene::~mapToolScene()
 
 HRESULT mapToolScene::init()
 {
-	_mapTool = new mapTool;
 	_mapTool->init();
-
 	return S_OK;
 }
 
