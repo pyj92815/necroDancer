@@ -11,6 +11,10 @@ HRESULT stageScene::init()
 
 	_beat = new Beat;
 	_beat->init();
+
+	_ui = new UImanager;
+	_ui->init();
+
 	return S_OK;
 }
 
@@ -22,20 +26,24 @@ void stageScene::update()
 {
 	_pm->update();
 	_em->update();
+
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		_beat->update();
 	}
+	_ui->update();
 }
 
 void stageScene::render()
 {
 	_pm->render();
 	_em->render();
+	
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		_beat->render();
 	}
 	//ENEMYMANAGER->render(getMemDC());
+	_ui->render();
 }
