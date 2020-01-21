@@ -5,7 +5,10 @@ cameraManager::cameraManager()
 {
 	_cameraSizeX = WINSIZEX;
 	_cameraSizeY = WINSIZEY;
-	_cameraX = _cameraY = 0;
+
+	//초기값 플레이어 위치로 할 예정 
+	_cameraX = 75;
+	_cameraY = 220;
 
 	_worldImage = new image;
 	_worldImage = IMAGEMANAGER->addImage("worldMap",4000, 2000);
@@ -13,6 +16,9 @@ cameraManager::cameraManager()
 
 	_cameraWorldSizeX = 5200;
 	_cameraWorldSizeY = 5200;
+
+	isCameraMoveX = false;
+	isCameraMoveY = false;
 }
 
 cameraManager::~cameraManager()
@@ -52,8 +58,39 @@ void cameraManager::set_CameraXY(int x, int y)
 
 void cameraManager::set_CameraXY(float x, float y)
 {
-	_cameraX = x - _cameraSizeX / 2.0f;
-	_cameraY = y - _cameraSizeY / 2.0f;
+	// 카메라의 위치를 판단한다.
+	float winX = (x - _cameraSizeX / 2.0f); // 카메라의 시작위치 X
+	float winY = (y - _cameraSizeY / 2.0f); // 카메라의 시작위치 Y
+
+	_cameraX > winX ? isCameraMoveX = true : isCameraMoveX = false;
+	_cameraY > winY ? isCameraMoveY = true : isCameraMoveY = false;
+
+	//카메라의 Y 
+	if (isCameraMoveY)
+	{
+		_cameraY -= 2.5f;
+		if (_cameraY < winY) _cameraY = winY;	
+	}
+	else
+	{
+		_cameraY += 2.5f;
+		if (_cameraY > winY) _cameraY = winY;
+	}
+
+	//카메라의 X 
+	if (isCameraMoveX)
+	{
+		_cameraX -= 2.5f;
+		if (_cameraX < winX) _cameraX = winX;
+	}
+	else
+	{
+		_cameraX += 2.5f;
+		if (_cameraX > winX) _cameraX = winX;
+	}
+
+	//_cameraX = x - _cameraSizeX / 2.0f;
+	//_cameraY = y - _cameraSizeY / 2.0f;
 	Camera_Correction();
 }
 
@@ -83,6 +120,12 @@ void cameraManager::Camera_Correction()
 	{
 		_cameraY = _cameraWorldSizeY - _cameraSizeY;
 	}
+}
+
+void cameraManager::Camera_Move()
+{
+
+
 }
 
 

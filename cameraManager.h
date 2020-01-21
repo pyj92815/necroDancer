@@ -12,6 +12,9 @@ private:
 	HDC _worldDC;
 	image* _worldImage;
 
+	bool isCameraMoveX;
+	bool isCameraMoveY;
+
 public:
 	cameraManager();
 	~cameraManager();
@@ -37,7 +40,7 @@ public:
 
 	//카메라가 맵 밖으로 나가지 못하게 
 	void Camera_Correction();
-
+	void Camera_Move();
 	// 월드 DC
 	HDC getWorldDC() { return _worldDC; }
 	image* getWorldImage() { return _worldImage; }
