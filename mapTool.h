@@ -24,6 +24,9 @@ private:
 	float _WINSIZEX, _WINSIZEY;
 	int _pos[2];
 
+	//락훈 맵툴 수정 
+	tagButton _map[9];
+	int _mapDirection;
 private:
 	tagButton _saveButton;		//저장
 	tagButton _loadButton;		//로드

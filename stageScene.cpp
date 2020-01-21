@@ -12,7 +12,7 @@ HRESULT stageScene::init()
 	_beat = new Beat;
 	_beat->init();
 
-	//load();
+	load();
 
 	_ui = new UImanager;
 	_ui->init();
@@ -60,12 +60,13 @@ void stageScene::render()
 	_em->render();
 	
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
+	EFFECTMANAGER->render();   // 현재 getMemDC로 뿌리면 잘되고 카메라로 뿌리면 위치가 다름 수정예정 ( 20200122)
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		_beat->render();
 	}
 	//ENEMYMANAGER->render(getMemDC());
-	_ui->render();
+	_ui->render();	
 }
 
 void stageScene::load()

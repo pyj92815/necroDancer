@@ -24,6 +24,19 @@ HRESULT mapTool::init()
 	_startL = 0;
 	_startT = 0;
 	_isClick = false;
+	//락훈 수정 ======================
+	_mapDirection = 0;
+	for (int i = 0;i < 3;i++)
+	{
+		for (int j = 0;j < 3;j++)
+		{
+			SetRect(&_map[i*3+j].rc, _WINSIZEX - 200 + (j * 30), _WINSIZEY - 100 + (i * 30),
+				_WINSIZEX - 170 + (j * 30), _WINSIZEY - 80 + (i * 30));
+			_map[i].XY.x = _WINSIZEX - 100;
+			_map[i].XY.y = _WINSIZEY - 100;
+			_map[i * 3 + j].isClick = false;
+		}
+	}
 	return S_OK;
 }
 
@@ -35,11 +48,30 @@ void mapTool::release()
 
 void mapTool::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		for (int i = 0;i < 9;i++)
+		{
+			if (PtInRect(&_map[i].rc, _ptMouse))
+			{
+				_map[i].isClick = true;
+				_mapDirection = i;
+			}
+		}
+		for (int i = 0;i < 9;i++)
+		{
+			if (_mapDirection == i) continue;
+			_map[i].isClick = false;
+
+		}
+	}
+
+
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
 	
 		setMap();
-				
+		
 		if (PtInRect(&_terrainButton.rc, _ptMouse))	{ _crtSelect = CTRL_TERRAINDRAW; }
 		if (PtInRect(&_wallButton.rc, _ptMouse)) { _crtSelect = CTRL_WALLDRAW; }
 		if (PtInRect(&_trapButton.rc, _ptMouse)) { _crtSelect = CTRL_TRAP; }
@@ -73,8 +105,6 @@ void mapTool::update()
 	{
 		_isClick = false;
 	}
-	
-	
 }
 
 
@@ -160,6 +190,22 @@ void mapTool::render()
 	{
 		Rectangle(CAMERAMANAGER->getWorldDC(), _startL, _startT, _endR, _endB);
 	}
+	//락훈 수정사항
+	for (int i = 0;i < 9;i++)
+	{
+		if (!_map[i].isClick)
+		{
+			Rectangle(CAMERAMANAGER->getWorldDC(), _map[i].rc);
+		}
+		else
+		{
+			HBRUSH brush = CreateSolidBrush(RGB(255, 0, 0));
+			HBRUSH oldBrush = (HBRUSH)SelectObject(CAMERAMANAGER->getWorldDC(), brush);
+			Rectangle(CAMERAMANAGER->getWorldDC(), _map[i].rc);
+			SelectObject(CAMERAMANAGER->getWorldDC(), oldBrush);
+			DeleteObject(brush);
+		}
+	}
 	CAMERAMANAGER->getWorldImage()->render(getMemDC());
 	// 카메라 뒤에 그려줌 
 	/*_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
@@ -170,6 +216,8 @@ void mapTool::render()
 	_btnTrap = CreateWindow("button", "함정", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1400, 700, 100, 30, _hWnd, HMENU(8), _hInstance, NULL);
 	_btnEraser = CreateWindow("button", "지우개", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1500, 700, 100, 30, _hWnd, HMENU(10), _hInstance, NULL);
 	_btnPlay = CreateWindow("button", "게임 창", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1600, 700, 100, 30, _hWnd, HMENU(9), _hInstance, NULL);*/
+
+
 	//===========================================================
 	//_backBuffer->render(getHDC(), 0, 0);
 }

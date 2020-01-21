@@ -15,6 +15,9 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.headImage = IMAGEMANAGER->addFrameImage("player1_heads", "./image/player/player1_heads.bmp", 384, 96, 8, 2, true, RGB(255, 0, 255));
 	_player.bodyImage = IMAGEMANAGER->addFrameImage("player1_armor_body_xmas", "./image/player/player1_armor_body_xmas.bmp", 384, 240, 8, 5, true, RGB(255, 0, 255));
 
+	//빗나감 이펙트
+	IMAGEMANAGER->addImage("player_effect_missed", "./image/player/TEMP_missed.bmp", 36, 13, true, RGB(255, 0, 255));
+	EFFECTMANAGER->addEffect("빗나감", "./image/player/TEMP_missed.bmp", 36, 13, 36, 13, 1.0f, 0.1f, 50);
 	// 플레이어 상태
 	_player.state = PLAYERSTATE_RIGHT;
 	_player.sight = 1;
@@ -63,6 +66,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_jump->init();
 
 	_isKeyPress = false;     // key 눌렸을때를 판단하는 
+	destroyAllWindows();
 	return S_OK;
 }
 
@@ -76,6 +80,10 @@ void player::update()
 	keyControl();					// KEY
 	playerMove();					// MOVE
 	CAMERAMANAGER->set_CameraXY(_player.idx * _distance + (_distance / 2), _player.idy * _distance + (_distance / 3));
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		EFFECTMANAGER->play("빗나감",_ptMouse.x, _ptMouse.y);
+	}
 }
 
 void player::render()

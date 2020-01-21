@@ -169,6 +169,7 @@ struct tagButton
 {
 	RECT rc;
 	POINT XY;
+	bool isClick;
 };
 
 struct tagMouse

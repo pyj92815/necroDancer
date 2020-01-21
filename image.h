@@ -120,8 +120,7 @@ public:
 	void scaleRender(HDC hdc, int destX, int destY, int scaleX, int scaleY);
 
 	void aniRender(HDC hdc, int destX, int destY, animation* ani);
-
-
+	
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 	inline HBITMAP getHBit() { return _imageInfo->hBit; }
 	inline DWORD getResID() { return _imageInfo->resID; }
