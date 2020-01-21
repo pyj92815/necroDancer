@@ -12,6 +12,9 @@ HRESULT UImanager::init()
 	_bodyInven.image = IMAGEMANAGER->addImage("body_Inven", "./image/UI/hud_slot_3.bmp", 60, 66, true, RGB(255, 0, 255));
 	_headInven.image = IMAGEMANAGER->addImage("head_Inven", "./image/UI/hud_slot_4.bmp", 60, 66, true, RGB(255, 0, 255));
 
+	//오른쪽 인벤토리
+	_coinInven.image = IMAGEMANAGER->addImage("coin_Inven", "./image/UI/hud_coins.bmp", 48, 48, true, RGB(255, 0, 255));
+	_daiaInven.image = IMAGEMANAGER->addImage("daia_Inven", "./image/UI/diamond.bmp", 50, 48, true, RGB(255, 0, 255));
 
 	//글자들
 	_downLeft.image = IMAGEMANAGER->addImage("down_Left", "./image/UI/down_left_x2.bmp", 46, 48, true, RGB(255, 0, 255));
@@ -24,8 +27,8 @@ HRESULT UImanager::init()
 	IMAGEMANAGER->addFrameImage("heart_null", "./image/UI/heart_null.bmp", 96, 44, 2, 1, true, RGB(255, 0, 255));
 
 
-	test = new image;
-	test = IMAGEMANAGER->addImage("0","./image/UI/0.bmp",8,20,true,RGB(255,0,255));
+	_scoreNum = IMAGEMANAGER->addFrameImage("number","./image/UI/number.bmp",80,20,10,1,true,RGB(255,0,255));
+	_scoreX = IMAGEMANAGER->addImage("numberX", "./image/UI/x.bmp",8, 8, true, RGB(255, 0, 255));
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -66,6 +69,8 @@ HRESULT UImanager::init()
 	_currentFrameY = 0;
 
 	hp = 6;
+	
+	_coinTest = 7259;
 
 	return S_OK;
 }
@@ -142,32 +147,65 @@ void UImanager::update()
 		}
 	}
 
-	
-	KEYANIMANAGER->update();
 
 }
 
 void UImanager::render()
 {
 	//왼쪽 인벤토리
-	_shovelInven.image->render(getMemDC(), 20, 0);
-	_attackInven.image->render(getMemDC(), 90, 0);
-	_itemInven.image->render(getMemDC(), 20, 76);
-	_throwInven.image->render(getMemDC(), 20, 190);
-	_bombInven.image->render(getMemDC(), 20, 294);
+	_shovelInven.image->render(getMemDC(), 20, 5);
+	_attackInven.image->render(getMemDC(), 90, 5);
+	_itemInven.image->render(getMemDC(), 20, 81);
+	_throwInven.image->render(getMemDC(), 20, 195);
+	_bombInven.image->render(getMemDC(), 20, 299);
+
+	//오른쪽 인벤토리
+	_coinInven.image->render(getMemDC(), WINSIZEX - 125, 5);
+	_daiaInven.image->render(getMemDC(), WINSIZEX - 125, 65);
+	_scoreX->render(getMemDC(),WINSIZEX -72, 30);
 
 	//글자들
-	_downLeft.image->render(getMemDC(), 30, 354);
-	_upDown.image->render(getMemDC(), 30, 250);
-	_upLeft.image->render(getMemDC(), 30, 136);
+	_downLeft.image->render(getMemDC(), 30, 359);
+	_upDown.image->render(getMemDC(), 30, 255);
+	_upLeft.image->render(getMemDC(), 30, 141);
 
 	for (int i = 0; i < 3; i++)
 	{
 		//_heart[i].state = HEARTSTATE_FULL;
 		//_heart[i].image->frameRender(getMemDC(), 600+i*60, 20);
-		_heart[i].image->aniRender(getMemDC(), 600 + i * 60, 20, _FrameWork);
+		_heart[i].image->aniRender(getMemDC(), 600 + i * 60, 35, _FrameWork);
 	}
+	//int a;
 
-	test->render(getMemDC(),WINSIZEX/2,WINSIZEY/2);
+	//if(1000<a)_score->frameRender(getMemDC(), WINSIZEX - 50, 20, 1234/1000 % 10, 0);
+	//if(100<a)_score->frameRender(getMemDC(), WINSIZEX - 50, 20, 1234 /100% 10, 0);
+	//if(10<a)_score->frameRender(getMemDC(), WINSIZEX - 50, 20, 1234/10 % 10, 0);
+	
+	
+	/*
+	_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, 3%10, 0);*/
 
+
+	if (_coinTest >= 1000)
+	{
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinTest / 1000 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinTest / 100 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 40, 20, _coinTest/10 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 30, 20, _coinTest % 10, 0);
+	}
+	if (_coinTest >= 100 && _coinTest <1000)
+	{
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinTest / 100 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinTest / 10 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 40, 20, _coinTest % 10, 0);
+	}
+	if (_coinTest >= 10 && _coinTest < 100)
+	{
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinTest / 10 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinTest % 10, 0);
+	}
+	if (_coinTest < 10)
+	{
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinTest % 10, 0);
+	}
 }
