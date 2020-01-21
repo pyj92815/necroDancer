@@ -27,7 +27,7 @@ public:
 	virtual void relase();
 	virtual void update();
 	virtual void render();
-
+	virtual void AnimationAdd();
 	//Enemy생성 함수 (float x, float y, float HP, float damage, const char* enemyName)
 	virtual void EnemyCreate(float x, float y, float HP,float damage,const char* enemyName);
 

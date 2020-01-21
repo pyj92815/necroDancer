@@ -3,14 +3,13 @@
 
 HRESULT Enemy::init()
 {
-	ZeroMemory(&_enemyInfo, sizeof(_enemyInfo));
+	//ZeroMemory(&_enemyInfo, sizeof(_enemyInfo));
 	
-	_enemyInfo = new EnemyInfo;
-	int Bat_Idle[] = { 0,1,2,3};
+	//_enemyInfo = new EnemyInfo;
+	/*int Bat_Idle[] = { 0,1,2,3};
 	_enemyInfo->image = IMAGEMANAGER->findImage("Enemy_bat");
 	KEYANIMANAGER->addArrayFrameAnimation("BatAnimaition", "Enemy_bat", Bat_Idle, 4, 10, true);
-	_enemyInfo->animation = KEYANIMANAGER->findAnimation("BatAnimaition");
-	_enemyInfo->animation->start();
+	_enemyInfo->animation = KEYANIMANAGER->findAnimation("BatAnimaition");*/
 
 	return S_OK;
 }

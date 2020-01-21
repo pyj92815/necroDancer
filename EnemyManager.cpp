@@ -165,8 +165,8 @@ void EnemyManager::imageAdd()
 	IMAGEMANAGER->addFrameImage("Enemy_slime_orangeR", "/.image./Enemy/slime_orangeR.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_wraithL.bmp", "./image./Enemy/wraithL.bmp", 144, 96, 3, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_wraithR.bmp", "./image./Enemy/wraithR.bmp", 144, 96, 3, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_zombieL.bmp", "./image./Enemy/zombieL.bmp", 1152, 100, 24, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_zombieR.bmp", "./image./Enemy/zombieR.bmp", 1152, 100, 24, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_zombie.bmp", "./image./Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
+
 }
 
 void EnemyManager::AnimationAdd()
@@ -328,6 +328,13 @@ void EnemyManager::AnimationAdd()
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_R_IDLE_Ani", "Enemy_wraithR", Enemy_wraith_R_IDLE, 2, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_R_ATTACK_Ani", "Enemy_wraithR", Enemy_wraith_R_ATTACK, 1, 10, true);
 	//==============================좀 비 애 니 메 이 션===============================================
-	int Enemy_zombie_L_UP[] = {0,1,2,3,4,5,6,7,8};
-	int Enemy_zombie_L_MOVE[] = { 9,10,11,12,13,14,15};
+	int Enemy_zombie_UP[] = { 0,1,2,3,4,5,6,7 };
+	int Enemy_zombie_LEFT[] = { 8,9,10,11,12,13,14,15 };
+	int Enemy_zombie_RIGHT[] = { 16,17,18,19,20,21,22,23 };
+	int Enemy_zombie_DOWN[] = { 24,25,26,27,28,29,30,31 };
+
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_UP_Ani", "Enemy_zombie", Enemy_zombie_UP, 8, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_LEFT_Ani", "Enemy_zombie", Enemy_zombie_LEFT, 8, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_RIGHT_Ani", "Enemy_zombie", Enemy_zombie_RIGHT, 8, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_DOWN_Ani", "Enemy_zombie", Enemy_zombie_DOWN, 8, 10, true);
 }
