@@ -31,6 +31,13 @@ private:
 	tagButton _wallButton;		//벽
 	tagButton _trapButton;		//함정
 	tagButton _itemButton;		//아이템
+	tagButton _exitButton;		//나가기
+private:
+	tagMouse _RectCreate;
+	bool _isClick;
+	
+	int _startL, _startT, _endR, _endB;
+
 public:
 	mapTool();
 	~mapTool();
