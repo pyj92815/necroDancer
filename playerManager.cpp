@@ -29,6 +29,6 @@ void playerManager::update()
 
 void playerManager::render()
 {
-	_ptt->render();
+	//_ptt->render();
 	_player->render();
 }

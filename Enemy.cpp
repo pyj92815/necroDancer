@@ -13,7 +13,7 @@ void Enemy::relase()
 
 void Enemy::update()
 {
-	_enemyInfo->discoveryRc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52 * 7, 52 * 7);
+	//_enemyInfo->discoveryRc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52 * 7, 52 * 7);
 
 }
 
