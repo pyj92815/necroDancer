@@ -12,7 +12,7 @@ HRESULT stageScene::init()
 	_beat = new Beat;
 	_beat->init();
 
-	load();
+	//load();
 
 	_ui = new UImanager;
 	_ui->init();
