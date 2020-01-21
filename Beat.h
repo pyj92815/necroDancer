@@ -10,7 +10,7 @@ using namespace std;
 #define WINSIZEX_HALF WINSIZEX / 2
 #define NOTE_INTERVAL WINSIZEX_HALF / 4
 #define NOTE_RADIUS_X 5
-#define HEARTFRAME_RATE 12
+#define HEARTFRAME_RATE 3
 
 
 enum tagStage
@@ -40,9 +40,11 @@ private:
 	tagStage _currentStage;
 	string _oldSongName, _currentSongName, _oldShopKeeper, _currentShopkeeper;
 	string _noteFileName;
+	bool _loopSong;
 
 	vector<int> _msTimeInfo;
 	vector<tagNote> _noteLeft;
+	vector<tagNote> _noteRight;
 	int _countComma;
 	int _countNote;
 	float _deltaTime;
@@ -50,6 +52,8 @@ private:
 
 	int _oldStageID, _currentStageID;
 	unsigned int _songPos;
+	unsigned int _songLength;  // FMOD::SOUND에 getLength()함수가 망가져서 만들었음 ㅠㅠ...
+	float _songLeftTime;
 	float _pitch;
 	float _noteSpeed;
 
@@ -75,6 +79,7 @@ private:
 	void render_DebugLog(HDC getMemDC);
 
 	void Load();
+	float GetSongVariousTime(unsigned int playTime, unsigned int songLength);
 
 
 public:
