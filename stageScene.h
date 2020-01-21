@@ -12,6 +12,8 @@ private:
 	EnemyManager* _em;
 	Beat* _beat;
 
+	tagTile _tiles[20 * 40];  // 받아와야하는 (타일 갯수 수정할 예정)
+	bool _isLoad;
 public:
 	stageScene() {}
 	~stageScene() {}
@@ -21,5 +23,6 @@ public:
 	virtual void update();
 	virtual void render();
 
+	void load();
 };
 

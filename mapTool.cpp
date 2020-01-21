@@ -14,9 +14,6 @@ void setWindowsSize(int x, int y, int width, int height);
 
 HRESULT mapTool::init()
 {
-	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("wallTiles", "./image/mapTool/wall/wall.bmp", 832, 416, WALLTILEX, WALLTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("trapTiles", "./image/mapTool/trap/trap.bmp", 312, 364, TRAPTILEX, TRAPTILEY, true, RGB(255, 0, 255));
 	// 맵툴 사이즈를 정의 
 	_WINSIZEX = 1880;
 	_WINSIZEY = 900;
