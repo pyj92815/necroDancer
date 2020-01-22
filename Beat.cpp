@@ -28,7 +28,7 @@ void Beat::update()
     update_SceneCheck();
 
     // 플레이어 움직임
-   // update_PlayerMoveTest();
+    //update_PlayerMoveTest();
 
     // 노래 & 노트 조절
     update_SongAndNoteControl();

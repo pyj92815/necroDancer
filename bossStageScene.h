@@ -41,6 +41,7 @@ public:
 
 	void bossStageMap_Load();											// 보스 스테이지 맵을 벡터 형식으로 저장한다.
 	void findTileImage();												// 타일 이미지를 찾아준다.
+	void z_Order_Player_Boss();											// 플레이어와 보스의 z오더
 
 	void stageSceneAddressLink(stageScene* stageScene) { _stageScene = stageScene; }
 };

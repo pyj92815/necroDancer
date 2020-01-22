@@ -16,10 +16,10 @@ HRESULT bossStageScene::init()
 	bossStageMap_Load();	// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
 
 	_deathMetal = new deathMetal;
-	_deathMetal->init("데스메탈", 5, 5, TESTTILESIZE, TESTTILESIZE);
+	_deathMetal->init("데스메탈", 5, 5, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
 
-	_player = _stageScene->getPlayerAddress();
-	_ui = _stageScene->getUiAddress();
+	_player = _stageScene->getPlayerAddress();							// 플레이어 링크
+	_ui = _stageScene->getUiAddress();									// ui 링크
 
 	return S_OK;
 }
@@ -33,6 +33,11 @@ void bossStageScene::update()
 	_deathMetal->update();
 	_player->update();
 	_ui->update();
+
+	if (KEYMANAGER->isToggleKey('V'))
+	{
+		BEATMANAGER->update();
+	}
 }
 
 void bossStageScene::render()
@@ -45,17 +50,68 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList).type != TYPE_NONE)
 			{
-				// 타일의 타입, 속성에 따라 이미지를 찾아서 좌표에 뿌려주는 함수
-				findTileImage();
+				//// 타일의 타입, 속성에 따라 이미지를 찾아서 좌표에 뿌려주는 함수
+				//findTileImage();
+				//
+				//if ((*_viTotalList).idY > _deathMetal->getBoss_Index().y)
+				//{
+				//	// 플레이어와 보스의 인덱스 y를 비교하여 누가 먼저 그려질지 연산해주는 함수
+				//	z_Order_Player_Boss();
+				//
+				//	// 타일의 타입, 속성에 따라 이미지를 찾아서 좌표에 뿌려주는 함수
+				//	findTileImage();
+				//}
+				//
+				//if ((*_viTotalList).idY > _player->getPlayer().idy)
+				//{
+				//	// 플레이어와 보스의 인덱스 y를 비교하여 누가 먼저 그려질지 연산해주는 함수
+				//	z_Order_Player_Boss();
+				//
+				//	// 타일의 타입, 속성에 따라 이미지를 찾아서 좌표에 뿌려주는 함수
+				//	findTileImage();
+				//}
+
+				//if (_deathMetal->getBoss_Index().y == (*_viTotalList).idY - 1)
+				//{
+				//	findTileImage();
+				//	_deathMetal->render();
+				//}
+				//else
+				//{
+				//	_deathMetal->render();
+				//	findTileImage();
+				//}
+
+				if (_deathMetal->getBoss_Index().y + 1 == (*_viTotalList).idY &&
+					(*_viTotalList).type == TYPE_WALL)
+				{
+					//findTileImage();
+				}
+				else
+				{
+					findTileImage();
+					_deathMetal->render();
+				}
 			}
 	
 		}
 	}
 
-	_deathMetal->render();
-	_player->render();
+
+
+
+
+	// 월드이미지를 뿌려준다.
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
+
+	// UI 출력
 	_ui->render();
+
+	// 테스트 비트 출력 토글
+	if (KEYMANAGER->isToggleKey('V'))
+	{
+		BEATMANAGER->render();
+	}
 
 }
 
@@ -132,5 +188,21 @@ void bossStageScene::findTileImage()
 		IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
 			(*_viTotalList).rc.left, (*_viTotalList).rc.top,
 			(*_viTotalList).trapFrameX, (*_viTotalList).trapFrameY);
+	}
+}
+
+void bossStageScene::z_Order_Player_Boss()
+{
+	// 보스의 인덱스y가 플레이어의 인덱스y보다 크다면 플레이어를 먼저 그려준다.
+	// 그렇지 않다면 보스를 먼저 그려준다.
+	if (_deathMetal->getBoss_Index().y > _player->getPlayer().idy)	// 보스가 플레이어보다 앞에 있다.
+	{
+		_player->render();
+		_deathMetal->render();
+	}
+	else	// 보스가 플레이어보다 뒤에 있다.
+	{
+		_deathMetal->render();
+		_player->render();
 	}
 }
