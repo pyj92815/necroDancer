@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="action.h" />
+    <ClInclude Include="alphaImageEffect.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStarManager.h" />
     <ClInclude Include="aStarScene.h" />
@@ -228,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
+    <ClCompile Include="alphaImageEffect.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStarManager.cpp" />
     <ClCompile Include="aStarScene.cpp" />

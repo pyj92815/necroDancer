@@ -16,11 +16,13 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.bodyImage = IMAGEMANAGER->addFrameImage("player1_armor_body_xmas", "./image/player/player1_armor_body_xmas.bmp", 384, 240, 8, 5, true, RGB(255, 0, 255));
 
 	//빗나감 이펙트
-	IMAGEMANAGER->addImage("player_effect_missed", "./image/player/TEMP_missed.bmp", 36, 13, true, RGB(255, 0, 255));
-	EFFECTMANAGER->addEffect("빗나감", "./image/player/TEMP_missed.bmp", 36, 13, 36, 13, 1.0f, 0.1f, 50);
+	IMAGEMANAGER->addImage("player_effect_missed", "./image/player/TEMP_missed.bmp", 72, 26, true, RGB(255, 0, 255),true);
+
 	// 플레이어 상태
 	_player.state = PLAYERSTATE_RIGHT;
 	_player.sight = 1;
+
+	_miss = "player_effect_missed";
 
 	//오른쪽 
 	int headRight[] = { 0,1,2,3,4,5,6,7 };
@@ -67,6 +69,12 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 
 	_isKeyPress = false;     // key 눌렸을때를 판단하는 
 	destroyAllWindows();
+
+	//effect
+	_effect = new alphaImageEffect;
+	_effect->init();
+	_isMiss = false;
+
 	return S_OK;
 }
 
@@ -80,9 +88,17 @@ void player::update()
 	keyControl();					// KEY
 	playerMove();					// MOVE
 	CAMERAMANAGER->set_CameraXY(_player.idx * _distance + (_distance / 2), _player.idy * _distance + (_distance / 3));
+	_effect->update();
+
+	if (_isMiss)
+	{
+		_effect->alphaEffectStart(_miss, (float)_player.x- (_distance / 2),(float)_player.y + 100);
+		_isMiss = false;
+	}
+
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
-		EFFECTMANAGER->play("빗나감",_ptMouse.x, _ptMouse.y);
+		_isMiss = true;
 	}
 }
 
@@ -90,6 +106,7 @@ void player::render()
 {
 	_player.bodyImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.bodyAni);	// 몸
 	_player.headImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.headAni);	// 얼굴 
+	_effect->render(CAMERAMANAGER->getWorldDC());
 }
 
 void player::playerMove()
@@ -159,7 +176,6 @@ void player::keyControl()
 			_angle = getAngle(_player.x, _player.y, _player.x - _distance, _player.y);	// 방향 
 			_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 			_isMoving = true;															// MOVE
-
 			_jump->jumping(&_player.x, &_player.y, 6, 1.5);	//점프 
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))

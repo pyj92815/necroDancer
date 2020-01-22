@@ -38,6 +38,7 @@ void stageScene::update()
 
 void stageScene::render()
 {
+	//땅 렌더
 	if (_isLoad)
 	{
 		for (int i = 0;i < 800; i++)
@@ -56,11 +57,13 @@ void stageScene::render()
 			}
 		}
 	}
+	//플레이어 렌더 
 	_pm->render();
+	//몬스터 렌더 
 	_em->render();
 	
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
-	EFFECTMANAGER->render();   // 현재 getMemDC로 뿌리면 잘되고 카메라로 뿌리면 위치가 다름 수정예정 ( 20200122)
+	
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		_beat->render();
