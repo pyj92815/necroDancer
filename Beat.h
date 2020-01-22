@@ -11,9 +11,11 @@ using namespace std;
 #define WINSIZEX_HALF 950 / 2	// 윈도우 가로 사이즈 절반
 #define NOTE_INTERVAL WINSIZEX_HALF / 4 // 노트 사이 간격
 #define NOTE_RADIUS_X 5 // 노트 하나의 가로 반지름 길이
-#define HEARTFRAME_RATE 3 // 심장 박동 프레임 지연 시간
+#define HEARTFRAME_RATE 20 // 심장 박동 프레임 지연 시간
 
 class gameNode;
+class player;
+class alphaEffect;
 
 enum tagStage // 테스트용으로 선언한 Scene상태
 {
@@ -32,7 +34,9 @@ struct tagNote // 노트 구조체
 	image* img;
 	float speed;
 	bool isCol;
+	bool isRender;
 	bool isPressBtn;
+	int alpha;
 };
 
 class Beat : public singletonBase<Beat>
@@ -65,6 +69,8 @@ private:
 	int heartFrameCount; // 현재 심장 프레임
 	bool _isBeating; // 심장 박동을 주어진 시간 간격마다 한번 씩만 두근거리기 위한 bool 
 
+	player* _player;
+	bool _effect;
 
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
@@ -92,4 +98,10 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
+	bool getBeating() { return _isBeating ;}
+	void setPlayerAddressLink(player* player) { _player = player; }
+
+	void setEffect(float x,float y);
+	void setEffectAlpha();
 };

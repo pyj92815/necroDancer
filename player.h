@@ -24,6 +24,7 @@ struct tagPlayer
 	image* bodyImage;		// 몸통 
 	RECT rc;				// RECT
 	float x, y;				// 좌표 X,Y  
+
 	int idx, idy;			// 타일의 인덱스 번호 
 	int count;				// 프레임 카운터 
 	int currnetFrameX, currnetFrameY;	// 프레임 X,Y
@@ -69,4 +70,5 @@ public:
 	tagPlayer getPlayer() { return _player; }			// 플레이어 값 반환 
 	int getSight() { return _player.sight; }			// 시야 값 반환 
 	PLAYERSTATE getState() { return _player.state; }	// 플레이어의 상태 값 반환 (HG가 추가했음)
+	bool getPlayerKey() { return _isKeyPress; }
 };

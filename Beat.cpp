@@ -1,7 +1,12 @@
 #include "stdafx.h"
 #include "Beat.h"
 #include"gameNode.h"
+#include "player.h"
+#include "alphaImageEffect.h"
 
+
+vector<alphaImageEffect*>		     _vEffect;  // 빗나감 이펙트 
+vector<alphaImageEffect*>::iterator _viEffect;
 
 HRESULT Beat::init()
 {
@@ -23,7 +28,7 @@ void Beat::update()
     update_SceneCheck();
 
     // 플레이어 움직임
-    update_PlayerMoveTest();
+   // update_PlayerMoveTest();
 
     // 노래 & 노트 조절
     update_SongAndNoteControl();
@@ -44,28 +49,48 @@ void Beat::render()
     Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
     Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
     Rectangle(_backBuffer->getMemDC(), test_Player);
-
+    //Rectangle(_backBuffer->getMemDC(), heartRC);
     if (_vNoteLeft.size() > 0) // 왼쪽 노트 렌더
     {
         for (int i = 0; i < _vNoteLeft.size(); i++)
         {
+            if (!_vNoteLeft[i].isRender) continue;
             //Rectangle(getMemDC(), _noteLeft[i].rc);
-            _vNoteLeft[i].img->render(_backBuffer->getMemDC(), _vNoteLeft[i].rc.left, _vNoteLeft[i].rc.top);
+            _vNoteLeft[i].img->alphaRender(_backBuffer->getMemDC(), _vNoteLeft[i].rc.left, _vNoteLeft[i].rc.top, _vNoteLeft[i].alpha);
         }
     }
     if (_vNoteRight.size() > 0) // 오른쪽 노트 렌더
     {
         for (int i = 0; i < _vNoteRight.size(); i++)
         {
+            if (!_vNoteRight[i].isRender) continue;
             //Rectangle(getMemDC(), _noteRight[i].rc);
-            _vNoteRight[i].img->render(_backBuffer->getMemDC(), _vNoteRight[i].rc.left, _vNoteRight[i].rc.top);
+            _vNoteRight[i].img->alphaRender(_backBuffer->getMemDC(), _vNoteRight[i].rc.left, _vNoteRight[i].rc.top, _vNoteRight[i].alpha);
         }
     }
 
     //Rectangle(getMemDC(), heartRC);
-    IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
+    IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()+100); // 심장 렌더
 
+    for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+    {
+        (*_viEffect)->render(_backBuffer->getMemDC());
+    }
     render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
+}
+
+void Beat::setEffect(float x,float y)
+{
+    if (!_effect) return;
+    alphaImageEffect* effect2;
+    effect2 = new alphaImageEffect;
+    effect2->init("GreenNote", x, y,5,true);
+    _vEffect.push_back(effect2);
+    _effect = false;
+}
+
+void Beat::setEffectAlpha()
+{
 }
 
 
@@ -81,8 +106,8 @@ void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
     SOUNDMANAGER->addSound("NPC_Stage_1_2_shopkeeper", "Music/zone1_2_shopkeeper.ogg", true, false);
     SOUNDMANAGER->addSound("NPC_Stage_1_3_shopkeeper", "Music/zone1_3_shopkeeper.ogg", true, false);
 
-    IMAGEMANAGER->addImage("GreenNote", "image/player/TEMP_beat_marker.bmp", 12, 64, true, RGB(255, 0, 255));
-    IMAGEMANAGER->addImage("RedNote", "image/player/TEMP_beat_marker_red.bmp", 12, 64, true, RGB(255, 0, 255));
+    IMAGEMANAGER->addImage("GreenNote", "image/player/TEMP_beat_marker.bmp", 12, 64, true, RGB(255, 0, 255), true);
+    IMAGEMANAGER->addImage("RedNote", "image/player/TEMP_beat_marker_red.bmp", 12, 64, true, RGB(255, 0, 255),true);
     IMAGEMANAGER->addFrameImage("Heart", "image/player/TEMP_beat_heart.bmp", 205, 130, 2, 1, true, RGB(255, 0, 255));
 }
 
@@ -183,6 +208,9 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
                     }
                 }
             }
+        }
+        for (int i = 0; i < _vNoteRight.size(); i++) // 오른쪽 노트
+        {
             _vNoteRight[i].pos.x -= _deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch); // 노트 이동 (델타 타임 / 현재 노트 시간(ms)값 * 노트 간격 * 현재 곡 pitch 값)
             _vNoteRight[i].img->setX(_vNoteRight[i].pos.x - _vNoteRight[i].img->getWidth() / 2); // 이미지 위치 세팅
             _vNoteRight[i].img->setY(_vNoteRight[i].pos.y - _vNoteRight[i].img->getHeight() / 2); // 이미지 위치 세팅
@@ -193,6 +221,12 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             {
                 if (!_vNoteRight[i].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
                 _vNoteRight[i].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
+                if (_player->getPlayerKey() && _vNoteRight[i].isRender)
+                {
+                    _vNoteRight[i].isRender = false;
+                    setEffect(_vNoteRight[i].pos.x, _vNoteRight[i].pos.y);
+                    _effect = true;
+                }
             }
         } // 여기까지가 오른쪽 노트
 
@@ -231,6 +265,11 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
                 _vNoteLeft[i].isCol = true;
             }
         } // 여기까지가 왼쪽 노트
+    }
+    // 이펙트 
+    for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+    {
+        (*_viEffect)->update();
     }
 }
 
@@ -354,6 +393,8 @@ void Beat::CreateNewNote(bool dirRight) // 노트 생성, 곡 시작 직전에 (오른쪽으로
         setNote.speed = _deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
         setNote.isCol = false;
         setNote.isPressBtn = false;
+        setNote.isRender = true;
+        setNote.alpha = 255;
 
         if (dirRight) _vNoteRight.push_back(setNote);
         else _vNoteLeft.push_back(setNote), ++_countNote; // *카운트 노트는 왼쪽 기준으로만 세주자! 양쪽다 하면 두 번 일하는거니깐!
@@ -376,7 +417,8 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // 노트 생성, 곡 시작 중 (오른�
     newNote.speed = _deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f) * NOTE_INTERVAL * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
     newNote.isCol = false;
     newNote.isPressBtn = false;
-
+    newNote.isRender = true;
+    newNote.alpha = 255;
     if (dirRight) _vNoteRight.push_back(newNote);
     else _vNoteLeft.push_back(newNote); // *카운트 노트는 왼쪽 기준으로만 세주자! 양쪽다 하면 두 번 일하는거니깐!
 }

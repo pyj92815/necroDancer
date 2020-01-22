@@ -9,13 +9,15 @@ alphaImageEffect::~alphaImageEffect()
 {
 }
 
-HRESULT alphaImageEffect::init(const char* imageName, float x, float y)
+HRESULT alphaImageEffect::init(const char* imageName, float x, float y, int speed,bool value)
 {
 	_alphaValue = 255;
 	_x = x;
 	_y = y;
 	_effectImage = IMAGEMANAGER->findImage(imageName);
 	_isRunning = true;
+	_speed = speed;
+	_isStop = value;
 	return S_OK;
 }
 
@@ -30,8 +32,8 @@ void alphaImageEffect::update()
 {
 	if (_isRunning)
 	{
-		_y -= 10 * TIMEMANAGER->getElapsedTime();
-		_alphaValue -= 10;
+		if(!_isStop) _y -= 10 * TIMEMANAGER->getElapsedTime();
+		_alphaValue -= _speed;
 		if (_alphaValue < 10)
 		{
 			_isRunning = false;
