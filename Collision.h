@@ -9,14 +9,16 @@ public:
 	Collision();
 	~Collision();
 
+	/////////////////////////////////////////// 캐릭터 충돌 ///////////////////////////////////////////////
+
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 캐릭터 충돌 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	// 플레이어의 1칸 근처에 에너미를 공격한다. (공격력 1)
 	// 매개변수 : 맵(벡터), 타일 갯수(X 축), 플레이어 정보, 에너미 정보 
-	void collision_Player_Attack_Enemy(vector<tagTile>* mapInfo, int tileSize, player* playerInfo,  Enemy* enemyInfo);
+	void collision_Player_Attack_Enemy(vector<tagTile>* mapInfo, int tileSize, player* playerInfo, Enemy* enemyInfo);
 
 	// 에너미의 1칸 근처에 플레이어를 공격한다. 
 	void collision_Enemy_Attack_Player();
-	
+
 	// 맵 정보, 플레이어, 보스의 정보를 가져와서 충돌 연산 후 수정을 해준다. (데스메탈)
 	void collision_Player_DeathMetal(vector<tagTile>* mapInfo, player* playerInfo, deathMetal* bossInfo);
 

@@ -8,7 +8,6 @@ class playerManager: public gameNode
 private:
 	player* _player;
 
-
 public:
 	playerManager() {}
 	~playerManager() {}
@@ -18,4 +17,5 @@ public:
 	void update();
 	void render();
 
+	player* getPlayerInfo() { return _player; }
 };

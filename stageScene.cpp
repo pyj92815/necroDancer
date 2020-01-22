@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "stageScene.h"
+#include "bossStageScene.h"
 
 HRESULT stageScene::init()
 {

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "playerManager.h"
-
+#include "bossStageScene.h"
 HRESULT playerManager::init()
 {
 	// ¹Ù´Ú Å×½ºÆ® 
