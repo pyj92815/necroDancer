@@ -48,7 +48,7 @@ using namespace std;
 #include "keyAniManager.h"
 #include "iniDataManager.h"
 #include "cameraManager.h"
-
+#include "Beat.h"
 using namespace SEVENTEEN_UTIL;
 
 //=========================================
@@ -73,6 +73,7 @@ using namespace SEVENTEEN_UTIL;
 #define KEYANIMANAGER keyAniManager::getSingleton()
 #define INIDATAMANAGER iniDataManager::getSingleton()
 #define CAMERAMANAGER cameraManager::getSingleton()
+#define BEATMANAGER Beat::getSingleton()
 
 #define SAFE_DELETE(p) {if(p) {delete(p); (p)=NULL;}}
 #define SAFE_RELEASE(p) {if(p) {(p)->release(); (p) = NULL;}}

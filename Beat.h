@@ -1,18 +1,19 @@
 #pragma once
-#include "gameNode.h"
-#include "action.h"
+//#include "gameNode.h"
+#include "singletonBase.h"
+//#include "action.h"
 #include <iostream> // 파일 저장 및 불러오기를 위해 선언한 헤더들
 #include <fstream> // 파일 저장 및 불러오기를 위해 선언한 헤더들
 #include <string> // 파일 저장 및 불러오기를 위해 선언한 헤더들
 #include <vector>
 using namespace std;
 
-#define WINSIZEX_HALF WINSIZEX / 2	// 윈도우 가로 사이즈 절반
+#define WINSIZEX_HALF 950 / 2	// 윈도우 가로 사이즈 절반
 #define NOTE_INTERVAL WINSIZEX_HALF / 4 // 노트 사이 간격
 #define NOTE_RADIUS_X 5 // 노트 하나의 가로 반지름 길이
 #define HEARTFRAME_RATE 3 // 심장 박동 프레임 지연 시간
 
-
+class gameNode;
 
 enum tagStage // 테스트용으로 선언한 Scene상태
 {
@@ -34,9 +35,7 @@ struct tagNote // 노트 구조체
 	bool isPressBtn;
 };
 
-
-
-class Beat : public gameNode
+class Beat : public singletonBase<Beat>
 {
 private:
 	tagStage _currentStage; // 현재 스테이지

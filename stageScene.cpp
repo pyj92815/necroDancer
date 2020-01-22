@@ -9,8 +9,8 @@ HRESULT stageScene::init()
 	_em = new EnemyManager;
 	_em->init();
 
-	_beat = new Beat;
-	_beat->init();
+	//_beat = new Beat;
+	//_beat->init();
 
 	load();
 
@@ -31,9 +31,10 @@ void stageScene::update()
 
 	if (KEYMANAGER->isToggleKey('V'))
 	{
-		_beat->update();
+		BEATMANAGER->update();
 	}
 	_ui->update();
+
 }
 
 void stageScene::render()
@@ -66,7 +67,7 @@ void stageScene::render()
 	
 	if (KEYMANAGER->isToggleKey('V'))
 	{
-		_beat->render();
+		BEATMANAGER->render();
 	}
 	//ENEMYMANAGER->render(getMemDC());
 	_ui->render();	

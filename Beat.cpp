@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Beat.h"
-
+#include"gameNode.h"
 
 
 HRESULT Beat::init()
@@ -40,17 +40,17 @@ void Beat::update()
 
 void Beat::render()
 {
-    Rectangle(getMemDC(), test_slowPlatform);
-    Rectangle(getMemDC(), test_fastPlatform);
-    Rectangle(getMemDC(), test_ShopKeeper);
-    Rectangle(getMemDC(), test_Player);
+    Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
+    Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
+    Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
+    Rectangle(_backBuffer->getMemDC(), test_Player);
 
     if (_vNoteLeft.size() > 0) // 왼쪽 노트 렌더
     {
         for (int i = 0; i < _vNoteLeft.size(); i++)
         {
             //Rectangle(getMemDC(), _noteLeft[i].rc);
-            _vNoteLeft[i].img->render(getMemDC(), _vNoteLeft[i].rc.left, _vNoteLeft[i].rc.top);
+            _vNoteLeft[i].img->render(_backBuffer->getMemDC(), _vNoteLeft[i].rc.left, _vNoteLeft[i].rc.top);
         }
     }
     if (_vNoteRight.size() > 0) // 오른쪽 노트 렌더
@@ -58,14 +58,14 @@ void Beat::render()
         for (int i = 0; i < _vNoteRight.size(); i++)
         {
             //Rectangle(getMemDC(), _noteRight[i].rc);
-            _vNoteRight[i].img->render(getMemDC(), _vNoteRight[i].rc.left, _vNoteRight[i].rc.top);
+            _vNoteRight[i].img->render(_backBuffer->getMemDC(), _vNoteRight[i].rc.left, _vNoteRight[i].rc.top);
         }
     }
 
     //Rectangle(getMemDC(), heartRC);
-    IMAGEMANAGER->frameRender("Heart", getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
+    IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
 
-    render_DebugLog(getMemDC()); // 디버그 텍스트 렌더
+    render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
 
 
