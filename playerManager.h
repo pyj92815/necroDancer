@@ -18,4 +18,5 @@ public:
 	void render();
 
 	player* getPlayerInfo() { return _player; }
+	float* getPlayerY() { return _player->getPlayerY(); }
 };

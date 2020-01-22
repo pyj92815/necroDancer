@@ -7,6 +7,13 @@
 
 class bossStageScene;
 
+struct tagZorder
+{
+	tagTile* tile;
+	playerManager* player;
+	Enemy* enemy;
+};
+
 class stageScene: public gameNode
 {
 private:
@@ -17,6 +24,9 @@ private:
 	tagTile _tiles[20 * 40];  // 받아와야하는 (타일 갯수 수정할 예정)
 	bool _isLoad;
 	bossStageScene* _bossStageScene;
+
+	multimap<float*, tagZorder*>				_mZorder;
+	multimap<float*, tagZorder*>::iterator		_miZorder;
 public:
 	stageScene() {}
 	~stageScene() {}

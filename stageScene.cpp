@@ -18,6 +18,25 @@ HRESULT stageScene::init()
 	_ui = new UImanager;
 	_ui->init();
 
+	//Á¦Æ®¿À´õ ÃÊ±â 
+	tagZorder* player;
+	player = new tagZorder;
+	ZeroMemory(player, sizeof(player));
+	//memset(player, 0, sizeof(player));
+	player->player = _pm;
+	player->enemy = NULL;
+	player->tile = NULL;
+	_mZorder.insert(pair<float*,tagZorder*>(_pm->getPlayerY(), player));
+	for (int i = 0; i < 800;++i)
+	{
+		tagZorder* tile;
+		tile = new tagZorder;
+		ZeroMemory(tile, sizeof(tile));
+		tile->tile = &_tiles[i];
+		tile->player = NULL;
+		tile->enemy = NULL;
+		_mZorder.insert(pair<float*, tagZorder*>((float*)_tiles[i].rc.bottom, tile));
+	}
 	return S_OK;
 }
 
@@ -40,29 +59,63 @@ void stageScene::update()
 
 void stageScene::render()
 {
-	//¶¥ ·»´õ
-	if (_isLoad)
+	////¶¥ ·»´õ
+	//if (_isLoad)
+	//{
+	//	for (int i = 0;i < 800; i++)
+	//	{
+	//		if (_tiles[i].terrain != TR_NONE)
+	//		{
+	//			IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY, _tiles[i].alphaValue);
+	//		}
+	//		if (_tiles[i].wall != W_NONE)
+	//		{
+	//			IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].wallFrameX, _tiles[i].wallFrameY, _tiles[i].alphaValue);
+	//		}
+	//		if (_tiles[i].trap != TRAP_NONE)
+	//		{
+	//			IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].trapFrameX, _tiles[i].trapFrameY, _tiles[i].alphaValue);
+	//		}
+	//	}
+	//}
+	////ÇÃ·¹ÀÌ¾î ·»´õ 
+	//_pm->render();
+	////¸ó½ºÅÍ ·»´õ 
+	//_em->render();
+
+	//Á¦Æ®¿À´õ ·£´õ 
+	for (_miZorder = _mZorder.begin(); _miZorder != _mZorder.end(); ++_miZorder)
 	{
-		for (int i = 0;i < 800; i++)
+		//¹®Á¦´Â Á¶±Ý ·º°É¸² Á¦Æ®¿À´õ·Î Ãâ·Â 
+		if (_miZorder->second->tile != NULL)
 		{
-			if (_tiles[i].terrain != TR_NONE)
+			if (_miZorder->second->tile->terrain != TR_NONE)
 			{
-				IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY, _tiles[i].alphaValue);
+				IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _miZorder->second->tile->rc.left, _miZorder->second->tile->rc.top, _miZorder->second->tile->terrainFrameX, _miZorder->second->tile->terrainFrameY, _miZorder->second->tile->alphaValue);
+				continue;
 			}
-			if (_tiles[i].wall != W_NONE)
+			if (_miZorder->second->tile->wall != W_NONE)
 			{
-				IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].wallFrameX, _tiles[i].wallFrameY, _tiles[i].alphaValue);
+				IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _miZorder->second->tile->rc.left, _miZorder->second->tile->rc.top, _miZorder->second->tile->terrainFrameX, _miZorder->second->tile->terrainFrameY, _miZorder->second->tile->alphaValue);
+				continue;
 			}
-			if (_tiles[i].trap != TRAP_NONE)
+			if (_miZorder->second->tile->trap != TRAP_NONE)
 			{
-				IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].trapFrameX, _tiles[i].trapFrameY, _tiles[i].alphaValue);
+				IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _miZorder->second->tile->rc.left, _miZorder->second->tile->rc.top, _miZorder->second->tile->trapFrameX, _miZorder->second->tile->trapFrameY, _miZorder->second->tile->alphaValue);
+				continue;
 			}
 		}
+		if (_miZorder->second->player != NULL)
+		{
+			_miZorder->second->player->render();
+			continue;
+		}
+		if (_miZorder->second->enemy != NULL)
+		{
+			_miZorder->second->enemy->render();
+			continue;
+		}	
 	}
-	//ÇÃ·¹ÀÌ¾î ·»´õ 
-	_pm->render();
-	//¸ó½ºÅÍ ·»´õ 
-	_em->render();
 	
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 	
