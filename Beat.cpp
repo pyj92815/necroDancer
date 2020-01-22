@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "Beat.h"
 #include"gameNode.h"
-
+#include "player.h"
+#include "alphaImageEffect.h"
 
 HRESULT Beat::init()
 {
@@ -193,6 +194,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             {
                 if (!_vNoteRight[i].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
                 _vNoteRight[i].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
+                //CreateHitNote();
             }
         } // 여기까지가 오른쪽 노트
 
@@ -229,6 +231,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             {
                 if (!_vNoteLeft[i].isCol) _isBeating = true;
                 _vNoteLeft[i].isCol = true;
+                //CreateHitNote();
             }
         } // 여기까지가 왼쪽 노트
     }
@@ -379,6 +382,11 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // 노트 생성, 곡 시작 중 (오른�
 
     if (dirRight) _vNoteRight.push_back(newNote);
     else _vNoteLeft.push_back(newNote); // *카운트 노트는 왼쪽 기준으로만 세주자! 양쪽다 하면 두 번 일하는거니깐!
+}
+
+void Beat::CreateHitNote(tagNote note)
+{
+
 }
 
 float Beat::GetSongVariousTime(unsigned int playTime, unsigned int songLength) // 곡의 여러가지 조건을 뽑아오기 위한 함수

@@ -1,19 +1,21 @@
 #pragma once
-//#include "gameNode.h"
-#include "singletonBase.h"
-//#include "action.h"
+#include "singletonBase.h" // Scene별로 유동적으로 사용해야되니깐 구애받지않고 쓸 수 있도록 싱글톤을 사용함
 #include <iostream> // 파일 저장 및 불러오기를 위해 선언한 헤더들
 #include <fstream> // 파일 저장 및 불러오기를 위해 선언한 헤더들
 #include <string> // 파일 저장 및 불러오기를 위해 선언한 헤더들
 #include <vector>
 using namespace std;
 
-#define WINSIZEX_HALF 950 / 2	// 윈도우 가로 사이즈 절반
+class gameNode; // 게임 노드와 전방 선언
+class player;
+class alphaEffect;
+
+#define WINSIZEX_HALF WINSIZEX / 2	// 윈도우 가로 사이즈 절반
 #define NOTE_INTERVAL WINSIZEX_HALF / 4 // 노트 사이 간격
 #define NOTE_RADIUS_X 5 // 노트 하나의 가로 반지름 길이
 #define HEARTFRAME_RATE 3 // 심장 박동 프레임 지연 시간
 
-class gameNode;
+
 
 enum tagStage // 테스트용으로 선언한 Scene상태
 {
@@ -35,7 +37,9 @@ struct tagNote // 노트 구조체
 	bool isPressBtn;
 };
 
-class Beat : public singletonBase<Beat>
+
+
+class Beat : public singletonBase<Beat> // 싱글톤 상속받기
 {
 private:
 	tagStage _currentStage; // 현재 스테이지
@@ -63,7 +67,14 @@ private:
 
 	image* heartImg; // 심장 이미지
 	int heartFrameCount; // 현재 심장 프레임
-	bool _isBeating; // 심장 박동을 주어진 시간 간격마다 한번 씩만 두근거리기 위한 bool 
+	bool _isBeating; // 심장 박동을 주어진 시간 간격마다 한번 씩만 두근거리기 위한 bool
+
+	vector<image*> _vHitNoteImg; // 알파 블렌더로 서서히 지울 노트 이미지를 저장할 이미지 전용 벡터
+
+	player* _player;
+	bool _textEffect;
+	//vector<alphaImageEffect*> _vEffect; // 빗나감 이펙트
+	//vector<alphaImageEffect*>::iterator _viEffect;
 
 
 private:
@@ -84,6 +95,7 @@ private:
 	void Load(); // 노트 파일 로드 함수
 	void CreateNewNote(bool dirRight); // 곡 시작 직전에 노트를 배치하는 함수. bool은 오른쪽으로 생성할 것인지 아닌지 판별.
 	void CreateNewNoteWhilePlay(bool dirRight); // 곡 시작하고 플레이 중에 노트를 배치하는 함수. bool은 오른쪽으로 생성할 것인지 아닌지 판별.
+	void CreateHitNote(tagNote note); // 사라지는 노트 전용 함수
 	float GetSongVariousTime(unsigned int playTime, unsigned int songLength); // 곡 제어나 노트 제어를 위해 특정 조건(특정 시간)을 뽑아오기 위해 쓰일 함수 
 
 
@@ -92,4 +104,6 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
+	void setPlayerAddressLink(player* player) { _player = player; }
 };
