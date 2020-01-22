@@ -4,13 +4,12 @@
 class alphaImageEffect : public effect
 {
 	int _alphaValue = 0;
-	bool _moveStart;
+	
 public:
 	alphaImageEffect();
 	~alphaImageEffect();
 
-	virtual HRESULT init();
-	void alphaEffectStart(const char* imageName,float x, float y);
+	virtual HRESULT init(const char* imageName, float x, float y);
 	void release();
 	void update();
 	void render();

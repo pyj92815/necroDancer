@@ -9,20 +9,14 @@ alphaImageEffect::~alphaImageEffect()
 {
 }
 
-HRESULT alphaImageEffect::init()
+HRESULT alphaImageEffect::init(const char* imageName, float x, float y)
 {
 	_alphaValue = 255;
-	_moveStart = false;
-	return S_OK;
-}
-
-void alphaImageEffect::alphaEffectStart(const char* imageName,float x,float y)
-{
-	_effectImage = IMAGEMANAGER->findImage(imageName);
 	_x = x;
 	_y = y;
+	_effectImage = IMAGEMANAGER->findImage(imageName);
 	_isRunning = true;
-	_alphaValue = 255;
+	return S_OK;
 }
 
 

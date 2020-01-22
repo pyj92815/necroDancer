@@ -48,6 +48,9 @@ private:
 	bool _isKeyPress;		// KEY 입력중 판단 
 
 	alphaImageEffect* _effect;
+	vector<alphaImageEffect*>		     _vEffect;  // 빗나감 이펙트 
+	vector<alphaImageEffect*>::iterator _viEffect;
+
 	const char* _miss;
 	bool _isMiss;
 public:
@@ -60,6 +63,7 @@ public:
 	void render();
 
 	void playerMove();
+	void playerMiss();
 	void keyControl();
 	//접근자 
 	tagPlayer getPlayer() { return _player; }			// 플레이어 값 반환 

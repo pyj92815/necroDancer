@@ -71,8 +71,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	destroyAllWindows();
 
 	//effect
-	_effect = new alphaImageEffect;
-	_effect->init();
+
 	_isMiss = false;
 
 	return S_OK;
@@ -87,18 +86,19 @@ void player::update()
 	_jump->update();				// JUMP
 	keyControl();					// KEY
 	playerMove();					// MOVE
+	playerMiss();					// MISS  ºø³ª°¨ 
 	CAMERAMANAGER->set_CameraXY(_player.idx * _distance + (_distance / 2), _player.idy * _distance + (_distance / 3));
-	_effect->update();
 
-	if (_isMiss)
-	{
-		_effect->alphaEffectStart(_miss, (float)_player.x- (_distance / 2),(float)_player.y + 100);
-		_isMiss = false;
-	}
+
 
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		_isMiss = true;
+	}
+
+	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+	{
+		(*_viEffect)->update();
 	}
 }
 
@@ -106,7 +106,11 @@ void player::render()
 {
 	_player.bodyImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.bodyAni);	// ¸ö
 	_player.headImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.headAni);	// ¾ó±¼ 
-	_effect->render(CAMERAMANAGER->getWorldDC());
+
+	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+	{
+		(*_viEffect)->render(CAMERAMANAGER->getWorldDC());
+	}
 }
 
 void player::playerMove()
@@ -135,6 +139,16 @@ void player::playerMove()
 		_isMoving = false;	  // ¼±Çü º¸°£ 
 		_isKeyPress = false;  // key ÀÔ·Â ÃÊ±âÈ­ 
 	}
+}
+
+void player::playerMiss()
+{
+	if (!_isMiss) return;
+	alphaImageEffect* effect;
+	effect = new alphaImageEffect;
+	effect->init(_miss, CAMERAMANAGER->get_CameraX() + 100, CAMERAMANAGER->get_CameraY() + 100);
+	_vEffect.push_back(effect);
+	_isMiss = false;
 }
 
 void player::keyControl()
