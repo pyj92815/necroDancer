@@ -6,15 +6,17 @@ enum class enemyState
 {
 	STATE_IDLE,STATE_DISCOVERY,STATE_MOVE,STATE_ATTACK,STATE_DIE
 };
+enum class Direction
+{
+	LEFT, RIGHT, UP, DOWN
+};
 struct EnemyInfo
 {
 	enemyState state;
-	animation* animation1;
-	animation* animation2;
-	animation* animation3;
-	animation* animation4;
-	image* image1;
-	image* image2;
+	Direction direction;
+	const char* animation;
+	const char* enemyName1;
+	const char* enemyName2;
 	float x, y;
 	RECT rc;
 	RECT discoveryRc;
@@ -40,6 +42,8 @@ public:
 	
 	virtual void Action();
 	virtual void Move();
+	virtual void AniChange();
+	virtual void Attack();
 
 	//Enemy생성 함수 (float x, float y, float HP, float damage, const char* enemyName)
 	virtual void EnemyCreate(float x, float y, float HP,float damage,const char* enemyName1,const char* enemyName2);

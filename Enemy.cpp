@@ -13,13 +13,11 @@ void Enemy::relase()
 
 void Enemy::update()
 {
-	//_enemyInfo->discoveryRc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52 * 7, 52 * 7);
-
 }
 
 void Enemy::render()
 {
-
+	IMAGEMANAGER->findImage(_enemyInfo->enemyName1)->aniRender(CAMERAMANAGER->getWorldDC(), _enemyInfo->x, _enemyInfo->y, KEYANIMANAGER->findAnimation(_enemyInfo->animation));
 }
 
 void Enemy::Action()
@@ -27,7 +25,6 @@ void Enemy::Action()
 	switch (_enemyInfo->state)
 	{
 	case enemyState::STATE_IDLE:
-		//if(IntersectRect())
 		break;
 	case enemyState::STATE_DISCOVERY:
 		break;
@@ -37,12 +34,18 @@ void Enemy::Action()
 		break;
 	case enemyState::STATE_DIE:
 		break;
-	default:
-		break;
 	}
 }
 
 void Enemy::Move()
+{
+}
+
+void Enemy::AniChange()
+{
+}
+
+void Enemy::Attack()
 {
 }
 
@@ -55,7 +58,11 @@ void Enemy::EnemyCreate(float x, float y, float HP, float damage,const char* ene
 	_enemyInfo->y = y;
 	_enemyInfo->HP = HP;
 	_enemyInfo->damage = damage;
-	_enemyInfo->image1 = IMAGEMANAGER->findImage(enemyName1);
-	_enemyInfo->image2 = IMAGEMANAGER->findImage(enemyName2);
-	_enemyInfo->rc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, _enemyInfo->image1->getFrameWidth(), _enemyInfo->image1->getFrameHeight());
+	_enemyInfo->enemyName1 = enemyName1;
+	_enemyInfo->enemyName2 = enemyName2;
+	//_enemyInfo->rc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y,IMAGEMANAGER->findImage(enemyName1)->getFrameWidth(), IMAGEMANAGER->findImage(enemyName1)->getFrameHeight());
+	_enemyInfo->rc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52, 52);
+	_enemyInfo->animation = "Enemy_zombie_UP_Ani";
+	_enemyInfo->discoveryRc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52 * 7, 52 * 7);
+	KEYANIMANAGER->findAnimation(_enemyInfo->animation)->start();
 }

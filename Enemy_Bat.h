@@ -2,6 +2,6 @@
 #include"Enemy.h"
 class Enemy_Bat:public Enemy
 {
-	
+	void AniChange();
 };
 

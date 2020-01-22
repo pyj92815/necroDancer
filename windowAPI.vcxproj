@@ -180,7 +180,6 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Enemy_Bat.h" />
-    <ClInclude Include="Enemy_Boss.h" />
     <ClInclude Include="Enemy_Dragon.h" />
     <ClInclude Include="Enemy_Ghost.h" />
     <ClInclude Include="Enemy_Minotaur.h" />
@@ -248,7 +247,6 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Enemy_Bat.cpp" />
-    <ClCompile Include="Enemy_Boss.cpp" />
     <ClCompile Include="Enemy_Dragon.cpp" />
     <ClCompile Include="Enemy_Ghost.cpp" />
     <ClCompile Include="Enemy_Minotaur.cpp" />

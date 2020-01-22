@@ -5,14 +5,12 @@ HRESULT EnemyManager::init()
 {
 	imageAdd();	//이미지 추가 함수
 	AnimationAdd(); //애니메이션 추가 함수
-	Enemy* enemy;
-	enemy = new Enemy_Bat;
-	enemy->init();
-	_vEnemy.push_back(enemy);
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->init();
 	}
+	_enemyType = EnemyType::ZOMBIE;
+	EnemyCreate(WINSIZEX / 2, WINSIZEY / 2, _enemyType);
 	return S_OK;
 }
 
@@ -73,6 +71,30 @@ void EnemyManager::EnemyCreate(float x, float y,EnemyType enemyType)
 	default:
 		break;
 	}
+}
+
+void EnemyManager::imageAdd()
+{
+	IMAGEMANAGER->addFrameImage("Enemy_batL", "./image./Enemy/batL.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_batR", "./image./Enemy/batR.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_dragonL", "./image./Enemy/dragonL.bmp", 216, 204, 2, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_dragonR", "./image./Enemy/dragonR.bmp", 216, 204, 2, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_ghostL", "./image./Enemy/ghostL.bmp", 96, 96, 2, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_ghostR", "./image./Enemy/ghostR.bmp", 96, 96, 2, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_minotaurL", "./image./Enemy/minotaurL.bmp", 900, 196, 9, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_minotaurR", "./image./Enemy/minotaurR.bmp", 900, 196, 9, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_skeletonL", "./image./Enemy/skeletonL.bmp", 384, 100, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_skeletonR", "./image./Enemy/skeletonR.bmp", 384, 100, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_skeleton_yellowL", "./image./Enemy/skeleton_yellowL.bmp", 432, 100, 9, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_skeleton_yellowR", "./image./Enemy/skeleton_yellowR.bmp", 432, 100, 9, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_slime_blueL", "./image./Enemy/slime_blueL.bmp", 416, 100, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_slime_blueR", "./image./Enemy/slime_blueR.bmp", 416, 100, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_slime_orangeL", "./image./Enemy/slime_orangeL.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_slime_orangeR", "./image./Enemy/slime_orangeR.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_wraithL", "./image./Enemy/wraithL.bmp", 144, 96, 3, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_wraithR", "./image./Enemy/wraithR.bmp", 144, 96, 3, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_zombie", "./image./Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
+
 }
 
 void EnemyManager::Enemy_Bat_Create(float x, float y)
@@ -146,59 +168,35 @@ void EnemyManager::Enemy_Zombie_Create(float x, float y)
 	_vEnemy.push_back(Zombie);
 }
 
-void EnemyManager::imageAdd()
-{
-	IMAGEMANAGER->addFrameImage("Enemy_batL", "./image./Enemy/batL.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_batR", "./image./Enemy/batR.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_dragonL","./image./Enemy/dragonL.bmp", 216, 204, 2, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_dragonR", "./image./Enemy/dragonR.bmp", 216, 204, 2, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_ghostL", "./image./Enemy/ghostL.bmp", 96, 96, 2, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_ghostR", "./image./Enemy/ghostR.bmp", 96, 96, 2, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_minotaurL", "./image./Enemy/minotaurL.bmp", 900, 196, 9, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_minotaurR", "./image./Enemy/minotaurR.bmp", 900, 196, 9, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_skeletonL", "./image./Enemy/skeletonL.bmp", 384, 100, 8, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_skeletonR", "./image./Enemy/skeletonR.bmp", 384, 100, 8, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_skeleton_yellowL", "./image./Enemy/skeleton_yellowL.bmp", 432, 100, 9, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_skeleton_yellowR", "./image./Enemy/skeleton_yellowR.bmp", 432, 100, 9, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_slime_blueL", "./image./Enemy/slime_blueL.bmp", 416, 100, 8, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_slime_blueR", "./image./Enemy/slime_blueR.bmp", 416, 100, 8, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_slime_orangeL", "./image./Enemy/slime_orangeL.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_slime_orangeR", "./image./Enemy/slime_orangeR.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_wraithL", "./image./Enemy/wraithL.bmp", 144, 96, 3, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_wraithR", "./image./Enemy/wraithR.bmp", 144, 96, 3, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_zombie", "./image./Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
-
-}
-
 void EnemyManager::AnimationAdd()
 {
 	//==================박 쥐 애 니 메 이 션=========================================
 	int Bat_L_IDLE[] = { 0,1,2,3 };
 	int Bat_L_Shadow[] = { 4,5,6,7 };
 	KEYANIMANAGER->addArrayFrameAnimation("Bat_L_IDLE_Ani", "Enemy_batL", Bat_L_IDLE, 4, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Bat_L_Shadow_Ani", "Enemy_batL", Bat_L_Shadow, 4, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Bat_L_Shadow_IDLE_Ani", "Enemy_batL", Bat_L_Shadow, 4, 10, true);
 	int Bat_R_IDLE[] = { 3,2,1,0 };
 	int Bat_R_Shadow[] = { 7,6,5,4 };
 	KEYANIMANAGER->addArrayFrameAnimation("Bat_R_IDLE_Ani", "Enemy_batR", Bat_R_IDLE, 4, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Bat_R_Shadow_Ani", "Enemy_batR", Bat_R_Shadow, 4, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Bat_R_Shadow_IDLE_Ani", "Enemy_batR", Bat_R_Shadow, 4, 10, true);
 	//==================용 애 니 메 이 션============================================
 	int Dragon_L_IDLE[] = { 0,1 };
 	int Dragon_L_Shadow[] = { 2,3 };
 	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_IDLE_Ani", "Enemy_dragonL", Dragon_L_IDLE, 2, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_Shadow_Ani", "Enemy_dragonL", Dragon_L_Shadow, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_Shadow_IDLE_Ani", "Enemy_dragonL", Dragon_L_Shadow, 2, 10, true);
 	int Dragon_R_IDLE[] = { 1,0 };
 	int Dragon_R_Shadow[] = { 3,2 };
 	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_IDLE_Ani", "Enemy_dragonR", Dragon_R_IDLE, 2, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_Shadow_Ani", "Enemy_dragonR", Dragon_R_Shadow, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_Shadow_IDLE_Ani", "Enemy_dragonR", Dragon_R_Shadow, 2, 10, true);
 	//==================유 령 애 니 메 이 션==========================================
 	int Ghost_L_IDLE[] = { 0,1 };
 	int Ghost_L_Shadow[] = { 2,3 };
 	KEYANIMANAGER->addArrayFrameAnimation("Ghost_L_IDLE_Ani", "Enemy_ghostL", Ghost_L_IDLE, 2, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Ghost_L_Shadow_Ani", "Enemy_ghostL", Ghost_L_Shadow, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Ghost_L_Shadow_IDLE_Ani", "Enemy_ghostL", Ghost_L_Shadow, 2, 10, true);
 	int Ghost_R_IDLE[] = { 1,0 };
 	int Ghost_R_Shadow[] = { 3,2 };
 	KEYANIMANAGER->addArrayFrameAnimation("Ghost_R_IDLE_Ani", "Enemy_ghostL", Ghost_L_IDLE, 2, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Ghost_R_Shadow_Ani", "Enemy_ghostL", Ghost_L_Shadow, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Ghost_R_Shadow_IDLE_Ani", "Enemy_ghostL", Ghost_L_Shadow, 2, 10, true);
 	//=================미노타우로스 애 니 메 이 션======================================
 	int Minotaur_L_IDLE[] = { 0,1,2 };
 	int Minotaur_L_DISCOVERY[] = { 3 };
@@ -247,6 +245,7 @@ void EnemyManager::AnimationAdd()
 
 	KEYANIMANAGER->addArrayFrameAnimation("skeleton_L_IDLE_Ani", "Enemy_skeletonL", Skeleton_L_IDLE, 4, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Skeleton_L_ATTACK_Ani", "Enemy_skeletonL", Skeleton_L_ATTACK, 4, 10, true);
+
 	KEYANIMANAGER->addArrayFrameAnimation("Skeleton_L_Shadow_IDLE_Ani", "Enemy_skeletonL", Skeleton_L_Shadow_IDLE, 4, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Skeleton_L_Shadow_ATTACK_Ani", "Enemy_skeletonL", Skeleton_L_Shadow_ATTACK, 4, 10, true);
 	//////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,6 +257,7 @@ void EnemyManager::AnimationAdd()
 
 	KEYANIMANAGER->addArrayFrameAnimation("skeleton_R_IDLE_Ani", "Enemy_skeletonR", Skeleton_R_IDLE, 4, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Skeleton_R_ATTACK_Ani", "Enemy_skeletonR", Skeleton_R_ATTACK, 4, 10, true);
+
 	KEYANIMANAGER->addArrayFrameAnimation("Skeleton_R_Shadow_IDLE_Ani", "Enemy_skeletonR", Skeleton_R_Shadow_IDLE, 4, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Skeleton_R_Shadow_ATTACK_Ani", "Enemy_skeletonR", Skeleton_R_Shadow_ATTACK, 4, 10, true);
 	//====================노랑 스켈레톤 애 니 메 이 션==============================================
@@ -320,23 +320,42 @@ void EnemyManager::AnimationAdd()
 	int Enemy_wraith_L_IDLE[] = { 0,1 };
 	int Enemy_wraith_L_ATTACK[] = { 2 };
 
+	int Enemy_wraith_L_Shadow_IDLE[] = { 3,4 };
+	int Enemy_wraith_L_Shadow_ATTACK[] = { 5 };
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_L_IDLE_Ani", "Enemy_wraithL", Enemy_wraith_L_IDLE, 2, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_L_ATTACK_Ani", "Enemy_wraithL", Enemy_wraith_L_ATTACK, 1, 10, true);
 
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_L_Shadow_IDLE_Ani", "Enemy_wraithL", Enemy_wraith_L_Shadow_IDLE, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_L_Shadow_ATTACK_Ani", "Enemy_wraithL", Enemy_wraith_L_Shadow_ATTACK, 1, 10, true);
+	//////////////////////////////////////////////////////////////////////////////////////////////////
 	int Enemy_wraith_R_IDLE[] = { 2,1 };
 	int Enemy_wraith_R_ATTACK[] = { 0 };
 
+	int Enemy_wraith_R_Shadow_IDLE[] = { 5,4 };
+	int Enemy_wraith_R_Shadow_ATTACK[] = { 3 };
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_R_IDLE_Ani", "Enemy_wraithR", Enemy_wraith_R_IDLE, 2, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_R_ATTACK_Ani", "Enemy_wraithR", Enemy_wraith_R_ATTACK, 1, 10, true);
+
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_R_Shadow_IDLE_Ani", "Enemy_wraithR", Enemy_wraith_R_Shadow_IDLE, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_wraith_R_Shadow_ATTACK_Ani", "Enemy_wraithR", Enemy_wraith_R_Shadow_ATTACK, 1, 10, true);
 	//==============================좀 비 애 니 메 이 션===============================================
 	int Enemy_zombie_UP[] = { 0,1,2,3,4,5,6,7 };
 	int Enemy_zombie_LEFT[] = { 8,9,10,11,12,13,14,15 };
 	int Enemy_zombie_RIGHT[] = { 16,17,18,19,20,21,22,23 };
 	int Enemy_zombie_DOWN[] = { 24,25,26,27,28,29,30,31 };
 
+	int Enemy_zombie_Shadow_UP[] = { 32,33,34,35,36,37,38,39 };
+	int Enemy_zombie_Shadow_LEFT[] = { 40,41,42,43,44,45,46,47 };
+	int Enemy_zombie_Shadow_RIGHT[] = { 48,49,50,51,52,53,54,55 };
+	int Enemy_zombie_Shadow_DOWN[] = { 56,57,58,59,60,61,62,63 };
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_UP_Ani", "Enemy_zombie", Enemy_zombie_UP, 8, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_LEFT_Ani", "Enemy_zombie", Enemy_zombie_LEFT, 8, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_RIGHT_Ani", "Enemy_zombie", Enemy_zombie_RIGHT, 8, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_DOWN_Ani", "Enemy_zombie", Enemy_zombie_DOWN, 8, 10, true);
+
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_Shadow_UP_Ani", "Enemy_zombie", Enemy_zombie_Shadow_UP, 8, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_Shadow_LEFT_Ani", "Enemy_zombie", Enemy_zombie_Shadow_LEFT, 8, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_Shadow_RIGHT_Ani", "Enemy_zombie", Enemy_zombie_Shadow_RIGHT, 8, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_Shadow_DOWN_Ani", "Enemy_zombie", Enemy_zombie_Shadow_DOWN, 8, 10, true);
 }
 
