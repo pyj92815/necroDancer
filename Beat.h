@@ -30,8 +30,22 @@ struct tagNote
 	image* img;
 	float speed;
 	bool isCol;
+	bool isPressBtn;
 };
 
+
+//class NoteHit : public gameNode
+//{
+//private:
+//	tagNote hitNote;
+//	int alpha;
+//
+//public:
+//	virtual HRESULT init(tagNote note);
+//	virtual void release();
+//	virtual void update();
+//	virtual void render();
+//};
 
 
 class Beat : public gameNode
@@ -42,9 +56,9 @@ private:
 	string _noteFileName;
 	bool _loopSong;
 
-	vector<int> _msTimeInfo;
-	vector<tagNote> _noteLeft;
-	vector<tagNote> _noteRight;
+	vector<int> _vMsTimeInfo;
+	vector<tagNote> _vNoteLeft;
+	vector<tagNote> _vNoteRight;
 	int _countComma;
 	int _countNote;
 	float _deltaTime;
@@ -64,6 +78,9 @@ private:
 	int heartFrameRate, heartFrameCount;
 	bool _isBeating;
 
+	//NoteHit* _hitNote;
+	//vector<NoteHit*> _vHitNote;
+
 
 private:
 	void init_AddSoundAndImg();
@@ -78,6 +95,8 @@ private:
 
 	void render_DebugLog(HDC getMemDC);
 
+
+private:
 	void Load();
 	float GetSongVariousTime(unsigned int playTime, unsigned int songLength);
 
