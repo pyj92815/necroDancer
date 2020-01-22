@@ -254,7 +254,7 @@ void mapTool::setup()
 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		//_tiles[i].type = TYPE_NONE;
+		_tiles[i].type = TYPE_NONE;
 		_tiles[i].isRender = false;
 		_tiles[i].terrainFrameX = 5;
 		_tiles[i].terrainFrameY = 5;
@@ -364,7 +364,8 @@ void mapTool::save()
 {
 	HANDLE file;
 	DWORD write;
-
+	// "SaveFile.map"
+	// "BossStageFile.map"
 	file = CreateFile("SaveFile.map", GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 

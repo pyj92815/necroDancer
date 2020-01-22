@@ -9,6 +9,8 @@ class playerManager: public gameNode
 private:
 	player* _player;
 	playerTestTile* _ptt;   // 지울예정
+
+
 public:
 	playerManager() {}
 	~playerManager() {}
@@ -18,4 +20,5 @@ public:
 	void update();
 	void render();
 
+	player* getPlayerInfo() { return _player; }
 };

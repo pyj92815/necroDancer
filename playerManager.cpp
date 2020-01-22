@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "playerManager.h"
-
+#include "bossStageScene.h"
 HRESULT playerManager::init()
 {
 	// ¹Ù´Ú Å×½ºÆ® 
@@ -11,7 +11,7 @@ HRESULT playerManager::init()
 	_ptt = new playerTestTile;
 	_ptt->setPlayerAddressLink(_player);
 	_ptt->init();
-	
+
 	return S_OK;
 }
 

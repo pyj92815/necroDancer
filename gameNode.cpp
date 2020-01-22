@@ -184,7 +184,7 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		case WM_MOUSEMOVE:
 			_ptMouse.x = static_cast<float>(LOWORD(lParam));
 			_ptMouse.y = static_cast<float>(HIWORD(lParam));
-			cout << "¸¶¿ì½º ÁÂÇ¥" << "x:" << _ptMouse.x << "y :" << _ptMouse.y << endl;
+			//cout << "¸¶¿ì½º ÁÂÇ¥" << "x:" << _ptMouse.x << "y :" << _ptMouse.y << endl;
 			
 		break;
 		case WM_KEYDOWN:
