@@ -1,6 +1,6 @@
 #pragma once
 #include "gameNode.h"
-#include <vector>
+
 
 enum HEARTSTATE
 {
@@ -13,12 +13,18 @@ enum INVENSTATE
 	INVENSTATE_FULL,
 	INVENSTATE_NULL
 };
+enum HEARTTURN
+{
+	TURN_ON,
+	TURN_OFF
+};
 
 struct heartTag
 {
 	image* image;
 	HEARTSTATE state;
-	
+	HEARTTURN turn;
+	animation* anime;
 };
 
 struct invenTag
@@ -61,11 +67,16 @@ private:
 
 	image* _scoreNum;
 	image* _scoreX;
-
+	image* _daiaNum;
 
 	int _coinTest;				//나중에 플레이어가 코인 충돌시 숫자로 받아오는 함수로 바꿔주면 될듯
+	int _diaTest;
 
 	int hp;
+
+	int _heartBeatCnt;
+	int _currentFrameSpeed;
+	int _frameCount;
 
 
 public:
