@@ -309,6 +309,9 @@
     <ClInclude Include="Collision_Library.h">
       <Filter>playGround\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="UImanager.h">
+      <Filter>playGround\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -487,6 +490,9 @@
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>playGround\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="UImanager.cpp">
+      <Filter>playGround\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
