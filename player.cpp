@@ -161,7 +161,7 @@ void player::keyControl()
 			_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 			_isMoving = true;															// MOVE
 
-			_jump->jumping(&_player.x, &_player.y, 10, 1.5);	//점프 
+			_jump->jumping(&_player.x, &_player.y, 8, 1.5);	//점프 
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
@@ -176,7 +176,7 @@ void player::keyControl()
 			_angle = getAngle(_player.x, _player.y, _player.x - _distance, _player.y);	// 방향 
 			_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 			_isMoving = true;															// MOVE
-			_jump->jumping(&_player.x, &_player.y, 6, 1.5);	//점프 
+			_jump->jumping(&_player.x, &_player.y, 7, 1.5);	//점프 
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
@@ -191,7 +191,7 @@ void player::keyControl()
 			_angle = getAngle(_player.x, _player.y, _player.x + _distance, _player.y);  // 방향 
 			_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 			_isMoving = true;															// MOVE
-			_jump->jumping(&_player.x, &_player.y, 6, 1.5);	// 점프
+			_jump->jumping(&_player.x, &_player.y, 7, 1.5);	// 점프
 		}
 	}
 }

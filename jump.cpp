@@ -41,7 +41,7 @@ void jump::update()
 	else // 이외의 키를 누르면 
 	{
 		*_y -= _jumpPower;
-		_jumpPower -= _gravity;
+		_jumpPower -= _gravity * TIMEMANAGER->getElapsedTime() * 50;
 		if (_startY < *_y)
 		{
 			_isJumping = false;
