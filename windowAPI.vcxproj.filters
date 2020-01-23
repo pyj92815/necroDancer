@@ -309,11 +309,11 @@
     <ClInclude Include="Collision_Library.h">
       <Filter>playGround\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="UImanager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="alphaImageEffect.h">
       <Filter>2DGameFramework\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="UImanager.h">
+      <Filter>playGround\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -494,11 +494,11 @@
     <ClCompile Include="Collision.cpp">
       <Filter>playGround\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="UImanager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="alphaImageEffect.cpp">
       <Filter>2DGameFramework\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="UImanager.cpp">
+      <Filter>playGround\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
