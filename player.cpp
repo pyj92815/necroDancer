@@ -145,7 +145,7 @@ void player::playerMiss()
 	if (!_isMiss) return;
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
-	effect->init(_miss, CAMERAMANAGER->get_CameraX() + 100, CAMERAMANAGER->get_CameraY() + 100,10);
+	effect->init(_miss, CAMERAMANAGER->get_CameraX() + BEATMANAGER->getHeartMiddle() - 30, CAMERAMANAGER->get_CameraY() + (WINSIZEY - 200),10);
 	_vEffect.push_back(effect);
 	_isMiss = false;
 }

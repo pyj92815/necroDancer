@@ -81,9 +81,6 @@ private:
 	player* _player;
 	bool _effect;
 
-	player* _player;
-	bool _effect;
-
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
 	void init_SetObjs(); // Beat 클래스에 있는 여러 오브젝트 정보들 초기화
@@ -118,5 +115,5 @@ public:
 	void HitNoteEffect(float x, float y);
 	void setEffectAlpha();
 	bool getInterval() { return  Imterval; }
-
+	float getHeartMiddle() { return (heartRC.left + heartRC.right) / 2; }
 };

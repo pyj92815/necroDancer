@@ -51,7 +51,6 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList).type != TYPE_NONE)
 			{
-<<<<<<< HEAD
 				//// 타일의 타입, 속성에 따라 이미지를 찾아서 좌표에 뿌려주는 함수
 				//findTileImage();
 				//
