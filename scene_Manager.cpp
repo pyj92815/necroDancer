@@ -27,6 +27,12 @@ HRESULT scene_Manager::init()
 	_stage->bossStageSceneAddressLink(_boss);
 
 	SCENEMANAGER->changeScene("Stage");
+
+	// 서로 링크 시켜준다.
+	_boss->stageSceneAddressLink(_stage);
+	_stage->bossStageSceneAddressLink(_boss);
+
+
 	return S_OK;
 }
 

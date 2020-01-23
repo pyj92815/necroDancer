@@ -156,7 +156,7 @@ void player::keyControl()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
-			if (BEATMANAGER->getBeating())
+			if (BEATMANAGER->getInterval())
 			{
 				_player.idy--;			// 좌표Y값--
 				_isKeyPress = true;		// key 입력 
@@ -174,7 +174,7 @@ void player::keyControl()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
-			if (BEATMANAGER->getBeating())
+			if (BEATMANAGER->getInterval())
 			{
 				_player.idy++;	// 좌표Y값++
 				_isKeyPress = true;		// key 입력 
@@ -192,7 +192,7 @@ void player::keyControl()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
-			if (BEATMANAGER->getBeating())
+			if (BEATMANAGER->getInterval())
 			{
 			_isKeyPress = true;		// key 입력 
 			//이미지 관련
@@ -214,7 +214,7 @@ void player::keyControl()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
-			if (BEATMANAGER->getBeating())
+			if (BEATMANAGER->getInterval())
 			{
 				_isKeyPress = true;		// key 입력 
 				//이미지 관련

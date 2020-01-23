@@ -398,7 +398,8 @@ void mapTool::save()
 {
 	HANDLE file;
 	DWORD write;
-
+	// "SaveFile.map"
+	// "BossStageFile.map"
 	file = CreateFile("SaveFile.map", GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 

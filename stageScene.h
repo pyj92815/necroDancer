@@ -7,6 +7,13 @@
 
 class bossStageScene;
 
+struct tagZorder
+{
+	tagTile* tile;
+	playerManager* player;
+	Enemy* enemy;
+};
+
 struct tagClass
 {
 	tagTile* tile;
