@@ -13,7 +13,7 @@ class alphaEffect;
 #define WINSIZEX_HALF WINSIZEX / 2	// 윈도우 가로 사이즈 절반
 #define NOTE_INTERVAL WINSIZEX_HALF / 4 // 노트 사이 간격
 #define NOTE_RADIUS_X 5 // 노트 하나의 가로 반지름 길이
-#define HEARTFRAME_RATE 3 // 심장 박동 프레임 지연 시간
+#define HEARTFRAME_RATE 20 // 심장 박동 프레임 지연 시간
 
 
 
@@ -34,7 +34,9 @@ struct tagNote // 노트 구조체
 	image* img;
 	float speed;
 	bool isCol;
+	bool isRender;
 	bool isPressBtn;
+	int alpha;
 };
 
 
@@ -72,10 +74,7 @@ private:
 	vector<image*> _vHitNoteImg; // 알파 블렌더로 서서히 지울 노트 이미지를 저장할 이미지 전용 벡터
 
 	player* _player;
-	bool _textEffect;
-	//vector<alphaImageEffect*> _vEffect; // 빗나감 이펙트
-	//vector<alphaImageEffect*>::iterator _viEffect;
-
+	bool _effect;
 
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
@@ -105,5 +104,9 @@ public:
 	virtual void update();
 	virtual void render();
 
+	bool getBeating() { return _isBeating ;}
 	void setPlayerAddressLink(player* player) { _player = player; }
+
+	void setEffect(float x,float y);
+	void setEffectAlpha();
 };
