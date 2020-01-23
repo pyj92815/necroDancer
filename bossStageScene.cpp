@@ -83,7 +83,7 @@ void bossStageScene::render()
 				//}
 
 
-				findTileImage();
+				//findTileImage();
 
 			}
 	
