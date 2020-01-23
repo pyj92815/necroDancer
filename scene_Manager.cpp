@@ -20,7 +20,7 @@ HRESULT scene_Manager::init()
 	SCENEMANAGER->addScene("Boss", _boss = new bossStageScene);
 
 	SCENEMANAGER->addScene("MAPTOOL", new mapTool);
-	SCENEMANAGER->changeScene("Intro");
+	SCENEMANAGER->changeScene("MAPTOOL");
 	return S_OK;
 }
 
