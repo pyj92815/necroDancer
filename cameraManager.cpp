@@ -11,14 +11,25 @@ cameraManager::cameraManager()
 	_cameraY = 220;
 
 	_worldImage = new image;
-	_worldImage = IMAGEMANAGER->addImage("worldMap",4000, 2000);
+	_worldImage = IMAGEMANAGER->addImage("worldMap",5200, 5200);
 	_worldDC = _worldImage->getMemDC();
+
+	isCameraMoveX = false;
+	isCameraMoveY = false;
+
+	/*_mapToolImage = new image;
+	_mapToolImage = IMAGEMANAGER->addImage("mapToolMap", 5200, 5200);
+	_mapToolDC = _mapToolImage->getMemDC();*/
 
 	_cameraWorldSizeX = 5200;
 	_cameraWorldSizeY = 5200;
 
-	isCameraMoveX = false;
-	isCameraMoveY = false;
+	_cameraMapTileSizeX = WINSIZEX;
+	_cameraMapTileSizeY = WINSIZEY;
+	
+	_cameraMapSizeX = NULL;
+	_cameraMapSizeY = NULL;
+
 }
 
 cameraManager::~cameraManager()
@@ -89,8 +100,8 @@ void cameraManager::set_CameraXY(float x, float y)
 		if (_cameraX > winX) _cameraX = winX;
 	}
 
-	//_cameraX = x - _cameraSizeX / 2.0f;
-	//_cameraY = y - _cameraSizeY / 2.0f;
+	/*_cameraX = x - _cameraSizeX / 2.0f;
+	_cameraY = y - _cameraSizeY / 2.0f;*/
 	Camera_Correction();
 }
 
@@ -124,8 +135,62 @@ void cameraManager::Camera_Correction()
 
 void cameraManager::Camera_Move()
 {
+}
+//■■■■■■■■■■■■■■■■■■■■■■■■■맵툴 사이즈■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+void cameraManager::set_CameraMapTielSize(float x, float y)
+{
+	_cameraSizeX = x;
+	_cameraSizeY = y;
+	CameraMapTool_Correction();
+}
+
+void cameraManager::set_CameraMapTool_XY(int x, int y)
+{
+	_cameraX = x - _cameraSizeX / 2.0f;
+	_cameraY = y - _cameraSizeY / 2.0f;
+	CameraMapTool_Correction();
+}
+
+void cameraManager::set_CameraMapTool_XY(float x, float y)
+{
+	_cameraX = x - _cameraSizeX / 2.0f;
+	_cameraY = y - _cameraSizeY / 2.0f;
+	CameraMapTool_Correction();
+}
+
+void cameraManager::set_CameraMapTool_XY(POINT xy)
+{
+	_cameraX = xy.x - _cameraSizeX / 2.0f;
+	_cameraY = xy.y - _cameraSizeY / 2.0f;
+	CameraMapTool_Correction();
+}
 
 
+void cameraManager::set_CameraMapTool_XY(RECT rc)
+{
+	_cameraX = rc.left - _cameraSizeX / 2.0f;
+	_cameraY = rc.top - _cameraSizeY / 2.0f;
+	CameraMapTool_Correction();
+}
+
+void cameraManager::CameraMapTool_Correction()
+{
+	if (_cameraX < 0) _cameraX = 0;
+	if (_cameraY < 0) _cameraY = 0;
+	if (_cameraX + _cameraSizeX > 5200)
+	{
+		_cameraX = 5200 - _cameraSizeX;
+	}
+	if (_cameraY + _cameraSizeY > 5200)
+	{
+	
+		_cameraY = 5200 - _cameraSizeY;
+	}
+	cout << "5200 넘냐 안넘냐 : " << _cameraX + _cameraSizeX << endl;
+}
+
+void cameraManager::CameraMapTool_Move()
+{
 }
 
 

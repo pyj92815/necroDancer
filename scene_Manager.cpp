@@ -18,14 +18,13 @@ HRESULT scene_Manager::init()
 	SCENEMANAGER->addScene("Stage", _stage = new stageScene);
 	SCENEMANAGER->addScene("End", _end = new endScene);
 	SCENEMANAGER->addScene("Boss", _boss = new bossStageScene);
-
 	SCENEMANAGER->addScene("MAPTOOL", new mapTool);
+
 	SCENEMANAGER->changeScene("Stage");
 
 	// 서로 링크 시켜준다.
 	_boss->stageSceneAddressLink(_stage);
 	_stage->bossStageSceneAddressLink(_boss);
-
 
 	return S_OK;
 }
