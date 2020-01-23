@@ -7,13 +7,24 @@
 
 class bossStageScene;
 
-struct tagZorder
+struct tagClass
 {
 	tagTile* tile;
 	playerManager* player;
 	Enemy* enemy;
 };
+struct zOrder
+{
+	float* y;
+	tagClass* Object;
 
+	zOrder(float* y, tagClass* Object)
+	{
+		this->y = y;
+		this->Object = Object;
+	};
+	zOrder() { ; }
+};
 class stageScene: public gameNode
 {
 private:
@@ -25,8 +36,14 @@ private:
 	bool _isLoad;
 	bossStageScene* _bossStageScene;
 
-	multimap<float*, tagZorder*>				_mZorder;
-	multimap<float*, tagZorder*>::iterator		_miZorder;
+	map<tagClass*, float>					_mZorder;
+	map<tagClass*, float>::iterator		_miZorder;
+
+	vector<pair<float, tagClass*>> 				_vZorder;
+	vector<pair<float, tagClass*>>::iterator	   _viZorder;
+
+	vector<zOrder*> _zOrderVector;
+
 public:
 	stageScene() {}
 	~stageScene() {}
@@ -35,7 +52,7 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
-
+	vector<zOrder*>ZorderUpdate(vector<zOrder*>  num);
 	void load();
 	void bossStageSceneAddressLink(bossStageScene* bossStageScene) { _bossStageScene = bossStageScene; }
 	player* getPlayerAddress() { return _pm->getPlayerInfo(); }

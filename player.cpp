@@ -106,7 +106,6 @@ void player::render()
 {
 	_player.bodyImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.bodyAni);	// ¸ö
 	_player.headImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.headAni);	// ¾ó±¼ 
-
 	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
 	{
 		(*_viEffect)->render(CAMERAMANAGER->getWorldDC());
