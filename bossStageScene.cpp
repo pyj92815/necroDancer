@@ -82,22 +82,15 @@ void bossStageScene::render()
 				//	findTileImage();
 				//}
 
-				if (_deathMetal->getBoss_Index().y + 1 == (*_viTotalList).idY &&
-					(*_viTotalList).type == TYPE_WALL)
-				{
-					//findTileImage();
-				}
-				else
-				{
-					findTileImage();
-					_deathMetal->render();
-				}
+
+				findTileImage();
+
 			}
 	
 		}
 	}
 
-
+	z_Order_Player_Boss();
 
 
 

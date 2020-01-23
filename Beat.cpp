@@ -76,6 +76,7 @@ void Beat::render()
     {
         (*_viEffect)->render(_backBuffer->getMemDC());
     }
+
     render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
 

@@ -315,6 +315,21 @@
     <ClInclude Include="alphaImageEffect.h">
       <Filter>2DGameFramework\effect</Filter>
     </ClInclude>
+    <ClInclude Include="boss_Bat.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Ghost.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveLibrary.h">
+      <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Skeleton.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Skeleton_Yellow.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -499,6 +514,21 @@
     </ClCompile>
     <ClCompile Include="alphaImageEffect.cpp">
       <Filter>2DGameFramework\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="slave.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Bat.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Ghost.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Skeleton.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Skeleton_Yellow.cpp">
+      <Filter>playGround\boss\boss File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
