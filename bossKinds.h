@@ -1,5 +1,7 @@
 #pragma once
 
+#define BOSS_RECOGNITION_RANGE 5	// 보스 인식 범위
+
 // 보스 헤더
 #include "boss.h"
 #include "deathMetal.h"

@@ -11,7 +11,7 @@ slave::~slave()
 
 HRESULT slave::init()
 {
-	//_slave.func.slave_Setting(&_slave);		// 슬레이브의 기존 정보를 비워준다.
+	_slave.slave_Setting();			// 슬레이브의 변수를 Null 값으로 초기화 해준다.
 
 	return S_OK;
 }

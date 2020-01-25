@@ -104,6 +104,10 @@ public:
 
 	void setBoss_Image(string bossName) { image = IMAGEMANAGER->findImage(bossName); }								// 보스의 이미지를 수정한다.
 
+	void setBoss_ClosePlayer(bool close) { isClosePlayer = close; }													// 보스 근처에 플레이어가 있는지 없는지
+
+	void ChangeAni() { isChangeAni = true; }
+
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수
 	void boss_Move();																								// 보스 이동 연산 함수

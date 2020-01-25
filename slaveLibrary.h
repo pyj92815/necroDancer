@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 
 // 슬레이브 종류
 enum SLAVE_TYPE
@@ -51,7 +52,7 @@ struct SLAVE_POS
 struct SLAVE_IMAGE
 {
 	animation*			animation;					// 슬레이브의 애니메이션을 담는다.
-	image*				image;						// 슬레이브의 이미지를 담는다.
+	image*				img;						// 슬레이브의 이미지를 담는다.
 };
 
 // 슬레이브의 연산 변수
@@ -72,42 +73,29 @@ struct SLAVE_OPERATION
 
 
 
-//// 슬레이브의 함수
-//struct SLAVE_FUNC
-//{
-//	void slave_Setting(SLAVE_INFO* slave);
-//
-//};
-
 // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 슬레이브의 정보 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 struct SLAVE_INFO
 {
-	SLAVE_STATUS		status;						// 슬레이브 스테이터스
-	SLAVE_POS			pos;						// 슬레이브 좌표
-	SLAVE_IMAGE			image;						// 슬레이브 이미지
-	SLAVE_OPERATION		operation;					// 슬레이브 연산
+	SLAVE_STATUS		status;							// 슬레이브 스테이터스
+	SLAVE_POS			pos;							// 슬레이브 좌표
+	SLAVE_IMAGE			image;							// 슬레이브 이미지
+	SLAVE_OPERATION		operation;						// 슬레이브 연산
 
-	//SLAVE_FUNC			func;						// 슬레이브의 함수
+	void slave_Setting()
+	{
+		// 스테이터스 초기화
+		status.type = SLAVE_NONE;
+		status.direction = SD_NONE;
+		status.hp = 1;							// 기본 체력은 1 이다.
+		status.attack = 1.f;					// 기본 공격력은 0.5f 이다.
+
+		// 좌표 초기화
+		pos.index.x = pos.index.y = 0;			// 기본 인덱스는 0이다.
+		pos.center.x = pos.center.y = 0;		// 기본 중점은 0이다.
+		pos.rc = RectMake(0, 0, 0, 0);			// 기본 렉트는 0이다.
+	}
 };
 
 
 
 
-//// 슬레이브 함수 정의
-//void SLAVE_FUNC::slave_Setting(SLAVE_INFO* slave)
-//{
-//	// 스테이터스 초기화
-//	slave->status.type = SLAVE_NONE;
-//	slave->status.direction = SD_NONE;
-//	slave->status.hp = 1;							// 기본 체력은 1 이다.
-//	slave->status.attack = 1.f;						// 기본 공격력은 0.5f 이다.
-//	
-//	// 좌표 초기화
-//	slave->pos.index.x = slave->pos.index.y = 0;		// 기본 인덱스는 0이다.
-//	slave->pos.center.x = slave->pos.center.y = 0;	// 기본 중점은 0이다.
-//	slave->pos.rc = RectMake(0, 0, 0, 0);			// 기본 렉트는 0이다.
-//
-//	// 이미지 초기화
-//	slave->image.animation = new animation;			// 애니메이션 공간 할당
-//	slave->image.image = new image;					// 이미지 공간 할당
-//}
