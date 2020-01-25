@@ -15,7 +15,6 @@ public:
 
 	void clearThrowShield();					// 데스메탈 실드에 쓰일 변수들을 청소한다.
 
-	void deathMetal_Animation_Setting();		// 데스메탈의 애니메이션 정보를 셋팅한다.
 	void deathMetal_Animation_Test();			// 데스메탈의 애니메이션 테스트 함수.
 	void deathMetal_ChangeAnimation();			// 데스메탈의 애니메이션 체인지 함수.
 

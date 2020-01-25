@@ -72,4 +72,5 @@ public:
 	PLAYERSTATE getState() { return _player.state; }	// 플레이어의 상태 값 반환 (HG가 추가했음)
 	bool getPlayerKey() { return _isKeyPress; }
 	float* getPlayerY() { return &_player.y; }
+	tagPlayer* PlayerAddress() { return &_player; }
 };

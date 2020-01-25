@@ -3,6 +3,7 @@
 #include "stageScene.h"
 #include "player.h"
 #include "UImanager.h"
+
 bossStageScene::bossStageScene()
 {
 }
@@ -13,13 +14,15 @@ bossStageScene::~bossStageScene()
 
 HRESULT bossStageScene::init()
 {
-	bossStageMap_Load();	// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
+	bossStageMap_Load();													// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
 
 	_deathMetal = new deathMetal;
-	_deathMetal->init("데스메탈", 5, 5, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
+	_deathMetal->init("데스메탈", 12, 14, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
 
-	_player = _stageScene->getPlayerAddress();							// 플레이어 링크
-	_ui = _stageScene->getUiAddress();									// ui 링크
+	_player = _stageScene->getPlayerAddress();								// 플레이어 링크
+	_ui = _stageScene->getUiAddress();										// ui 링크
+
+	playerPos_Setting();													// 보스 스테이지에 입장 한 플레이어의 위치를 생성 위치를 잡아준다.
 
 	return S_OK;
 }
@@ -84,7 +87,7 @@ void bossStageScene::render()
 				//}
 
 
-				//findTileImage();
+				findTileImage();
 
 			}
 	
@@ -199,4 +202,16 @@ void bossStageScene::z_Order_Player_Boss()
 		_player->render();
 	}
 
+}
+
+void bossStageScene::playerPos_Setting()
+{
+	_player->PlayerAddress()->idx = 12;
+	_player->PlayerAddress()->idy = 25;
+	_player->PlayerAddress()->x = _player->PlayerAddress()->idx * TESTTILESIZE + (TESTTILESIZE / 2);
+	_player->PlayerAddress()->y = _player->PlayerAddress()->idy * TESTTILESIZE + (TESTTILESIZE / 3);
+	_player->PlayerAddress()->rc = RectMakeCenter(_player->PlayerAddress()->x, _player->PlayerAddress()->y,
+		_player->PlayerAddress()->bodyImage->getFrameWidth(), _player->PlayerAddress()->headImage->getFrameHeight());
+	CAMERAMANAGER->set_CameraXY(_player->PlayerAddress()->idx * TESTTILESIZE + (TESTTILESIZE / 2),
+		_player->PlayerAddress()->idy * TESTTILESIZE + (TESTTILESIZE / 3));
 }

@@ -13,6 +13,7 @@ HRESULT introScene::init()
 {
 	_video = new video;
 	_video->init("intro.avi");
+
 	return S_OK;
 }
 

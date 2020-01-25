@@ -327,6 +327,9 @@
     <ClInclude Include="Next_Create_Boss.h">
       <Filter>playGround\boss</Filter>
     </ClInclude>
+    <ClInclude Include="addImage_Boss.h">
+      <Filter>playGround\boss\boss Stage Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -1,6 +1,6 @@
 #pragma once
 #include "gameNode.h"
-#include "deathMetal.h"
+#include "bossKinds.h"
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinmainCRTStartup /subsystem:console")
@@ -42,6 +42,8 @@ public:
 	void bossStageMap_Load();											// 보스 스테이지 맵을 벡터 형식으로 저장한다.
 	void findTileImage();												// 타일 이미지를 찾아준다.
 	void z_Order_Player_Boss();											// 플레이어와 보스의 z오더
+
+	void playerPos_Setting();											// 보스방에 처음 도착한 플레이어의 위치를 초기화 해준다.
 
 	void stageSceneAddressLink(stageScene* stageScene) { _stageScene = stageScene; }
 };

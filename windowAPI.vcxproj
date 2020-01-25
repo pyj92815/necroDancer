@@ -231,6 +231,7 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="video.h" />
     <ClInclude Include="windowAPI.h" />
+    <ClInclude Include="addImage_Boss.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
