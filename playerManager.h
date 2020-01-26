@@ -7,6 +7,7 @@ class playerManager: public gameNode
 {
 private:
 	player* _player;
+
 public:
 	playerManager() {}
 	~playerManager() {}
@@ -16,5 +17,6 @@ public:
 	void update();
 	void render();
 
+	player* getPlayerInfo() { return _player; }
+	float* getPlayerY() { return _player->getPlayerY(); }
 };
-

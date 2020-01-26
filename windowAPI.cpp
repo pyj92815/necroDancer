@@ -2,6 +2,7 @@
 #include "playGround.h"
 //API : Application Programming Interface
 
+
 HINSTANCE	_hInstance;
 HWND		_hWnd;
 
@@ -9,7 +10,6 @@ POINT _ptMouse;		//마우스 용 POINT
 BOOL _leftButtonDown;	//중복 클릭 방지용
 
 playGround _pg;
-
 
 //함수의 프로토타입 선언
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -33,7 +33,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	wndClass.lpszClassName = WINNAME;
 	wndClass.lpszMenuName = NULL;
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-
+	
 	RegisterClass(&wndClass);
 
 	_hWnd = CreateWindow(
@@ -48,11 +48,30 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		(HMENU)NULL,
 		hInstance,
 		NULL);
-
+	
 	setWindowsSize(WINSTARTX, WINSTARTY, WINSIZEX, WINSIZEY);
+	
+	//방법 1
+	//cvNamedWindow(WINNAME);							 // OPENCV타입 이름의 WINDOW 생성 
+	//cvResizeWindow(WINNAME, WINSIZEX, WINSIZEY);	 // 사이즈 조정  
+	//
+	//moveWindow(WINNAME, WINSTARTX, WINSTARTY);
+	//_hWnd = (HWND)cvGetWindowHandle(WINNAME);		 // _hwnd로 대입 
+	//_hWnd = GetParent(_hWnd);	
+	// 
 
+	//방법2 	
+	cv::namedWindow(WINNAME);
+	HWND cvWnd = (HWND)cvGetWindowHandle(WINNAME);
+	if (!cvWnd) return false;
+	HWND oldParent = ::GetParent(cvWnd);
+	::SetParent(cvWnd, oldParent);
+	//::ShowWindow(oldParent, SW_HIDE);
+	// resizeWindow(WINNAME, WINSIZEX + 100, WINSIZEY+ 50); //동영상 크기라서 안됌 
+	moveWindow(WINNAME, -74, -120);		// 이동시키기 
+	::SetParent(oldParent, _hWnd);
 	ShowWindow(_hWnd, cmdShow);
-
+	
 	//메시지 루프 돌기이전에
 	if (FAILED(_pg.init()))
 	{
@@ -86,8 +105,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 			_pg.render();
 		}
 	}
-	
-
+		
 	//루프문이 다돌면 플레이그라운드 해제
 	_pg.release();
 	UnregisterClass(WINNAME, hInstance);
@@ -116,4 +134,6 @@ void setWindowsSize(int x, int y, int width, int height)
 		(winRect.right - winRect.left),
 		(winRect.bottom - winRect.top),
 		SWP_NOZORDER | SWP_NOMOVE);
+
 }
+

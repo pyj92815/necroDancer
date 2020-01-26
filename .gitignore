@@ -1,0 +1,11 @@
+.vs/
+x64/
+./opencvBuild/
+./Debug/
+*.obj
+*.res
+*.pch
+*.pdb
+*.tlog
+*.log
+*.idb

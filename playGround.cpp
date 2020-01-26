@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "playGround.h"
-#include <map>
 
 playGround::playGround()
 {
@@ -11,11 +10,14 @@ playGround::~playGround()
 {
 }
 
-
 HRESULT playGround::init()
 {
 	gameNode::init(true);
-	
+	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("wallTiles", "./image/mapTool/wall/wall.bmp", 832, 416, WALLTILEX, WALLTILEY, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("trapTiles", "./image/mapTool/trap/trap.bmp", 312, 364, TRAPTILEX, TRAPTILEY, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("itemTiles", "./image/mapTool/item/passive.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
+
 	/*multimap<string, int> mm;
 
 
@@ -30,9 +32,10 @@ HRESULT playGround::init()
 	{
 		cout <<miter->first<<","<< miter->second << endl;
 	}*/
+	_sm = new scene_Manager;
+	_sm->init();
 
-	_pm = new playerManager;
-	_pm->init();
+	
 	return S_OK;
 }
 
@@ -40,27 +43,29 @@ HRESULT playGround::init()
 void playGround::release()
 {
 	gameNode::release();
-
-
+	_sm->release();
 }
 
 
 void playGround::update()
 {
 	gameNode::update();
-
-	_pm->update();
-	
-
+	_sm->update();
 }
 
 
 
 void playGround::render()
 {
-	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
+	//PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
+	PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY, BLACKNESS);
+	//PatBlt(CAMERAMANAGER->getmapToolDC(), CAMERAMANAGER->get_CameraMapSize_X(), CAMERAMANAGER->get_CameraMapSize_Y(), WINSIZEX, WINSIZEY, BLACKNESS);
+
 	//===========================================================
-	_pm->render();
+	
+	_sm->render();
+
 	//===========================================================
-	_backBuffer->render(getHDC(), 0, 0);
+	if (!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
+
 }

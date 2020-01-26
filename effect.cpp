@@ -122,7 +122,6 @@ void effect::render(HDC hdc)
 {
 	if (!_isRunning) return;
 	//_effectImage->aniRender(getMemDC(), _x, _y, _effectAnimation);
-
 	_effectImage->aniRender(hdc, _x, _y, _effectAnimation);
 }
 

@@ -26,7 +26,7 @@ void action::release()
 
 void action::update()
 {
-	moving();
+	//moving();
 }
 
 void action::render()
@@ -61,11 +61,11 @@ void action::moveTo(image * image, float endX, float endY, float time)
 
 }
 
-void action::moveTo(image * image, float endX, float endY, float time, CALLBACK_FUNCTION cbFunction)
+void action::moveTo(image * image, float endX, float endY, float time, CALLBACK_FUNCTION_STUDY cbFunction)
 {
 	if (!_isMoving)
 	{
-		_callbackFunction = static_cast<CALLBACK_FUNCTION>(cbFunction);
+		_callbackFunction = static_cast<CALLBACK_FUNCTION_STUDY>(cbFunction);
 
 		_image = image;
 
@@ -88,20 +88,20 @@ void action::moveTo(image * image, float endX, float endY, float time, CALLBACK_
 	}
 }
 
+
 void action::moving()
 {
 	if (!_isMoving) return;
-
 	float elapsedTime = TIMEMANAGER->getElapsedTime();
 
 	//200정도의 거리를 2초에 걸쳐서 도달해야한다면 속도값을 구해줌
 	float moveSpeed = (elapsedTime / _time) * _travelRange;
 
+	float time = TIMEMANAGER->getElapsedTime();
+
 	//이미지를 도착지점까지 각도와 속도를 맞춰서 원하는 시간에 도달케 한다
 	_image->setX(_image->getX() + cosf(_angle) * moveSpeed);
 	_image->setY(_image->getY() + (-sinf(_angle) * moveSpeed));
-
-	float time = TIMEMANAGER->getElapsedTime();
 
 	if (_time + _worldTimeCount <= TIMEMANAGER->getWorldTime())
 	{
@@ -117,5 +117,4 @@ void action::moving()
 		}
 
 	}
-
 }

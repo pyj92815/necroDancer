@@ -877,5 +877,5 @@ void image::scaleRender(HDC hdc, int destX, int destY, int scaleX, int scaleY)
 void image::aniRender(HDC hdc, int destX, int destY, animation* ani)
 {
 	render(hdc, destX- ani->getFrameWidth()/2, destY- ani->getFrameHeight()/2, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
-
 }
+

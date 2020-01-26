@@ -24,6 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>windowAPI</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName />
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,9 +73,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;./lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;./lib/;</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);./inc;</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -90,6 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\KGA-17\Desktop\teamProject;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,10 +109,14 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions);CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\KGA-17\Desktop\teamProject</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -148,19 +157,56 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="action.h" />
+    <ClInclude Include="alphaImageEffect.h" />
     <ClInclude Include="animation.h" />
+    <ClInclude Include="aStarManager.h" />
     <ClInclude Include="aStarScene.h" />
     <ClInclude Include="aStarTest.h" />
+    <ClInclude Include="Beat.h" />
+    <ClInclude Include="boss.h" />
+    <ClInclude Include="bossKinds.h" />
+    <ClInclude Include="bossLibrary.h" />
+    <ClInclude Include="bossMove.h" />
+    <ClInclude Include="bossScene.h" />
+    <ClInclude Include="bossStageScene.h" />
+    <ClInclude Include="bossStageTestTile.h" />
+    <ClInclude Include="boss_Bat.h" />
+    <ClInclude Include="boss_Ghost.h" />
+    <ClInclude Include="boss_Skeleton.h" />
+    <ClInclude Include="boss_Skeleton_Yellow.h" />
     <ClInclude Include="button.h" />
+    <ClInclude Include="cameraManager.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="Collision_Library.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="deathMetal.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
+    <ClInclude Include="endScene.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="Enemy_Bat.h" />
+    <ClInclude Include="Enemy_Boss.h" />
+    <ClInclude Include="Enemy_Dragon.h" />
+    <ClInclude Include="Enemy_Ghost.h" />
+    <ClInclude Include="Enemy_Minotaur.h" />
+    <ClInclude Include="Enemy_Skeleton.h" />
+    <ClInclude Include="Enemy_Skeleton_Yellow.h" />
+    <ClInclude Include="Enemy_Slime_Blue.h" />
+    <ClInclude Include="Enemy_Slime_Orange.h" />
+    <ClInclude Include="Enemy_Warith.h" />
+    <ClInclude Include="Enemy_Zombie.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="iniDataManager.h" />
+    <ClInclude Include="introScene.h" />
+    <ClInclude Include="jump.h" />
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="loadingScene.h" />
+    <ClInclude Include="mapTool.h" />
+    <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerManager.h" />
     <ClInclude Include="playerTestTile.h" />
@@ -169,8 +215,12 @@
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="scene_Manager.h" />
     <ClInclude Include="singletonBase.h" />
+    <ClInclude Include="slave.h" />
+    <ClInclude Include="slaveLibrary.h" />
     <ClInclude Include="soundManager.h" />
+    <ClInclude Include="stageScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="tile.h" />
@@ -178,30 +228,69 @@
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="txtData.h" />
+    <ClInclude Include="UImanager.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="video.h" />
     <ClInclude Include="windowAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
+    <ClCompile Include="alphaImageEffect.cpp" />
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="aStarManager.cpp" />
     <ClCompile Include="aStarScene.cpp" />
     <ClCompile Include="aStarTest.cpp" />
+    <ClCompile Include="Beat.cpp" />
+    <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bossMove.cpp" />
+    <ClCompile Include="bossScene.cpp" />
+    <ClCompile Include="bossStageScene.cpp" />
+    <ClCompile Include="bossStageTestTile.cpp" />
+    <ClCompile Include="boss_Bat.cpp" />
+    <ClCompile Include="boss_Ghost.cpp" />
+    <ClCompile Include="boss_Skeleton.cpp" />
+    <ClCompile Include="boss_Skeleton_Yellow.cpp" />
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="cameraManager.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="deathMetal.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
+    <ClCompile Include="endScene.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="Enemy_Bat.cpp" />
+    <ClCompile Include="Enemy_Boss.cpp" />
+    <ClCompile Include="Enemy_Dragon.cpp" />
+    <ClCompile Include="Enemy_Ghost.cpp" />
+    <ClCompile Include="Enemy_Minotaur.cpp" />
+    <ClCompile Include="Enemy_Skeleton.cpp" />
+    <ClCompile Include="Enemy_Skeleton_Yellow.cpp" />
+    <ClCompile Include="Enemy_Slime_Blue.cpp" />
+    <ClCompile Include="Enemy_Slime_Orange.cpp" />
+    <ClCompile Include="Enemy_Warith.cpp" />
+    <ClCompile Include="Enemy_Zombie.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
+    <ClCompile Include="introScene.cpp" />
+    <ClCompile Include="jump.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="loadingScene.cpp" />
+    <ClCompile Include="mapTool.cpp" />
+    <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerManager.cpp" />
     <ClCompile Include="playerTestTile.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="scene_Manager.cpp" />
+    <ClCompile Include="slave.cpp" />
     <ClCompile Include="soundManager.cpp" />
+    <ClCompile Include="stageScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -212,7 +301,9 @@
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="txtData.cpp" />
+    <ClCompile Include="UImanager.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="video.cpp" />
     <ClCompile Include="windowAPI.cpp" />
   </ItemGroup>
   <ItemGroup>

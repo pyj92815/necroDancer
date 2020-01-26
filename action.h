@@ -1,7 +1,7 @@
 #pragma once
 #include "gameNode.h"
 
-typedef void(*CALLBACK_FUNCTION)(void);
+typedef void(*CALLBACK_FUNCTION_STUDY)(void);
 
 class action : public gameNode
 {
@@ -17,7 +17,7 @@ private:
 
 	bool _isMoving;
 
-	CALLBACK_FUNCTION _callbackFunction;
+	CALLBACK_FUNCTION_STUDY _callbackFunction;
 	
 public:
 	action();
@@ -29,7 +29,7 @@ public:
 	void render();
 
 	void moveTo(image* image, float endX, float endY, float time);
-	void moveTo(image* image, float endX, float endY, float time, CALLBACK_FUNCTION cbFunction);
+	void moveTo(image* image, float endX, float endY, float time, CALLBACK_FUNCTION_STUDY cbFunction);
 
 	void moving();
 

@@ -58,6 +58,48 @@
     <Filter Include="playGround\player">
       <UniqueIdentifier>{67f0544e-e72b-4038-9ee8-4f47cd1dc644}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\Enemy">
+      <UniqueIdentifier>{73fb92ce-3f96-42ef-977c-b3a781e949da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Scene">
+      <UniqueIdentifier>{52638d6b-cb2b-4827-8928-e713add1546a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\video">
+      <UniqueIdentifier>{0d3642fe-ba18-4ab0-bab4-7ebd096f9641}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\MapTool">
+      <UniqueIdentifier>{cd7060e9-3639-49b0-a374-5f738b819ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss">
+      <UniqueIdentifier>{22ada17d-d20c-4e65-9e82-ae5522171c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\GameSettingManager">
+      <UniqueIdentifier>{eea3e2d0-acf8-49fa-a302-d101f1c11226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\GameSettingManager\Option">
+      <UniqueIdentifier>{4d40f321-88e3-4524-ab6d-7b361c88c3a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\GameSettingManager\Beat">
+      <UniqueIdentifier>{e9b0f420-8eab-452d-b96e-483946f1eaf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss Action">
+      <UniqueIdentifier>{da6bab5f-f9e2-4509-9763-ad6f8a084f9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss File">
+      <UniqueIdentifier>{cefc73e9-661f-4323-9fb4-f08b077dd5e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss Library">
+      <UniqueIdentifier>{03774254-90e9-4b8d-90cf-ed71ea4bdc83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss Stage Scene">
+      <UniqueIdentifier>{d385ee7e-338d-4ea2-9a54-1f8671624622}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\boss\boss Stage Test Tile">
+      <UniqueIdentifier>{eb686c76-ab7f-48fe-beec-ea403cb2cd89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\Collision">
+      <UniqueIdentifier>{6425a4cd-9763-49c8-91c9-5e3cb0cdd5c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -70,9 +112,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="windowAPI.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="commonMacroFunction.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="gameNode.h">
@@ -159,6 +198,138 @@
     <ClInclude Include="tileNode.h">
       <Filter>playGround\A%2aScene</Filter>
     </ClInclude>
+    <ClInclude Include="jump.h">
+      <Filter>playGround\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Bat.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Dragon.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Minotaur.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Ghost.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Skeleton.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Skeleton_Yellow.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Slime_Blue.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Slime_Orange.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Warith.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Zombie.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Boss.h">
+      <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="stageScene.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="introScene.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="endScene.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bossScene.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_Manager.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="video.h">
+      <Filter>2DGameFramework\video</Filter>
+    </ClInclude>
+    <ClInclude Include="aStarManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="loadingScene.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="mapToolScene.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Beat.h">
+      <Filter>playGround\GameSettingManager\Beat</Filter>
+    </ClInclude>
+    <ClInclude Include="mapTool.h">
+      <Filter>playGround\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="commonMacroFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="boss.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="deathMetal.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slave.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="bossLibrary.h">
+      <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="bossMove.h">
+      <Filter>playGround\boss\boss Action</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageScene.h">
+      <Filter>playGround\boss\boss Stage Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStageTestTile.h">
+      <Filter>playGround\boss\boss Stage Test Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>playGround\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="bossKinds.h">
+      <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision_Library.h">
+      <Filter>playGround\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="UImanager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="alphaImageEffect.h">
+      <Filter>2DGameFramework\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Bat.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Ghost.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveLibrary.h">
+      <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Skeleton.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Skeleton_Yellow.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -241,6 +412,123 @@
     </ClCompile>
     <ClCompile Include="playerTestTile.cpp">
       <Filter>playGround\player</Filter>
+    </ClCompile>
+    <ClCompile Include="jump.cpp">
+      <Filter>playGround\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Bat.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Ghost.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Dragon.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Minotaur.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Skeleton.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Skeleton_Yellow.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Slime_Blue.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Slime_Orange.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Warith.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Zombie.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Boss.cpp">
+      <Filter>playGround\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="stageScene.cpp">
+      <Filter>playGround\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="introScene.cpp">
+      <Filter>playGround\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="endScene.cpp">
+      <Filter>playGround\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bossScene.cpp">
+      <Filter>playGround\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_Manager.cpp">
+      <Filter>playGround\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="video.cpp">
+      <Filter>2DGameFramework\video</Filter>
+    </ClCompile>
+    <ClCompile Include="aStarManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingScene.cpp">
+      <Filter>playGround\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="mapToolScene.cpp">
+      <Filter>playGround\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Beat.cpp">
+      <Filter>playGround\GameSettingManager\Beat</Filter>
+    </ClCompile>
+    <ClCompile Include="mapTool.cpp">
+      <Filter>playGround\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cameraManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="deathMetal.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="bossMove.cpp">
+      <Filter>playGround\boss\boss Action</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageScene.cpp">
+      <Filter>playGround\boss\boss Stage Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStageTestTile.cpp">
+      <Filter>playGround\boss\boss Stage Test Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>playGround\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="UImanager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="alphaImageEffect.cpp">
+      <Filter>2DGameFramework\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="slave.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Bat.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Ghost.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Skeleton.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Skeleton_Yellow.cpp">
+      <Filter>playGround\boss\boss File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
