@@ -9,8 +9,6 @@ HRESULT deathMetal::init(string bossName, int idx, int idy, int TILE_SIZEX, int 
 	boss::magicAttack = 2;												 // 데스메탈의 기본 마법공격력 초기화
 	boss::init(bossName, idx, idy, TILE_SIZEX, TILE_SIZEY);				 // 데스메탈의 좌표 변수 초기화
 
-	deathMetal_Animation_Setting();										 // 데스메탈의 애니메이션 추가 함수
-
 	boss::direction = BD_DOWN;											 // 데스메탈은 처음에 아래를 바라보고 있다.
 	boss::animation = KEYANIMANAGER->findAnimation("deathMetal_SDown");  // 데스메탈의 시작 애니메이션은 쉐도우다운
 	boss::animation->start();											 // 애니메이션을 시작한다.
@@ -56,48 +54,6 @@ void deathMetal::clearThrowShield()
 	_throwShield.isShieldUpdate = false;
 	_throwShield.isOut = false;
 	boss::isThrowShield = false;
-}
-
-void deathMetal::deathMetal_Animation_Setting()
-{
-
-	// 실드 있을때 이용하는 애니메이션
-	int Left[] = {2, 3};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_Left", "Death_Metal", Left, 2, 10, true);
-
-	int ShadowLeft[] = {14, 15};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_SLeft", "Death_Metal", ShadowLeft, 2, 10, true);
-
-	int Up[] = {6, 7};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_Up", "Death_Metal", Up, 2, 10, true);
-
-	int ShadowUp[] = {18, 19};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_SUp", "Death_Metal", ShadowUp, 2, 10, true);
-
-	int Right[] = {0, 1};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_Right", "Death_Metal", Right, 2, 10, true);
-
-	int ShadowRight[] = {12, 13};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_SRight", "Death_Metal", ShadowRight, 2, 10, true);
-
-	int Down[] = {4, 5};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_Down", "Death_Metal", Down, 2, 10, true);
-
-	int ShadowDown[] = {16, 17};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_SDown", "Death_Metal", ShadowDown, 2, 10, true);
-
-	// 실드 없을때 이용하는 애니메이션
-	int Attack[] = {8, 9};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_Attack", "Death_Metal", Attack, 2, 10, true);
-
-	int ShadowAttack[] = {20, 21};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_SAttack", "Death_Metal", ShadowAttack, 2, 10, true);
-
-	int Idle[] = {10, 11};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_Idle", "Death_Metal", Idle, 2, 10, true);
-
-	int ShadowIdle[] = {22, 23};
-	KEYANIMANAGER->addArrayFrameAnimation("deathMetal_SIdle", "Death_Metal", ShadowIdle, 2, 10, true);
 }
 
 void deathMetal::deathMetal_Animation_Test()

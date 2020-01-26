@@ -13,7 +13,6 @@ boss::~boss()
 
 HRESULT boss::init(string bossName, int _idx, int _idy, int _tileSizeX, int _tileSizeY)
 {
-	addBossImage();													// 보스 이미지 추가 함수
 	findBossType(bossName);											// 보스의 타입을 저장한다.
 	findBossImage();												// 보스의 타입을 이용하여 이미지를 찾아 넣는다.
 	settingBossPos(_idx, _idy, _tileSizeX, _tileSizeY);				// 보스의 좌표 변수들을 초기화 한다.
@@ -46,24 +45,6 @@ void boss::render()
 void boss::render(ThrowShield info)
 {
 	info.image->render(CAMERAMANAGER->getWorldDC(), info.rc.left, info.rc.top);
-}
-
-void boss::addBossImage()
-{
-	IMAGEMANAGER->addImage("deathMetal_SceneImage", "./image/Enemy/boss/deathMetal_Image.bmp", 960, 398, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("deathMetal_Shield", "./image/Enemy/boss/deathMetal_Shield.bmp", 90, 46, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Death_Metal", "./image/Enemy/boss/death_metal.bmp", 2112, 212, 12, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Boss_Ghost", "./image/Enemy/boss/boss_Ghost.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
-
-	// 보스의 스킬 이미지
-	IMAGEMANAGER->addFrameImage("Boss_Fire_0", "./image/Enemy/boss/boss_Fire_0.bmp", 336, 96, 7, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Boss_Fire_1", "./image/Enemy/boss/boss_Fire_1.bmp", 336, 96, 7, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Boss_Fire_2", "./image/Enemy/boss/boss_Fire_2.bmp", 336, 96, 7, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Boss_Fire_3", "./image/Enemy/boss/boss_Fire_3.bmp", 336, 96, 7, 2, true, RGB(255, 0, 255));
-
-	// 테스트용 이미지
-	IMAGEMANAGER->addFrameImage("Test_Heart", "./image/Enemy/boss/beat_heart_test.bmp", 164, 104, 2, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Test_Floor", "./image/Enemy/boss/floor_test.bmp", 156, 104, 3, 2, true, RGB(255, 0, 255));
 }
 
 void boss::findBossType(string bossname)

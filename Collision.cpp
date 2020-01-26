@@ -9,7 +9,7 @@ Collision::~Collision()
 {
 }
 
-bool Collision::collision_Player_Attack_Enemy(vector<tagTile>* mapInfo, int tileSize, player* playerInfo, Enemy* enemyInfo)
+bool Collision::collision_Player_Find_Enemy(player* playerInfo, Enemy* enemyInfo)
 {
 	// 플레이어의 근처에 에너미가 있다면 true의 값으로 바뀌고,
 	bool isAttack = false;
@@ -78,12 +78,61 @@ bool Collision::collision_Player_Attack_Enemy(vector<tagTile>* mapInfo, int tile
 
 }
 
-void Collision::collision_Enemy_Attack_Player()
+bool Collision::collision_Player_Find_Enamy(player* playerInfo, deathMetal* bossInfo)
 {
-	
+	// 플레이어의 근처에 데스메탈이 있다면 true의 값으로 바뀌고,
+	bool isAttack = false;
+
+	// 플레이어의 방향에 따라 연산을 한다. (방향 + 한칸에 상대가 있는지 찾아준다. 상대가 있다면 true의 값을 리턴)
+	switch (playerInfo->getState())
+	{
+	case PLAYERSTATE_LEFT:
+		// 플레이어의 인덱스x -1을 한 값에 에너미가 있다면 플레이어의 바로 왼쪽에 에너미가 있다는 뜻 
+		if (playerInfo->getPlayer().idx - 1 == bossInfo->getBoss_Index().x &&
+			playerInfo->getPlayer().idy == bossInfo->getBoss_Index().y)
+		{
+			isAttack = true;
+		}
+		break;
+
+	case PLAYERSTATE_UP:
+		// 플레이어의 인덱스y -1을 한 값에 에너미가 있다면 플레이어의 바로 위쪽에 에너미가 있다는 뜻
+		if (playerInfo->getPlayer().idx == bossInfo->getBoss_Index().x &&
+			playerInfo->getPlayer().idy - 1 == bossInfo->getBoss_Index().y)
+		{
+			isAttack = true;
+		}
+		break;
+
+	case PLAYERSTATE_RIGHT:
+		// 플레이어의 인덱스x +1을 한 값에 에너미가 있다면 플레이어의 바로 오른쪽에 에너미가 있다는 뜻
+		if (playerInfo->getPlayer().idx + 1 == bossInfo->getBoss_Index().x &&
+			playerInfo->getPlayer().idy == bossInfo->getBoss_Index().y)
+		{
+			isAttack = true;
+		}
+		break;
+
+	case PLAYERSTATE_DOWN:
+		// 플레이어의 인덱스y +1을 한 값에 에너미가 있다면 플레이어의 바로 아래쪽에 에너미가 있다는 뜻
+		if (playerInfo->getPlayer().idx == bossInfo->getBoss_Index().x &&
+			playerInfo->getPlayer().idy + 1 == bossInfo->getBoss_Index().y)
+		{
+			isAttack = true;
+		}
+		break;
+	}
+
+	// 근처에 데스메탈이 있다면 true, 아니면 false
+	return isAttack;
 }
 
-bool Collision::collision_Player_DeathMetal(vector<tagTile>* mapInfo,int tileSize, player* playerInfo, deathMetal* bossInfo)
+void Collision::collision_Enemy_Find_Player(player* playerInfo, Enemy* enemyInfo)
+{
+	// 에너미 방향 정보가 없음
+}
+
+bool Collision::collision_DeathMetal_Find_Player(player* playerInfo, deathMetal* bossInfo)
 {
 	// 데스메탈이 공격 가능한 장소에 플레이어가 있다면 이 값이 true로 바뀐다.
 	bool isAttack = false;
@@ -117,7 +166,7 @@ bool Collision::collision_Player_DeathMetal(vector<tagTile>* mapInfo,int tileSiz
 		break;
 
 	case BD_DOWN:
-		if (bossInfo->getBoss_Index().x  == playerInfo->getPlayer().idx &&
+		if (bossInfo->getBoss_Index().x == playerInfo->getPlayer().idx &&
 			bossInfo->getBoss_Index().y + 1 == playerInfo->getPlayer().idy)
 		{
 			isAttack = true;

@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "enemy.h"
 #include "bossLibrary.h"
 #include "bossMove.h"
 
@@ -54,7 +53,6 @@ public:
 	virtual void render();
 	virtual void render(ThrowShield info);
 
-	void addBossImage();																							// 보스전에 필요한 이미지를 추가한다.
 	void findBossType(string bossname);																				// 보스 타입을 찾아준다.
 	void findBossImage();																							// 타입 정보로 보스 이미지를 찾아 넣는다.
 	void settingBossPos(int idx, int idy, int tileSizeX, int tileSizeY);											// 보스의 각종 좌표 변수 초기화
@@ -105,6 +103,10 @@ public:
 	void setBoss_Index(int idx, int idy) { index.x = idx; index.y = idy; }											// 타일의 인덱스를 받아와 저장한다.
 
 	void setBoss_Image(string bossName) { image = IMAGEMANAGER->findImage(bossName); }								// 보스의 이미지를 수정한다.
+
+	void setBoss_ClosePlayer(bool close) { isClosePlayer = close; }													// 보스 근처에 플레이어가 있는지 없는지
+
+	void ChangeAni() { isChangeAni = true; }
 
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수
