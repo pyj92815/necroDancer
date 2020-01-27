@@ -46,10 +46,10 @@ void Beat::update()
 
 void Beat::render()
 {
-    Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
-    Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
-    Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
-    Rectangle(_backBuffer->getMemDC(), test_Player);
+   //Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
+   //Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
+   //Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
+   //Rectangle(_backBuffer->getMemDC(), test_Player);
 
     if (_vNoteLeft.size() > 0) // ¿ÞÂÊ ³ëÆ® ·»´õ
     {

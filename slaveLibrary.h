@@ -55,6 +55,13 @@ struct SLAVE_IMAGE
 	image*				img;						// 슬레이브의 이미지를 담는다.
 };
 
+// 불의 마을
+struct SLAVE_BOOL
+{
+	bool				close_Player;				// 슬레이브 근처에 플레이어가 있는지 없는지 여부.
+	bool				changeAni;					// 애니메이션을 체인지 해야 하는지 여부.
+};
+
 // 슬레이브의 연산 변수
 struct SLAVE_OPERATION
 {
@@ -80,6 +87,7 @@ struct SLAVE_INFO
 	SLAVE_POS			pos;							// 슬레이브 좌표
 	SLAVE_IMAGE			image;							// 슬레이브 이미지
 	SLAVE_OPERATION		operation;						// 슬레이브 연산
+	SLAVE_BOOL			b_Value;						// 슬레이브 bool값 
 
 	void slave_Setting()
 	{

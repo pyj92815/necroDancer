@@ -49,3 +49,20 @@ struct tagBossJump
 	POINTFLOAT		 start;								// 시작 위치
 	bool			 isJumping;							// 점프중이라면 true
 };
+
+
+struct BOSS_PHASE_SETTING_BOOL
+{
+	bool PHASE_1_Set;	// 1페이즈 셋팅을 했다면 true로 바꾼다. (1번만 적용하기 위해서)
+	bool PHASE_2_Set;	// 2페이즈 셋팅을 했다면 true로 바꾼다. (1번만 적용하기 위해서)
+	bool PHASE_3_Set;	// 3페이즈 셋팅을 했다면 true로 바꾼다. (1번만 적용하기 위해서)
+	bool PHASE_4_Set;	// 4페이즈 셋팅을 했다면 true로 바꾼다. (1번만 적용하기 위해서)
+};
+
+// 보스에서 사용하는 BOOL 값을 모아둔 구조체
+struct BOSS_BOOL
+{
+	BOSS_PHASE_SETTING_BOOL		PHASE_BOOL;
+
+	bool						get_Beat;		// 박자를 받았으면 true로 변한다.
+};

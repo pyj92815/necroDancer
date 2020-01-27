@@ -328,7 +328,7 @@
       <Filter>playGround\boss</Filter>
     </ClInclude>
     <ClInclude Include="addImage_Boss.h">
-      <Filter>playGround\boss\boss Stage Scene</Filter>
+      <Filter>playGround\boss\boss Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

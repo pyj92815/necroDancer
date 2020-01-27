@@ -21,7 +21,8 @@ protected:
 	POINT		index;							// 보스의 배열 인덱스	  (어느 타일에 있는지 인덱스)
 
 	// 보스 이미지
-	animation*  animation;						// 보스의 에니메이션 정보
+	animation*  ani;							// 보스의 에니메이션 정보
+	animation*  attack_Ani;						// 보스 공격 이펙트 애니메이션 정보
 	image*		image;							// 보스의 이미지를 담는다.
 
 
@@ -42,6 +43,9 @@ protected:
 	float       worldTime;						// 월드 타임 
 	bossMove	move;							// 보스 이동에 필요한 연산 함수
 	tagBossJump jump;							// 보스 점프에 필요한 연산 함수
+	int			move_Count;						// 보스가 이동 가능한 박자를 저장한다.
+
+	BOSS_BOOL	boss_Bool;						// 보스에 사용하는 bool을 모아두었다.
 
 public:
 	boss();
@@ -57,6 +61,7 @@ public:
 	void findBossImage();																							// 타입 정보로 보스 이미지를 찾아 넣는다.
 	void settingBossPos(int idx, int idy, int tileSizeX, int tileSizeY);											// 보스의 각종 좌표 변수 초기화
 	void settingBossMoveVariable(int tileSizeX, int tileSizeY);														// 보스의 이동 변수 초기화
+	void settingBossVariable();																						// 보스에서 사용할 변수 초기화
 
 	// 보스 정보 겟터 함수
 	int getBoss_HP() { return hp; }																					// 보스의 HP를 받아온다.
@@ -68,6 +73,11 @@ public:
 	RECT getBoss_Rect() { return rc; }																				// 보스의 렉트를 받아온다.
 	POINTFLOAT getBoss_Center() { return center; }																	// 보스의 중점을 받아온다.
 	POINT getBoss_Index() { return index; }																			// 보스의 배열 인덱스를 받아온다.
+
+	int getBoss_Move_Count_Value() { return move.get_BossMoveCount(); }
+	int getBoss_Move_Count() { return move_Count; }
+
+	bool getBoss_Beat() { return boss_Bool.get_Beat; }																// 보스가 비트를 받았는지 유무
 
 	// 보스 정보 셋터 함수
 	void setBoss_HP(int _hp) { hp = _hp; if (hp > 9) hp = 9; if (hp < 0) hp = 0; }									// 보스의 HP를 수정한다. (hp가 최대치 최소치를 넘어가지 않게 예외처리)
@@ -107,6 +117,17 @@ public:
 	void setBoss_ClosePlayer(bool close) { isClosePlayer = close; }													// 보스 근처에 플레이어가 있는지 없는지
 
 	void ChangeAni() { isChangeAni = true; }
+
+	void setBoss_Move_Count() { move_Count--; }																		// 보스의 무브 카운트를 감소 시킨다.
+	void setBoss_Move_Count(int num) { move_Count = num; }
+
+	void setBoss_Direction(BOSS_DIRECTION dir) { direction = dir; }													// 보스의 방향을 수정한다.
+
+	void setBoss_WorldTime(float wTime) { worldTime = wTime; }														// 월드 타임을 수정한다.
+
+	void setBoss_Move_BoolValue_Ture() { isMove = isJump = isChangeAni = true; }									// 무브에 필요한 bool값을 한번에 수정한다.
+
+	void setBoss_Beat(bool value) { boss_Bool.get_Beat = value; }													// 비트를 받았는지 유무를 수정한다. (여러번 중복 받는것을 피하기 위해)
 
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수

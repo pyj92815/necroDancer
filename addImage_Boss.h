@@ -21,6 +21,9 @@ public:
 		// 테스트용 이미지
 		IMAGEMANAGER->addFrameImage("Test_Heart", "./image/Enemy/boss/beat_heart_test.bmp", 164, 104, 2, 1, true, RGB(255, 0, 255));
 		IMAGEMANAGER->addFrameImage("Test_Floor", "./image/Enemy/boss/floor_test.bmp", 156, 104, 3, 2, true, RGB(255, 0, 255));
+
+		// 보스, 슬레이브 근접 공격 이펙트
+		IMAGEMANAGER->addFrameImage("base_Attack", "./image/Enemy/boss/slave/boss_Slave_Attack.bmp", 270, 48, 5, 1, true, RGB(255, 0, 255));
 	}
 
 	void add_BossAnimation()
@@ -62,6 +65,10 @@ public:
 
 		int ShadowIdle[] = { 22, 23 };
 		KEYANIMANAGER->addArrayFrameAnimation("deathMetal_SIdle", "Death_Metal", ShadowIdle, 2, 10, true);
+
+		// 보스, 슬레이브 근접 공격 애니메이션
+		int baseAtt[] = { 0, 1, 2, 3, 4 };
+		KEYANIMANAGER->addArrayFrameAnimation("Base_Attack", "base_Attack", baseAtt, 5, 10, false);
 	}
 };
 

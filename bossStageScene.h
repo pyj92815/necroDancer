@@ -52,11 +52,16 @@ public:
 	// 플레이어
 	void playerPos_Setting();											// 보스방에 처음 도착한 플레이어의 위치를 초기화 해준다.
 
-	// 보스
+	// 보스 & 슬레이브
 	void closePlayer(player* player, deathMetal* deathMetal);			// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
 	void closePlayer(player* player, slave* slave);						// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
+	void findPlayer(player* player, deathMetal* deathMetal, UImanager* ui);			// 플레이어의 위치를 찾는다. (데스메탈)
+	void findPlayer(player* player, slave* slave);						// 플레이어의 위치를 찾는다. (슬레이브)
+
+	void boss_Move_Player();											// 보스가 플레이어에게 움직이는 연산
 
 	// 스테이지 씬과의 링크
 	void stageSceneAddressLink(stageScene* stageScene) { _stageScene = stageScene; }
+
 };
 

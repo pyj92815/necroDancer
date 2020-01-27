@@ -17,7 +17,7 @@ HRESULT boss::init(string bossName, int _idx, int _idy, int _tileSizeX, int _til
 	findBossImage();												// 보스의 타입을 이용하여 이미지를 찾아 넣는다.
 	settingBossPos(_idx, _idy, _tileSizeX, _tileSizeY);				// 보스의 좌표 변수들을 초기화 한다.
 	settingBossMoveVariable(_tileSizeX, _tileSizeY);				// 보스의 이동에 필요한 변수를 초기화한다.
-
+	settingBossVariable();											// 보스에서 사용할 변수 초기화
 	return S_OK;
 }
 
@@ -33,7 +33,7 @@ void boss::render()
 {
 	//PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY, BLACKNESS);
 	// aniRender는 센터 중심으로 그려진다.
-	image->aniRender(CAMERAMANAGER->getWorldDC(), center.x, center.y - (image->getFrameHeight() / 3), animation);
+	image->aniRender(CAMERAMANAGER->getWorldDC(), center.x, center.y - (image->getFrameHeight() / 3), ani);
 
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
@@ -89,6 +89,17 @@ void boss::settingBossMoveVariable(int tileSizeX, int tileSizeY)
 	time = 0.2f;									// 다음 타일까지 이동 시간
 	distance = tileSizeX;							// 다음 타일까지의 거리
 	speed = move.getMoveSpeed(time, distance);		// 다음 타일까지 이동 속도
+}
+
+void boss::settingBossVariable()
+{
+	boss_Bool.PHASE_BOOL.PHASE_1_Set = false;
+	boss_Bool.PHASE_BOOL.PHASE_2_Set = false;
+	boss_Bool.PHASE_BOOL.PHASE_3_Set = false;
+	boss_Bool.PHASE_BOOL.PHASE_4_Set = false;
+
+	move_Count = 0;
+
 }
 
 void boss::Info_Update()
