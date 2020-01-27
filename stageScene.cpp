@@ -15,8 +15,8 @@ HRESULT stageScene::init()
 	_ui = new UImanager;
 	_ui->init();
 
-	ZorderSetup();
 
+	ZorderSetup();
 	return S_OK;
 }
 
@@ -33,7 +33,7 @@ void stageScene::update()
 
 	_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
-	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getSight());
+	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 }
 
 void stageScene::render()

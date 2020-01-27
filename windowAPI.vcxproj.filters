@@ -192,9 +192,6 @@
     <ClInclude Include="playerManager.h">
       <Filter>playGround\player</Filter>
     </ClInclude>
-    <ClInclude Include="playerTestTile.h">
-      <Filter>playGround\player</Filter>
-    </ClInclude>
     <ClInclude Include="tileNode.h">
       <Filter>playGround\A%2aScene</Filter>
     </ClInclude>
@@ -330,6 +327,9 @@
     <ClInclude Include="boss_Skeleton_Yellow.h">
       <Filter>playGround\boss\boss File</Filter>
     </ClInclude>
+    <ClInclude Include="playerLibrary.h">
+      <Filter>playGround\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -408,9 +408,6 @@
       <Filter>playGround\player</Filter>
     </ClCompile>
     <ClCompile Include="playerManager.cpp">
-      <Filter>playGround\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerTestTile.cpp">
       <Filter>playGround\player</Filter>
     </ClCompile>
     <ClCompile Include="jump.cpp">

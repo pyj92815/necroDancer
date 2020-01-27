@@ -12,79 +12,33 @@ player::~player()
 
 HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 {
-	// 이미지 
-	_player.headImage = IMAGEMANAGER->addFrameImage("player1_heads", "./image/player/player1_heads.bmp", 384, 96, 8, 2, true, RGB(255, 0, 255));
-	_player.bodyImage = IMAGEMANAGER->addFrameImage("player1_armor_body_xmas", "./image/player/player1_armor_body_xmas.bmp", 384, 240, 8, 5, true, RGB(255, 0, 255));
-	//이펙트
-	IMAGEMANAGER->addImage("shovel_basic", "./image/player/shovel_basic.bmp", 48, 48, true, RGB(255, 0, 255), true); // 삽 
-	IMAGEMANAGER->addImage("player_effect_missed", "./image/player/TEMP_missed.bmp", 72, 26, true, RGB(255, 0, 255), true);  // 빗나감 
-	IMAGEMANAGER->addFrameImage("swipe_dagger", "./image/player/swipe_dagger.bmp", 144, 192,3,4, true, RGB(255, 0, 255));
-	// 긴검
-	IMAGEMANAGER->addFrameImage("swipe_longsword상하", "./image/player/swipe_longsword상하.bmp", 192, 192, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("swipe_longsword좌우", "./image/player/swipe_longsword좌우.bmp", 384, 96, 4, 2, true, RGB(255, 0, 255));
-	// 넓은 검
-	IMAGEMANAGER->addFrameImage("swipe_broadsword상하", "./image/player/swipe_broadsword상하.bmp", 432, 96, 3, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("swipe_broadsword좌우", "./image/player/swipe_broadsword좌우.bmp", 144,288, 3, 2, true, RGB(255, 0, 255));
-	// 레이피어 
-	IMAGEMANAGER->addFrameImage("swipe_rapier상하", "./image/player/swipe_rapier상하.bmp", 192, 192, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("swipe_rapier좌우", "./image/player/swipe_rapier좌우.bmp", 384, 96, 4, 2, true, RGB(255, 0, 255));
-
-
-	// 플레이어 상태
-	_player.direction = PLAYERDIRECTION_RIGHT;
-	_player.sight = 7;
-	_player.weapon = PLAYERWAEPON_NONE;
-	//오른쪽 
-	int headRight[] = { 0,1,2,3,4,5,6,7 };
-	KEYANIMANAGER->addArrayFrameAnimation("headRight", "player1_heads", headRight, 8, 10, true);
-
-	int bodyRight[] = { 0,1,2,3 };
-	KEYANIMANAGER->addArrayFrameAnimation("bodyRight", "player1_armor_body_xmas", bodyRight, 4, 10, true);
-	// 왼쪽 
-	int headLeft[] = { 15,14,13,12,11,10,9,8 };
-	KEYANIMANAGER->addArrayFrameAnimation("headLeft", "player1_heads", headLeft, 8, 10, true);
-
-	int bodyLeft[] = { 7,6,5,4 };
-	KEYANIMANAGER->addArrayFrameAnimation("bodyLeft", "player1_armor_body_xmas", bodyLeft, 4, 10, true);
-
+	imageSetting();			 // 이미지 
+	_jump = new jump;		 // 점프 클래스
+	_jump->init();
 	//애니매이션 초기화 
-	_player.headAni = KEYANIMANAGER->findAnimation("headRight");
+	_player.headAni = KEYANIMANAGER->findAnimation("headRight");			// 애니매이션 이미지
 	_player.bodyAni = KEYANIMANAGER->findAnimation("bodyRight");
-
-	//플레이어의 위치 index값
-	_player.idx = idx;
-	_player.idy = idy;
-
-	//플레이어의 초기값 
-	_player.x = _player.idx * tileSizeX + (tileSizeX / 2);
-	_player.y = _player.idy * tileSizeY + (tileSizeY / 3);
-
-	_distance = tileSizeY;			// 타일의 distance 
-
-	_player.rc = RectMakeCenter(_player.x, _player.y, _player.bodyImage->getFrameWidth(), _player.headImage->getFrameHeight());
-
-	//애니매이션 시작 
+	_player.headImage = IMAGEMANAGER->findImage("player1_heads");			// 이미지
+	_player.bodyImage = IMAGEMANAGER->findImage("player1_armor_body_xmas");
 	_player.headAni->start();
 	_player.bodyAni->start();
+	_player.direction = PLAYERDIRECTION_RIGHT;				// 방향 오른쪽	RIGHT
+	_player.weapon = PLAYERWAEPON_NONE;						// 무기			NONE
+	_player.sight = 7;										// 시야 값		7
+	_player.idx = idx;										// 인덱스 X
+	_player.idy = idy;										// 인덱스 Y
+	_player.x = _player.idx * tileSizeX + (tileSizeX / 2);
+	_player.y = _player.idy * tileSizeY + (tileSizeY / 3);
+	_player.rc = RectMakeCenter(_player.x, _player.y, _player.bodyImage->getFrameWidth(), _player.headImage->getFrameHeight());
 
-	//선형 보간 
-	_action = new action;
-	_action->init();
-	_isMoving = false;		 // bool move
-	_time = 0.15;			 // 움직이는 시간 
+	_distance = tileSizeY;			//  타일 중점 거리
+	_time = 0.15;					//  MOVE 시간 
 
-	// 점프 
-	_jump = new jump;
-	_jump->init();
+	_isMoving = false;		 // MOVE 판단
+	_isKeyPress = false;     // 노트 판단 
+	_isKeyDown = false;      // KEY 입력 판단
 
-	_isKeyPress = false;     // key 눌렸을때 노트가 중간인지를 판단하는 
-	_isKeyDown = false;      // key 입력을 판단 하는 
-	destroyAllWindows();
-
-	//공격이펙트
-
-	
-
+	destroyAllWindows(); // 임시 설정
 	return S_OK;
 }
 
@@ -98,17 +52,11 @@ void player::update()
 	keyControl();					// KEY
 	playerMove();					// MOVE
 
-	CAMERAMANAGER->set_CameraXY(_player.idx * _distance + (_distance / 2), _player.idy * _distance + (_distance / 3));
-
 	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
 	{
 		(*_viEffect)->update();
 	}
-	if (KEYMANAGER->isOnceKeyDown('A'))
-	{
-		
-	}
-
+	CAMERAMANAGER->set_CameraXY(_player.idx * _distance + (_distance / 2), _player.idy * _distance + (_distance / 3)); // 카메라 세팅
 }
 
 void player::render()
@@ -142,13 +90,13 @@ void player::playerMove()
 		_player.x = _player.idx * _distance + (_distance / 2);
 		_player.y = _player.idy * _distance + (_distance / 3);
 
-		_isMoving = false;	  // 선형 보간 
+		_isMoving = false;	    // 선형 보간 
+		_isKeyDown = false;		
 		//_isKeyPress = false;  // key 입력 초기화 
-		_isKeyDown = false;
 	}
 }
 
-void player::playerMissEffect()
+void player::playerEffect_Miss()
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
@@ -156,33 +104,32 @@ void player::playerMissEffect()
 	_vEffect.push_back(effect);
 }
 
-void player::playerShovelEffect(tagTile* tile)
+void player::playerEffect_Shovel(tagTile* tile)
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
 	effect->init("shovel_basic", tile->rc.left,tile->rc.top, 10,TIMESLOW);
 	_vEffect.push_back(effect);
 	CAMERAMANAGER->Camera_WorldDC_Shake(); // 문제는 예외처리 때문에 카메라 0,0에서는 작동 안함 
-
 }
-
-void player::playerAttackEffect(const char* imageName,tagTile* tile, int frameY)
+// 타일 위치
+void player::playerEffect_Attack(const char* imageName,tagTile* tile, int frameY)
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
 	effect->init(imageName, tile->rc.left, tile->rc.top, 0,frameY, FRAMEIMAGE);
 	_vEffect.push_back(effect);
 }
-
-void player::playerAttackEffect(const char* imageName, float x, float y, int frameY)
+// 좌표값 x,y의 위치
+void player::playerEffect_Attack(const char* imageName, float x, float y, int frameY)
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
 	effect->init(imageName, x, y, 0, frameY, FRAMEIMAGE);
 	_vEffect.push_back(effect);
 }
-
-void player::playerAttackEffect(const char* imageName, int x, int y, int frameY)
+// idx, idy의 위치
+void player::playerEffect_Attack(const char* imageName, int x, int y, int frameY)
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
@@ -214,7 +161,7 @@ void player::keyControl()
 			}
 			else
 			{
-				playerMissEffect();
+				playerEffect_Miss();
 			}
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
@@ -227,7 +174,7 @@ void player::keyControl()
 			}
 			else
 			{
-				playerMissEffect();
+				playerEffect_Miss();
 			}
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
@@ -240,7 +187,7 @@ void player::keyControl()
 			}
 			else
 			{
-				playerMissEffect();
+				playerEffect_Miss();
 			}
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
@@ -253,33 +200,10 @@ void player::keyControl()
 			}
 			else
 			{
-				playerMissEffect();
+				playerEffect_Miss();
 			}
 		}
-	
 	}
-
-	if (KEYMANAGER->isOnceKeyUp(VK_UP))
-	{
-		//_isKeyPress = false;
-		//_isKeyDown = false;
-	}
-	else if (KEYMANAGER->isOnceKeyUp(VK_DOWN))
-	{
-		//_isKeyPress = false;
-		//_isKeyDown = false;
-	}
-	else if (KEYMANAGER->isOnceKeyUp(VK_LEFT))
-	{
-		//_isKeyPress = false;
-		//_isKeyDown = false;
-	}
-	else if (KEYMANAGER->isOnceKeyUp(VK_RIGHT))
-	{
-		//_isKeyPress = false;
-		//_isKeyDown = false;
-	}
-
 }
 
 void player::tileCheck()
@@ -293,7 +217,7 @@ void player::tileCheck()
 			{
 				if (_miPlayerTile->second->wall != W_NONE)
 				{
-					playerShovelEffect(_miPlayerTile->second);
+					playerEffect_Shovel(_miPlayerTile->second);
 					_miPlayerTile->second->type = TYPE_TERRAIN;
 					_miPlayerTile->second->wall = W_NONE;
 					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
@@ -306,18 +230,18 @@ void player::tileCheck()
 					switch (_player.weapon)
 					{
 					case PLAYERWAEPON_DAGGER:
-						playerAttackEffect("swipe_dagger", _miPlayerTile->second, 0);
+						playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 0);
 						break;
 					case PLAYERWAEPON_LONGSWORD:
-						playerAttackEffect("swipe_longsword상하", (_player.idx) * 52 , (_player.idy- 2) * 52, 0);
+						playerEffect_Attack("swipe_longsword상하", (_player.idx) * 52 , (_player.idy- 2) * 52, 0);
 
 						break;
 					case PLAYERWAEPON_BROADSWORD:
-						playerAttackEffect("swipe_broadsword상하", (_player.idx-1) * 52, (_player.idy - 1) * 52, 0);
+						playerEffect_Attack("swipe_broadsword상하", (_player.idx-1) * 52, (_player.idy - 1) * 52, 0);
 
 						break;
 					case PLAYERWAEPON_RAPIER:
-						playerAttackEffect("swipe_rapier상하", _player.idx * 52, (_player.idy - 2) * 52, 0);
+						playerEffect_Attack("swipe_rapier상하", _player.idx * 52, (_player.idy - 2) * 52, 0);
 						break;
 					default:
 						break;
@@ -336,7 +260,7 @@ void player::tileCheck()
 			{
 				if (_miPlayerTile->second->wall != W_NONE)
 				{
-					playerShovelEffect(_miPlayerTile->second);
+					playerEffect_Shovel(_miPlayerTile->second);
 					_miPlayerTile->second->type = TYPE_TERRAIN;
 					_miPlayerTile->second->wall = W_NONE;
 					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
@@ -349,18 +273,18 @@ void player::tileCheck()
 					switch (_player.weapon)
 					{
 					case PLAYERWAEPON_DAGGER:
-						playerAttackEffect("swipe_dagger", _miPlayerTile->second, 1);
+						playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 1);
 						break;
 					case PLAYERWAEPON_LONGSWORD:
-						playerAttackEffect("swipe_longsword상하", _miPlayerTile->second, 1);
+						playerEffect_Attack("swipe_longsword상하", _miPlayerTile->second, 1);
 
 						break;
 					case PLAYERWAEPON_BROADSWORD:
-						playerAttackEffect("swipe_broadsword상하", (_player.idx - 1) * 52, (_player.idy + 1) * 52, 1);
+						playerEffect_Attack("swipe_broadsword상하", (_player.idx - 1) * 52, (_player.idy + 1) * 52, 1);
 
 						break;
 					case PLAYERWAEPON_RAPIER:
-						playerAttackEffect("swipe_rapier상하", _player.idx * 52, (_player.idy + 1) * 52, 1);
+						playerEffect_Attack("swipe_rapier상하", _player.idx * 52, (_player.idy + 1) * 52, 1);
 						break;
 					default:
 						break;
@@ -378,7 +302,7 @@ void player::tileCheck()
 			{
 				if (_miPlayerTile->second->wall != W_NONE)
 				{
-					playerShovelEffect(_miPlayerTile->second);
+					playerEffect_Shovel(_miPlayerTile->second);
 					_miPlayerTile->second->type = TYPE_TERRAIN;
 					_miPlayerTile->second->wall = W_NONE;
 					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
@@ -391,17 +315,17 @@ void player::tileCheck()
 					switch (_player.weapon)
 					{
 					case PLAYERWAEPON_DAGGER:
-						playerAttackEffect("swipe_dagger", _miPlayerTile->second, 2);
+						playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 2);
 						break;
 					case PLAYERWAEPON_LONGSWORD:
-						playerAttackEffect("swipe_longsword좌우", (_player.idx-2) * 52, _player.idy * 52, 0);
+						playerEffect_Attack("swipe_longsword좌우", (_player.idx-2) * 52, _player.idy * 52, 0);
 						break;
 					case PLAYERWAEPON_BROADSWORD:
-						playerAttackEffect("swipe_broadsword좌우", (_player.idx - 1) * 52, (_player.idy - 1) * 52, 0);
+						playerEffect_Attack("swipe_broadsword좌우", (_player.idx - 1) * 52, (_player.idy - 1) * 52, 0);
 
 						break;
 					case PLAYERWAEPON_RAPIER:
-						playerAttackEffect("swipe_rapier좌우", (_player.idx - 2) * 52, _player.idy  * 52, 0);
+						playerEffect_Attack("swipe_rapier좌우", (_player.idx - 2) * 52, _player.idy  * 52, 0);
 						break;
 					default:
 						break;
@@ -419,7 +343,7 @@ void player::tileCheck()
 			{
 				if (_miPlayerTile->second->wall != W_NONE)
 				{
-					playerShovelEffect(_miPlayerTile->second);
+					playerEffect_Shovel(_miPlayerTile->second);
 					_miPlayerTile->second->type = TYPE_TERRAIN;
 					_miPlayerTile->second->wall = W_NONE;
 					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
@@ -432,18 +356,18 @@ void player::tileCheck()
 					switch (_player.weapon)
 					{
 					case PLAYERWAEPON_DAGGER:
-						playerAttackEffect("swipe_dagger", _miPlayerTile->second, 3);
+						playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 3);
 						break;
 					case PLAYERWAEPON_LONGSWORD:
-						playerAttackEffect("swipe_longsword좌우", _miPlayerTile->second, 1);
+						playerEffect_Attack("swipe_longsword좌우", _miPlayerTile->second, 1);
 
 						break;
 					case PLAYERWAEPON_BROADSWORD:
-						playerAttackEffect("swipe_broadsword좌우", (_player.idx + 1) * 52, (_player.idy - 1) * 52, 1);
+						playerEffect_Attack("swipe_broadsword좌우", (_player.idx + 1) * 52, (_player.idy - 1) * 52, 1);
 
 						break;
 					case PLAYERWAEPON_RAPIER:
-						playerAttackEffect("swipe_rapier좌우", (_player.idx + 1) * 52, _player.idy * 52, 1);
+						playerEffect_Attack("swipe_rapier좌우", (_player.idx + 1) * 52, _player.idy * 52, 1);
 						break;
 					default:
 						break;
@@ -465,7 +389,7 @@ void player::StateMove()
 	{
 	case PLAYERDIRECTION_UP:
 		_player.idy--;			// 좌표Y값--
-			//선형보간
+		//선형보간
 		_angle = getAngle(_player.x, _player.y, _player.x, _player.y - _distance);  // 방향 
 		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 		_isMoving = true;															// MOVE
