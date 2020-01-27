@@ -4,7 +4,7 @@
 #include<vector>
 enum class enemyState
 {
-	STATE_IDLE,STATE_DISCOVERY,STATE_MOVE,STATE_ATTACK,STATE_DIE
+	STATE_IDLE,STATE_MOVE,STATE_ATTACK,STATE_DIE
 };
 enum class Direction
 {
@@ -14,9 +14,8 @@ struct EnemyInfo
 {
 	enemyState state;
 	Direction direction;
-	const char* animation;
-	const char* enemyName1;
-	const char* enemyName2;
+	animation* animation;
+	image* image;
 	float x, y;
 	RECT rc;
 	RECT discoveryRc;
@@ -29,7 +28,7 @@ class Enemy:public gameNode
 {
 protected:
 	EnemyInfo* _enemyInfo;				//에너미 정보(구조체)
-	//enemyState _state;
+	
 public:
 	Enemy() {};
 	~Enemy() {};
@@ -46,8 +45,8 @@ public:
 	virtual void Attack();
 
 	//Enemy생성 함수 (float x, float y, float HP, float damage, const char* enemyName)
-	virtual void EnemyCreate(float x, float y, float HP,float damage,const char* enemyName1,const char* enemyName2);
-
+	virtual void EnemyCreate(float x, float y, float HP,float damage);
+	virtual void EnemyCreate(float x, float y, float HP, float damage,Direction direction);
 
 	//Enemy정보 접근자
 	virtual EnemyInfo* getEnemyInfo() { return _enemyInfo; }

@@ -3,8 +3,8 @@
 
 class Enemy_Zombie:public Enemy
 {
-
 public:
+	HRESULT init();
 	void AniChange();
 };
 
