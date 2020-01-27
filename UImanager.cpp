@@ -64,7 +64,7 @@ HRESULT UImanager::init()
 
 	_heartBeatCnt = 0;								//하트비트 카운트
 
-
+	interval = 0;
 	//인벤토리 해제 불값=============================
 
 	_attackInven.open = false;
@@ -77,6 +77,8 @@ HRESULT UImanager::init()
 	_feetInven.open = false;
 	_torchInven.open = false;
 	_ringInven.open = false;
+	_heatBeatStop = false;
+	_heatBeatStop2 = true;
 
 	//인벤토리 고정할 위치
 	_x1Slot = 20 , _y1Slot = 5;
@@ -119,15 +121,32 @@ void UImanager::update()
 		hp++;
 	}
 
-	if (KEYMANAGER->isOnceKeyDown('A'))
+	/*if (KEYMANAGER->isOnceKeyDown('A'))
 	{
 		_heartBeatCnt++;
 	}
 	if (KEYMANAGER->isOnceKeyDown('S'))
 	{
 		_heartBeatCnt--;
-	}
+	}*/
+	
+	
+		if (BEATMANAGER->getInterval())
+		{
+			interval++;
+			if (interval > 10) //노트가 10개 이므로
+			{
+				_heartBeatCnt++;
 
+				if (_heartBeatCnt > 2)
+				{
+					_heartBeatCnt = 0;
+				}
+				interval = 0;
+			}
+
+		}
+	
 
 	if (KEYMANAGER->isToggleKey('L'))
 	{
