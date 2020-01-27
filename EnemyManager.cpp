@@ -77,7 +77,7 @@ void EnemyManager::EnemyCreate(float x, float y,EnemyType enemyType)
 
 void EnemyManager::imageAdd()
 {
-	IMAGEMANAGER->addFrameImage("Enemy_bat", "./image./Enemy/batL.bmp", 384, 96, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_bat", "./image./Enemy/bat.bmp", 384, 96, 8, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_dragon", "./image./Enemy/dragon.bmp", 432, 204, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_ghost", "./image./Enemy/ghost.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_minotaur", "./image./Enemy/minotaur.bmp", 1800, 196, 18, 2, true, RGB(255, 0, 255));
