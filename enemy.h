@@ -4,30 +4,32 @@
 #include<vector>
 enum class enemyState
 {
-	STATE_IDLE,STATE_DISCOVERY,STATE_MOVE,STATE_ATTACK,STATE_DIE
+	STATE_IDLE,STATE_MOVE,STATE_ATTACK,STATE_DIE
+};
+enum class Direction
+{
+	LEFT, RIGHT, UP, DOWN
 };
 struct EnemyInfo
 {
-	enemyState state;
-	animation* animation1;
-	animation* animation2;
-	animation* animation3;
-	animation* animation4;
-	image* image1;
-	image* image2;
-	float x, y;
+	enemyState state;					//enemy의 상태를 지정할 enum문
+	Direction direction;				//enemy의 방향을 지정할 enum문
+	animation* animation;	
+	image* image;
+	float x, y;			
 	RECT rc;
-	RECT discoveryRc;
+	RECT discoveryRc;					//플레이어를 발견할 인식 범위
 	float HP;
 	float damage;
-	bool Light;
+	bool Light;							//시야 안에 있는지 여부를 판단하기 위한 bool값
+	bool aniChange;						//애니메이션을 바꿨는지 판단하기 위한 bool값
 };
 
 class Enemy:public gameNode
 {
 protected:
 	EnemyInfo* _enemyInfo;				//에너미 정보(구조체)
-	//enemyState _state;
+	
 public:
 	Enemy() {};
 	~Enemy() {};
@@ -38,12 +40,14 @@ public:
 	virtual void update();
 	virtual void render();
 	
-	virtual void Action();
-	virtual void Move();
+	virtual void Action();				//enemy의 상태를 바꿔주기 위한 함수
+	virtual void Move();				//enemy의 움직임 패턴을 구현할 함수
+	virtual void AniChange();			//enemy의 애니메이션을 바꿔주기 위한 함수
+	virtual void Attack();				//enemy의 공격을 구현할 함수
 
 	//Enemy생성 함수 (float x, float y, float HP, float damage, const char* enemyName)
-	virtual void EnemyCreate(float x, float y, float HP,float damage,const char* enemyName1,const char* enemyName2);
-
+	virtual void EnemyCreate(float x, float y, float HP,float damage);
+	virtual void EnemyCreate(float x, float y, float HP, float damage,Direction direction);
 
 	//Enemy정보 접근자
 	virtual EnemyInfo* getEnemyInfo() { return _enemyInfo; }
