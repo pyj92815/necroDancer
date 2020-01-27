@@ -218,6 +218,8 @@
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="slave.h" />
     <ClInclude Include="slaveLibrary.h" />
+    <ClInclude Include="slaveManager.h" />
+    <ClInclude Include="slaveManager_Library.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stageScene.h" />
     <ClInclude Include="stdafx.h" />
@@ -288,6 +290,7 @@
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="scene_Manager.cpp" />
     <ClCompile Include="slave.cpp" />
+    <ClCompile Include="slaveManager.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stageScene.cpp" />
     <ClCompile Include="stdafx.cpp">

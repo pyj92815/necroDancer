@@ -330,6 +330,12 @@
     <ClInclude Include="addImage_Boss.h">
       <Filter>playGround\boss\boss Library</Filter>
     </ClInclude>
+    <ClInclude Include="slaveManager.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager_Library.h">
+      <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -525,6 +531,9 @@
       <Filter>playGround\boss\boss File</Filter>
     </ClCompile>
     <ClCompile Include="boss_Skeleton_Yellow.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="slaveManager.cpp">
       <Filter>playGround\boss\boss File</Filter>
     </ClCompile>
   </ItemGroup>

@@ -33,7 +33,7 @@ void boss::render()
 {
 	//PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY, BLACKNESS);
 	// aniRender는 센터 중심으로 그려진다.
-	image->aniRender(CAMERAMANAGER->getWorldDC(), center.x, center.y - (image->getFrameHeight() / 3), ani);
+	_image->aniRender(CAMERAMANAGER->getWorldDC(), center.x, center.y - (_image->getFrameHeight() / 3), ani);
 
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
@@ -58,11 +58,11 @@ void boss::findBossImage()
 	switch (type)
 	{
 	case DEATH_METAL:
-		image = IMAGEMANAGER->findImage("Death_Metal");
+		_image = IMAGEMANAGER->findImage("Death_Metal");
 		break;
 
 	case EMPTY:
-		image = IMAGEMANAGER->findImage("Test_Floor");
+		_image = IMAGEMANAGER->findImage("Test_Floor");
 		break;
 	}
 }
@@ -118,7 +118,6 @@ void boss::boss_Move()
 {
 	// 보스가 움직였다면 true
 	if (isMove) move.startMove(&time, &distance, &angle, &speed, &worldTime, &center, &index, direction, &isMove);
-
 	// 보스가 움직였다면 점프 상태가 true
 	// 보스가 점프를 했을때 필요한 값은
 	// 보스의 좌표, 값을 저장 수정 가능한 속도?, 방향에 맞게 수치는 다르게

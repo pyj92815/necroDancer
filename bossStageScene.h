@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "bossKinds.h"
+#include "slaveManager.h"
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinmainCRTStartup /subsystem:console")
@@ -19,10 +20,11 @@ private:
 	vector<tagTile>					_vTotalList;					// 보스 스테이지의 타일 정보 벡터로 저장해서 사용한다.
 	vector<tagTile>::iterator		_viTotalList;
 
-	deathMetal*						_deathMetal;					// 데스메탈
+	stageScene*						_stageScene;					// 스테이지 씬
+	UImanager*						_ui;							// ui
 	player*							_player;						// 플레이어	
-	stageScene*						_stageScene;
-	UImanager*						_ui;
+	deathMetal*						_deathMetal;					// 데스메탈
+	slaveManager*					_sm;							// 슬레이브 매니저
 		
 private:
 	bool distanceCheck;												// 거리를 체크한다. (범위에 들어오거나 들어오지 않을때 값이 바뀐다.)
@@ -59,6 +61,8 @@ public:
 	void findPlayer(player* player, slave* slave);						// 플레이어의 위치를 찾는다. (슬레이브)
 
 	void boss_Move_Player();											// 보스가 플레이어에게 움직이는 연산
+
+	void boss_Base_Attack_Render();										// 보스의 근접 공격 애니메이션을 그려준다.
 
 	// 스테이지 씬과의 링크
 	void stageSceneAddressLink(stageScene* stageScene) { _stageScene = stageScene; }

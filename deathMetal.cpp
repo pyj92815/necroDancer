@@ -30,7 +30,7 @@ void deathMetal::release()
 void deathMetal::update()
 {
 	Info_Update();												 // 데스메탈의 인덱스 정보가 바뀌면 자동으로 중점, 렉트를 갱신해준다.
-	deathMetal_Animation_Test();								 // 데스메탈의 애니메이션 테스트 함수
+	//deathMetal_Animation_Test();								 // 데스메탈의 애니메이션 테스트 함수
 	deathMetal_ChangePhase();									 // 데스메탈의 페이즈 체인지 함수									
 	deathMetal_ChangeAnimation();								 // 데스메탈의 애니메이션 체인지 함수
 	boss_Move();												 // 데스메탈의 이동 연산 함수
@@ -39,7 +39,6 @@ void deathMetal::update()
 void deathMetal::render()
 {
 	boss::render();
-
 	if(_throwShield.isOut) boss::render(_throwShield);	 // 페이즈 1이 끝나면 실드의 정보가 갱신되고, 그때부터 보이기 시작한다.
 }
 
@@ -481,7 +480,7 @@ void deathMetal::deathMetal_ShieldPosUpdate()
 {
 	// 렉트를 구한다. (중점x - 실드이미지 가로 / 2, 중점y - 보스이미지 세로 / 2, 실드이미지 가로, 실드이미지 세로)
 	_throwShield.rc = RectMake(boss::center.x - _throwShield.image->getWidth() / 2, 
-		boss::center.y - boss::image->getFrameHeight() / 2, _throwShield.image->getWidth(), _throwShield.image->getHeight());
+		boss::center.y - boss::_image->getFrameHeight() / 2, _throwShield.image->getWidth(), _throwShield.image->getHeight());
 
 	// 렉트를 이용하여 중점을 구한다.
 	_throwShield.center.x = (_throwShield.rc.left + _throwShield.rc.right) / 2;
@@ -569,8 +568,4 @@ void deathMetal::deathMetal_ThrowShield()
 		}
 		break;
 	}
-}
-
-void deathMetal::deathMetal_Move()
-{
 }

@@ -26,6 +26,9 @@ HRESULT bossStageScene::init()
 
 	distanceCheck = false;
 
+	_sm = new slaveManager;
+	_sm->init();
+
 	return S_OK;
 }
 
@@ -45,10 +48,18 @@ void bossStageScene::update()
 	// 보스 움직임 연산
 	boss_Move_Player();
 
-
+	_sm->update();
 	if (KEYMANAGER->isToggleKey('V'))
 	{
 		BEATMANAGER->update();
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+	{
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y + 1);
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y + 1);
 	}
 
 	// 비트 
@@ -97,14 +108,21 @@ void bossStageScene::render()
 				//	findTileImage();
 				//}
 
-
+				// 타일의 속성에 따라 이미지를 뿌린다.
 				findTileImage();
 
 			}
 	
 		}
 	}
+
+	// 보스와 플레이어의 랜드 순서를 찾는다.
 	z_Order_Player_Boss();
+
+	// 보스가 근접 공격을 했을때 이펙트를 그려준다.
+	boss_Base_Attack_Render();
+
+	_sm->render();
 
 	// 월드이미지를 뿌려준다.
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
@@ -117,7 +135,6 @@ void bossStageScene::render()
 	{
 		BEATMANAGER->render();
 	}
-
 }
 
 void bossStageScene::bossStageMap_Load()
@@ -301,6 +318,11 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 		}
 	}
 
+
+	//cout << "distance :" << distance << endl;
+	//cout << "range : " << TILESIZE * BOSS_RECOGNITION_RANGE << endl;
+	//cout << distanceCheck << endl;
+
 	// 만약 타일 사이즈인 52로 나누었을때 0이 나오지 않는다면 대각선이라는 뜻
 	else
 	{
@@ -466,6 +488,21 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 				// 플레이어가 앞에 있다면 근접 공격을 해준다.
 				ui->set_HP();
 
+				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
+				deathMetal->setBoss_Direction(BD_LEFT);
+				
+				//// 플레이어의 중점 좌표를 받아온다.
+				//deathMetal->setBoss_BaseAttack_Pos(player->getPlayer().x, player->getPlayer().y);
+				//
+				//// 이펙트 이미지를 넣어준다.
+				//deathMetal->setBoss_BaseSkill_Image("base_Attack");
+				//
+				//// 어떤 이펙트를 뿌릴지 넣어준다.
+				//deathMetal->setBoss_BaseSkill("Base_Attack");
+				//
+				//// 이펙트를 실행 시킨다.
+				//deathMetal->start_AttackAni();
+
 				// 다음 이동을 위해 무브 카운트를 다시 채워준다.
 				deathMetal->setBoss_Move_Count(deathMetal->getBoss_Move_Count_Value());
 			}
@@ -495,6 +532,21 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 			{
 				// 플레이어가 앞에 있다면 근접 공격을 해준다.
 				ui->set_HP();
+
+				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
+				deathMetal->setBoss_Direction(BD_RIGHT);
+
+				//// 플레이어의 중점 좌표를 받아온다.
+				//deathMetal->setBoss_BaseAttack_Pos(player->getPlayer().x, player->getPlayer().y);
+				//
+				//// 이펙트 이미지를 넣어준다.
+				//deathMetal->setBoss_BaseSkill_Image("base_Attack");
+				//
+				//// 어떤 이펙트를 뿌릴지 넣어준다.
+				//deathMetal->setBoss_BaseSkill("Base_Attack");
+				//
+				//// 이펙트를 실행 시킨다.
+				//deathMetal->start_AttackAni();
 
 				// 다음 이동을 위해 무브 카운트를 다시 채워준다.
 				deathMetal->setBoss_Move_Count(deathMetal->getBoss_Move_Count_Value());
@@ -531,6 +583,21 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 				// 플레이어가 앞에 있다면 근접 공격을 해준다.
 				ui->set_HP();
 
+				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
+				deathMetal->setBoss_Direction(BD_UP);
+
+				//// 플레이어의 중점 좌표를 받아온다.
+				//deathMetal->setBoss_BaseAttack_Pos(player->getPlayer().x, player->getPlayer().y);
+				//
+				//// 이펙트 이미지를 넣어준다.
+				//deathMetal->setBoss_BaseSkill_Image("base_Attack");
+				//
+				//// 어떤 이펙트를 뿌릴지 넣어준다.
+				//deathMetal->setBoss_BaseSkill("Base_Attack");
+				//
+				//// 이펙트를 실행 시킨다.
+				//deathMetal->start_AttackAni();
+
 				// 다음 이동을 위해 무브 카운트를 다시 채워준다.
 				deathMetal->setBoss_Move_Count(deathMetal->getBoss_Move_Count_Value());
 			}
@@ -560,6 +627,21 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 			{
 				// 플레이어가 앞에 있다면 근접 공격을 해준다.
 				ui->set_HP();
+
+				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
+				deathMetal->setBoss_Direction(BD_DOWN);
+
+				//// 플레이어의 중점 좌표를 받아온다.
+				//deathMetal->setBoss_BaseAttack_Pos(player->getPlayer().x, player->getPlayer().y);
+				//
+				//// 이펙트 이미지를 넣어준다.
+				//deathMetal->setBoss_BaseSkill_Image("base_Attack");
+				//
+				//// 어떤 이펙트를 뿌릴지 넣어준다.
+				//deathMetal->setBoss_BaseSkill("Base_Attack");
+				//
+				//// 이펙트를 실행 시킨다.
+				//deathMetal->start_AttackAni();
 
 				// 다음 이동을 위해 무브 카운트를 다시 채워준다.
 				deathMetal->setBoss_Move_Count(deathMetal->getBoss_Move_Count_Value());
@@ -609,5 +691,9 @@ void bossStageScene::boss_Move_Player()
 		findPlayer(_player, _deathMetal, _ui);
 	}
 
-	cout << _deathMetal->getBoss_Move_Count() << endl;
+}
+
+void bossStageScene::boss_Base_Attack_Render()
+{
+	//_deathMetal->
 }
