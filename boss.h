@@ -49,6 +49,10 @@ protected:
 
 	BOSS_BOOL	boss_Bool;						// 보스에 사용하는 bool을 모아두었다.
 
+	BOSS_DIRECTION save_Direction;				// 보스의 방향을 저장해둔다.
+	bool		   change_Ani;					// 애니메이션 체인지가 가능한지 여부
+	bool		   save_ClosePlayer;		    // 플레이어가 근처에 있는지 여부 세이브
+
 public:
 	boss();
 	~boss();
@@ -129,7 +133,8 @@ public:
 
 	void setBoss_WorldTime(float wTime) { worldTime = wTime; }														// 월드 타임을 수정한다.
 
-	void setBoss_Move_BoolValue_Ture() { isMove = isJump = isChangeAni = true; }									// 무브에 필요한 bool값을 한번에 수정한다.
+	void setBoss_Move_BoolValue_Ture() { 
+		/*isMove = isJump = isChangeAni = true;*/ isMove = isJump = isChangeAni = true;	}									// 무브에 필요한 bool값을 한번에 수정한다.
 
 	void setBoss_Beat(bool value) { boss_Bool.get_Beat = value; }													// 비트를 받았는지 유무를 수정한다. (여러번 중복 받는것을 피하기 위해)
 

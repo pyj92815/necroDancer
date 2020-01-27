@@ -10,6 +10,7 @@ HRESULT deathMetal::init(string bossName, int idx, int idy, int TILE_SIZEX, int 
 	boss::init(bossName, idx, idy, TILE_SIZEX, TILE_SIZEY);				 // 데스메탈의 좌표 변수 초기화
 
 	boss::direction = BD_DOWN;											 // 데스메탈은 처음에 아래를 바라보고 있다.
+	boss::save_Direction = boss::direction;								 // 데스메탈의 방향을 저장해 둔다. (만약 방향이 바뀔 경우에 애니메이션을 바꿀때 사용)
 	boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SDown");		 // 데스메탈의 시작 애니메이션은 쉐도우다운
 	boss::ani->start();													 // 애니메이션을 시작한다.
 	boss::isMove = false;												 // 데스메탈이 움직이면 이 값이 true로 바뀐다.
@@ -17,6 +18,7 @@ HRESULT deathMetal::init(string bossName, int idx, int idy, int TILE_SIZEX, int 
 	boss::isChangeAni = false;											 // 데스메탈이 움직이면 이 값이 true로 바뀐다.
 	boss::isCasting = false;											 // 데스메탈이 마법을 캐스팅 중이라면 이 값이 true로 바뀐다.
 	boss::isClosePlayer = false;										 // 데스메탈이 플레이어 근처에 있다면 이 값이 true로 바뀐다.
+	boss::save_ClosePlayer = boss::isClosePlayer;						 // 근처에 플레이어가 있는지 여부를 저장해둔다. 
 
 	clearThrowShield();													 // 데스메탈의 실드 정보를 초기화 해준다.
 
@@ -157,6 +159,24 @@ void deathMetal::deathMetal_Animation_Test()
 
 void deathMetal::deathMetal_ChangeAnimation()
 {
+	// 방향에 변화가 있을때 true의 값을 넣어준다.
+	if (boss::direction != boss::save_Direction)
+	{
+		// 다음 방향이 변화 할때까지 이곳에 들어오지 않는다.
+		boss::save_Direction = boss::direction;
+		boss::isChangeAni = true;
+		boss::change_Ani = true;
+	}
+
+	// 플레이어가 근처에 있거나 멀리 갔거나 값이 변경 되었을때 들어온다.
+	if (boss::isClosePlayer != boss::save_ClosePlayer)
+	{
+		// 다음 변화가 있을때까지 들어오지 않는다.
+		boss::save_ClosePlayer = boss::isClosePlayer;
+		boss::isChangeAni = true;
+		boss::change_Ani = true;
+	}
+
 	// 데스메탈이 바라보는 방향에 따라 애니메이션을 바꿔준다.
 	if (boss::isChangeAni)	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
 	{
@@ -170,14 +190,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 				if (boss::isClosePlayer)
 				{
 					boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Left");
-					boss::ani->start();
+					//boss::ani->start();
 				}
 
 				// 플레이어와의 거리가 멀 경우 데스메탈은 쉐도우 상태 이미지이다.
 				else
 				{
 					boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SLeft");
-					boss::ani->start();
+					//boss::ani->start();
 				}
 			}
 
@@ -191,14 +211,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 					if (!boss::isCasting)
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Idle");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 
 					// 마법 캐스팅 중일때는 공격 모션
 					else
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Attack");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 				}
 
@@ -209,14 +229,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 					if (!boss::isCasting)
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SIdle");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 
 					// 마법 캐스팅 중일때는 공격 모션
 					else
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SAttack");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 				}
 			}
@@ -233,14 +253,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 				if (boss::isClosePlayer)
 				{
 					boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Up");
-					boss::ani->start();
+					//boss::ani->start();
 				}
 
 				// 플레이어와의 거리가 멀 경우 데스메탈은 쉐도우 상태 이미지이다.
 				else
 				{
 					boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SUp");
-					boss::ani->start();
+					//boss::ani->start();
 				}
 			}
 
@@ -254,14 +274,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 					if (!boss::isCasting)
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Idle");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 
 					// 마법 캐스팅 중일때는 공격 모션
 					else
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Attack");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 				}
 
@@ -272,14 +292,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 					if (!boss::isCasting)
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SIdle");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 
 					// 마법 캐스팅 중일때는 공격 모션
 					else
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SAttack");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 				}
 			}
@@ -297,14 +317,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 				if (boss::isClosePlayer)
 				{
 					boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Right");
-					boss::ani->start();
+					//boss::ani->start();
 				}
 
 				// 플레이어와의 거리가 멀 경우 데스메탈은 쉐도우 상태 이미지이다.
 				else
 				{
 					boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SRight");
-					boss::ani->start();
+					//boss::ani->start();
 				}
 			}
 
@@ -318,14 +338,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 					if (!boss::isCasting)
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Idle");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 
 					// 마법 캐스팅 중일때는 공격 모션
 					else
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Attack");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 				}
 
@@ -336,14 +356,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 					if (!boss::isCasting)
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SIdle");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 
 					// 마법 캐스팅 중일때는 공격 모션
 					else
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SAttack");
-						boss::ani->start();
+						//boss::ani->start();
 
 					}
 				}
@@ -361,14 +381,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 				if (boss::isClosePlayer)
 				{
 					boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Down");
-					boss::ani->start();
+					//boss::ani->start();
 				}
 
 				// 플레이어와의 거리가 멀 경우 데스메탈은 쉐도우 상태 이미지이다.
 				else
 				{
 					boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SDown");
-					boss::ani->start();
+					//boss::ani->start();
 				}
 			}
 
@@ -382,14 +402,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 					if (!boss::isCasting)
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Idle");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 
 					// 마법 캐스팅 중일때는 공격 모션
 					else
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_Attack");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 				}
 
@@ -400,14 +420,14 @@ void deathMetal::deathMetal_ChangeAnimation()
 					if (!boss::isCasting)
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SIdle");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 
 					// 마법 캐스팅 중일때는 공격 모션
 					else
 					{
 						boss::ani = KEYANIMANAGER->findAnimation("deathMetal_SAttack");
-						boss::ani->start();
+						//boss::ani->start();
 					}
 				}
 			}
@@ -419,6 +439,13 @@ void deathMetal::deathMetal_ChangeAnimation()
 			}
 			boss::isChangeAni = false;		// 보스의 움직임에 따라 애니메이션을 바꿔주었다면, 다음 움직임까지 false를 주어서 다시 바뀌지 않게 한다.
 		}
+	}
+
+	// ture의 값일때 한번만 스타트 해주고 다시 false로
+	if (boss::change_Ani)
+	{
+		boss::change_Ani = false;
+		boss::ani->start();
 	}
 }
 

@@ -302,7 +302,7 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 			{
 				distanceCheck = true;
 				deathMetal->setBoss_ClosePlayer(true);
-				deathMetal->ChangeAni();
+				//deathMetal->ChangeAni();
 			}
 		}
 
@@ -313,7 +313,7 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 			{
 				distanceCheck = false;
 				deathMetal->setBoss_ClosePlayer(false);
-				deathMetal->ChangeAni();
+				//deathMetal->ChangeAni();
 			}
 		}
 	}
@@ -334,7 +334,7 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 			{
 				distanceCheck = true;
 				deathMetal->setBoss_ClosePlayer(true);
-				deathMetal->ChangeAni();
+				//deathMetal->ChangeAni();
 			}
 		}
 	
@@ -345,7 +345,7 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 			{
 				distanceCheck = false;
 				deathMetal->setBoss_ClosePlayer(false);
-				deathMetal->ChangeAni();
+				//deathMetal->ChangeAni();
 			}
 		}
 	}
@@ -456,9 +456,11 @@ void bossStageScene::closePlayer(player* player, slave* slave)
 
 void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanager* ui)
 {
+
 	// 보스의 인덱스에서 플레이어의 인덱스를 빼서 값을 담아둔다. (플레이어의 위치를 찾고, 어느 방향이 가까운지 비교에서 사용할 것)
 	int x = deathMetal->getBoss_Index().x - player->getPlayer().idx;
 	int y = deathMetal->getBoss_Index().y - player->getPlayer().idy;
+
 
 	// x가 짧다면 flase, y가 짧다면 true의 값을 저장한다.
 	bool x_OR_y = false; 
