@@ -14,6 +14,7 @@ void Enemy::relase()
 void Enemy::update()
 {
 	AniChange();
+	Move();
 }
 
 void Enemy::render()
@@ -23,7 +24,17 @@ void Enemy::render()
 
 void Enemy::Action()
 {
-
+	switch (_enemyInfo->state)
+	{
+	case enemyState::STATE_IDLE:
+		break;
+	case enemyState::STATE_MOVE:
+		break;
+	case enemyState::STATE_ATTACK:
+		break;
+	case enemyState::STATE_DIE:
+		break;
+	}
 }
 
 void Enemy::Move()

@@ -8,6 +8,11 @@ HRESULT Enemy_Dragon::init()
 	return S_OK;
 }
 
+void Enemy_Dragon::Move()
+{
+	//두 박자마다 플레이어를 쫓아 움직인다 모든 종류의 벽을 부술 수 있다.
+}
+
 void Enemy_Dragon::AniChange()
 {
 	switch (_enemyInfo->direction)

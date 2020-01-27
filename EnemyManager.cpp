@@ -25,6 +25,7 @@ void EnemyManager::update()
 	{
 		(*_viEnemy)->update();
 	}
+	
 }
 
 void EnemyManager::render()
@@ -82,10 +83,9 @@ void EnemyManager::imageAdd()
 	IMAGEMANAGER->addFrameImage("Enemy_minotaur", "./image./Enemy/minotaur.bmp", 1800, 196, 18, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_skeleton", "./image./Enemy/skeleton.bmp", 768, 100, 16, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_skeleton_yellow", "./image./Enemy/skeleton_yellow.bmp", 816, 100, 17, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_slime_blue", "./image./Enemy/slime_blue.bmp", 832, 100, 16, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_slime_orange", "./image./Enemy/slime_orange.bmp", 416, 104, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_slime_blue", "./image./Enemy/slime_blue.bmp", 416, 100, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_slime_orange", "./image./Enemy/slime_orange.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_wraith", "./image./Enemy/wraith.bmp", 288, 96, 6, 2, true, RGB(255, 0, 255));
-	
 	IMAGEMANAGER->addFrameImage("Enemy_zombie", "./image./Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
 
 }
@@ -142,7 +142,7 @@ void EnemyManager::Enemy_Slime_Orange_Create(float x, float y)
 {
 	Enemy* Slime_Orange;
 	Slime_Orange = new Enemy_Slime_Orange;
-	Slime_Orange->EnemyCreate(x, y, 1.0f, 0.5f);
+	Slime_Orange->EnemyCreate(x, y, 1.0f, 0.5f,Direction::RIGHT);
 	_vEnemy.push_back(Slime_Orange);
 }
 void EnemyManager::Enemy_Wraith_Create(float x, float y)
@@ -254,22 +254,14 @@ void EnemyManager::AnimationAdd()
 	KEYANIMANAGER->addArrayFrameAnimation("skeleton_yellow_Shadow_RUNAWAY_Ani", "Enemy_skeleton_yellow", skeleton_yellow_Shadow_RUNAWAY, 1, 10, true);
 	//==============================파랑 슬 라 임 애 니 메 이 션======================================
 	int Enemy_slime_blue_L_IDLE[] = { 0,1,2,3,4,5,6,7 };
-	int Enemy_slime_blue_R_IDLE[] = { 15,14,13,12,11,10,9,8 };
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_blue_L_IDLE_Ani", "Enemy_slime_blue", Enemy_slime_blue_L_IDLE, 8, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_blue_R_IDLE_Ani", "Enemy_slime_blue", Enemy_slime_blue_R_IDLE, 8, 10, true);
-	int Enemy_slime_blue_L_Shadow_IDLE[] = {  16,17,18,19,20,21,22,23};
-	int Enemy_slime_blue_R_Shadow_IDLE[] = { 31,30,29,28,27,26,25,24};
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_blue_L_Shadow_IDLE_Ani", "Enemy_slime_blue", Enemy_slime_blue_L_Shadow_IDLE, 8, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_blue_R_Shadow_IDLE_Ani", "Enemy_slime_blue", Enemy_slime_blue_R_Shadow_IDLE, 8, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_blue_IDLE_Ani", "Enemy_slime_blue", Enemy_slime_blue_L_IDLE, 8, 10, true);
+	int Enemy_slime_blue_L_Shadow_IDLE[] = {8,9,10,11,12,13,14,15};
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_blue_Shadow_IDLE_Ani", "Enemy_slime_blue", Enemy_slime_blue_L_Shadow_IDLE, 8, 10, true);
 	//==============================노랑 슬라임 애 니 메 이 션========================================
 	int Enemy_slime_orange_L_IDLE[] = { 0,1,2,3 };
-	int Enemy_slime_orange_R_IDLE[] = { 7,6,5,4 };
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_orange_L_IDLE_Ani", "Enemy_slime_orange", Enemy_slime_orange_L_IDLE, 4, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_orange_R_IDLE_Ani", "Enemy_slime_orange", Enemy_slime_orange_R_IDLE, 4, 10, true);
-	int Enemy_slime_orange_L_Shadow_IDLE[] = { 8,9,10,11 };
-	int Enemy_slime_orange_R_Shadow_IDLE[] = { 15,14,13,12};
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_orange_L_Shadow_IDLE_Ani", "Enemy_slime_orange", Enemy_slime_orange_L_Shadow_IDLE, 4, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_orange_R_Shadow_IDLE_Ani", "Enemy_slime_orange", Enemy_slime_orange_R_Shadow_IDLE, 4, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_orange_IDLE_Ani", "Enemy_slime_orange", Enemy_slime_orange_L_IDLE, 4, 10, true);
+	int Enemy_slime_orange_L_Shadow_IDLE[] = { 4,5,6,7 };
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_slime_orange_Shadow_IDLE_Ani", "Enemy_slime_orange", Enemy_slime_orange_L_Shadow_IDLE, 4, 10, true);
 	//==============================레 이 스 애 니 메 이 션============================================
 	int Enemy_wraith_L_IDLE[] = { 0,1,2 };
 	int Enemy_wraith_R_IDLE[] = { 5,4,3};

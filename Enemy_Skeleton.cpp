@@ -8,6 +8,11 @@ HRESULT Enemy_Skeleton::init()
 	return S_OK;
 }
 
+void Enemy_Skeleton::Move()
+{
+	//두 박자마다 플레이어를 쫓아 움직인다.
+}
+
 void Enemy_Skeleton::AniChange()
 {
 	switch (_enemyInfo->direction)

@@ -12,16 +12,17 @@ enum class Direction
 };
 struct EnemyInfo
 {
-	enemyState state;
-	Direction direction;
-	animation* animation;
+	enemyState state;					//enemy의 상태를 지정할 enum문
+	Direction direction;				//enemy의 방향을 지정할 enum문
+	animation* animation;	
 	image* image;
-	float x, y;
+	float x, y;			
 	RECT rc;
-	RECT discoveryRc;
+	RECT discoveryRc;					//플레이어를 발견할 인식 범위
 	float HP;
 	float damage;
-	bool Light;
+	bool Light;							//시야 안에 있는지 여부를 판단하기 위한 bool값
+	bool aniChange;						//애니메이션을 바꿨는지 판단하기 위한 bool값
 };
 
 class Enemy:public gameNode
@@ -39,10 +40,10 @@ public:
 	virtual void update();
 	virtual void render();
 	
-	virtual void Action();
-	virtual void Move();
-	virtual void AniChange();
-	virtual void Attack();
+	virtual void Action();				//enemy의 상태를 바꿔주기 위한 함수
+	virtual void Move();				//enemy의 움직임 패턴을 구현할 함수
+	virtual void AniChange();			//enemy의 애니메이션을 바꿔주기 위한 함수
+	virtual void Attack();				//enemy의 공격을 구현할 함수
 
 	//Enemy생성 함수 (float x, float y, float HP, float damage, const char* enemyName)
 	virtual void EnemyCreate(float x, float y, float HP,float damage);

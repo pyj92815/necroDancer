@@ -8,6 +8,11 @@ HRESULT Enemy_Ghost::init()
 	return S_OK;
 }
 
+void Enemy_Ghost::Move()
+{
+	//한 박자마다 플레이어를 쫓아 움직인다.
+}
+
 void Enemy_Ghost::AniChange()
 {
 	switch (_enemyInfo->direction)

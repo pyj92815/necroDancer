@@ -8,6 +8,29 @@ HRESULT Enemy_Bat::init()
 	return S_OK;
 }
 
+void Enemy_Bat::Move()
+{
+	//박쥐는 두 박자마다 랜덤방향으로 한칸씩 이동한다.
+	int rand_Num = RND->getInt(4);
+	if (rand_Num == 0)
+	{
+		//좌로 이동
+	}
+	else if (rand_Num == 1)
+	{
+		//우로 이동
+	}
+	else if (rand_Num == 2)
+	{
+		//위로 이동
+	}
+	else if (rand_Num == 3)
+	{
+		//아래로 이동
+	}
+
+}
+
 void Enemy_Bat::AniChange()
 {
 	switch (_enemyInfo->direction)

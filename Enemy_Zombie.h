@@ -5,6 +5,7 @@ class Enemy_Zombie:public Enemy
 {
 public:
 	HRESULT init();
+	void Move();
 	void AniChange();
 };
 
