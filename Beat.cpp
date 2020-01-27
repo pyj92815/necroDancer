@@ -56,7 +56,7 @@ void Beat::render()
         for (int i = 0; i < _vNoteLeft.size(); i++)
         {
             if (!_vNoteLeft[i].isRender) continue;
-            //Rectangle(getMemDC(), _noteLeft[i].rc);
+            Rectangle(_backBuffer->getMemDC(), _vNoteLeft[i].rc);
             _vNoteLeft[i].img->alphaRender(_backBuffer->getMemDC(), _vNoteLeft[i].rc.left, _vNoteLeft[i].rc.top, _vNoteLeft[i].alpha);
         }
     }
@@ -65,7 +65,7 @@ void Beat::render()
         for (int i = 0; i < _vNoteRight.size(); i++)
         {
             if (!_vNoteRight[i].isRender) continue;
-            //Rectangle(getMemDC(), _noteRight[i].rc);
+            Rectangle(_backBuffer->getMemDC(), _vNoteRight[i].rc);
             _vNoteRight[i].img->alphaRender(_backBuffer->getMemDC(), _vNoteRight[i].rc.left, _vNoteRight[i].rc.top, _vNoteRight[i].alpha);
         }
     }
@@ -75,7 +75,7 @@ void Beat::render()
         (*_viEffect)->render(_backBuffer->getMemDC());
     }
 
-    //Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
+    Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
     IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
     render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
@@ -85,7 +85,7 @@ void Beat::HitNoteEffect(float x, float y)
     if (!_effect) return;
     alphaImageEffect* noteHitEffect;
     noteHitEffect = new alphaImageEffect;
-    noteHitEffect->init("GreenNote", x, y, 5, true);
+    noteHitEffect->init("GreenNote", x, y, 5,STOP);
     _vEffect.push_back(noteHitEffect);
     _effect = false;
 }
@@ -194,6 +194,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             if (_vNoteRight[i].pos.x <= WINSIZEX / 2) // 오른쪽으로 나오는 노트가 중점 x값보다 작은 경우 (노트가 중점을 넘을 때)
             {
                 _vNoteRight.erase(_vNoteRight.begin() + i); // 넘어간 노트 삭제
+				_player->setPlayerKeyDown();
                 if (_vNoteRight.size() <= 0) break; // 노트 벡터의 크기가 0 이하일때 충돌을 막기 위해 Break; <이거 안하면 밑에 이동하는 코드에 접근하고 터져버림>
 
                 if (_countNote < _countComma - 3) // 노트 생성 수가 노트 정보 길이 - 3보다 작은 경우(노트 개수 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌))
@@ -221,6 +222,8 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
 
                 if (_player->getPlayerKey() && _vNoteRight[i].isRender && inputIntervalCount > 0)
                 {
+					//락훈 추가 
+					_player->setPlayerKey();
                     HitNoteEffect(_vNoteRight[i].pos.x, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteRight[i].rc.bottom - _vNoteRight[i].rc.top) / 2));
                     _vNoteRight[i].isRender = false;
                     _effect = true;
@@ -268,6 +271,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
 
                 if (_player->getPlayerKey() && _vNoteLeft[i].isRender && inputIntervalCount > 0)
                 {
+					_player->setPlayerKey();
                     HitNoteEffect(_vNoteLeft[i].pos.x, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteLeft[i].rc.bottom - _vNoteLeft[i].rc.top) / 2));
                     _vNoteLeft[i].isRender = false;
                     _effect = true;
@@ -280,7 +284,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
     {
         (*_viEffect)->update();
     }
-    if (inputIntervalCount > 0.0f)
+    if (inputIntervalCount > 0.000f)
     {
         Imterval = true;
     }

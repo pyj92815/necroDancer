@@ -26,7 +26,6 @@ HRESULT gameNode::init()
 
 	_hdc = GetDC(_hWnd);
 	_managerInit = false;
-	
 	return S_OK;
 }
 
@@ -37,7 +36,6 @@ HRESULT gameNode::init(bool managerInit)
 
 	if (_managerInit)
 	{
-		
 		KEYMANAGER->init();
 		IMAGEMANAGER->init();
 		TXTDATA->init();
@@ -49,7 +47,6 @@ HRESULT gameNode::init(bool managerInit)
 		INIDATAMANAGER->init();
 		CAMERAMANAGER->init();
 		BEATMANAGER->init();
-
 	}
 
 	return S_OK;
@@ -91,6 +88,7 @@ void gameNode::update()
 	cvSetMouseCallback(WINNAME, CallBackFunc, NULL); // 위치 좌표를 넣기 위한 값 
 	SOUNDMANAGER->update();
 	KEYANIMANAGER->update();
+	EFFECTMANAGER->update();
 }
 
 void gameNode::render()

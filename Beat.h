@@ -12,7 +12,7 @@ class alphaEffect;
 
 #define WINSIZEX_HALF WINSIZEX / 2	// 윈도우 가로 사이즈 절반
 #define NOTE_INTERVAL WINSIZEX_HALF / 4 // 노트 사이 간격
-#define NOTE_RADIUS_X 5 // 노트 하나의 가로 반지름 길이
+#define NOTE_RADIUS_X 6 // 노트 하나의 가로 반지름 길이
 #define HEARTFRAME_RATE 20 // 심장 박동 프레임 지연 시간
 
 class gameNode;

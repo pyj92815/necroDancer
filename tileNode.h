@@ -87,6 +87,14 @@ enum OBJECT
 	OBJ_WEAPON, W_ARMOR								//아이탬(방어구)
 };
 
+enum ITEMWEAPON
+{
+	DAGGER,
+	SPEAR,
+	RAPIER,
+	LONGSWORD
+};
+
 enum TRAP
 {
 	TRAP_FAST_BEAT, TRAP_SLOW_BEAT, TRAP_MUTE,		//리듬 템포 함정 및 음소거 함정
@@ -176,4 +184,13 @@ struct tagMouse
 {
 	RECT rc;
 	POINT XY;
+};
+
+// 락훈 추가
+enum EFFECTTYPE
+{
+	TIMESLOW,// 시간이 지나면 사라짐				// 삽    
+	SLOW,	 // 서서히 위로 올라가면서 사라짐		// 빗나감
+	STOP,	 // 가만히 자리에서 사라짐			// 비트
+	FRAMEIMAGE,
 };

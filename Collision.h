@@ -41,5 +41,14 @@ public:
 	// 맵 정보, 캐릭터 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
 	bool collision_Charactor_Object(vector<tagTile>* mapInfo, deathMetal* deathMetalInfo);
 
+	//락훈추가
+	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 플레이어 타일 충돌 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+	//하나로
+	map<PLAYERDIRECTION, tagTile*>  collision_player_tile(vector<tagTile*>* mapInfo, player* playerInfo);
+
+	map<PLAYERDIRECTION, Enemy*>  collision_player_Enemy_tile(vector<tagTile*>* mapInfo, player* playerInfo, PLAYERWAEPON weapon, Enemy* enemy);
+
+
 };
 
