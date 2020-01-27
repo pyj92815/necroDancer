@@ -19,8 +19,8 @@ private:
 	//HDC _mapToolDC;
 	//image* _mapToolImage;
 
-	bool isCameraMoveX;
-	bool isCameraMoveY;
+	bool _isCameraMoveX;
+	bool _isCameraMoveY;
 
 public:
 	cameraManager();
@@ -71,5 +71,8 @@ public:
 
 	void CameraMapTool_Correction();
 	void CameraMapTool_Move();
+
+	//카메라 흔들리는보정 
+	void Camera_WorldDC_Shake();
 };
 

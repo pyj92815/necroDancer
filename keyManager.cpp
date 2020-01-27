@@ -72,3 +72,19 @@ bool keyManager::isToggleKey(int key)
 
 	return false;
 }
+
+bool keyManager::isOncekeytwoDown(int one, int two)
+{
+	if (GetAsyncKeyState(one) & 0x8000 && GetAsyncKeyState(two) & 0x8000)
+	{
+		if (!this->getKeyDown()[one] && !this->getKeyDown()[two])
+		{
+			this->setKeyTwoDown(one, two, true);
+
+			return true;
+		}
+	}
+	else this->setKeyTwoDown(one, two, false);
+
+	return false;
+}

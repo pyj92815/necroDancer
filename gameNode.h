@@ -26,7 +26,6 @@ class gameNode
 private:
 	HDC _hdc;
 	bool _managerInit;
-	
 
 public:
 	gameNode();

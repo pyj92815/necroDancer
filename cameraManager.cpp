@@ -14,8 +14,8 @@ cameraManager::cameraManager()
 	_worldImage = IMAGEMANAGER->addImage("worldMap",5200, 5200);
 	_worldDC = _worldImage->getMemDC();
 
-	isCameraMoveX = false;
-	isCameraMoveY = false;
+	_isCameraMoveX = false;
+	_isCameraMoveY = false;
 
 	/*_mapToolImage = new image;
 	_mapToolImage = IMAGEMANAGER->addImage("mapToolMap", 5200, 5200);
@@ -73,35 +73,36 @@ void cameraManager::set_CameraXY(float x, float y)
 	float winX = (x - _cameraSizeX / 2.0f); // 카메라의 시작위치 X
 	float winY = (y - _cameraSizeY / 2.0f); // 카메라의 시작위치 Y
 
-	_cameraX > winX ? isCameraMoveX = true : isCameraMoveX = false;
-	_cameraY > winY ? isCameraMoveY = true : isCameraMoveY = false;
+	_cameraX > winX ? _isCameraMoveX = true : _isCameraMoveX = false;
+	_cameraY > winY ? _isCameraMoveY = true : _isCameraMoveY = false;
 
 	//카메라의 Y 
-	if (isCameraMoveY)
+	if (_isCameraMoveY)
 	{
-		_cameraY -= 2.5f;
+		_cameraY -= 3.0f;
 		if (_cameraY < winY) _cameraY = winY;	
 	}
 	else
 	{
-		_cameraY += 2.5f;
+		_cameraY += 3.0f;
 		if (_cameraY > winY) _cameraY = winY;
 	}
 
 	//카메라의 X 
-	if (isCameraMoveX)
+	if (_isCameraMoveX)
 	{
-		_cameraX -= 2.5f;
+		_cameraX -= 3.0f;
 		if (_cameraX < winX) _cameraX = winX;
 	}
 	else
 	{
-		_cameraX += 2.5f;
+		_cameraX += 3.0f;
 		if (_cameraX > winX) _cameraX = winX;
 	}
 
 	/*_cameraX = x - _cameraSizeX / 2.0f;
 	_cameraY = y - _cameraSizeY / 2.0f;*/
+
 	Camera_Correction();
 }
 
@@ -191,6 +192,14 @@ void cameraManager::CameraMapTool_Correction()
 
 void cameraManager::CameraMapTool_Move()
 {
+}
+
+void cameraManager::Camera_WorldDC_Shake()
+{
+	// 0.0 camerax,y 에서는 충돌처리가 안됨 
+	set_CameraXY(_cameraX+RND->getFromFloatTo(-3, 3), _cameraY+ RND->getFromFloatTo(-3, 3));
+	set_CameraXY(_cameraX + RND->getFromFloatTo(-3, 3), _cameraY + RND->getFromFloatTo(-3, 3));
+	set_CameraXY(_cameraX + RND->getFromFloatTo(-3, 3), _cameraY + RND->getFromFloatTo(-3, 3));
 }
 
 

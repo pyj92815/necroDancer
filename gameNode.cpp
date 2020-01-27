@@ -23,9 +23,9 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 
 HRESULT gameNode::init()
 {
-
 	_hdc = GetDC(_hWnd);
 	_managerInit = false;
+	
 	return S_OK;
 }
 
@@ -204,4 +204,6 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 
 	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
+
+
 

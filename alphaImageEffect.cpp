@@ -61,14 +61,14 @@ void alphaImageEffect::update()
 		switch (_type)
 		{
 		case TIMESLOW:
-			if (!BEATMANAGER->getInterval())
+			if (_time + 0.25f <= TIMEMANAGER->getWorldTime())
 			{
 				_isRunning = false;
 				this->release();
 			}
 			break;
 		case SLOW:
-			_y -= 15 * TIMEMANAGER->getElapsedTime();
+			_y -= 20 * TIMEMANAGER->getElapsedTime();
 
 			_alphaValue -= _speed;
 			if (_alphaValue < 10)

@@ -33,7 +33,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	// 플레이어 상태
 	_player.direction = PLAYERDIRECTION_RIGHT;
 	_player.sight = 7;
-	_player.weapon = PLAYERWAEPON_RAPIER;
+	_player.weapon = PLAYERWAEPON_NONE;
 	//오른쪽 
 	int headRight[] = { 0,1,2,3,4,5,6,7 };
 	KEYANIMANAGER->addArrayFrameAnimation("headRight", "player1_heads", headRight, 8, 10, true);
@@ -106,7 +106,7 @@ void player::update()
 	}
 	if (KEYMANAGER->isOnceKeyDown('A'))
 	{
-
+		
 	}
 
 }
@@ -133,8 +133,6 @@ void player::playerMove()
 	//이미지를 도착지점까지 각도와 속도를 맞춰서 원하는 시간에 도달케 한다
 	_player.x = _player.x + cosf(_angle) * moveSpeed;
 	_player.y = _player.y + (-sinf(_angle) * moveSpeed);
-
-	float time = TIMEMANAGER->getElapsedTime();
 
 	// 만약 월드 시간이 도달하면 
 	if (_time + _worldTimeCount <= TIMEMANAGER->getWorldTime())
@@ -164,6 +162,8 @@ void player::playerShovelEffect(tagTile* tile)
 	effect = new alphaImageEffect;
 	effect->init("shovel_basic", tile->rc.left,tile->rc.top, 10,TIMESLOW);
 	_vEffect.push_back(effect);
+	CAMERAMANAGER->Camera_WorldDC_Shake(); // 문제는 예외처리 때문에 카메라 0,0에서는 작동 안함 
+
 }
 
 void player::playerAttackEffect(const char* imageName,tagTile* tile, int frameY)
@@ -194,7 +194,17 @@ void player::keyControl()
 {
 	if (!_isKeyDown)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
+		{
+			_isKeyDown = true;
+			cout << "이건 체력 키 " << endl;
+		}
+		else if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_DOWN))
+		{
+			_isKeyDown = true;
+			cout << "이건 폭탄 키 " << endl;
+		}
+		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
 			_player.direction = PLAYERDIRECTION_UP; 
 			_isKeyDown = true;
@@ -246,6 +256,7 @@ void player::keyControl()
 				playerMissEffect();
 			}
 		}
+	
 	}
 
 	if (KEYMANAGER->isOnceKeyUp(VK_UP))
