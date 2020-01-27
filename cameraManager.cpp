@@ -183,14 +183,31 @@ void cameraManager::CameraMapTool_Correction()
 	}
 	if (_cameraY + _cameraSizeY > 5200)
 	{
-	
 		_cameraY = 5200 - _cameraSizeY;
 	}
-	cout << "5200 넘냐 안넘냐 : " << _cameraX + _cameraSizeX << endl;
+	//cout << "5200 넘냐 안넘냐 : " << _cameraX + _cameraSizeX << endl;
 }
 
 void cameraManager::CameraMapTool_Move()
 {
+}
+
+void cameraManager::set_CameraPos_Update(float x, float y)
+{
+	_cameraX = x;
+	_cameraY = y; 
+
+	if (_cameraX < 0) _cameraX = 0;
+	if (_cameraY < 0) _cameraY = 0;
+	if (_cameraX + _cameraSizeX > 5200)
+	{
+		_cameraX = 5200 - _cameraSizeX;
+	}
+	if (_cameraY + _cameraSizeY > 5200)
+	{
+
+		_cameraY = 5200 - _cameraSizeY;
+	}
 }
 
 

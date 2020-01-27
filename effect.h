@@ -9,7 +9,7 @@ protected:
 	int			_x;
 	int			_y;
 
-	image* _effectImage;
+	image*		  _effectImage;
 	animation* _effectAnimation;
 	BOOL		_isRunning;
 	BOOL	    _last;

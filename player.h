@@ -2,7 +2,8 @@
 #include "gameNode.h"
 #include "animation.h"
 #include "jump.h"
-#include "action.h"		    // 보간개념 이동할때 사용하기 위한 
+#include "action.h"			   // 보간개념 이동할때 사용하기 위한 
+#include "alphaImageEffect.h"  // 이펙트 사용
 
 enum PLAYERSTATE	// (미사용) 추후 수정 예정 
 {
@@ -23,6 +24,7 @@ struct tagPlayer
 	image* bodyImage;		// 몸통 
 	RECT rc;				// RECT
 	float x, y;				// 좌표 X,Y  
+
 	int idx, idy;			// 타일의 인덱스 번호 
 	int count;				// 프레임 카운터 
 	int currnetFrameX, currnetFrameY;	// 프레임 X,Y
@@ -45,6 +47,13 @@ private:
 
 	bool _isMoving;			// BOOL 선형보간이동
 	bool _isKeyPress;		// KEY 입력중 판단 
+
+	alphaImageEffect* _effect;
+	vector<alphaImageEffect*>		     _vEffect;  // 빗나감 이펙트 
+	vector<alphaImageEffect*>::iterator _viEffect;
+
+	const char* _miss;
+	bool _isMiss;
 public:
 	player();
 	~player();
@@ -55,9 +64,12 @@ public:
 	void render();
 
 	void playerMove();
+	void playerMiss();
 	void keyControl();
 	//접근자 
-	tagPlayer getPlayer() { return _player; }	// 플레이어 값 반환 
-	int getSight() { return _player.sight; }	// 시야 값 반환 
+	tagPlayer getPlayer() { return _player; }			// 플레이어 값 반환 
+	int getSight() { return _player.sight; }			// 시야 값 반환 
 	PLAYERSTATE getState() { return _player.state; }	// 플레이어의 상태 값 반환 (HG가 추가했음)
+	bool getPlayerKey() { return _isKeyPress; }
+	float* getPlayerY() { return &_player.y; }
 };

@@ -1,18 +1,29 @@
 #pragma once
 #include "gameNode.h"
 #include "deathMetal.h"
-#include "bossStageTestTile.h"											// 이후에 영주가 만든 타일 헤더로 교체 해야한다.
+
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinmainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+
+class stageScene;
+class UImanager;
+class player;
 
 class bossStageScene : public gameNode
 {
 private:
-	bossStageTestTile*		_bossStageTile;								// 보스 스테이지의 타일을 생성
-	vector<tile*>			_vTotalList;								// 보스 스테이지의 타일 정보를 복사한다.
-	
-	tile					_BSTList[TESTTILESIZE][TESTTILESIZE];		// 임시 사이즈만큼 공간을 만든다. (이후에 자료형 바꿔야함)
-	vector<tile*>			_vBSTList;									// 보스 스테이지 타일 리스트를 담는다. (벡터 자료형은 영주가 만든 타일 자료형으로 교체해야한다.)
+	tagTile							_tiles[TILEX * TILEY];			// 맵을 받아 올 타일 변수
+	vector<tagTile>					_vTotalList;					// 보스 스테이지의 타일 정보 벡터로 저장해서 사용한다.
+	vector<tagTile>::iterator		_viTotalList;
 
-	deathMetal*				_deathMetal;								// 데스메탈
+	deathMetal*						_deathMetal;					// 데스메탈
+	player*							_player;						// 플레이어	
+	stageScene*						_stageScene;
+	UImanager*						_ui;
+		
 public:
 	bossStageScene();
 	~bossStageScene();
@@ -27,7 +38,11 @@ public:
 	// 맵 속성에 따라 이미지가 출력하게 만들까?
 	// 타일 자체에 이미지를 저장할까? 그 타일 위치 위에 캐릭터의 렉트에 이미지를 그릴까?
 	// 이동을 할 때마다 그 타일의 속성을 바꿔줘야한다.
-	void bossStageMap_Load();											// 보스 스테이지 맵을 불러와서 저장한다.
 
+	void bossStageMap_Load();											// 보스 스테이지 맵을 벡터 형식으로 저장한다.
+	void findTileImage();												// 타일 이미지를 찾아준다.
+	void z_Order_Player_Boss();											// 플레이어와 보스의 z오더
+
+	void stageSceneAddressLink(stageScene* stageScene) { _stageScene = stageScene; }
 };
 

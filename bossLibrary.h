@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 
+
 // 보스 종류
 enum BOSSTYPE
 {

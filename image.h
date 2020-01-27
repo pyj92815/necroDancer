@@ -95,6 +95,10 @@ public:
 	void frameRender(HDC hdc, int destX, int destY);
 	//이미지 프레임 렌더(뿌려질DC, 뿌려질left, 뿌려질top, 프레임X번호, 프레임Y번호
 	void frameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
+	//이미지 프레임 렌더(뿌려질DC, 뿌려질left, 뿌려질bottom, 프레임X번호, 프레임Y번호)
+	void frameBottomRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
+	//이미지 프레임 렌더(뿌려질DC, 뿌려질left, 뿌려질bottom, 프레임X번호, 프레임Y번호)
+	void frameWallBottomRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
 
 	void loopRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY);
 
@@ -120,8 +124,7 @@ public:
 	void scaleRender(HDC hdc, int destX, int destY, int scaleX, int scaleY);
 
 	void aniRender(HDC hdc, int destX, int destY, animation* ani);
-
-
+	
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 	inline HBITMAP getHBit() { return _imageInfo->hBit; }
 	inline DWORD getResID() { return _imageInfo->resID; }

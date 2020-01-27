@@ -46,6 +46,7 @@ bool keyManager::isOnceKeyDown(int key)
 
 bool keyManager::isOnceKeyUp(int key)
 {
+	// 어떠한 키를 눌렀을때, 눌러졌다고 신호를 보낸다.
 	if (GetAsyncKeyState(key) & 0x8000) this->setKeyUp(key, true);
 	else
 	{

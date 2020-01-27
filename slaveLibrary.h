@@ -1,0 +1,20 @@
+#pragma once
+
+// 슬레이브 종류
+enum SLAVETYPE
+{
+	SLAVE_BAT,
+	SLAVE_GHOST,
+	SLAVE_SKELETON,
+	SLAVE_SKELETON_YELLOW,
+	SLAVE_NONE
+};
+
+// 슬레이브 방향
+enum SLAVEDIRECTION
+{
+	SD_LEFT,
+	SD_UP,
+	SD_RIGHT,
+	SD_DOWN
+};

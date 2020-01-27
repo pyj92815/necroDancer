@@ -48,6 +48,7 @@ HRESULT gameNode::init(bool managerInit)
 		KEYANIMANAGER->init();
 		INIDATAMANAGER->init();
 		CAMERAMANAGER->init();
+		BEATMANAGER->init();
 
 	}
 

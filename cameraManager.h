@@ -71,5 +71,7 @@ public:
 
 	void CameraMapTool_Correction();
 	void CameraMapTool_Move();
+
+	void set_CameraPos_Update(float x, float y);
 };
 

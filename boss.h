@@ -65,6 +65,7 @@ public:
 	int getBoss_Shield() { return shield; }																			// 보스의 실드를 받아온다.
 	float getBoss_Atk() { return attack; }																			// 보스의 공격력을 받아온다.
 	float getBoss_MegicAtk() { return magicAttack; }
+	BOSS_DIRECTION getBoss_Direction() { return direction; }														// 보스가 바라보는 방향을 받아온다.
 
 	RECT getBoss_Rect() { return rc; }																				// 보스의 렉트를 받아온다.
 	POINTFLOAT getBoss_Center() { return center; }																	// 보스의 중점을 받아온다.
