@@ -14,6 +14,7 @@ void Enemy::relase()
 void Enemy::update()
 {
 	AniChange();
+	Action();
 	Move();
 }
 
@@ -75,4 +76,40 @@ void Enemy::EnemyCreate(float x, float y, float HP, float damage, Direction dire
 	_enemyInfo->damage = damage;
 	_enemyInfo->rc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52, 52);
 	_enemyInfo->discoveryRc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52 * 7, 52 * 7);
+
+	//x,y 중점에서 + 이미지 크기 x-이미지 절반 크기
+}
+
+void Enemy::EnemyCreate(float x, float y, float HP, float damage, const char* enemyName, const char* enemyAnimation)
+{
+	ZeroMemory(&_enemyInfo, sizeof(_enemyInfo));
+	_enemyInfo = new EnemyInfo;
+	_enemyInfo->direction = Direction::LEFT;
+	_enemyInfo->state = enemyState::STATE_IDLE;
+	_enemyInfo->x = x;
+	_enemyInfo->y = y;
+	_enemyInfo->HP = HP;
+	_enemyInfo->damage = damage;
+	_enemyInfo->image = IMAGEMANAGER->findImage(enemyName);
+	_enemyInfo->animation = KEYANIMANAGER->findAnimation(enemyAnimation);
+	_enemyInfo->rc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52, 52);
+	_enemyInfo->discoveryRc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52 * 7, 52 * 7);
+	_enemyInfo->animation->start();
+}
+
+void Enemy::EnemyCreate(float x, float y, float HP, float damage, const char* enemyName, const char* enemyAnimation, Direction direction)
+{
+	ZeroMemory(&_enemyInfo, sizeof(_enemyInfo));
+	_enemyInfo = new EnemyInfo;
+	_enemyInfo->direction = direction;
+	_enemyInfo->state = enemyState::STATE_IDLE;
+	_enemyInfo->x = x;
+	_enemyInfo->y = y;
+	_enemyInfo->HP = HP;
+	_enemyInfo->damage = damage;
+	_enemyInfo->image = IMAGEMANAGER->findImage(enemyName);
+	_enemyInfo->animation = KEYANIMANAGER->findAnimation(enemyAnimation);
+	_enemyInfo->rc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52, 52);
+	_enemyInfo->discoveryRc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52 * 7, 52 * 7);
+	_enemyInfo->animation->start();
 }

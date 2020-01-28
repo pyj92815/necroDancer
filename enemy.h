@@ -45,9 +45,14 @@ public:
 	virtual void AniChange();			//enemy의 애니메이션을 바꿔주기 위한 함수
 	virtual void Attack();				//enemy의 공격을 구현할 함수
 
-	//Enemy생성 함수 (float x, float y, float HP, float damage, const char* enemyName)
+	//Enemy생성 함수
 	virtual void EnemyCreate(float x, float y, float HP,float damage);
 	virtual void EnemyCreate(float x, float y, float HP, float damage,Direction direction);
+	virtual void EnemyCreate(float x, float y, float HP, float damage, const char* enemyName, const char* enemyAnimation);
+	virtual void EnemyCreate(float x, float y, float HP, float damage, const char* enemyName, const char* enemyAnimation,Direction direction);
+
+	virtual void Hit(float damage) { _enemyInfo->HP -= damage; }
+
 
 	//Enemy정보 접근자
 	virtual EnemyInfo* getEnemyInfo() { return _enemyInfo; }

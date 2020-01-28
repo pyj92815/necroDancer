@@ -5,7 +5,7 @@ HRESULT EnemyManager::init()
 {
 	imageAdd();	//이미지 추가 함수
 	AnimationAdd(); //애니메이션 추가 함수
-	_enemyType = EnemyType::ZOMBIE;
+	_enemyType = EnemyType::BAT;
 	EnemyCreate(WINSIZEX / 2, WINSIZEY / 2, _enemyType);
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
@@ -17,6 +17,17 @@ HRESULT EnemyManager::init()
 
 void EnemyManager::release()
 {
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
+	{
+		if ((*_viEnemy)->getEnemyInfo()->state == enemyState::STATE_DIE)
+		{
+			_vEnemy.erase(_viEnemy);
+		}
+		else
+		{
+			++_viEnemy;
+		}
+	}
 }
 
 void EnemyManager::update()
@@ -25,7 +36,6 @@ void EnemyManager::update()
 	{
 		(*_viEnemy)->update();
 	}
-	
 }
 
 void EnemyManager::render()
@@ -93,63 +103,63 @@ void EnemyManager::Enemy_Bat_Create(float x, float y)
 {
 	Enemy* Bat;
 	Bat = new Enemy_Bat;
-	Bat->EnemyCreate(x, y, 1.0f, 0.5f);
+	Bat->EnemyCreate(x, y, 1.0f, 0.5f, "Enemy_bat","Bat_L_Shadow_IDLE_Ani");
 	_vEnemy.push_back(Bat);
 }
 void EnemyManager::Enemy_Dragon_Create(float x, float y)
 {
 	Enemy* Dragon;
 	Dragon = new Enemy_Dragon;
-	Dragon->EnemyCreate(x, y, 4.0f, 2.0f);
+	Dragon->EnemyCreate(x, y, 4.0f, 2.0f,"Enemy_dragon", "Dragon_L_Shadow_IDLE_Ani");
 	_vEnemy.push_back(Dragon);
 }
 void EnemyManager::Enemy_Ghost_Create(float x, float y)
 {
 	Enemy* Ghost;
 	Ghost = new Enemy_Ghost;
-	Ghost->EnemyCreate(x, y, 1.0f, 1.0f);
+	Ghost->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_ghost","Ghost_L_Shadow_IDLE_Ani");
 	_vEnemy.push_back(Ghost);
 }
 void EnemyManager::Enemy_Minotaur_Create(float x, float y)
 {
 	Enemy* Minotaur;
 	Minotaur = new Enemy_Minotaur;
-	Minotaur->EnemyCreate(x, y, 3.0f, 2.0f);
+	Minotaur->EnemyCreate(x, y, 3.0f, 2.0f,"Enemy_minotaur","Minotaur_L_Shadow_IDLE_Ani");
 	_vEnemy.push_back(Minotaur);
 }
 void EnemyManager::Enemy_Skeleton_Create(float x, float y)
 {
 	Enemy* Skeleton;
 	Skeleton = new Enemy_Skeleton;
-	Skeleton->EnemyCreate(x, y, 1.0f, 0.5f);
+	Skeleton->EnemyCreate(x, y, 1.0f, 0.5f,"Enemy_skeleton","Skeleton_L_Shadow_IDLE_Ani");
 	_vEnemy.push_back(Skeleton);
 }
 void EnemyManager::Enemy_Skeleton_Yellow_Create(float x, float y)
 {
 	Enemy* Skeleton_Yellow;
 	Skeleton_Yellow = new Enemy_Skeleton_Yellow;
-	Skeleton_Yellow->EnemyCreate(x, y, 2.0f, 1.5f);
+	Skeleton_Yellow->EnemyCreate(x, y, 2.0f, 1.5f,"Enemy_skeleton_yellow","skeleton_yellow_L_Shadow_IDLE_Ani");
 	_vEnemy.push_back(Skeleton_Yellow);
 }
 void EnemyManager::Enemy_Slime_Blue_Create(float x, float y)
 {
 	Enemy* Slime_Blue;
 	Slime_Blue = new Enemy_Slime_Blue;
-	Slime_Blue->EnemyCreate(x, y, 2.0f, 1.0f);
+	Slime_Blue->EnemyCreate(x, y, 2.0f, 1.0f,"Enemy_slime_blue","Enemy_slime_blue_Shadow_IDLE_Ani");
 	_vEnemy.push_back(Slime_Blue);
 }
 void EnemyManager::Enemy_Slime_Orange_Create(float x, float y)
 {
 	Enemy* Slime_Orange;
 	Slime_Orange = new Enemy_Slime_Orange;
-	Slime_Orange->EnemyCreate(x, y, 1.0f, 0.5f,Direction::RIGHT);
+	Slime_Orange->EnemyCreate(x, y, 1.0f, 0.5f,"Enemy_slime_orange","Enemy_slime_orange_Shadow_IDLE_Ani",Direction::RIGHT);
 	_vEnemy.push_back(Slime_Orange);
 }
 void EnemyManager::Enemy_Wraith_Create(float x, float y)
 {
 	Enemy* Wraith;
 	Wraith = new Enemy_Warith;
-	Wraith->EnemyCreate(x, y, 1.0f, 0.5f);
+	Wraith->EnemyCreate(x, y, 1.0f, 0.5f,"Enemy_wraith","Enemy_wraith_L_Shadow_IDLE_Ani");
 	_vEnemy.push_back(Wraith);
 }
 void EnemyManager::Enemy_Zombie_Create(float x, float y)
@@ -159,11 +169,11 @@ void EnemyManager::Enemy_Zombie_Create(float x, float y)
 	
 	if(RND->getInt(2)==0)
 	{ 
-		Zombie->EnemyCreate(x, y, 1.0f, 1.0f,Direction::LEFT);
+		Zombie->EnemyCreate(x, y, 1.0f, 1.0f,"Enemy_zombie","Enemy_zombie_Shadow_LEFT_Ani",Direction::LEFT);
 	}
 	else
 	{
-		Zombie->EnemyCreate(x, y, 1.0f, 1.0f, Direction::UP);
+		Zombie->EnemyCreate(x, y, 1.0f, 1.0f,"Enemy_zombie","Enemy_zombie_Shadow_UP_Ani", Direction::UP);
 	}
 
 	_vEnemy.push_back(Zombie);
