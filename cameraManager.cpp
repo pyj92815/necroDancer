@@ -11,7 +11,7 @@ cameraManager::cameraManager()
 	_cameraY = 220;
 
 	_worldImage = new image;
-	_worldImage = IMAGEMANAGER->addImage("worldMap",5200, 5200);
+	_worldImage = IMAGEMANAGER->addImage("worldMap",2080, 2080);
 	_worldDC = _worldImage->getMemDC();
 
 	_isCameraMoveX = false;
@@ -178,13 +178,13 @@ void cameraManager::CameraMapTool_Correction()
 {
 	if (_cameraX < 0) _cameraX = 0;
 	if (_cameraY < 0) _cameraY = 0;
-	if (_cameraX + _cameraSizeX > 5200)
+	if (_cameraX + _cameraSizeX > 2080)
 	{
-		_cameraX = 5200 - _cameraSizeX;
+		_cameraX = 2080 - _cameraSizeX;
 	}
-	if (_cameraY + _cameraSizeY > 5200)
+	if (_cameraY + _cameraSizeY > 2080)
 	{
-		_cameraY = 5200 - _cameraSizeY;
+		_cameraY = 2080 - _cameraSizeY;
 	}
 	//cout << "5200 넘냐 안넘냐 : " << _cameraX + _cameraSizeX << endl;
 }
@@ -209,14 +209,14 @@ void cameraManager::set_CameraPos_Update(float x, float y)
 
 	if (_cameraX < 0) _cameraX = 0;
 	if (_cameraY < 0) _cameraY = 0;
-	if (_cameraX + _cameraSizeX > 5200)
+	if (_cameraX + _cameraSizeX > 2080)
 	{
-		_cameraX = 5200 - _cameraSizeX;
+		_cameraX = 2080 - _cameraSizeX;
 	}
-	if (_cameraY + _cameraSizeY > 5200)
+	if (_cameraY + _cameraSizeY > 2080)
 	{
 
-		_cameraY = 5200 - _cameraSizeY;
+		_cameraY = 2080 - _cameraSizeY;
 	}
 }
 

@@ -26,10 +26,10 @@
 #define TESTTILESIZE 52
 
 //타일 갯수는 가로 100 / 세로 100
-#define TILEX 100
-#define TILEY 100
+#define TILEX 40
+#define TILEY 40
 
-//타일 총 사이즈는 5200 X 5200
+//타일 총 사이즈는 2080 X 2080
 #define TILESIZEX TILESIZE * TILEX
 #define TILESIZEY TILESIZE * TILEY
 
