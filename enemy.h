@@ -42,6 +42,7 @@ public:
 	virtual void update();
 	virtual void render();
 	
+	virtual void Beat();				//Beat의 따라 enemy를 움직이게 하기 위해 관련 연산을 하는 함수
 	virtual void Action();				//enemy의 상태를 바꿔주기 위한 함수
 	virtual void Move();				//enemy의 움직임 패턴을 구현할 함수
 	virtual void AniChange();			//enemy의 애니메이션을 바꿔주기 위한 함수
@@ -54,7 +55,8 @@ public:
 	virtual void EnemyCreate(float x, float y, float HP, float damage, const char* enemyName, const char* enemyAnimation,Direction direction);
 
 	virtual void Hit(float damage) { _enemyInfo->HP -= damage; }
-
+	//,시작점,마지막점,시간적 값
+	virtual float LinearInterpolation(float value1,float value2,float amount);
 
 	//Enemy정보 접근자
 	virtual EnemyInfo* getEnemyInfo() { return _enemyInfo; }

@@ -25,6 +25,10 @@ void EnemyManager::update()
 	{
 		(*_viEnemy)->update();
 	}
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
+	{
+		//if((*_viEnemy)->getEnemyInfo()->state==)
+	}
 }
 
 void EnemyManager::render()

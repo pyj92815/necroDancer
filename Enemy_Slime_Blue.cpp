@@ -29,7 +29,7 @@ void Enemy_Slime_Blue::Action()
 void Enemy_Slime_Blue::Move()
 {
 	//두 박자마다 움직이며 위 아래 2개의 타일만을 왕복하며 움직인다. 이동 경로에 벽이 있다면 제자리 점프를 한다.
-	if (BEATMANAGER->getInterval())
+	if (_enemyInfo->beat / 2 == 1)
 	{
 		switch (_enemyInfo->direction)
 		{
@@ -39,6 +39,7 @@ void Enemy_Slime_Blue::Move()
 			//위로 이동
 			_enemyInfo->y -= 10;
 			_enemyInfo->direction = Direction::DOWN;
+			_enemyInfo->beat = 0;
 			break;
 		case Direction::DOWN:
 			//이동 경로에 플레이어가 있으면
@@ -46,14 +47,11 @@ void Enemy_Slime_Blue::Move()
 			//아래로 이동
 			_enemyInfo->y += 10;
 			_enemyInfo->direction = Direction::UP;
+			_enemyInfo->beat = 0;
 			break;
 		}
 	}
-	else
-	{
-
-	}
-	
+		
 }
 
 void Enemy_Slime_Blue::Attack()

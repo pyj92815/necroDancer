@@ -13,6 +13,7 @@ void Enemy::relase()
 
 void Enemy::update()
 {
+	Beat();
 	AniChange();
 	Action();
 }
@@ -20,6 +21,14 @@ void Enemy::update()
 void Enemy::render()
 {
 	_enemyInfo->image->aniRender(CAMERAMANAGER->getWorldDC(), _enemyInfo->x, _enemyInfo->y-(_enemyInfo->image->getFrameHeight()/4), _enemyInfo->animation);
+}
+
+void Enemy::Beat()
+{
+	if (BEATMANAGER->getInterval())
+	{
+		_enemyInfo->beat++;
+	}
 }
 
 void Enemy::Action()
@@ -117,4 +126,9 @@ void Enemy::EnemyCreate(float x, float y, float HP, float damage, const char* en
 	_enemyInfo->rc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52, 52);
 	_enemyInfo->discoveryRc = RectMakeCenter(_enemyInfo->x, _enemyInfo->y, 52 * 7, 52 * 7);
 	_enemyInfo->animation->start();
+}
+
+float Enemy::LinearInterpolation(float value1, float value2, float amount)
+{
+	return float(value1 + ((float)(value2 - value1) * amount));
 }
