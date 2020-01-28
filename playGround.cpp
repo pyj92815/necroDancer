@@ -48,7 +48,7 @@ void playGround::release()
 
 
 void playGround::update()
-{
+{	// OPTION->CheckOptionOpen()을 이용해서 잠시동안 다른 움직이는 것들 꺼주기 //if()
 	gameNode::update();
 	_sm->update();
 }
@@ -65,6 +65,8 @@ void playGround::render()
 	
 	_sm->render();
 	TIMEMANAGER->render(getMemDC());
+	OPTION->render();
+	
 	//===========================================================
 	if (!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0,0);
 

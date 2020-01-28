@@ -206,6 +206,7 @@
     <ClInclude Include="mapToolScene.h" />
     <ClInclude Include="miniMap.h" />
     <ClInclude Include="Next_Create_Boss.h" />
+    <ClInclude Include="Option.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerLibrary.h" />
     <ClInclude Include="playerManager.h" />
@@ -282,6 +283,7 @@
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
     <ClCompile Include="miniMap.cpp" />
+    <ClCompile Include="Option.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerManager.cpp" />
     <ClCompile Include="playGround.cpp" />

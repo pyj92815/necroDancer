@@ -189,9 +189,6 @@
     <ClInclude Include="playerManager.h">
       <Filter>playGround\player</Filter>
     </ClInclude>
-    <ClInclude Include="playerTestTile.h">
-      <Filter>playGround\player</Filter>
-    </ClInclude>
     <ClInclude Include="tileNode.h">
       <Filter>playGround\A%2aScene</Filter>
     </ClInclude>
@@ -232,9 +229,6 @@
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="EnemyManager.h">
-      <Filter>playGround\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Boss.h">
       <Filter>playGround\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="stageScene.h">
@@ -333,6 +327,18 @@
     <ClInclude Include="miniMap.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="playerLibrary.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager_Library.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Option.h">
+      <Filter>playGround\GameSettingManager\Option</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -413,9 +419,6 @@
     <ClCompile Include="playerManager.cpp">
       <Filter>playGround\player</Filter>
     </ClCompile>
-    <ClCompile Include="playerTestTile.cpp">
-      <Filter>playGround\player</Filter>
-    </ClCompile>
     <ClCompile Include="jump.cpp">
       <Filter>playGround\player</Filter>
     </ClCompile>
@@ -453,9 +456,6 @@
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
-      <Filter>playGround\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Boss.cpp">
       <Filter>playGround\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="stageScene.cpp">
@@ -532,6 +532,12 @@
     </ClCompile>
     <ClCompile Include="UImanager.cpp">
       <Filter>playGround\player</Filter>
+    </ClCompile>
+    <ClCompile Include="slaveManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Option.cpp">
+      <Filter>playGround\GameSettingManager\Option</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
