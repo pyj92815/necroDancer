@@ -2,7 +2,7 @@
 #include "gameNode.h"
 #include "addImage_Boss.h"
 
-#define LOADINGMAX 1000										//로딩 카운트 맥스치
+#define LOADINGMAX 100									//로딩 카운트 맥스치
 
 class loadingScene : public gameNode
 {

@@ -93,6 +93,20 @@ void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char *
 	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
 }
 
+void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, array<int, 4>* arr, int arrLen, int fps, bool loop)
+{
+	image* img = IMAGEMANAGER->findImage(imageKeyName);
+
+	animation* ani = new animation;
+
+	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
+	ani->setPlayFrame(arr, arrLen, loop);
+	ani->setFPS(fps);
+
+	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
+}
+
+
 void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char * imageKeyName, int * arr, int arrLen, int fps, bool loop, void * cbFunction)
 {
 	image* img = IMAGEMANAGER->findImage(imageKeyName);
@@ -194,6 +208,44 @@ animation * keyAniManager::findAnimation(string animationKeyName)
 	if (iter != _mTotalAnimation.end()) return iter->second;
 	return nullptr;
 }
+
+void keyAniManager::swapArrayFrameAnimaition(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop)
+{
+	iterAnimation iter = _mTotalAnimation.find(animationKeyName);
+
+	// 持失 
+	image* img = IMAGEMANAGER->findImage(imageKeyName);
+
+	animation* ani = new animation;
+
+	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
+	ani->setPlayFrame(arr, arrLen, loop);
+	ani->setFPS(fps);
+
+	iter->second->setPlayList();
+	iter->second = ani;
+	SAFE_RELEASE(ani);
+	SAFE_DELETE(ani);
+}
+
+void keyAniManager::swapArrayFrameAnimaition(string animationKeyName, const char* imageKeyName, array<int, 4>* arr, int arrLen, int fps, bool loop)
+{
+	iterAnimation iter = _mTotalAnimation.find(animationKeyName);
+
+	// 持失 
+	image* img = IMAGEMANAGER->findImage(imageKeyName);
+
+	animation* ani = new animation;
+
+	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
+	ani->setPlayFrame(arr, arrLen, loop);
+	ani->setFPS(fps);
+
+	iter->second = ani;
+
+	ani->release();
+}
+
 
 void keyAniManager::deleteAll()
 {

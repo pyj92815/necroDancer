@@ -79,15 +79,6 @@ enum WALL
 	W_NONE											//나중에 지울용도
 };
 
-
-enum ITEMWEAPON
-{
-	DAGGER,
-	SPEAR,
-	RAPIER,
-	LONGSWORD
-};
-
 enum TRAP
 {
 	TRAP_FAST_BEAT, TRAP_SLOW_BEAT, TRAP_MUTE,		//리듬 템포 함정 및 음소거 함정
@@ -159,7 +150,7 @@ struct tagTile
 	WALL wall;				//벽
 	TRAP trap;				//함정
 	ARMOR armor;				//방어구
-	WEAPON weapon;				//무기
+	WEAPON weapon;			//무기
 	OBJECT obj;				//오브젝트
 	CHARACTER character;	//캐릭터
 	RECT rc;				//렉트

@@ -51,7 +51,7 @@ void player::release()
 void player::update()
 {
 	_jump->update();							  // JUMP
-	if(!_jump->getJumping()) _shadow = _player.y; // 그림자의 위치(제트오더 점프 시 벽뒤로 넘어가지 않게 하기 위한 변수)
+	if (!_jump->getJumping()) _shadow = _player.y; // 그림자의 위치(제트오더 점프 시 벽뒤로 넘어가지 않게 하기 위한 변수)
 
 	keyControl();					// KEY
 	playerMove();					// MOVE
@@ -61,6 +61,32 @@ void player::update()
 		(*_viEffect)->update();
 	}
 	CAMERAMANAGER->set_CameraXY(_player.idx * _distance + (_distance / 2), _player.idy * _distance + (_distance / 3)); // 카메라 세팅
+
+	if (KEYMANAGER->isOnceKeyUp('A'))
+	{
+		bodyLeft = { 15, 14, 13, 12 };
+		bodyRight = { 8,9,10,11 };
+		KEYANIMANAGER->swapArrayFrameAnimaition("bodyRight", "player1_armor_body_xmas", &bodyRight, 4, 10, true);
+		KEYANIMANAGER->swapArrayFrameAnimaition("bodyLeft", "player1_armor_body_xmas", &bodyLeft, 4, 10, true);
+	
+		_player.headAni = KEYANIMANAGER->findAnimation("headLeft");			// 애니매이션 이미지
+		_player.bodyAni = KEYANIMANAGER->findAnimation("bodyLeft");
+		_player.headAni->start();
+		_player.bodyAni->start();
+
+		/*
+		KEYANIMANAGER->findAnimation("headLeft")->stop();
+		KEYANIMANAGER->findAnimation("bodyLeft")->stop();
+		KEYANIMANAGER->findAnimation("headRight")->stop();
+		KEYANIMANAGER->findAnimation("bodyRight")->stop();*/
+
+		//KEYANIMANAGER->findAnimation("headLeft")->start();
+		//KEYANIMANAGER->findAnimation("bodyLeft")->start();
+		//KEYANIMANAGER->findAnimation("headRight")->start();
+		//KEYANIMANAGER->findAnimation("bodyRight")->start();
+
+
+	}
 }
 
 void player::render()
@@ -95,7 +121,7 @@ void player::playerMove()
 		_player.y = _player.idy * _distance + (_distance / 3);
 
 		_isMoving = false;	    // 선형 보간 
-		_isKeyDown = false;		
+		_isKeyDown = false;
 		//_isKeyPress = false;  // key 입력 초기화 
 	}
 }
@@ -104,7 +130,7 @@ void player::playerEffect_Miss()
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
-	effect->init("player_effect_missed", CAMERAMANAGER->get_CameraX() + BEATMANAGER->getHeartMiddle() - 30, CAMERAMANAGER->get_CameraY() + (WINSIZEY - 200),10, SLOW);
+	effect->init("player_effect_missed", CAMERAMANAGER->get_CameraX() + BEATMANAGER->getHeartMiddle() - 30, CAMERAMANAGER->get_CameraY() + (WINSIZEY - 200), 10, SLOW);
 	_vEffect.push_back(effect);
 }
 
@@ -112,17 +138,17 @@ void player::playerEffect_Shovel(tagTile* tile)
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
-	effect->init("shovel_basic", tile->rc.left,tile->rc.top, 10,TIMESLOW);
+	effect->init("shovel_basic", tile->rc.left, tile->rc.top-30, 10, TIMESLOW);
 	_vEffect.push_back(effect);
 	CAMERAMANAGER->Camera_WorldDC_Shake(); // 문제는 예외처리 때문에 카메라 0,0에서는 작동 안함 
 }
 
 // 타일 위치
-void player::playerEffect_Attack(const char* imageName,tagTile* tile, int frameY)
+void player::playerEffect_Attack(const char* imageName, tagTile* tile, int frameY)
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
-	effect->init(imageName, tile->rc.left, tile->rc.top, 0,frameY, FRAMEIMAGE);
+	effect->init(imageName, tile->rc.left, tile->rc.top, 0, frameY, FRAMEIMAGE);
 	_vEffect.push_back(effect);
 }
 // 좌표값 x,y의 위치
@@ -159,7 +185,7 @@ void player::keyControl()
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
-			_player.direction = PLAYERDIRECTION_UP; 
+			_player.direction = PLAYERDIRECTION_UP;
 			_isKeyDown = true;
 			if (BEATMANAGER->getInterval())
 			{
@@ -215,178 +241,360 @@ void player::keyControl()
 void player::tileCheck()
 {
 	_isKeyPress = true;				// 인터벌 사이에 누름 
-	
-		for (_miPlayerTile = _mPlayerTile.begin(); _miPlayerTile != _mPlayerTile.end(); ++_miPlayerTile)
+	bool action = false;			// 액션을 취했는지 안했는지 판단할 예정 
+
+	// 상하좌우의 타일정보
+	for (_miPlayerTile = _mPlayerTile.begin(); _miPlayerTile != _mPlayerTile.end(); ++_miPlayerTile)
+	{
+		//UP타일
+		if (_miPlayerTile->first == PLAYERDIRECTION_UP && _miPlayerTile->first == _player.direction)
 		{
-			if (_miPlayerTile->first == PLAYERDIRECTION_UP && 
-				_miPlayerTile->first == _player.direction)
+			//타일의 종류를 판단
+			switch (_miPlayerTile->second->type)
 			{
-				if (_miPlayerTile->second->wall != W_NONE)
-				{
-					playerEffect_Shovel(_miPlayerTile->second);
-					_miPlayerTile->second->type = TYPE_TERRAIN;
-					_miPlayerTile->second->wall = W_NONE;
-					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-					_miPlayerTile->second->terrainFrameX = 1;
-					_miPlayerTile->second->terrainFrameY = 1;
-				}
-				else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
-				{
-					// 몬스터 타일 돌려야 함 
-					switch (_player.weapon)
-					{
-					case PLAYERWAEPON_DAGGER:
-						playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 0);
-						break;
-					case PLAYERWAEPON_LONGSWORD:
-						playerEffect_Attack("swipe_longsword상하", (_player.idx) * 52 , (_player.idy- 2) * 52, 0);
-
-						break;
-					case PLAYERWAEPON_BROADSWORD:
-						playerEffect_Attack("swipe_broadsword상하", (_player.idx-1) * 52, (_player.idy - 1) * 52, 0);
-
-						break;
-					case PLAYERWAEPON_RAPIER:
-						playerEffect_Attack("swipe_rapier상하", _player.idx * 52, (_player.idy - 2) * 52, 0);
-						break;
-					default:
-						break;
-					}
-				}
-				else
-				{
-					StateMove();
-				}
-
+			case TYPE_WALL:
+				wallCheck();
+				action = true;
+				break;
+			case TYPE_TRAP:
+				trapCheck();
+				action = true;
+				break;
+			case TYPE_ITEM_ARMOR:
+			case TYPE_ITEM_WEAPON:
+				action = true;
+				itempCheck();
+				break;
+			default:
 				break;
 			}
-		
-			if (_miPlayerTile->first == PLAYERDIRECTION_DOWN &&
-				_miPlayerTile->first == _player.direction)
-			{
-				if (_miPlayerTile->second->wall != W_NONE)
-				{
-					playerEffect_Shovel(_miPlayerTile->second);
-					_miPlayerTile->second->type = TYPE_TERRAIN;
-					_miPlayerTile->second->wall = W_NONE;
-					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-					_miPlayerTile->second->terrainFrameX = 1;
-					_miPlayerTile->second->terrainFrameY = 1;
-				}
-				else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
-				{
-					// 몬스터 타일 돌려야 함 
-					switch (_player.weapon)
-					{
-					case PLAYERWAEPON_DAGGER:
-						playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 1);
-						break;
-					case PLAYERWAEPON_LONGSWORD:
-						playerEffect_Attack("swipe_longsword상하", _miPlayerTile->second, 1);
-
-						break;
-					case PLAYERWAEPON_BROADSWORD:
-						playerEffect_Attack("swipe_broadsword상하", (_player.idx - 1) * 52, (_player.idy + 1) * 52, 1);
-
-						break;
-					case PLAYERWAEPON_RAPIER:
-						playerEffect_Attack("swipe_rapier상하", _player.idx * 52, (_player.idy + 1) * 52, 1);
-						break;
-					default:
-						break;
-					}
-				}
-				else
-				{
-					StateMove();
-				}
-				break;
-			}
-		
-			if (_miPlayerTile->first == PLAYERDIRECTION_LEFT &&
-				_miPlayerTile->first == _player.direction)
-			{
-				if (_miPlayerTile->second->wall != W_NONE)
-				{
-					playerEffect_Shovel(_miPlayerTile->second);
-					_miPlayerTile->second->type = TYPE_TERRAIN;
-					_miPlayerTile->second->wall = W_NONE;
-					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-					_miPlayerTile->second->terrainFrameX = 1;
-					_miPlayerTile->second->terrainFrameY = 1;
-				}
-				else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
-				{
-					// 몬스터 타일 돌려야 함 
-					switch (_player.weapon)
-					{
-					case PLAYERWAEPON_DAGGER:
-						playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 2);
-						break;
-					case PLAYERWAEPON_LONGSWORD:
-						playerEffect_Attack("swipe_longsword좌우", (_player.idx-2) * 52, _player.idy * 52, 0);
-						break;
-					case PLAYERWAEPON_BROADSWORD:
-						playerEffect_Attack("swipe_broadsword좌우", (_player.idx - 1) * 52, (_player.idy - 1) * 52, 0);
-
-						break;
-					case PLAYERWAEPON_RAPIER:
-						playerEffect_Attack("swipe_rapier좌우", (_player.idx - 2) * 52, _player.idy  * 52, 0);
-						break;
-					default:
-						break;
-					}
-				}
-				else
-				{
-					StateMove();
-				}
-				break;
-			}
-
-			if (_miPlayerTile->first == PLAYERDIRECTION_RIGHT &&
-				_miPlayerTile->first == _player.direction)
-			{
-				if (_miPlayerTile->second->wall != W_NONE)
-				{
-					playerEffect_Shovel(_miPlayerTile->second);
-					_miPlayerTile->second->type = TYPE_TERRAIN;
-					_miPlayerTile->second->wall = W_NONE;
-					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-					_miPlayerTile->second->terrainFrameX = 1;
-					_miPlayerTile->second->terrainFrameY = 1;
-				}
-				else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
-				{
-					// 몬스터 타일 돌려야 함 
-					switch (_player.weapon)
-					{
-					case PLAYERWAEPON_DAGGER:
-						playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 3);
-						break;
-					case PLAYERWAEPON_LONGSWORD:
-						playerEffect_Attack("swipe_longsword좌우", _miPlayerTile->second, 1);
-
-						break;
-					case PLAYERWAEPON_BROADSWORD:
-						playerEffect_Attack("swipe_broadsword좌우", (_player.idx + 1) * 52, (_player.idy - 1) * 52, 1);
-
-						break;
-					case PLAYERWAEPON_RAPIER:
-						playerEffect_Attack("swipe_rapier좌우", (_player.idx + 1) * 52, _player.idy * 52, 1);
-						break;
-					default:
-						break;
-					}
-				}
-				else
-				{
-					StateMove();
-				}
-				break;
-			}
+			break;
 		}
+		if (_miPlayerTile->first == PLAYERDIRECTION_DOWN && _miPlayerTile->first == _player.direction)
+		{
+			switch (_miPlayerTile->second->type)
+			{
+			case TYPE_WALL:
+				wallCheck();
+				action = true;
+				break;
+			case TYPE_TRAP:
+				trapCheck();
+				action = true;
+				break;
+			case TYPE_ITEM_ARMOR:
+			case TYPE_ITEM_WEAPON:
+				itempCheck();
+				action = true;
+				break;
+			default:
+				break;
+			}
+			break;
+		}
+		if (_miPlayerTile->first == PLAYERDIRECTION_LEFT && _miPlayerTile->first == _player.direction)
+		{
+			switch (_miPlayerTile->second->type)
+			{
+			case TYPE_WALL:
+				wallCheck();
+				action = true;
+				break;
+			case TYPE_TRAP:
+				trapCheck();
+				action = true;
+				break;
+			case TYPE_ITEM_ARMOR:
+			case TYPE_ITEM_WEAPON:
+				itempCheck();
+				action = true;
+				break;
+			default:
+				break;
+			}
+			break;
+		}
+		if (_miPlayerTile->first == PLAYERDIRECTION_RIGHT && _miPlayerTile->first == _player.direction)
+		{
+			switch (_miPlayerTile->second->type)
+			{
+			case TYPE_WALL:
+				wallCheck();
+				action = true;
+				break;
+			case TYPE_TRAP:
+				trapCheck();
+				action = true;
+				break;
+			case TYPE_ITEM_ARMOR:
+			case TYPE_ITEM_WEAPON:
+				itempCheck();
+				action = true;
+				break;
+			default:
+				break;
+			}
+			break;
+		}
+	}
+	if (action) return;
+	// ENEMY 타일 정보 
+	for (_miPlayerEnemyTile = _mPlayerEnemyTile.begin(); _miPlayerEnemyTile != _mPlayerEnemyTile.end(); ++_miPlayerEnemyTile)
+	{
+		if (_player.weapon == PLAYERWAEPON_NONE) action = true; return;
+		//up
+		//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
+			//{
+			//	// 몬스터 타일 돌려야 함 
+			//	switch (_player.weapon)
+			//	{
+			//	case PLAYERWAEPON_DAGGER:
+			//		playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 0);
+			//		break;
+			//	case PLAYERWAEPON_LONGSWORD:
+			//		playerEffect_Attack("swipe_longsword상하", (_player.idx) * 52, (_player.idy - 2) * 52, 0);
 
+			//		break;
+			//	case PLAYERWAEPON_BROADSWORD:
+			//		playerEffect_Attack("swipe_broadsword상하", (_player.idx - 1) * 52, (_player.idy - 1) * 52, 0);
+
+			//		break;
+			//	case PLAYERWAEPON_RAPIER:
+			//		playerEffect_Attack("swipe_rapier상하", _player.idx * 52, (_player.idy - 2) * 52, 0);
+			//		break;
+			//	default:
+			//		break;
+			//	}
+			//}
+		// down
+		//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
+			//{
+			//	// 몬스터 타일 돌려야 함 
+			//	switch (_player.weapon)
+			//	{
+			//	case PLAYERWAEPON_DAGGER:
+			//		playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 1);
+			//		break;
+			//	case PLAYERWAEPON_LONGSWORD:
+			//		playerEffect_Attack("swipe_longsword상하", _miPlayerTile->second, 1);
+
+			//		break;
+			//	case PLAYERWAEPON_BROADSWORD:
+			//		playerEffect_Attack("swipe_broadsword상하", (_player.idx - 1) * 52, (_player.idy + 1) * 52, 1);
+
+			//		break;
+			//	case PLAYERWAEPON_RAPIER:
+			//		playerEffect_Attack("swipe_rapier상하", _player.idx * 52, (_player.idy + 1) * 52, 1);
+			//		break;
+			//	default:
+			//		break;
+			//	}
+
+		//left
+		//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
+			//{
+			//	// 몬스터 타일 돌려야 함 
+			//	switch (_player.weapon)
+			//	{
+			//	case PLAYERWAEPON_DAGGER:
+			//		playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 2);
+			//		break;
+			//	case PLAYERWAEPON_LONGSWORD:
+			//		playerEffect_Attack("swipe_longsword좌우", (_player.idx - 2) * 52, _player.idy * 52, 0);
+			//		break;
+			//	case PLAYERWAEPON_BROADSWORD:
+			//		playerEffect_Attack("swipe_broadsword좌우", (_player.idx - 1) * 52, (_player.idy - 1) * 52, 0);
+
+			//		break;
+			//	case PLAYERWAEPON_RAPIER:
+			//		playerEffect_Attack("swipe_rapier좌우", (_player.idx - 2) * 52, _player.idy * 52, 0);
+			//		break;
+			//	default:
+			//		break;
+			//	}
+			//}
+			//else
+			//{
+			//	StateMove();
+			//}
+		//right
+		//if (_miPlayerTile->second->wall != W_NONE)
+			//{
+			//	playerEffect_Shovel(_miPlayerTile->second);
+			//	_miPlayerTile->second->type = TYPE_TERRAIN;
+			//	_miPlayerTile->second->wall = W_NONE;
+			//	_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
+			//	_miPlayerTile->second->terrainFrameX = 1;
+			//	_miPlayerTile->second->terrainFrameY = 1;
+			//}
+			//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
+			//{
+			//	// 몬스터 타일 돌려야 함 
+			//	switch (_player.weapon)
+			//	{
+			//	case PLAYERWAEPON_DAGGER:
+			//		playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 3);
+			//		break;
+			//	case PLAYERWAEPON_LONGSWORD:
+			//		playerEffect_Attack("swipe_longsword좌우", _miPlayerTile->second, 1);
+
+			//		break;
+			//	case PLAYERWAEPON_BROADSWORD:
+			//		playerEffect_Attack("swipe_broadsword좌우", (_player.idx + 1) * 52, (_player.idy - 1) * 52, 1);
+
+			//		break;
+			//	case PLAYERWAEPON_RAPIER:
+			//		playerEffect_Attack("swipe_rapier좌우", (_player.idx + 1) * 52, _player.idy * 52, 1);
+			//		break;
+			//	default:
+			//		break;
+			//	}
+			//}
+			//else
+			//{
+			//	StateMove();
+			//}
+			//break;
+	}
+
+	if(!action) StateMove();
+}
+
+void player::wallCheck()
+{
+	// 타일 삽 이미지를 띄운다 
+	playerEffect_Shovel(_miPlayerTile->second);
+	switch (_miPlayerTile->second->wall)
+	{
+	case W_WALL:
+		_miPlayerTile->second->type = TYPE_TERRAIN;
+		_miPlayerTile->second->wall = W_NONE;
+		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
+		_miPlayerTile->second->terrainFrameX = 1;
+		_miPlayerTile->second->terrainFrameY = 1;
+		break;
+	default:
+		_miPlayerTile->second->type = TYPE_TERRAIN;
+		_miPlayerTile->second->wall = W_NONE;
+		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
+		_miPlayerTile->second->terrainFrameX = 1;
+		_miPlayerTile->second->terrainFrameY = 1;
+		break;
+	}
+}
+
+void player::enemyCheck()
+{
+}
+
+void player::trapCheck()
+{
+}
+
+void player::itempCheck()
+{
+	if (_miPlayerTile->second->type == TYPE_ITEM_ARMOR)
+	{
+		switch (_miPlayerTile->second->armor)
+		{
+		case A_HELMET:
+			break;
+		case A_ARMOR_1:
+			bodyLeft = { 8,9,10,11 };
+			bodyRight = { 15,14,13,12};
+			KEYANIMANAGER->swapArrayFrameAnimaition("bodyLeft", "player1_armor_body_xmas", &bodyLeft, 4, 10, true);
+			KEYANIMANAGER->swapArrayFrameAnimaition("bodyRight", "player1_armor_body_xmas", &bodyRight, 4, 10, true);
+			break;
+		case A_ARMOR_2:
+			break;
+		case A_ARMOR_3:
+			break;
+		case A_ARMOR_4:
+			break;
+		case A_BOOTS:
+			break;
+		case A_RING:
+			break;
+		case A_TORCH_1:
+			break;
+		case A_TORCH_2:
+			break;
+		case A_TORCH_3:
+			break;
+		case A_NONE:
+			return;
+			break;
+		}
+	}
+	if(_miPlayerTile->second->type == TYPE_ITEM_WEAPON)
+	{
+		//makeItem(WEAPON weapon, ARMOR armor,int framex, int framey ,int sight,int damege, float guard, float hp);
+		switch (_miPlayerTile->second->weapon)
+		{
+		case WP_DAGGER_1:
+			makeItem(WP_DAGGER_1, A_NONE, 0, 0, 0, 1, 0, 0);
+			break;
+		case WP_DAGGER_2:
+			makeItem(WP_DAGGER_2, A_NONE, 1, 0, 0, 1, 0, 0);
+			break;
+		case WP_SWORD: // 레이피어
+			makeItem(WP_SWORD, A_NONE, 2, 0, 0, 1, 0, 0);
+			break;
+		case WP_LONG_SWORD:  // 브로드소드
+			makeItem(WP_LONG_SWORD, A_NONE, 3, 0, 0, 1, 0, 0);
+			break;
+		case WP_BOMB:
+			break;
+		case WP_RIFLE:
+			break;
+		case WP_SHOTGUN:
+			break;
+		case WP_SPEAR:
+			break;
+		case WP_MACE:
+			break;
+		case WP_WHIP:
+			break;
+		case WP_NINETAILS_WHIP:
+			break;
+		case WP_BOW:
+			break;
+		case WP_CROSS_BOW:
+			break;
+		case WP_NONE:
+			return;
+			break;
+		}
+	}
+}
+
+void player::makeItem(WEAPON weapon, ARMOR armor, int framex, int framey, int sight, int damege, float guard, float hp)
+{
+	tagItem* item;
+	item = new tagItem;
+	ZeroMemory(item, sizeof(item));
+	item->weapon = weapon;
+	item->armor = armor;
+
+	if (weapon != WP_NONE)
+	{
+		item->weaponFrameX = framex;
+		item->weaponFrameY = framey;
+		item->armorFrameX = 0;
+		item->armorFrameY = 0;
+	}
+	else
+	{
+		item->armorFrameX = framex;
+		item->armorFrameY = framey;
+		item->weaponFrameX = 0;
+		item->weaponFrameY = 0;
+	}
+	item->sight = sight;
+	item->damege = damege;
+	item->guard = guard;
+	item->hp = hp;
+	_vInven.push_back(item);
 }
 
 void player::StateMove()

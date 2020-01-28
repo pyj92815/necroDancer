@@ -49,6 +49,9 @@ public:
 
 	//배열에 담아 애니메이션 재생
 	void setPlayFrame(int* playArr, int arrLen, BOOL loop = FALSE);
+	void setPlayFrame(array<int,4>* playArr, int arrLen, BOOL loop = FALSE);
+	
+
 	void setPlayFrame(int* playArr, int arrLen, BOOL loop, CALLBACK_FUNCTION_STUDY cbFunction);
 	void setPlayFrame(int* playArr, int arrLen, BOOL loop, CALLBACK_FUNCTION_PARAMETER cbFunction, void* obj);
 
@@ -65,6 +68,11 @@ public:
 
 	//지속여부를 확인하는 
 	void frameContinue() { _last = true; }
+	void setPlayList() {
+		_nowPlayIndex = 0;
+		_playList.clear();
+		_frameList.clear();
+	}
 
 	void start();
 	void stop();

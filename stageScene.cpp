@@ -274,7 +274,6 @@ void stageScene::setVision(POINT index, int sight)
 		setVision(PointMake(index.x, index.y + 1), sight - 1);
 		setVision(PointMake(index.x - 1, index.y), sight - 1);
 		setVision(PointMake(index.x + 1, index.y), sight - 1);
-
 	}
 	else _tiles[index.y * TILEX + index.x].alphaValue = 0;
 	// 1. 벽 넘어서 까지 시야처리를 어떻게 해야할지 

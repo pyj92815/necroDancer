@@ -28,6 +28,9 @@ public:
 	void addDefaultFrameAnimation(string animationKeyName, const char* imageKeyName, int fps, bool reverse, bool loop, void* cbFunction, void* obj);
 
 	void addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop);
+	void addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, array<int,4>* arr, int arrLen, int fps, bool loop);
+	
+
 	void addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop, void* cbFunction);
 	void addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop, void* cbFunction, void* obj);
 
@@ -41,6 +44,10 @@ public:
 	void resume(string animationKeyName);
 
 	animation* findAnimation(string animationKeyName);
+
+	void swapArrayFrameAnimaition(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop);
+	void swapArrayFrameAnimaition(string animationKeyName, const char* imageKeyName, array<int,4>* arr, int arrLen, int fps, bool loop);
+	void swapArrayFrameAnimaition8(string animationKeyName, const char* imageKeyName, array<int, 8>* arr, int arrLen, int fps, bool loop);
 
 	void deleteAll();
 

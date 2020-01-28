@@ -37,3 +37,18 @@ struct tagPlayer				//플레이어의 정보
 	int sight;					// 시야값
 	int damage;					// 공격력 
 };
+
+struct tagItem
+{
+	TYPE type;
+	WEAPON weapon;
+	ARMOR armor;
+	int armorFrameX;			//아이템 번호
+	int armorFrameY;			//아이템 번호
+	int weaponFrameX;			//아이템 번호
+	int weaponFrameY;			//아이템 번호
+	int sight;			// 시야값
+	int damege;			// 공격력
+	float guard;			// 방어력 
+	float hp;				// 체력 
+};
