@@ -49,6 +49,7 @@ using namespace std;
 #include "iniDataManager.h"
 #include "cameraManager.h"
 #include "Beat.h"
+#include "Option.h"
 using namespace SEVENTEEN_UTIL;
 
 //=========================================
@@ -74,6 +75,7 @@ using namespace SEVENTEEN_UTIL;
 #define INIDATAMANAGER iniDataManager::getSingleton()
 #define CAMERAMANAGER cameraManager::getSingleton()
 #define BEATMANAGER Beat::getSingleton()
+#define OPTION Option::getSingleton()
 
 #define SAFE_DELETE(p) {if(p) {delete(p); (p)=NULL;}}
 #define SAFE_RELEASE(p) {if(p) {(p)->release(); (p) = NULL;}}

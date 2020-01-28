@@ -49,7 +49,7 @@ HRESULT gameNode::init(bool managerInit)
 		INIDATAMANAGER->init();
 		CAMERAMANAGER->init();
 		BEATMANAGER->init();
-
+		OPTION->init();
 	}
 
 	return S_OK;
@@ -95,6 +95,7 @@ void gameNode::update()
 
 void gameNode::render()
 {
+
 }
 
 //void gameNode::loadSet(STAGE stage, int stageNum)
@@ -193,7 +194,15 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			switch (wParam)
 			{
 				case VK_ESCAPE:
-					PostQuitMessage(0);
+					if (!OPTION->CheckOptionOpen())
+					{
+						OPTION->SetOptionOpen(true);
+					}
+					else
+					{
+						OPTION->SetOptionOpen(false);
+					}
+					//PostQuitMessage(0);
 				break;
 			}
 		}

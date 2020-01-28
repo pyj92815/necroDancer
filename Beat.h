@@ -12,7 +12,7 @@ class alphaEffect;
 
 #define WINSIZEX_HALF WINSIZEX / 2	// 윈도우 가로 사이즈 절반
 #define NOTE_INTERVAL WINSIZEX_HALF / 4 // 노트 사이 간격
-#define NOTE_RADIUS_X 5 // 노트 하나의 가로 반지름 길이
+#define NOTE_RADIUS_X 6 // 노트 하나의 가로 반지름 길이
 #define HEARTFRAME_RATE 3 // 심장 박동 프레임 지연 시간
 
 
@@ -31,7 +31,6 @@ struct tagNote // 노트 구조체
 	RECT rc;
 	POINTFLOAT pos;
 	image* img;
-	float speed;
 	bool isCol; // 심장 박동 애니메이션 중복 방지를 위한 bool
 	bool isRender;
 	int alpha;
@@ -72,7 +71,7 @@ private:
 	vector<image*> _vHitNoteImg; // 알파 블렌더로 서서히 지울 노트 이미지를 저장할 이미지 전용 벡터
 	float inputInterval;
 	float inputIntervalCount;
-	bool Imterval;
+	bool Interval;
 	player* _player;
 	bool _effect;
 
@@ -96,7 +95,6 @@ private:
 	void CreateNewNote(bool dirRight); // 곡 시작 직전에 노트를 배치하는 함수. bool은 오른쪽으로 생성할 것인지 아닌지 판별.
 	void CreateNewNoteWhilePlay(bool dirRight); // 곡 시작하고 플레이 중에 노트를 배치하는 함수. bool은 오른쪽으로 생성할 것인지 아닌지 판별.
 	float GetSongVariousTime(unsigned int playTime, unsigned int songLength); // 곡 제어나 노트 제어를 위해 특정 조건(특정 시간)을 뽑아오기 위해 쓰일 함수
-	float GetInputInterval(tagNote note, bool dirRight); // 입력 인터벌 값 주기
 
 
 public:
@@ -109,6 +107,5 @@ public:
 	void setPlayerAddressLink(player* player) { _player = player; }
 
 	void HitNoteEffect(float x, float y);
-	void setEffectAlpha();
-	bool getInterval() { return  Imterval; }
+	bool getInterval() { return  Interval; }
 };
