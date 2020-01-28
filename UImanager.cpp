@@ -64,7 +64,7 @@ HRESULT UImanager::init()
 
 	_heartBeatCnt = 0;								//하트비트 카운트
 
-
+	interval = 0;
 	//인벤토리 해제 불값=============================
 
 	_attackInven.open = false;
@@ -77,6 +77,8 @@ HRESULT UImanager::init()
 	_feetInven.open = false;
 	_torchInven.open = false;
 	_ringInven.open = false;
+	_heatBeatStop = false;
+	_heatBeatStop2 = true;
 
 	//인벤토리 고정할 위치
 	_x1Slot = 20 , _y1Slot = 5;
@@ -119,32 +121,53 @@ void UImanager::update()
 		hp++;
 	}
 
-	if (KEYMANAGER->isOnceKeyDown('A'))
+	/*if (KEYMANAGER->isOnceKeyDown('A'))
 	{
 		_heartBeatCnt++;
 	}
 	if (KEYMANAGER->isOnceKeyDown('S'))
 	{
 		_heartBeatCnt--;
-	}
+	}*/
+	
+	
+		if (BEATMANAGER->getInterval())
+		{
+			interval++;
+			if (interval > 10) //노트가 10개 이므로
+			{
+				_heartBeatCnt++;
 
+				if (_heartBeatCnt > 2)
+				{
+					_heartBeatCnt = 0;
+				}
+				interval = 0;
+			}
+
+		}
+	
 
 	if (KEYMANAGER->isToggleKey('L'))
 	{
-		_attackInven.open = true;
-		_itemInven.open = true;
 		_bombInven.open = true;
-		_throwInven.open = true;
 		_bodyInven.open = true;
 		_feetInven.open = true;
-	    _torchInven.open = true;
+
+		_torchInven.open = true;
 		_ringInven.open = true;
 
 	}
 	if (KEYMANAGER->isToggleKey('K'))
 	{
 		_shovelInven.open = true;
+
+		_attackInven.open = true;
+		_itemInven.open = true;
 		_headInven.open = true;
+		_throwInven.open = true;
+		
+		
 	}
 	//=======================================
 
@@ -328,17 +351,55 @@ void UImanager::update()
 							if (_x7Slot >= _ringInven.x)_ringInven.x++;
 						}
 					}
+					if (_torchInven.open)
+					{
+						if (_x6Slot >= _ringInven.x)_ringInven.x++;
+					}
+				}
+				if (_feetInven.open)
+				{
+					if (_x5Slot >= _torchInven.x)_torchInven.x++;
+					if (_x5Slot >= _ringInven.x)_ringInven.x++;
+					if (_torchInven.open)
+					{
+						if (_x6Slot >= _ringInven.x)_ringInven.x++;
+					}
+				}
+				if (_torchInven.open)
+				{
+					if (_x5Slot >= _ringInven.x)_ringInven.x++;
+				}
+
+			}
+			if (_headInven.open)
+			{
+				if (_x4Slot >= _feetInven.x)_feetInven.x++;
+				if (_x4Slot >= _torchInven.x)_torchInven.x++;
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+				if (_feetInven.open)
+				{
+					if (_x5Slot >= _torchInven.x)_torchInven.x++;
+					if (_x5Slot >= _ringInven.x)_ringInven.x++;
+					if (_torchInven.open)
+					{
+						if (_x6Slot >= _ringInven.x)_ringInven.x++;
+					}
 				}
 			}
+			if (_feetInven.open)
+			{
+				if (_x4Slot >= _torchInven.x)_torchInven.x++;
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+				if (_torchInven.open)
+				{
+					if (_x5Slot >= _ringInven.x)_ringInven.x++;
+				}
+			}
+			if (_torchInven.open)
+			{
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+			}
 		}
-	}
-	if (_attackInven.open)
-	{
-		if (_x2Slot >= _bodyInven.x)_bodyInven.x++;
-		if (_x2Slot >= _headInven.x)_headInven.x++;
-		if (_x2Slot >= _feetInven.x)_feetInven.x++;
-		if (_x2Slot >= _torchInven.x)_torchInven.x++;
-		if (_x2Slot >= _ringInven.x)_ringInven.x++;
 		if (_bodyInven.open)
 		{
 			if (_x3Slot >= _headInven.x)_headInven.x++;
@@ -361,7 +422,121 @@ void UImanager::update()
 				}
 			}
 		}
+		if (_headInven.open)
+		{
+			if (_x3Slot >= _feetInven.x)_feetInven.x++;
+			if (_x3Slot >= _torchInven.x)_torchInven.x++;
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+			if (_feetInven.open)
+			{
+				if (_x4Slot >= _torchInven.x)_torchInven.x++;
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+				if (_torchInven.open)
+				{
+					if (_x5Slot >= _ringInven.x)_ringInven.x++;
+				}
+			}
+		}
+		if (_feetInven.open)
+		{
+			if (_x3Slot >= _torchInven.x)_torchInven.x++;
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+			if (_torchInven.open)
+			{
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+			}
+		}
+		if (_torchInven.open)
+		{
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+		}
 	}
+
+	//==============================================
+
+	if (_attackInven.open)
+	{
+		if (_x2Slot >= _bodyInven.x)_bodyInven.x++;
+		if (_x2Slot >= _headInven.x)_headInven.x++;
+		if (_x2Slot >= _feetInven.x)_feetInven.x++;
+		if (_x2Slot >= _torchInven.x)_torchInven.x++;
+		if (_x2Slot >= _ringInven.x)_ringInven.x++;
+		if (_bodyInven.open)
+		{
+			if (_x3Slot >= _headInven.x)_headInven.x++; //여기서 해드가 없으면 
+			if (_x3Slot >= _feetInven.x)_feetInven.x++;	//밑에 얘네들이 x3에 머무는구나
+			if (_x3Slot >= _torchInven.x)_torchInven.x++;
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+			if (_headInven.open)
+			{
+				if (_x4Slot >= _feetInven.x)_feetInven.x++;
+				if (_x4Slot >= _torchInven.x)_torchInven.x++;
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+				if (_feetInven.open)
+				{
+					if (_x5Slot >= _torchInven.x)_torchInven.x++;
+					if (_x5Slot >= _ringInven.x)_ringInven.x++;
+					if (_torchInven.open)
+					{
+						if (_x6Slot >= _ringInven.x)_ringInven.x++;
+					}
+					
+				}
+				
+			}
+
+			if (_feetInven.open)
+			{
+				if (_x4Slot >= _torchInven.x)_torchInven.x++;
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+				if (_torchInven.open)
+				{
+					if (_x5Slot >= _ringInven.x)_ringInven.x++;
+				}
+			}
+			if (_torchInven.open)
+			{
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+			}
+		}
+		if (_headInven.open)
+		{
+			if (_x3Slot >= _feetInven.x)_feetInven.x++;
+			if (_x3Slot >= _torchInven.x)_torchInven.x++;
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+			if (_feetInven.open)
+			{
+				if (_x4Slot >= _torchInven.x)_torchInven.x++;
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+				if (_torchInven.open)
+				{
+					if (_x5Slot >= _ringInven.x)_ringInven.x++;
+				}
+				
+			}
+
+		}
+		if (_feetInven.open)
+		{
+			if (_x3Slot >= _torchInven.x)_torchInven.x++;
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+			if (_torchInven.open)
+			{
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+			}
+
+		}
+		if (_torchInven.open)
+		{
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+		}
+	}
+
+
+	//=================================================
+
+
+
 	if (_bodyInven.open)
 	{
 		if (_x2Slot >= _headInven.x)_headInven.x++;
@@ -382,8 +557,29 @@ void UImanager::update()
 					if (_x5Slot >= _ringInven.x)_ringInven.x++;
 				}
 			}
+			if (_torchInven.open)
+			{
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+			}
+			
+		}
+		if (_feetInven.open)
+		{
+			if (_x3Slot >= _torchInven.x)_torchInven.x++;
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+			if (_torchInven.open)
+			{
+				if (_x4Slot >= _ringInven.x)_ringInven.x++;
+			}
+		}
+		if (_torchInven.open)
+		{
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
 		}
 	}
+
+	//===================================
+
 	if (_headInven.open)
 	{
 		if (_x2Slot >= _feetInven.x)_feetInven.x++;
@@ -398,7 +594,12 @@ void UImanager::update()
 				if (_x4Slot >= _ringInven.x)_ringInven.x++;
 			}
 		}
+		if (_torchInven.open)
+		{
+			if (_x3Slot >= _ringInven.x)_ringInven.x++;
+		}
 	}
+	//=============================
 	if (_feetInven.open)
 	{
 		if (_x2Slot >= _torchInven.x)_torchInven.x++;
@@ -408,52 +609,38 @@ void UImanager::update()
 			if (_x3Slot >= _ringInven.x)_ringInven.x++;
 		}
 	}
+
+	//==========================
 	if (_torchInven.open)
 	{
 		if (_x2Slot >= _ringInven.x)_ringInven.x++;
 	}
 
-	//y축 기준
-	if (!_shovelInven.open)
+	//y축 기준====================
+	
+	_itemInven.y = _y2Slot;
+	if (!_itemInven.open)
 	{
-		_itemInven.y = _y1Slot;
-		if (!_itemInven.open)
+		_throwInven.y = _y2Slot;
+		if (!_throwInven.open)
 		{
-			_throwInven.y = _y1Slot;
-			if (!_throwInven.open)
-			{
-				_bombInven.y = _y1Slot;
-			}
+			_bombInven.y = _y2Slot;
 		}
 	}
-	if (_shovelInven.open)
-	{
-		if (_y2Slot >= _itemInven.y)_itemInven.y++;
-		if (_y2Slot >= _throwInven.y)_throwInven.y++;
-		if (_y2Slot >= _bombInven.y)_bombInven.y++;
-		if (_itemInven.open)
-		{
-			if (_y3Slot >= _throwInven.y)_throwInven.y++;
-			if (_y3Slot >= _bombInven.y)_bombInven.y++;
-			if (_throwInven.open)
-			{
-				if (_y4Slot >= _bombInven.y)_bombInven.y++;
-			}
-		}
-	}
+	
 	if (_itemInven.open)
 	{
-		if (_y2Slot >= _throwInven.y)_throwInven.y++;
-		if (_y2Slot >= _bombInven.y)_bombInven.y++;
+		if (_y3Slot >= _throwInven.y)_throwInven.y++;
+		if (_y3Slot >= _bombInven.y)_bombInven.y++;
 		if (_throwInven.open)
 		{
-			if (_y3Slot >= _bombInven.y)_bombInven.y++;
+			if (_y4Slot >= _bombInven.y)_bombInven.y++;
 		}
 	}
-
+	
 	if (_throwInven.open)
 	{
-		if (_y2Slot >= _bombInven.y)_bombInven.y++;
+		if (_y3Slot >= _bombInven.y)_bombInven.y++;
 	}
 
 

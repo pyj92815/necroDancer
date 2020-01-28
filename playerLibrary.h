@@ -20,7 +20,6 @@ enum PLAYERWAEPON				// 플레이어의 무기
 	PLAYERWAEPON_BROADSWORD,	// 브로드소드
 };
 
-
 struct tagPlayer				//플레이어의 정보
 {
 	PLAYERDIRECTION direction;	// 방향   

@@ -83,10 +83,13 @@ private:
 	int hp;
 
 	int _heartBeatCnt;
+	bool _heatBeatStop;
+	bool _heatBeatStop2;
 	int _currentFrameSpeed;
 	int _frameCount;
 
 	float tx;
+	int interval;
 
 	//½½·Ô °íÁ¤ÇÒ À§Ä¡ ÁÂÇ¥
 	float _x1Slot , _y1Slot;
