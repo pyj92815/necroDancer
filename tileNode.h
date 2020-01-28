@@ -75,17 +75,10 @@ enum WALL
 {
 	W_WALL, W_ITEM_WALL, W_WALL2, W_SHOP_WALL,		//기본 벽, 아이템이 들어있는 벽, 
 	W_END_WALL, W_BOSS_WALL,						//부셔지지 않는 벽
-	W_DOOR, W_TORCH, W_FIRE_WALL,					//문. 토치, 불 기둥
+	W_DOOR,											//문. 토치, 불 기둥
 	W_NONE											//나중에 지울용도
 };
 
-//오브젝트
-enum OBJECT
-{
-	OBJ_ENEMY,										//적
-	OBJ_FLOOR_OBJECT,								//바닦에 뿌려지는 오브젝트
-	OBJ_WEAPON, W_ARMOR								//아이탬(방어구)
-};
 
 enum ITEMWEAPON
 {
@@ -108,6 +101,39 @@ enum TRAP
 	TRAP_NONE
 };
 
+//아이템
+enum ARMOR
+{
+	//방어구
+	A_HELMET,
+	A_ARMOR_1, A_ARMOR_2, A_ARMOR_3, A_ARMOR_4,
+	A_BOOTS,
+	A_RING,
+	A_TORCH_1, A_TORCH_2, A_TORCH_3, A_NONE
+};
+enum WEAPON
+{
+	//무기
+	WP_DAGGER_1, WP_DAGGER_2, WP_SWORD, WP_LONG_SWORD,
+	WP_BOMB, WP_RIFLE, WP_SHOTGUN,
+	WP_SPEAR, WP_MACE,
+	WP_WHIP, WP_NINETAILS_WHIP,
+	WP_BOW, WP_CROSS_BOW,
+	WP_NONE
+};
+
+enum OBJECT
+{
+	OBJ_WATER,										//바닦에 뿌려지는 오브젝트
+	OBJ_FALLING_DOOR,								//떨어지는 바닦
+};
+
+enum CHARACTER
+{
+	CHAR_ENEMY,										//적
+	CHAR_PLAYER,									//플레이어
+};
+
 //position
 enum POS
 {
@@ -119,6 +145,7 @@ enum TYPE
 	TYPE_TERRAIN,
 	TYPE_WALL,
 	TYPE_TRAP,
+	TYPE_ITEM_ARMOR, TYPE_ITEM_WEAPON,
 	TYPE_OBJECT,
 	TYPE_ENEMY,
 	TYPE_CHARACTER,
@@ -131,7 +158,10 @@ struct tagTile
 	TERRAIN terrain;		//지형
 	WALL wall;				//벽
 	TRAP trap;				//함정
+	ARMOR armor;				//방어구
+	WEAPON weapon;				//무기
 	OBJECT obj;				//오브젝트
+	CHARACTER character;	//캐릭터
 	RECT rc;				//렉트
 	int terrainFrameX;		//터레인 번호
 	int terrainFrameY;		//터레인 번호
@@ -143,13 +173,15 @@ struct tagTile
 	int enemyFrameY;		//적 번호
 	int	floorObjFrameX;		//바닦 오브젝트 번호
 	int floorObjFrameY;		//바닦 오브젝트 번호
-	int itemFrameX;			//아이템 번호
-	int itemFrameY;			//아이템 번호
+	int armorFrameX;			//아이템 번호
+	int armorFrameY;			//아이템 번호
+	int weaponFrameX;			//아이템 번호
+	int weaponFrameY;			//아이템 번호
 	int trapFrameX;			//함정 번호
 	int trapFrameY;			//함정 번호
 	
 	int alphaValue;			//시야 값 정하기 위한 알파 블랜더 변수
-	bool alphaEyesight;			//플레이어 시야
+	bool alphaEyesight;		//플레이어 시야
 	
 	bool isRender;
 
@@ -159,7 +191,7 @@ struct tagTile
 };
 
 //타일셋 
-struct tagSampleTile
+struct tagSetTile
 {
 	RECT rcTile;
 	int terrainFrameX;

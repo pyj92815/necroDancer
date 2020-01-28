@@ -496,6 +496,76 @@ void image::frameRender(HDC hdc, int destX, int destY, int currentFrameX, int cu
 	}
 }
 
+void image::frameBottomRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY)
+{
+	_imageInfo->currentFrameX = currentFrameX;
+	_imageInfo->currentFrameY = currentFrameY;
+
+	//트랜스 컬러 처리를 해야하냐
+	if (_trans)
+	{
+		//화면에 뿌려줄때 특정 픽셀값을 빼고 출력해준다
+		GdiTransparentBlt(
+			hdc,												//복사될 영역의 DC 
+			destX,												//복사될 좌표 X
+			destY - 52,											//복사될 좌표 Y
+			_imageInfo->frameWidth,								//복사될 크기
+			_imageInfo->frameHeight,							//복사될 크기
+			_imageInfo->hMemDC,									//복사할 DC
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,									//복사해올 좌표
+			_imageInfo->frameWidth,									//복사해올 크기
+			_imageInfo->frameHeight,
+			_transColor);										//복사해올때 제외할 칼라
+
+	}
+	//아니냐
+	else
+	{
+		BitBlt(hdc, destX, destY,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight, SRCCOPY);
+	}
+}
+
+void image::frameWallBottomRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY)
+{
+	_imageInfo->currentFrameX = currentFrameX;
+	_imageInfo->currentFrameY = currentFrameY;
+
+	//트랜스 컬러 처리를 해야하냐
+	if (_trans)
+	{
+		//화면에 뿌려줄때 특정 픽셀값을 빼고 출력해준다
+		GdiTransparentBlt(
+			hdc,												//복사될 영역의 DC 
+			destX,												//복사될 좌표 X
+			destY - 84,											//복사될 좌표 Y
+			_imageInfo->frameWidth,								//복사될 크기
+			_imageInfo->frameHeight,							//복사될 크기
+			_imageInfo->hMemDC,									//복사할 DC
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,									//복사해올 좌표
+			_imageInfo->frameWidth,									//복사해올 크기
+			_imageInfo->frameHeight,
+			_transColor);										//복사해올때 제외할 칼라
+
+	}
+	//아니냐
+	else
+	{
+		BitBlt(hdc, destX, destY,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight, SRCCOPY);
+	}
+}
+
 void image::loopRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY)
 {
 	if (offSetX < 0) offSetX = _imageInfo->width + (offSetX % _imageInfo->width);

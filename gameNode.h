@@ -9,6 +9,9 @@ enum CTRL
 {
 	CTRL_SAVE,			//세이브 버튼에서 사용될 것
 	CTRL_LOAD,			//로드 버튼에서 사용될 것
+	CTRL_ITEM, 
+	CTRL_ARMOR, 
+	CTRL_WEAPON,
 	CTRL_OBJECT,		//오브젝트들을 그리기위한 버튼
 	CTRL_TERRAINDRAW,	//지형 그리기 버튼
 	CTRL_FLOOR_OBJ,		//바닦에 있는 오브젝트

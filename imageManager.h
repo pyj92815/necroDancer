@@ -40,5 +40,7 @@ public:
 	//프레임렌더 만들어보세욤 여러분 손으로
 	void frameRender(string strKey, HDC hdc, int destX, int destY);
 	void frameRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
+	void frameBottomRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
+	void frameWallBottomRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
 };
 

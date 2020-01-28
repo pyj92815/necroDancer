@@ -72,7 +72,9 @@ public:
 	void CameraMapTool_Correction();
 	void CameraMapTool_Move();
 
+
 	//카메라 흔들리는보정 
 	void Camera_WorldDC_Shake();
+	void set_CameraPos_Update(float x, float y);
 };
 

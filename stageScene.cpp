@@ -30,7 +30,7 @@ void stageScene::update()
 	_em->update();
 	BEATMANAGER->update();
 	_ui->update();
-
+	ZorderSetup();
 	_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
@@ -41,6 +41,7 @@ void stageScene::render()
 	// ¹Ù´Ú ·»´õ 
 	for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
 	{
+		if ((*_viTotalList)->type == TYPE_NONE) continue;
 		if ((*_viTotalList)->terrain != TR_NONE)
 		{
 			if ((*_viTotalList)->alphaValue <= 0)
@@ -57,11 +58,12 @@ void stageScene::render()
 	//// ÀÌ¿ÜÀÇ ·»´õ 
 	for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
 	{
+		if ((*_viTotalList)->type == TYPE_NONE) continue;
 		if ((*_viTotalList)->alphaValue <= 0)
 		{
 			if ((*_viTotalList)->wall != W_NONE)
 			{
-				IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
+				IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 52, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
 				continue;
 			}
 			if ((*_viTotalList)->trap != TRAP_NONE)
@@ -110,7 +112,7 @@ void stageScene::render()
 			{
 				if (_zOrderVector[i]->Object->tile->wall != W_NONE)
 				{
-					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY);
+					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 52, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY);
 				}
 				if (_zOrderVector[i]->Object->tile->trap != TRAP_NONE)
 				{
@@ -153,15 +155,15 @@ void stageScene::render()
 void stageScene::ZorderSetup()
 {
 	_zOrderVector.clear();
-	int startX = _pm->getPlayerInfo()->getPlayer().idx - 4;
-	int startY = _pm->getPlayerInfo()->getPlayer().idy - 4;
-	if (_pm->getPlayerInfo()->getPlayer().idx - 4 < 0) startX = 0;
-	if (_pm->getPlayerInfo()->getPlayer().idy - 4 < 0) startY = 0;
+	int startX = _pm->getPlayerInfo()->getPlayer().idx - 7;
+	int startY = _pm->getPlayerInfo()->getPlayer().idy - 7;
+	if (_pm->getPlayerInfo()->getPlayer().idx - 7 < 0) startX = 0;
+	if (_pm->getPlayerInfo()->getPlayer().idy - 7 < 0) startY = 0;
 
 	// 2n+ 1 °³ ¸¸Å­
-	for (int i = startY; i < startY + 9; i++)
+	for (int i = startY; i < startY + 15; i++)
 	{
-		for (int j = startX; j < startX + 9; j++)
+		for (int j = startX; j < startX + 15; j++)
 		{
 			if (i > TILEY) continue;
 			if (j > TILEX) continue;
@@ -278,7 +280,7 @@ void stageScene::stageMapLoad()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);

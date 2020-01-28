@@ -204,6 +204,7 @@
     <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="mapToolScene.h" />
+    <ClInclude Include="mapTool_Library.h" />
     <ClInclude Include="miniMap.h" />
     <ClInclude Include="Next_Create_Boss.h" />
     <ClInclude Include="Option.h" />

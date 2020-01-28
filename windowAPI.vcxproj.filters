@@ -339,6 +339,9 @@
     <ClInclude Include="Option.h">
       <Filter>playGround\GameSettingManager\Option</Filter>
     </ClInclude>
+    <ClInclude Include="mapTool_Library.h">
+      <Filter>playGround\MapTool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
