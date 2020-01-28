@@ -23,3 +23,8 @@ void playerManager::render()
 {
 	_player->render();
 }
+
+void playerManager::effectRender()
+{
+	_player->effectRender();
+}

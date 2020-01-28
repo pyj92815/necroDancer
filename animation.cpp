@@ -249,8 +249,6 @@ void animation::setPlayFrame(array<int, 4>* playArr, int arrLen, BOOL loop)
 
 	for (int i = 0; i < playArr->size(); i++)
 	{
-		int temp;
-		temp = (*playArr)[i];
 		_playList.push_back((*playArr)[i]);
 	}
 }

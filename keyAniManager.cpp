@@ -209,44 +209,6 @@ animation * keyAniManager::findAnimation(string animationKeyName)
 	return nullptr;
 }
 
-void keyAniManager::swapArrayFrameAnimaition(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop)
-{
-	iterAnimation iter = _mTotalAnimation.find(animationKeyName);
-
-	// 持失 
-	image* img = IMAGEMANAGER->findImage(imageKeyName);
-
-	animation* ani = new animation;
-
-	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
-	ani->setPlayFrame(arr, arrLen, loop);
-	ani->setFPS(fps);
-
-	iter->second->setPlayList();
-	iter->second = ani;
-	SAFE_RELEASE(ani);
-	SAFE_DELETE(ani);
-}
-
-void keyAniManager::swapArrayFrameAnimaition(string animationKeyName, const char* imageKeyName, array<int, 4>* arr, int arrLen, int fps, bool loop)
-{
-	iterAnimation iter = _mTotalAnimation.find(animationKeyName);
-
-	// 持失 
-	image* img = IMAGEMANAGER->findImage(imageKeyName);
-
-	animation* ani = new animation;
-
-	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
-	ani->setPlayFrame(arr, arrLen, loop);
-	ani->setFPS(fps);
-
-	iter->second = ani;
-
-	ani->release();
-}
-
-
 void keyAniManager::deleteAll()
 {
 	for (iterAnimation iter = _mTotalAnimation.begin(); iter != _mTotalAnimation.end();)

@@ -70,8 +70,6 @@ public:
 	void frameContinue() { _last = true; }
 	void setPlayList() {
 		_nowPlayIndex = 0;
-		_playList.clear();
-		_frameList.clear();
 	}
 
 	void start();

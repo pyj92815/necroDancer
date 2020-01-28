@@ -45,10 +45,6 @@ public:
 
 	animation* findAnimation(string animationKeyName);
 
-	void swapArrayFrameAnimaition(string animationKeyName, const char* imageKeyName, int* arr, int arrLen, int fps, bool loop);
-	void swapArrayFrameAnimaition(string animationKeyName, const char* imageKeyName, array<int,4>* arr, int arrLen, int fps, bool loop);
-	void swapArrayFrameAnimaition8(string animationKeyName, const char* imageKeyName, array<int, 8>* arr, int arrLen, int fps, bool loop);
-
 	void deleteAll();
 
 

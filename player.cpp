@@ -64,28 +64,7 @@ void player::update()
 
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
-		bodyLeft = { 15, 14, 13, 12 };
-		bodyRight = { 8,9,10,11 };
-		KEYANIMANAGER->swapArrayFrameAnimaition("bodyRight", "player1_armor_body_xmas", &bodyRight, 4, 10, true);
-		KEYANIMANAGER->swapArrayFrameAnimaition("bodyLeft", "player1_armor_body_xmas", &bodyLeft, 4, 10, true);
-	
-		_player.headAni = KEYANIMANAGER->findAnimation("headLeft");			// 애니매이션 이미지
-		_player.bodyAni = KEYANIMANAGER->findAnimation("bodyLeft");
-		_player.headAni->start();
-		_player.bodyAni->start();
-
-		/*
-		KEYANIMANAGER->findAnimation("headLeft")->stop();
-		KEYANIMANAGER->findAnimation("bodyLeft")->stop();
-		KEYANIMANAGER->findAnimation("headRight")->stop();
-		KEYANIMANAGER->findAnimation("bodyRight")->stop();*/
-
-		//KEYANIMANAGER->findAnimation("headLeft")->start();
-		//KEYANIMANAGER->findAnimation("bodyLeft")->start();
-		//KEYANIMANAGER->findAnimation("headRight")->start();
-		//KEYANIMANAGER->findAnimation("bodyRight")->start();
-
-
+		playerEffect_Miss();
 	}
 }
 
@@ -93,6 +72,10 @@ void player::render()
 {
 	_player.bodyImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.bodyAni);	// 몸
 	_player.headImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.headAni);	// 얼굴 
+}
+
+void player::effectRender()
+{
 	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
 	{
 		(*_viEffect)->render(CAMERAMANAGER->getWorldDC());
@@ -270,7 +253,7 @@ void player::tileCheck()
 			}
 			break;
 		}
-		if (_miPlayerTile->first == PLAYERDIRECTION_DOWN && _miPlayerTile->first == _player.direction)
+		else if (_miPlayerTile->first == PLAYERDIRECTION_DOWN && _miPlayerTile->first == _player.direction)
 		{
 			switch (_miPlayerTile->second->type)
 			{
@@ -292,7 +275,7 @@ void player::tileCheck()
 			}
 			break;
 		}
-		if (_miPlayerTile->first == PLAYERDIRECTION_LEFT && _miPlayerTile->first == _player.direction)
+		else if (_miPlayerTile->first == PLAYERDIRECTION_LEFT && _miPlayerTile->first == _player.direction)
 		{
 			switch (_miPlayerTile->second->type)
 			{
@@ -314,7 +297,7 @@ void player::tileCheck()
 			}
 			break;
 		}
-		if (_miPlayerTile->first == PLAYERDIRECTION_RIGHT && _miPlayerTile->first == _player.direction)
+		else if (_miPlayerTile->first == PLAYERDIRECTION_RIGHT && _miPlayerTile->first == _player.direction)
 		{
 			switch (_miPlayerTile->second->type)
 			{
@@ -338,7 +321,7 @@ void player::tileCheck()
 		}
 	}
 	if (action) return;
-	// ENEMY 타일 정보 
+	// ENEMY 타일 정보 ( 작성 예정 )
 	for (_miPlayerEnemyTile = _mPlayerEnemyTile.begin(); _miPlayerEnemyTile != _mPlayerEnemyTile.end(); ++_miPlayerEnemyTile)
 	{
 		if (_player.weapon == PLAYERWAEPON_NONE) action = true; return;
@@ -463,10 +446,23 @@ void player::tileCheck()
 void player::wallCheck()
 {
 	// 타일 삽 이미지를 띄운다 
-	playerEffect_Shovel(_miPlayerTile->second);
+
 	switch (_miPlayerTile->second->wall)
 	{
 	case W_WALL:
+		playerEffect_Shovel(_miPlayerTile->second);
+		_miPlayerTile->second->type = TYPE_TERRAIN;
+		_miPlayerTile->second->wall = W_NONE;
+		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
+		_miPlayerTile->second->terrainFrameX = 1;
+		_miPlayerTile->second->terrainFrameY = 1;
+		break;
+	case  W_END_WALL:
+	case  W_BOSS_WALL:
+	case  W_SHOP_WALL:
+		playerEffect_Shovel(_miPlayerTile->second);
+		break;
+	case W_DOOR:
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
 		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
@@ -500,31 +496,52 @@ void player::itempCheck()
 		case A_HELMET:
 			break;
 		case A_ARMOR_1:
-			bodyLeft = { 8,9,10,11 };
-			bodyRight = { 15,14,13,12};
-			KEYANIMANAGER->swapArrayFrameAnimaition("bodyLeft", "player1_armor_body_xmas", &bodyLeft, 4, 10, true);
-			KEYANIMANAGER->swapArrayFrameAnimaition("bodyRight", "player1_armor_body_xmas", &bodyRight, 4, 10, true);
+			bodyLeft = { 15,14,13,12 };
+			bodyRight = { 8,9,10,11 };
+			KEYANIMANAGER->findAnimation("bodyLeft")->setPlayFrame(&bodyLeft, 4, true);
+			KEYANIMANAGER->findAnimation("bodyRight")->setPlayFrame(&bodyRight, 4, true);
+			makeItem(WP_NONE, A_ARMOR_1, 0, 1, 0, 0, 1, 0);
 			break;
 		case A_ARMOR_2:
+			bodyLeft = { 23,22,21,20 };
+			bodyRight = { 16,17,18,19 };
+			KEYANIMANAGER->findAnimation("bodyLeft")->setPlayFrame(&bodyLeft, 4, true);
+			KEYANIMANAGER->findAnimation("bodyRight")->setPlayFrame(&bodyRight, 4, true);
+			makeItem(WP_NONE, A_ARMOR_2, 1, 1, 0, 0, 2, 0);
 			break;
 		case A_ARMOR_3:
+			bodyLeft = { 31,30,29,28 };
+			bodyRight = { 24,25,26,27 };
+			KEYANIMANAGER->findAnimation("bodyLeft")->setPlayFrame(&bodyLeft, 4, true);
+			KEYANIMANAGER->findAnimation("bodyRight")->setPlayFrame(&bodyRight, 4, true);
+			makeItem(WP_NONE, A_ARMOR_2, 2, 1, 0, 0, 3, 0);
 			break;
 		case A_ARMOR_4:
+			bodyLeft = { 39,38,37,36 };
+			bodyRight = { 32,33,34,35 };
+			KEYANIMANAGER->findAnimation("bodyLeft")->setPlayFrame(&bodyLeft, 4, true);
+			KEYANIMANAGER->findAnimation("bodyRight")->setPlayFrame(&bodyRight, 4, true);
+			makeItem(WP_NONE, A_ARMOR_2, 3, 1, 0, 0, 4, 0);
 			break;
 		case A_BOOTS:
 			break;
 		case A_RING:
 			break;
 		case A_TORCH_1:
+			makeItem(WP_NONE, A_TORCH_2, 3, 4, 1, 0, 0, 0);
 			break;
 		case A_TORCH_2:
+			makeItem(WP_NONE, A_TORCH_2, 3, 4, 2, 0, 0, 0);
 			break;
 		case A_TORCH_3:
+			makeItem(WP_NONE, A_TORCH_3, 3, 4, 3, 0, 0, 0);
 			break;
 		case A_NONE:
 			return;
 			break;
 		}
+
+	
 	}
 	if(_miPlayerTile->second->type == TYPE_ITEM_WEAPON)
 	{
@@ -575,7 +592,6 @@ void player::makeItem(WEAPON weapon, ARMOR armor, int framex, int framey, int si
 	ZeroMemory(item, sizeof(item));
 	item->weapon = weapon;
 	item->armor = armor;
-
 	if (weapon != WP_NONE)
 	{
 		item->weaponFrameX = framex;
@@ -644,40 +660,6 @@ void player::StateMove()
 		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 		_isMoving = true;															// MOVE
 		_jump->jumping(&_player.x, &_player.y, 7, 1.5);	//점프 
-		break;
-	default:
-		break;
-	}
-}
-
-void player::StateAttack()
-{
-	switch (_player.direction)
-	{
-	case PLAYERDIRECTION_UP:
-		break;
-	case PLAYERDIRECTION_DOWN:
-		break;
-	case PLAYERDIRECTION_RIGHT:
-		break;
-	case PLAYERDIRECTION_LEFT:
-		break;
-	default:
-		break;
-	}
-}
-
-void player::StateShovel()
-{
-	switch (_player.direction)
-	{
-	case PLAYERDIRECTION_UP:
-		break;
-	case PLAYERDIRECTION_DOWN:
-		break;
-	case PLAYERDIRECTION_RIGHT:
-		break;
-	case PLAYERDIRECTION_LEFT:
 		break;
 	default:
 		break;
