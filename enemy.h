@@ -24,6 +24,7 @@ struct EnemyInfo
 	float damage;
 	bool Light;							//시야 안에 있는지 여부를 판단하기 위한 bool값
 	bool aniChange;						//애니메이션을 바꿨는지 판단하기 위한 bool값
+	int beat;							//박자마다 움직이는 enemy의 특성을 위해 박자를  표시할 변수 ex)beat++ if(beat==2){enemy움직임 beat=0;}
 };
 
 class Enemy:public gameNode
