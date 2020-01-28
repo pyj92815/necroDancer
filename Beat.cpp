@@ -112,7 +112,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
 {
     _currentStage = STAGE_LOBBY;
     _noteFileName = _currentSongName = _oldSongName = "";
-    inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating = _activeAction = _deltaTime = _countNote = _countComma = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = _noteSpeed = 0;
+    _averageSpeed = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating = _activeAction = _deltaTime = _countNote = _countComma = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = _noteSpeed = 0;
 
     test_ShopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
     test_ShopKeeper = RectMakeCenter(test_ShopKeeperPos.x, test_ShopKeeperPos.y, 50, 50);
@@ -329,6 +329,10 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
         char display_checkInfo[256];
         sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _countNote);
         TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
+
+        char display_checkAverSpeed[256];
+        sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "%d", _averageSpeed);
+        TextOut(getMemDC, 100, 220, display_checkAverSpeed, strlen(display_checkAverSpeed));
     }
 }
 
@@ -358,6 +362,7 @@ void Beat::Load() // 노트 파일 로드
             {
                 ++_countComma; // 콤마 세기
                 _vMsTimeInfo.push_back(atoi(tempWord.c_str())); // 변환 순서 : 문자열 -> char*로 변환 -> atoi는 char*을 int로 변환
+                _averageSpeed += atoi(tempWord.c_str());
                 tempWord = ""; // string 초기화
                 continue;
             }
