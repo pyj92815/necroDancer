@@ -24,4 +24,5 @@ void boss_Ghost::update()
 
 void boss_Ghost::render()
 {
+	Rectangle(CAMERAMANAGER->getWorldDC(), _slave.pos.rc);
 }

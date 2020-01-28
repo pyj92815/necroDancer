@@ -30,7 +30,6 @@ void slave::render()
 {
 	_slave.image.img->aniRender(CAMERAMANAGER->getWorldDC(), _slave.pos.center.x, _slave.pos.center.y -
 		(_slave.image.img->getFrameHeight() / 4), _slave.image.animation);
-
 }
 
 
