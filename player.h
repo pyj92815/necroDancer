@@ -65,6 +65,7 @@ public:
 	PLAYERDIRECTION		getDirection()		{ return _player.direction; }  //  방향 
 	bool   getPlayerKey()	{ return _isKeyPress;}	  // 비트매니저 사용 
 	float* getPlayerY()		{ return &_player.y; }	  // 제트오더 사용 
+	tagPlayer* PlayerAddress() { return &_player; }
 
 	void setPlayerKeyDown()				  { _isKeyDown = false; }  // 비트매니저 KEY초기화
 	void setPlayerKey(bool value = false) {	_isKeyPress = value;}  // 비트매니저 사용  

@@ -1,9 +1,12 @@
 #pragma once
 #include "bossLibrary.h"
 
+
+
 class bossMove
 {
 private:
+	int			   move_Count;	// 이동 가능한 박자 카운트에 사용한다.(1박자 후 이동, 2박자 후 이동.. 등등)
 	
 public:
 	bossMove();
@@ -21,5 +24,8 @@ public:
 	// 보스의 중점 x, y를 이용하여 위치 계산을 한다.
 	// 보스가 점프 연산하는중에 필요한 변수를 이용한다. (속도, 중력 등)
 	void jumping(BOSS_DIRECTION* direction, POINTFLOAT* center, tagBossJump* jump);
+
+	void			set_BossMoveCount(int value) { move_Count = value; }	// 무브 카운터 셋터
+	int				get_BossMoveCount()  { return move_Count; }				// 무브 카운터 겟터
 };
 
