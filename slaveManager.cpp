@@ -31,9 +31,31 @@ void slaveManager::render()
 void slaveManager::create_Slave(SLAVE_TYPE type, int idx, int idy)
 {
 	slave* new_Slave;
-	new_Slave = new slave;								// 공간 할당을 받는다.
-	new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
 
-	_vSlaveList.push_back(new_Slave);					// 새로 만들어진 슬레이브를 저장한다.
+	// 타입에 맞는 공간 할당을 받는다.
+	switch (type)
+	{
+		case SLAVE_TYPE::SLAVE_BAT:
+			new_Slave = new boss_Bat;
+			//new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
+			break;
+
+		case SLAVE_TYPE::SLAVE_GHOST:
+			new_Slave = new boss_Ghost;
+			//new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
+			break;
+
+		case SLAVE_TYPE::SLAVE_SKELETON:
+			new_Slave = new boss_Skeleton;
+			//new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
+			break;
+
+		case SLAVE_TYPE::SLAVE_SKELETON_YELLOW:
+			new_Slave = new boss_Skeleton_Yellow;
+			//new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
+			break;
+	}		
+	new_Slave->init(type, idx, idy);							// 해당 슬레이브를 만든다.
+	_vSlaveList.push_back(new_Slave);							// 새로 만들어진 슬레이브를 저장한다.
 }
 

@@ -24,4 +24,5 @@ void boss_Skeleton::update()
 
 void boss_Skeleton::render()
 {
+	Rectangle(CAMERAMANAGER->getWorldDC(), _slave.pos.rc);
 }

@@ -48,18 +48,35 @@ void bossStageScene::update()
 	// 보스 움직임 연산
 	boss_Move_Player();
 
-	_sm->update();
-	if (KEYMANAGER->isToggleKey('V'))
-	{
-		BEATMANAGER->update();
-	}
-
 	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
 	{
 		_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
+	{
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
 		_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y + 1);
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y + 1);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
+	{
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+	{
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+	}
+
+	_sm->update();
+
+	if (KEYMANAGER->isToggleKey('V'))
+	{
+		BEATMANAGER->update();
 	}
 
 	// 비트 
