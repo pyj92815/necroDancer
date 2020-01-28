@@ -468,6 +468,7 @@ void mapTool::setup()
 		_tiles[i].weapon = WP_NONE;
 		_tiles[i].trap = TRAP_NONE;
 		_tiles[i].wall = W_NONE;
+		_tiles[i].alphaValue = 255; // 0~255 
 	}
 }
 

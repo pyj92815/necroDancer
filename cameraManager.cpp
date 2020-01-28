@@ -30,6 +30,7 @@ cameraManager::cameraManager()
 	_cameraMapSizeX = NULL;
 	_cameraMapSizeY = NULL;
 
+	_cameraRect = RectMake(_cameraX, _cameraY, WINSIZEX, WINSIZEY);
 }
 
 cameraManager::~cameraManager()
@@ -104,6 +105,7 @@ void cameraManager::set_CameraXY(float x, float y)
 	_cameraY = y - _cameraSizeY / 2.0f;*/
 
 	Camera_Correction();
+	_cameraRect = RectMake(_cameraX, _cameraY, WINSIZEX, WINSIZEY);  // RECT 업데이트 
 }
 
 void cameraManager::set_CameraXY(POINT xy)

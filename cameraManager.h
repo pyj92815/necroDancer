@@ -4,6 +4,7 @@
 class cameraManager : public singletonBase<cameraManager>
 {
 private:
+	RECT  _cameraRect;							// 렌더링 RECT   
 	float _cameraWorldSizeX, _cameraWorldSizeY; // 카메라 배경으 
 	float _cameraSizeX, _cameraSizeY;			// 카메라 크기 
 	float _cameraX, _cameraY;					// 카메라 좌표 
@@ -11,7 +12,6 @@ private:
 	float _cameraMapFullTileSizeX, _cameraMapFullTileSizeY; //맵툴 최대 사이즈
 	float _cameraMapTileSizeX, _cameraMapTileSizeY;			//맵툴 크기
 	float _cameraMapSizeX, _cameraMapSizeY;					//맵툴 좌표			
-
 
 	HDC _worldDC;
 	image* _worldImage;
@@ -72,9 +72,10 @@ public:
 	void CameraMapTool_Correction();
 	void CameraMapTool_Move();
 
-
 	//카메라 흔들리는보정 
 	void Camera_WorldDC_Shake();
+	RECT getCamera_Rect() { return _cameraRect; }
 	void set_CameraPos_Update(float x, float y);
+
 };
 

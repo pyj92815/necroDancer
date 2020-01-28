@@ -27,7 +27,7 @@ private:
 	float _distance;		// 타일 중점 거리 
 	float _time;			// 시간 
 	float _angle;			// 각도 
-
+	float _shadow;
 	bool _isMoving;			// BOOL 선형보간이동
 	bool _isKeyPress;		// KEY 입력 중 노트 판단 
 	bool _isKeyDown;		// KEY 입력 판단
@@ -64,7 +64,7 @@ public:
 	tagPlayer			getPlayer()			{ return _player; }			   //  전역 사용 
 	PLAYERDIRECTION		getDirection()		{ return _player.direction; }  //  방향 
 	bool   getPlayerKey()	{ return _isKeyPress;}	  // 비트매니저 사용 
-	float* getPlayerY()		{ return &_player.y; }	  // 제트오더 사용 
+	float* getPlayerY()		{ return &_shadow; }	  // 제트오더 사용 
 	tagPlayer* PlayerAddress() { return &_player; }
 
 	void setPlayerKeyDown()				  { _isKeyDown = false; }  // 비트매니저 KEY초기화

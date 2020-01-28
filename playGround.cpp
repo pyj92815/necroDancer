@@ -40,20 +40,6 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addFrameImage("armorTiles", "./image/mapTool/item/passive.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("weaponTiles", "./image/mapTool/item/weapon.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
 
-	/*multimap<string, int> mm;
-
-
-	mm.insert(pair<string, int>("¼¼ÈÆ", 300));
-	mm.insert(pair<string, int>("¶ôÈÆ", 200));
-	mm.insert(pair<string, int>("Çü±æ", 100));
-
-
-	multimap<string, int>::iterator miter;
-
-	for (miter =mm.begin();miter != mm.end();miter++)
-	{
-		cout <<miter->first<<","<< miter->second << endl;
-	}*/
 	_sm = new scene_Manager;
 	_sm->init();
 
@@ -86,7 +72,7 @@ void playGround::render()
 	//===========================================================
 	
 	_sm->render();
-
+	TIMEMANAGER->render(getMemDC());
 	//===========================================================
 	if (!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
 

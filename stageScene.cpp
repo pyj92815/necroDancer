@@ -41,51 +41,56 @@ void stageScene::render()
 	// 바닥 렌더 
 	for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
 	{
-		if ((*_viTotalList)->type == TYPE_NONE) continue;
-		if ((*_viTotalList)->terrain != TR_NONE)
+		RECT temp;
+		if (IntersectRect(&temp, &CAMERAMANAGER->getCamera_Rect(), &(*_viTotalList)->rc))
 		{
-			if ((*_viTotalList)->alphaValue <= 0)
+			if ((*_viTotalList)->type == TYPE_NONE) continue;
+
+			if ((*_viTotalList)->terrain != TR_NONE)
 			{
-				IMAGEMANAGER->findImage("terrainTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY);
-			}
-			else
-			{
-				IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY, (*_viTotalList)->alphaValue);
-			}
-			continue;
-		}
-	}
-	//// 이외의 렌더 
-	for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
-	{
-		if ((*_viTotalList)->type == TYPE_NONE) continue;
-		if ((*_viTotalList)->alphaValue <= 0)
-		{
-			if ((*_viTotalList)->wall != W_NONE)
-			{
-				IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
-				continue;
-			}
-			if ((*_viTotalList)->trap != TRAP_NONE)
-			{
-				IMAGEMANAGER->findImage("trapTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY);
-				continue;
-			}
-		}
-		else
-		{
-			if ((*_viTotalList)->wall != W_NONE)
-			{
-				IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY, (*_viTotalList)->alphaValue);
-				continue;
-			}
-			if ((*_viTotalList)->trap != TRAP_NONE)
-			{
-				IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY, (*_viTotalList)->alphaValue);
+				if ((*_viTotalList)->alphaValue <= 0)
+				{
+					IMAGEMANAGER->findImage("terrainTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY);
+				}
+				else
+				{
+					//IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY, (*_viTotalList)->alphaValue);
+				}
 				continue;
 			}
 		}
 	}
+	//// 이외의 렌더 
+	//for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
+	//{
+	//	if ((*_viTotalList)->type == TYPE_NONE) continue;
+	//	if ((*_viTotalList)->alphaValue <= 0)
+	//	{
+	//		if ((*_viTotalList)->wall != W_NONE)
+	//		{
+	//			IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
+	//			continue;
+	//		}
+	//		if ((*_viTotalList)->trap != TRAP_NONE)
+	//		{
+	//			IMAGEMANAGER->findImage("trapTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY);
+	//			continue;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if ((*_viTotalList)->wall != W_NONE)
+	//		{
+	//			IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY, (*_viTotalList)->alphaValue);
+	//			continue;
+	//		}
+	//		if ((*_viTotalList)->trap != TRAP_NONE)
+	//		{
+	//			IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY, (*_viTotalList)->alphaValue);
+	//			continue;
+	//		}
+	//	}
+	//}
 
 	//플레이어 렌더 
 	/*pm->render();*/
@@ -120,17 +125,17 @@ void stageScene::render()
 				}
 
 			}
-			else
+	/*		else
 			{
 				if (_zOrderVector[i]->Object->tile->wall != W_NONE)
 				{
-					IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->alphaValue);
+					IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 30, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY, _zOrderVector[i]->Object->tile->alphaValue);
 				}
 				if (_zOrderVector[i]->Object->tile->trap != TRAP_NONE)
 				{
 					IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top, _zOrderVector[i]->Object->tile->trapFrameX, _zOrderVector[i]->Object->tile->trapFrameY, _zOrderVector[i]->Object->tile->alphaValue);
 				}
-			}
+			}*/
 			continue;
 		}
 		if (_zOrderVector[i]->Object->player != NULL)
@@ -152,18 +157,19 @@ void stageScene::render()
 	_ui->render();
 }
 
+// 제트오더 사이즈 설정하기 
 void stageScene::ZorderSetup()
 {
 	_zOrderVector.clear();
-	int startX = _pm->getPlayerInfo()->getPlayer().idx - 7;
-	int startY = _pm->getPlayerInfo()->getPlayer().idy - 7;
-	if (_pm->getPlayerInfo()->getPlayer().idx - 7 < 0) startX = 0;
-	if (_pm->getPlayerInfo()->getPlayer().idy - 7 < 0) startY = 0;
+	int startX = _pm->getPlayerInfo()->getPlayer().idx - 15;
+	int startY = _pm->getPlayerInfo()->getPlayer().idy - 10;
+	if (_pm->getPlayerInfo()->getPlayer().idx - 15 < 0) startX = 0;
+	if (_pm->getPlayerInfo()->getPlayer().idy - 10 < 0) startY = 0;
 
 	// 2n+ 1 개 만큼
-	for (int i = startY; i < startY + 15; i++)
+	for (int i = startY; i < startY + 21; i++)
 	{
-		for (int j = startX; j < startX + 15; j++)
+		for (int j = startX; j < startX + 31; j++)
 		{
 			if (i > TILEY) continue;
 			if (j > TILEX) continue;
@@ -253,13 +259,13 @@ void stageScene::setVision(POINT index, int sight)
 {
 	// 재귀함수 
 	// 초기 예외처리 
-	if (0 > index.x || 0 > index.y || index.x > TILEX || index.y > TILEY) return; 
+	if (0 > index.x || 0 > index.y || index.x > TILEX || index.y > TILEY) return;
 	if (sight <= 0) return;
-	
+
 	bool recursionContinue = true;  // 초기 조건값 
 	//recursionContinue &= (_tiles[index.y * TILEX + index.x].wall == W_NONE);  // 맞춰야 하는 조건 
 	if (_tiles[index.y * TILEX + index.x].wall != W_NONE) sight = sight - 3;	// 시야처리에 따른 값 조정할 예정 
-	
+
 	if (recursionContinue)
 	{
 		_tiles[index.y * TILEX + index.x].alphaValue = 0;

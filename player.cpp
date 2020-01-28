@@ -31,6 +31,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.x = _player.idx * tileSizeX + (tileSizeX / 2);
 	_player.y = _player.idy * tileSizeY + (tileSizeY / 3);
 	_player.rc = RectMakeCenter(_player.x, _player.y, _player.bodyImage->getFrameWidth(), _player.headImage->getFrameHeight());
+	_shadow = _player.y;
 
 	_distance = tileSizeY;			//  타일 중점 거리
 	_time = 0.15;					//  MOVE 시간 
@@ -49,7 +50,9 @@ void player::release()
 
 void player::update()
 {
-	_jump->update();				// JUMP
+	_jump->update();							  // JUMP
+	if(!_jump->getJumping()) _shadow = _player.y; // 그림자의 위치(제트오더 점프 시 벽뒤로 넘어가지 않게 하기 위한 변수)
+
 	keyControl();					// KEY
 	playerMove();					// MOVE
 
@@ -109,7 +112,7 @@ void player::playerEffect_Shovel(tagTile* tile)
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
-	effect->init("shovel_basic", tile->rc.left,tile->rc.top - 30, 10,TIMESLOW);
+	effect->init("shovel_basic", tile->rc.left,tile->rc.top, 10,TIMESLOW);
 	_vEffect.push_back(effect);
 	CAMERAMANAGER->Camera_WorldDC_Shake(); // 문제는 예외처리 때문에 카메라 0,0에서는 작동 안함 
 }
@@ -224,8 +227,8 @@ void player::tileCheck()
 					_miPlayerTile->second->type = TYPE_TERRAIN;
 					_miPlayerTile->second->wall = W_NONE;
 					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-					_miPlayerTile->second->terrainFrameX = 0;
-					_miPlayerTile->second->terrainFrameY = 0;
+					_miPlayerTile->second->terrainFrameX = 1;
+					_miPlayerTile->second->terrainFrameY = 1;
 				}
 				else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
 				{
@@ -267,8 +270,8 @@ void player::tileCheck()
 					_miPlayerTile->second->type = TYPE_TERRAIN;
 					_miPlayerTile->second->wall = W_NONE;
 					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-					_miPlayerTile->second->terrainFrameX = 0;
-					_miPlayerTile->second->terrainFrameY = 0;
+					_miPlayerTile->second->terrainFrameX = 1;
+					_miPlayerTile->second->terrainFrameY = 1;
 				}
 				else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
 				{
@@ -309,8 +312,8 @@ void player::tileCheck()
 					_miPlayerTile->second->type = TYPE_TERRAIN;
 					_miPlayerTile->second->wall = W_NONE;
 					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-					_miPlayerTile->second->terrainFrameX = 0;
-					_miPlayerTile->second->terrainFrameY = 0;
+					_miPlayerTile->second->terrainFrameX = 1;
+					_miPlayerTile->second->terrainFrameY = 1;
 				}
 				else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
 				{

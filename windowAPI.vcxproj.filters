@@ -339,9 +339,6 @@
     <ClInclude Include="mapTool_Library.h">
       <Filter>playGround\MapTool</Filter>
     </ClInclude>
-    <ClInclude Include="itemManager.h">
-      <Filter>playGround\player</Filter>
-    </ClInclude>
     <ClInclude Include="playerLibrary.h">
       <Filter>playGround\player</Filter>
     </ClInclude>
@@ -544,9 +541,6 @@
     </ClCompile>
     <ClCompile Include="Option.cpp">
       <Filter>playGround\GameSettingManager\Option</Filter>
-    </ClCompile>
-    <ClCompile Include="itemManager.cpp">
-      <Filter>playGround\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
