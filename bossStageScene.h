@@ -65,7 +65,7 @@ public:
 	// 보스 & 슬레이브
 	void closePlayer(player* player, deathMetal* deathMetal);					// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
 	void searchSlave(vector<slave*> vSlaveList, player* player);				// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
-	void closePlayer(player* player, SLAVE_INFO* slave);								// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
+	void closePlayer_Slave(player* player, SLAVE_INFO* slave);								// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
 	void findPlayer(player* player, deathMetal* deathMetal, UImanager* ui);		// 플레이어의 위치를 찾는다. (데스메탈)
 	void findPlayer(player* player, slave* slave);								// 플레이어의 위치를 찾는다. (슬레이브)
 

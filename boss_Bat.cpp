@@ -11,6 +11,8 @@ boss_Bat::~boss_Bat()
 
 HRESULT boss_Bat::init()
 {
+
+
 	return S_OK;
 }
 

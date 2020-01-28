@@ -350,11 +350,11 @@ void bossStageScene::searchSlave(vector<slave*> vSlaveList, player* player)
 {
 	for (int i = 0; i < vSlaveList.size(); ++i)
 	{
-		closePlayer(player, vSlaveList[i]->get_Slave());
+		closePlayer_Slave(player, vSlaveList[i]->get_Slave());
 	}
 }
 
-void bossStageScene::closePlayer(player* player, SLAVE_INFO* slave)
+void bossStageScene::closePlayer_Slave(player* player, SLAVE_INFO* slave)
 {
 	// 플레이어와 슬레이브의 렉트 중점을 담는다.
 	POINTFLOAT playerCenter;
@@ -401,27 +401,26 @@ void bossStageScene::closePlayer(player* player, SLAVE_INFO* slave)
 		playerCenter.x, playerCenter.y);
 
 
-
 	// 만약 타일의 사이즈인 52로 나누었을때 0이 나온다면 52(양옆위아래)로 거리를 재야 한다.
 	if ((int)distance % TILESIZE == 0)
 	{
 		// 거리가 달라질때만 값이 바뀌기 때문에 한번만 적용이 된다.
-		if (!distanceCheck)
+		if (!slave->b_Value.distanceCheck)
 		{
 			// 플레이어가 인식 범위 안에 있다면 쉐도우를 벗는다.
 			if (distance < TILESIZE * BOSS_RECOGNITION_RANGE)
 			{
-				distanceCheck = true;
+				slave->b_Value.distanceCheck = true;
 				slave->b_Value.isClosePlayer = true;
 			}
 		}
 
-		if (distanceCheck)
+		if (slave->b_Value.distanceCheck)
 		{
 			// 플레이어가 인식 범위 안에 없다면 쉐도우를 입는다.
 			if (distance >= TILESIZE * BOSS_RECOGNITION_RANGE)
 			{
-				distanceCheck = false;
+				slave->b_Value.distanceCheck = false;
 				slave->b_Value.isClosePlayer = false;
 			}
 		}
@@ -431,26 +430,27 @@ void bossStageScene::closePlayer(player* player, SLAVE_INFO* slave)
 	else
 	{
 		// 거리가 달라질때만 값이 바뀌기 때문에 한번만 적용이 된다.
-		if (!distanceCheck)
+		if (!slave->b_Value.distanceCheck)
 		{
 			// 플레이어가 인식 범위 안에 있다면 쉐도우를 벗는다. 인식범위 예외처리를 해준다.
 			if (distance < (TILESIZE) * (BOSS_RECOGNITION_RANGE - 1) && distance < 165)
 			{
-				distanceCheck = true;
+				slave->b_Value.distanceCheck = true;
 				slave->b_Value.isClosePlayer = true;
 			}
 		}
 
-		if (distanceCheck)
+		if (slave->b_Value.distanceCheck)
 		{
 			// 플레이어가 인식 범위 안에 없다면 쉐도우를 입는다. 인식범위 예외처리를 해준다.
 			if (distance >= (TILESIZE) * (BOSS_RECOGNITION_RANGE - 1) || distance > 165)
 			{
-				distanceCheck = false;
+				slave->b_Value.distanceCheck = false;
 				slave->b_Value.isClosePlayer = false;
 			}
 		}
 	}
+
 }
 
 void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanager* ui)

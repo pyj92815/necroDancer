@@ -63,6 +63,7 @@ struct SLAVE_BOOL
 	bool				save_ClosePlayer;			// 슬레이브가 근처에 있는지 세이브를 한다.
 	bool				isChangeAni;				// 움직였다면 애니메이션을 바꿔줘야한다.
 	bool				change_Ani;					// 애니메이션을 체인지가 가능한지 여부
+	bool				distanceCheck;				// 플레이어와 거리 체크 
 };
 
 // 슬레이브의 연산 변수
@@ -133,6 +134,7 @@ public:
 		slave->b_Value.isChangeAni = false;
 		slave->b_Value.isClosePlayer = false;
 		slave->b_Value.save_ClosePlayer = false;
+		slave->b_Value.distanceCheck = false;
 
 		// 이미지, 애니메이션 할당
 		slave->image.img = new image;
