@@ -2,5 +2,9 @@
 #include"Enemy.h"
 class Enemy_Slime_Blue:public Enemy
 {
+public:
+	HRESULT init();
+	void Move();
+	void AniChange();
 };
 

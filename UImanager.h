@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include <map>
 
 
 enum HEARTSTATE
@@ -34,6 +35,7 @@ struct invenTag
 	INVENSTATE state;
 	float x;
 	float y;
+	bool open;
 
 };
 
@@ -41,6 +43,9 @@ class UImanager : public gameNode
 {
 private:
 	//인벤토리
+	map<OBJECT, invenTag> _mInven;
+	map<OBJECT, invenTag>::iterator _miInven;
+
 	invenTag _attackInven;
 	invenTag _shovelInven;
 	invenTag _itemInven;
@@ -48,7 +53,10 @@ private:
 	invenTag _throwInven;
 	invenTag _bodyInven;
 	invenTag _headInven;
-
+	invenTag _feetInven;
+	invenTag _torchInven;
+	invenTag _ringInven;
+	
 	invenTag _coinInven;
 	invenTag _daiaInven;
 
@@ -75,8 +83,22 @@ private:
 	int hp;
 
 	int _heartBeatCnt;
+	bool _heatBeatStop;
+	bool _heatBeatStop2;
 	int _currentFrameSpeed;
 	int _frameCount;
+
+	float tx;
+	int interval;
+
+	//슬롯 고정할 위치 좌표
+	float _x1Slot , _y1Slot;
+	float _x2Slot , _y2Slot;
+	float _x3Slot , _y3Slot;
+	float _x4Slot , _y4Slot;
+	float _x5Slot;
+	float _x6Slot;
+	float _x7Slot;
 
 
 public:
@@ -85,6 +107,6 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
-
+	void set_HP() { hp--; }
 };
 

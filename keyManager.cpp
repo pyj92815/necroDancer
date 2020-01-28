@@ -46,6 +46,7 @@ bool keyManager::isOnceKeyDown(int key)
 
 bool keyManager::isOnceKeyUp(int key)
 {
+	// 어떠한 키를 눌렀을때, 눌러졌다고 신호를 보낸다.
 	if (GetAsyncKeyState(key) & 0x8000) this->setKeyUp(key, true);
 	else
 	{
@@ -69,6 +70,22 @@ bool keyManager::isStayKeyDown(int key)
 bool keyManager::isToggleKey(int key)
 {
 	if (GetKeyState(key) & 0x0001) return true;
+
+	return false;
+}
+
+bool keyManager::isOncekeytwoDown(int one, int two)
+{
+	if (GetAsyncKeyState(one) & 0x8000 && GetAsyncKeyState(two) & 0x8000)
+	{
+		if (!this->getKeyDown()[one] && !this->getKeyDown()[two])
+		{
+			this->setKeyTwoDown(one, two, true);
+
+			return true;
+		}
+	}
+	else this->setKeyTwoDown(one, two, false);
 
 	return false;
 }

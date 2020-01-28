@@ -55,7 +55,7 @@ HRESULT effect::init(image* effectImage, int frameW, int frameH, int fps, float 
 	return S_OK;
 }
 
-HRESULT effect::init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, bool last, float x, float y)
+HRESULT effect::init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, float x, float y,bool last)
 {
 	//이펙트 이미지가 없으면 실패를 띄워라
 	if (!effectImage) return E_FAIL;
@@ -102,7 +102,7 @@ void effect::update()
 	//만약 애니메이션 재생신호가 false면 이펙트를 꺼라
 	if (!_effectAnimation->isPlay())
 	{
-		if (!_effectAnimation->isLast())
+		if (_effectAnimation->isLast())
 		{
 			killEffect();
 		}

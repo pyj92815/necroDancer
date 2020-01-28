@@ -23,7 +23,6 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 
 HRESULT gameNode::init()
 {
-
 	_hdc = GetDC(_hWnd);
 	_managerInit = false;
 	
@@ -37,7 +36,6 @@ HRESULT gameNode::init(bool managerInit)
 
 	if (_managerInit)
 	{
-		
 		KEYMANAGER->init();
 		IMAGEMANAGER->init();
 		TXTDATA->init();
@@ -91,6 +89,7 @@ void gameNode::update()
 	cvSetMouseCallback(WINNAME, CallBackFunc, NULL); // 위치 좌표를 넣기 위한 값 
 	SOUNDMANAGER->update();
 	KEYANIMANAGER->update();
+	EFFECTMANAGER->update();
 }
 
 void gameNode::render()
@@ -215,4 +214,6 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 
 	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
+
+
 

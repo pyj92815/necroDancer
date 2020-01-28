@@ -33,6 +33,7 @@ struct tagNote // 노트 구조체
 	image* img;
 	bool isCol; // 심장 박동 애니메이션 중복 방지를 위한 bool
 	bool isRender;
+
 	int alpha;
 };
 
@@ -76,7 +77,6 @@ private:
 	player* _player;
 	bool _effect;
 
-
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
 	void init_SetObjs(); // Beat 클래스에 있는 여러 오브젝트 정보들 초기화
@@ -109,4 +109,5 @@ public:
 
 	void HitNoteEffect(float x, float y);
 	bool getInterval() { return  Interval; }
+	float getHeartMiddle() { return (heartRC.left + heartRC.right) / 2; }
 };
