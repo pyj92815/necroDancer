@@ -14,6 +14,7 @@ void setWindowsSize(int x, int y, int width, int height);
 
 HRESULT mapTool::init()
 {
+	
 	//■■■■■■■■■■■■■■■■■ 맵툴 사이즈를 정의 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_WINSIZEX = 1800;
 	_WINSIZEY = 900;
@@ -66,7 +67,7 @@ void mapTool::save()
 	// "SaveFile.map"
 	//"Boss_SaveFile.map"
 	//"Stage_SaveFile.map"
-	file = CreateFile("SaveFile.map", GENERIC_WRITE, 0, NULL,
+	file = CreateFile("Stage_SaveFile.map", GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
@@ -81,7 +82,7 @@ void mapTool::load()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -106,8 +107,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_TERRAIN;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameBottomRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
 				_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		}
 	}
@@ -119,8 +120,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_TRAP;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameBottomRender("trapTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
 				_tiles[i].trapFrameX, _tiles[i].trapFrameY);
 		}
 	}
@@ -132,8 +133,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_ITEM_ARMOR;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameBottomRender("armorTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("armorTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
 				_tiles[i].armorFrameX, _tiles[i].armorFrameY);
 		}
 	}
@@ -146,8 +147,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_ITEM_WEAPON;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameBottomRender("weaponTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("weaponTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
 				_tiles[i].weaponFrameX, _tiles[i].weaponFrameY);
 		}
 	}
@@ -160,8 +161,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_WALL;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameWallBottomRender("wallTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top - 30,
 				_tiles[i].wallFrameX, _tiles[i].wallFrameY);
 		}
 	}
@@ -175,14 +176,20 @@ void mapTool::render()
 	
 	//Rectangle(getMemDC(), _saveButton.rc);
 	//Rectangle(getMemDC(), _loadButton.rc);
-	IMAGEMANAGER->findImage("save")->alphaRender(getMemDC(), _saveButton.rc.left, _saveButton.rc.top, 200);
-	IMAGEMANAGER->findImage("load")->alphaRender(getMemDC(), _loadButton.rc.left, _loadButton.rc.top, 200);
-	Rectangle(getMemDC(), _terrainButton.rc);
-	Rectangle(getMemDC(), _wallButton.rc); 
-	Rectangle(getMemDC(), _trapButton.rc);
+	//Rectangle(getMemDC(), _terrainButton.rc);
+	//Rectangle(getMemDC(), _wallButton.rc);
+	//Rectangle(getMemDC(), _trapButton.rc);
+	//Rectangle(getMemDC(), _armorButton.rc);
+	//Rectangle(getMemDC(), _weaponButton.rc);
+	IMAGEMANAGER->findImage("save")->render(getMemDC(), _saveButton.rc.left, _saveButton.rc.top);
+	IMAGEMANAGER->findImage("load")->render(getMemDC(), _loadButton.rc.left, _loadButton.rc.top);
+	IMAGEMANAGER->findImage("terrain")->render(getMemDC(), _terrainButton.rc.left, _terrainButton.rc.top);
+	IMAGEMANAGER->findImage("wall")->render(getMemDC(), _wallButton.rc.left, _wallButton.rc.top);
+	IMAGEMANAGER->findImage("trap")->render(getMemDC(), _trapButton.rc.left, _trapButton.rc.top);
+	IMAGEMANAGER->findImage("armor")->render(getMemDC(), _armorButton.rc.left, _armorButton.rc.top);
+	IMAGEMANAGER->findImage("weapon")->render(getMemDC(), _weaponButton.rc.left, _weaponButton.rc.top);
 	Rectangle(getMemDC(), _eraseButton.rc);
-	Rectangle(getMemDC(), _armorButton.rc);
-	Rectangle(getMemDC(), _weaponButton.rc);
+
 
 	//Rectangle(getMemDC(), _left);
 	IMAGEMANAGER->findImage("left")->alphaRender(getMemDC(), _left.left, _left.top, 200);
@@ -277,7 +284,6 @@ void mapTool::render()
 		{
 			Rectangle(CAMERAMANAGER->getWorldDC(), _trapTile[i].rcTile);
 		}*/
-
 		IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(getMemDC(),
 			_mouseEffect.mouseRect.left, _mouseEffect.mouseRect.top,
 			_mouseEffect.frameX, _mouseEffect.frameY, 200);
@@ -293,7 +299,6 @@ void mapTool::render()
 				Rectangle(getMemDC(), _trapTile[i * TRAPTILEX + j].rcTile);
 			}
 		}
-
 		// 팔렛트 이미지 출력
 		IMAGEMANAGER->render("trapTiles", getMemDC(), _palette.trapTile.left, _palette.trapTile.top + 24);
 	}
@@ -307,7 +312,6 @@ void mapTool::render()
 			{
 				Rectangle(getMemDC(), _wallTile[i].rcTile);
 			}*/
-
 		IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(getMemDC(),
 			_mouseEffect.mouseRect.left, _mouseEffect.mouseRect.top - 32,
 			_mouseEffect.frameX, _mouseEffect.frameY, 200);
@@ -323,13 +327,9 @@ void mapTool::render()
 				Rectangle(getMemDC(), _wallTile[i * WALLTILEX + j].rcTile);
 			}
 		}
-
 		// 팔렛트 이미지 출력
 		IMAGEMANAGER->render("wallTiles", getMemDC(), _palette.wallTile.left, _palette.wallTile.top + 24);
 	}
-
-
-	
 	/*_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
 	_btnLoad = CreateWindow("button", "불러오기", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON , 1200, 500, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
 	_btnObjectDraw = CreateWindow("button", "오브젝트", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 700, 100, 30, _hWnd, HMENU(2), _hInstance, NULL);
@@ -344,6 +344,7 @@ void mapTool::render()
 
 void mapTool::setup()
 {
+	_itemButton.rc = RectMake(210, 825, 52, 52);
 	_armorButton.rc = RectMake(320, 825, 52, 52);
 	_weaponButton.rc = RectMake(430, 825, 52, 52);
 	_saveButton.rc = RectMake(1625, 825, 52, 52);
