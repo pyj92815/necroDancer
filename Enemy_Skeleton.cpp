@@ -3,7 +3,7 @@
 
 HRESULT Enemy_Skeleton::init()
 {
-	_enemyInfo->image = IMAGEMANAGER->findImage("Enemy_skeletonL");
+	_enemyInfo->image = IMAGEMANAGER->findImage("Enemy_skeleton");
 	_enemyInfo->animation = KEYANIMANAGER->findAnimation("Skeleton_L_Shadow_IDLE_Ani");
 	return S_OK;
 }

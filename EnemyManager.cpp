@@ -6,7 +6,7 @@ HRESULT EnemyManager::init()
 	imageAdd();	//이미지 추가 함수
 	AnimationAdd(); //애니메이션 추가 함수
 	_enemyType = EnemyType::BAT;
-	EnemyCreate(WINSIZEX / 2, WINSIZEY / 2, _enemyType);
+	EnemyCreate(3, 3, _enemyType);
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->init();
@@ -17,17 +17,6 @@ HRESULT EnemyManager::init()
 
 void EnemyManager::release()
 {
-	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
-	{
-		if ((*_viEnemy)->getEnemyInfo()->state == enemyState::STATE_DIE)
-		{
-			_vEnemy.erase(_viEnemy);
-		}
-		else
-		{
-			++_viEnemy;
-		}
-	}
 }
 
 void EnemyManager::update()

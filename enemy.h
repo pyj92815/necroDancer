@@ -16,6 +16,7 @@ struct EnemyInfo
 	Direction direction;				//enemy의 방향을 지정할 enum문
 	animation* animation;	
 	image* image;
+	float idx, idy;
 	float x, y;			
 	RECT rc;
 	RECT discoveryRc;					//플레이어를 발견할 인식 범위
