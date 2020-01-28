@@ -10,8 +10,8 @@ public:
 	~boss_Skeleton();
 
 	HRESULT init();
-	void release();
 	void update();
-	void render();
+
+	void boss_Skeleton_ChangeAnimation();		// 슬레이브 박쥐의 애니메이션 체인지 함수
 };
 

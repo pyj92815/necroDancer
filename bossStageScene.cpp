@@ -14,6 +14,12 @@ bossStageScene::~bossStageScene()
 
 HRESULT bossStageScene::init()
 {
+	_addBossImage->add_BossImage();
+	_addBossImage->add_BossAnimation();
+
+	_addSlaveImage->add_SlaveImage();
+	_addSlaveImage->add_SlaveAnimation();
+
 	bossStageMap_Load();													// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
 
 	_deathMetal = new deathMetal;
@@ -44,6 +50,9 @@ void bossStageScene::update()
 
 	// 플레이어가 보스 근처에 있는지 없는지를 찾아준다.
 	closePlayer(_player, _deathMetal);
+
+	// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.
+	searchSlave(_sm->get_SlaveList(), _player);
 
 	// 보스 움직임 연산
 	boss_Move_Player();
@@ -79,8 +88,6 @@ void bossStageScene::update()
 		BEATMANAGER->update();
 	}
 
-	// 비트 
-	//cout << BEATMANAGER->getInterval() << endl;
 }
 
 void bossStageScene::render()
@@ -93,38 +100,7 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList).type != TYPE_NONE)
 			{
-				//// 타일의 타입, 속성에 따라 이미지를 찾아서 좌표에 뿌려주는 함수
-				//findTileImage();
-				//
-				//if ((*_viTotalList).idY > _deathMetal->getBoss_Index().y)
-				//{
-				//	// 플레이어와 보스의 인덱스 y를 비교하여 누가 먼저 그려질지 연산해주는 함수
-				//	z_Order_Player_Boss();
-				//
-				//	// 타일의 타입, 속성에 따라 이미지를 찾아서 좌표에 뿌려주는 함수
-				//	findTileImage();
-				//}
-				//
-				//if ((*_viTotalList).idY > _player->getPlayer().idy)
-				//{
-				//	// 플레이어와 보스의 인덱스 y를 비교하여 누가 먼저 그려질지 연산해주는 함수
-				//	z_Order_Player_Boss();
-				//
-				//	// 타일의 타입, 속성에 따라 이미지를 찾아서 좌표에 뿌려주는 함수
-				//	findTileImage();
-				//}
-
-				//if (_deathMetal->getBoss_Index().y == (*_viTotalList).idY - 1)
-				//{
-				//	findTileImage();
-				//	_deathMetal->render();
-				//}
-				//else
-				//{
-				//	_deathMetal->render();
-				//	findTileImage();
-				//}
-
+	
 				// 타일의 속성에 따라 이미지를 뿌린다.
 				findTileImage();
 
@@ -136,8 +112,8 @@ void bossStageScene::render()
 	// 보스와 플레이어의 랜드 순서를 찾는다.
 	z_Order_Player_Boss();
 
-	// 보스가 근접 공격을 했을때 이펙트를 그려준다.
-	boss_Base_Attack_Render();
+	// 보스가 근접 공격을 했을때 이펙트를 그려준다. (size가 0 이상이라면)
+	if (_vEffect.size() > 0)	boss_Base_Attack_Render();
 
 	_sm->render();
 
@@ -239,11 +215,13 @@ void bossStageScene::z_Order_Player_Boss()
 	{
 		_player->render();
 		_deathMetal->render();
+
 	}
 	else	// 보스가 플레이어보다 뒤에 있다.
 	{
 		_deathMetal->render();
 		_player->render();
+
 	}
 
 }
@@ -368,7 +346,15 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 	}
 }
 
-void bossStageScene::closePlayer(player* player, slave* slave)
+void bossStageScene::searchSlave(vector<slave*> vSlaveList, player* player)
+{
+	for (int i = 0; i < vSlaveList.size(); ++i)
+	{
+		closePlayer(player, vSlaveList[i]->get_Slave());
+	}
+}
+
+void bossStageScene::closePlayer(player* player, SLAVE_INFO* slave)
 {
 	// 플레이어와 슬레이브의 렉트 중점을 담는다.
 	POINTFLOAT playerCenter;
@@ -395,7 +381,7 @@ void bossStageScene::closePlayer(player* player, slave* slave)
 		}
 
 		// 슬레이브 인덱스와 같은 타일을 찾아서 렉트의 중점을 구한다.
-		if (_vTotalList[i].idX == slave->get_Slave()->pos.index.x && _vTotalList[i].idY == slave->get_Slave()->pos.index.y)
+		if (_vTotalList[i].idX == slave->pos.index.x && _vTotalList[i].idY == slave->pos.index.y)
 		{
 			slaveCenter.x = (_vTotalList[i].rc.left + _vTotalList[i].rc.right) / 2;
 			slaveCenter.y = (_vTotalList[i].rc.top + _vTotalList[i].rc.bottom) / 2;
@@ -426,8 +412,7 @@ void bossStageScene::closePlayer(player* player, slave* slave)
 			if (distance < TILESIZE * BOSS_RECOGNITION_RANGE)
 			{
 				distanceCheck = true;
-				slave->get_Slave()->b_Value.close_Player = true;
-				slave->get_Slave()->b_Value.changeAni = true;
+				slave->b_Value.isClosePlayer = true;
 			}
 		}
 
@@ -437,8 +422,7 @@ void bossStageScene::closePlayer(player* player, slave* slave)
 			if (distance >= TILESIZE * BOSS_RECOGNITION_RANGE)
 			{
 				distanceCheck = false;
-				slave->get_Slave()->b_Value.close_Player = false;
-				slave->get_Slave()->b_Value.changeAni = true;
+				slave->b_Value.isClosePlayer = false;
 			}
 		}
 	}
@@ -453,8 +437,7 @@ void bossStageScene::closePlayer(player* player, slave* slave)
 			if (distance < (TILESIZE) * (BOSS_RECOGNITION_RANGE - 1) && distance < 165)
 			{
 				distanceCheck = true;
-				slave->get_Slave()->b_Value.close_Player = true;
-				slave->get_Slave()->b_Value.changeAni = true;
+				slave->b_Value.isClosePlayer = true;
 			}
 		}
 
@@ -464,8 +447,7 @@ void bossStageScene::closePlayer(player* player, slave* slave)
 			if (distance >= (TILESIZE) * (BOSS_RECOGNITION_RANGE - 1) || distance > 165)
 			{
 				distanceCheck = false;
-				slave->get_Slave()->b_Value.close_Player = false;
-				slave->get_Slave()->b_Value.changeAni = true;
+				slave->b_Value.isClosePlayer = false;
 			}
 		}
 	}
@@ -506,6 +488,9 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 			{
 				// 플레이어가 앞에 있다면 근접 공격을 해준다.
 				ui->set_HP();
+
+				// 플레이어에게 근접 공격 이펙트를 그려준다.
+				boss_Base_Attack_Render("base_Attack", player);
 
 				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
 				deathMetal->setBoss_Direction(BD_LEFT);
@@ -551,6 +536,9 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 			{
 				// 플레이어가 앞에 있다면 근접 공격을 해준다.
 				ui->set_HP();
+
+				// 플레이어에게 근접 공격 이펙트를 그려준다.
+				boss_Base_Attack_Render("base_Attack", player);
 
 				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
 				deathMetal->setBoss_Direction(BD_RIGHT);
@@ -602,6 +590,9 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 				// 플레이어가 앞에 있다면 근접 공격을 해준다.
 				ui->set_HP();
 
+				// 플레이어에게 근접 공격 이펙트를 그려준다.
+				boss_Base_Attack_Render("base_Attack", player);
+
 				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
 				deathMetal->setBoss_Direction(BD_UP);
 
@@ -646,6 +637,9 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 			{
 				// 플레이어가 앞에 있다면 근접 공격을 해준다.
 				ui->set_HP();
+
+				// 플레이어에게 근접 공격 이펙트를 그려준다.
+				boss_Base_Attack_Render("base_Attack", player);
 
 				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
 				deathMetal->setBoss_Direction(BD_DOWN);
@@ -714,5 +708,40 @@ void bossStageScene::boss_Move_Player()
 
 void bossStageScene::boss_Base_Attack_Render()
 {
-	//_deathMetal->
+	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+	{
+		(*_viEffect)->img->frameRender(CAMERAMANAGER->getWorldDC(), (*_viEffect)->rc.left, (*_viEffect)->rc.top,
+			(*_viEffect)->img->getFrameX(), (*_viEffect)->img->getFrameY());
+
+		// 이미지를 그려주고 다음 프레임으로 넘겨준다.
+		(*_viEffect)->img->setFrameX((*_viEffect)->img->getFrameX() + 1);
+
+		// 만약 최대 프레임 이상이라면 벡터를 지워준다.
+		if ((*_viEffect)->img->getFrameX() >= (*_viEffect)->Max_FrameX)
+		{
+			_vEffect.erase(_viEffect);
+
+			break;
+		}
+	}
+}
+
+void bossStageScene::boss_Base_Attack_Render(string skillName, player* player)
+{
+	// 보스가 공격을 했을때 그 타일 위치에 이펙트를 보여준다.
+	// 애니메이션 쓰지 않고 프레임 랜더로 그리다가 마지막 이미지 출력 후
+	// 벡터 삭제를 하는걸로?
+	// 벡터는 어디서 생성?
+
+	// 뿌려질 이미지와 뿌려질 좌표를 임시로 저장 하는 변수를 만든다. + 공간 할당
+	// 플레이어의 렉트에 이미지를 뿌리고, 프레임이 모두 끝난다면 벡터를 삭제 해준다.
+	BOSS_STAGE_EFFECT_VECTOR* temp_Effect = new BOSS_STAGE_EFFECT_VECTOR;
+	temp_Effect->img = IMAGEMANAGER->findImage(skillName);
+	temp_Effect->img->setFrameX(0);
+	temp_Effect->img->setFrameY(0);
+	temp_Effect->Max_FrameX = temp_Effect->img->getMaxFrameX();
+	temp_Effect->rc = RectMake(player->getPlayer().idx * TILESIZE, player->getPlayer().idy * TILESIZE,
+		TILESIZE, TILESIZE);
+	// 이펙트가 뿌려질 중점 좌표와 뿌려질 이펙트 이미지를 담는 벡터
+	_vEffect.push_back(temp_Effect);
 }

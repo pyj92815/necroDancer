@@ -330,17 +330,20 @@
     <ClInclude Include="playerLibrary.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="slaveManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="slaveManager_Library.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Option.h">
       <Filter>playGround\GameSettingManager\Option</Filter>
     </ClInclude>
     <ClInclude Include="mapTool_Library.h">
       <Filter>playGround\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Stage_Library.h">
+      <Filter>playGround\boss\boss Stage Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager_Library.h">
+      <Filter>playGround\boss\boss Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -536,11 +539,11 @@
     <ClCompile Include="UImanager.cpp">
       <Filter>playGround\player</Filter>
     </ClCompile>
-    <ClCompile Include="slaveManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Option.cpp">
       <Filter>playGround\GameSettingManager\Option</Filter>
+    </ClCompile>
+    <ClCompile Include="slaveManager.cpp">
+      <Filter>playGround\boss\boss File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -37,22 +37,18 @@ void slaveManager::create_Slave(SLAVE_TYPE type, int idx, int idy)
 	{
 		case SLAVE_TYPE::SLAVE_BAT:
 			new_Slave = new boss_Bat;
-			//new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
 			break;
 
 		case SLAVE_TYPE::SLAVE_GHOST:
 			new_Slave = new boss_Ghost;
-			//new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
 			break;
 
 		case SLAVE_TYPE::SLAVE_SKELETON:
 			new_Slave = new boss_Skeleton;
-			//new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
 			break;
 
 		case SLAVE_TYPE::SLAVE_SKELETON_YELLOW:
 			new_Slave = new boss_Skeleton_Yellow;
-			//new_Slave->init(type, idx, idy);					// 해당 슬레이브를 만든다.
 			break;
 	}		
 	new_Slave->init(type, idx, idy);							// 해당 슬레이브를 만든다.
