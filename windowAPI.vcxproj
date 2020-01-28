@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="action.h" />
+    <ClInclude Include="alphaImageEffect.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStarManager.h" />
     <ClInclude Include="aStarScene.h" />
@@ -167,7 +168,10 @@
     <ClInclude Include="bossMove.h" />
     <ClInclude Include="bossScene.h" />
     <ClInclude Include="bossStageScene.h" />
-    <ClInclude Include="bossStageTestTile.h" />
+    <ClInclude Include="boss_Bat.h" />
+    <ClInclude Include="boss_Ghost.h" />
+    <ClInclude Include="boss_Skeleton.h" />
+    <ClInclude Include="boss_Skeleton_Yellow.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="Collision.h" />
@@ -200,9 +204,13 @@
     <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="mapToolScene.h" />
+    <ClInclude Include="mapTool_Library.h" />
+    <ClInclude Include="miniMap.h" />
+    <ClInclude Include="Next_Create_Boss.h" />
+    <ClInclude Include="Option.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerLibrary.h" />
     <ClInclude Include="playerManager.h" />
-    <ClInclude Include="playerTestTile.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
@@ -211,6 +219,9 @@
     <ClInclude Include="scene_Manager.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="slave.h" />
+    <ClInclude Include="slaveLibrary.h" />
+    <ClInclude Include="slaveManager.h" />
+    <ClInclude Include="slaveManager_Library.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stageScene.h" />
     <ClInclude Include="stdafx.h" />
@@ -224,9 +235,11 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="video.h" />
     <ClInclude Include="windowAPI.h" />
+    <ClInclude Include="addImage_Boss.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
+    <ClCompile Include="alphaImageEffect.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStarManager.cpp" />
     <ClCompile Include="aStarScene.cpp" />
@@ -236,7 +249,10 @@
     <ClCompile Include="bossMove.cpp" />
     <ClCompile Include="bossScene.cpp" />
     <ClCompile Include="bossStageScene.cpp" />
-    <ClCompile Include="bossStageTestTile.cpp" />
+    <ClCompile Include="boss_Bat.cpp" />
+    <ClCompile Include="boss_Ghost.cpp" />
+    <ClCompile Include="boss_Skeleton.cpp" />
+    <ClCompile Include="boss_Skeleton_Yellow.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -267,13 +283,16 @@
     <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="mapToolScene.cpp" />
+    <ClCompile Include="miniMap.cpp" />
+    <ClCompile Include="Option.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerManager.cpp" />
-    <ClCompile Include="playerTestTile.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="scene_Manager.cpp" />
+    <ClCompile Include="slave.cpp" />
+    <ClCompile Include="slaveManager.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stageScene.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "addImage_Boss.h"
 
 #define LOADINGMAX 100										//로딩 카운트 맥스치
 
@@ -7,6 +8,9 @@ class loadingScene : public gameNode
 {
 private:
 	image* _background;										//이미지 빈공간 변수 만들어주고
+
+	ADD_BOSS_IMAGE*   _addBossImage;
+	ADD_SLAVE_IMAGE*  _addSlaveImage;
 
 public:
 	loadingScene();

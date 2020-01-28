@@ -9,7 +9,7 @@ protected:
 	int			_x;
 	int			_y;
 
-	image* _effectImage;
+	image*		  _effectImage;
 	animation* _effectAnimation;
 	BOOL		_isRunning;
 	BOOL	    _last;
@@ -20,8 +20,8 @@ public:
 	~effect();
 
 	virtual HRESULT init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime);
-	virtual HRESULT init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, bool last);
-	virtual HRESULT init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, bool last, float x, float y);
+	virtual HRESULT init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, bool last = false);
+	virtual HRESULT init(image* effectImage, int frameW, int frameH, int fps, float elapsedTime, float x, float y, bool last = false);
 
 	virtual void release();
 	virtual void update();

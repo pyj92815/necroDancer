@@ -51,11 +51,11 @@ public:
 	void pause(string keyName);
 	void resume(string keyName);
 
-	unsigned int getSongPosition(string keyName, unsigned int& pos);
-	float getPitch(string keyName, float& pitch);
+	unsigned int getSongPosition(string keyName, unsigned int& pos); // 현재 곡의 위치를 받아오는 함수
+	float getPitch(string keyName, float& pitch); // 현재 곡의 pitch값을 받아오는 함수
 
-	void setVolume(string keyName, float volume);
-	void setPitch(string keyName, float pitch);
+	void setVolume(string keyName, float volume); // Volume 조절 함수
+	void setPitch(string keyName, float pitch); // pitch 조절 함수(곡 속도 조절 함수)
 
 	bool isPlaySound(string keyName);
 	bool isPauseSound(string keyName);

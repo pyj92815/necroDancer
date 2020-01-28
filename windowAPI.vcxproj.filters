@@ -94,9 +94,6 @@
     <Filter Include="playGround\boss\boss Stage Scene">
       <UniqueIdentifier>{d385ee7e-338d-4ea2-9a54-1f8671624622}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\boss\boss Stage Test Tile">
-      <UniqueIdentifier>{eb686c76-ab7f-48fe-beec-ea403cb2cd89}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\Collision">
       <UniqueIdentifier>{6425a4cd-9763-49c8-91c9-5e3cb0cdd5c2}</UniqueIdentifier>
     </Filter>
@@ -190,9 +187,6 @@
       <Filter>playGround\player</Filter>
     </ClInclude>
     <ClInclude Include="playerManager.h">
-      <Filter>playGround\player</Filter>
-    </ClInclude>
-    <ClInclude Include="playerTestTile.h">
       <Filter>playGround\player</Filter>
     </ClInclude>
     <ClInclude Include="tileNode.h">
@@ -294,9 +288,6 @@
     <ClInclude Include="bossStageScene.h">
       <Filter>playGround\boss\boss Stage Scene</Filter>
     </ClInclude>
-    <ClInclude Include="bossStageTestTile.h">
-      <Filter>playGround\boss\boss Stage Test Tile</Filter>
-    </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>playGround\Collision</Filter>
     </ClInclude>
@@ -306,8 +297,50 @@
     <ClInclude Include="Collision_Library.h">
       <Filter>playGround\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="alphaImageEffect.h">
+      <Filter>2DGameFramework\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Bat.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Ghost.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveLibrary.h">
+      <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Skeleton.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Skeleton_Yellow.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="Next_Create_Boss.h">
+      <Filter>playGround\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="addImage_Boss.h">
+      <Filter>playGround\boss\boss Stage Scene</Filter>
+    </ClInclude>
     <ClInclude Include="UImanager.h">
+      <Filter>playGround\player</Filter>
+    </ClInclude>
+    <ClInclude Include="miniMap.h">
+      <Filter>playGround\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager_Library.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Option.h">
+      <Filter>playGround\GameSettingManager\Option</Filter>
+    </ClInclude>
+    <ClInclude Include="mapTool_Library.h">
+      <Filter>playGround\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="playerLibrary.h">
+      <Filter>playGround\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -387,9 +420,6 @@
       <Filter>playGround\player</Filter>
     </ClCompile>
     <ClCompile Include="playerManager.cpp">
-      <Filter>playGround\player</Filter>
-    </ClCompile>
-    <ClCompile Include="playerTestTile.cpp">
       <Filter>playGround\player</Filter>
     </ClCompile>
     <ClCompile Include="jump.cpp">
@@ -479,14 +509,38 @@
     <ClCompile Include="bossStageScene.cpp">
       <Filter>playGround\boss\boss Stage Scene</Filter>
     </ClCompile>
-    <ClCompile Include="bossStageTestTile.cpp">
-      <Filter>playGround\boss\boss Stage Test Tile</Filter>
-    </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>playGround\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="alphaImageEffect.cpp">
+      <Filter>2DGameFramework\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="slave.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Bat.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Ghost.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Skeleton.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Skeleton_Yellow.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="miniMap.cpp">
+      <Filter>playGround\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="UImanager.cpp">
+      <Filter>playGround\player</Filter>
+    </ClCompile>
+    <ClCompile Include="slaveManager.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Option.cpp">
+      <Filter>playGround\GameSettingManager\Option</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

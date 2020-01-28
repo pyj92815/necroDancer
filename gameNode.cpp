@@ -23,7 +23,6 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 
 HRESULT gameNode::init()
 {
-
 	_hdc = GetDC(_hWnd);
 	_managerInit = false;
 	
@@ -37,7 +36,6 @@ HRESULT gameNode::init(bool managerInit)
 
 	if (_managerInit)
 	{
-		
 		KEYMANAGER->init();
 		IMAGEMANAGER->init();
 		TXTDATA->init();
@@ -48,7 +46,8 @@ HRESULT gameNode::init(bool managerInit)
 		KEYANIMANAGER->init();
 		INIDATAMANAGER->init();
 		CAMERAMANAGER->init();
-
+		BEATMANAGER->init();
+		OPTION->init();
 	}
 
 	return S_OK;
@@ -90,10 +89,12 @@ void gameNode::update()
 	cvSetMouseCallback(WINNAME, CallBackFunc, NULL); // 위치 좌표를 넣기 위한 값 
 	SOUNDMANAGER->update();
 	KEYANIMANAGER->update();
+	EFFECTMANAGER->update();
 }
 
 void gameNode::render()
 {
+
 }
 
 //void gameNode::loadSet(STAGE stage, int stageNum)
@@ -184,7 +185,7 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		case WM_MOUSEMOVE:
 			_ptMouse.x = static_cast<float>(LOWORD(lParam));
 			_ptMouse.y = static_cast<float>(HIWORD(lParam));
-			cout << "마우스 좌표" << "x:" << _ptMouse.x << "y :" << _ptMouse.y << endl;
+			//cout << "마우스 좌표" << "x:" << _ptMouse.x << "y :" << _ptMouse.y << endl;
 			
 		break;
 		case WM_KEYDOWN:
@@ -192,7 +193,15 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			switch (wParam)
 			{
 				case VK_ESCAPE:
-					PostQuitMessage(0);
+					if (!OPTION->CheckOptionOpen())
+					{
+						OPTION->SetOptionOpen(true);
+					}
+					else
+					{
+						OPTION->SetOptionOpen(false);
+					}
+					//PostQuitMessage(0);
 				break;
 			}
 		}
@@ -205,4 +214,6 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 
 	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
+
+
 

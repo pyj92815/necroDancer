@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "enemy.h"
 #include "bossLibrary.h"
 #include "bossMove.h"
 
@@ -22,9 +21,12 @@ protected:
 	POINT		index;							// 보스의 배열 인덱스	  (어느 타일에 있는지 인덱스)
 
 	// 보스 이미지
-	animation*  animation;						// 보스의 에니메이션 정보
-	image*		image;							// 보스의 이미지를 담는다.
+	animation*  attack_Ani;						// 보스 공격 이펙트 애니메이션 정보
+	image*		att_Image;						// 보스 공격 이미지를 담는다.
+	POINTFLOAT	ani_Center;						// 이펙트 애니메이션을 뿌릴 좌표를 저장한다.
 
+	animation*  ani;							// 보스의 에니메이션 정보
+	image*		_image;							// 보스의 이미지를 담는다.
 
 	// 자주 연산하는 값 저장하는 변수
 	int			_tileSize_X, _tileSize_Y;		// 타일의 사이즈를 담아둔다.
@@ -43,6 +45,13 @@ protected:
 	float       worldTime;						// 월드 타임 
 	bossMove	move;							// 보스 이동에 필요한 연산 함수
 	tagBossJump jump;							// 보스 점프에 필요한 연산 함수
+	int			move_Count;						// 보스가 이동 가능한 박자를 저장한다.
+
+	BOSS_BOOL	boss_Bool;						// 보스에 사용하는 bool을 모아두었다.
+
+	BOSS_DIRECTION save_Direction;				// 보스의 방향을 저장해둔다.
+	bool		   change_Ani;					// 애니메이션 체인지가 가능한지 여부
+	bool		   save_ClosePlayer;		    // 플레이어가 근처에 있는지 여부 세이브
 
 public:
 	boss();
@@ -54,21 +63,29 @@ public:
 	virtual void render();
 	virtual void render(ThrowShield info);
 
-	void addBossImage();																							// 보스전에 필요한 이미지를 추가한다.
 	void findBossType(string bossname);																				// 보스 타입을 찾아준다.
 	void findBossImage();																							// 타입 정보로 보스 이미지를 찾아 넣는다.
 	void settingBossPos(int idx, int idy, int tileSizeX, int tileSizeY);											// 보스의 각종 좌표 변수 초기화
 	void settingBossMoveVariable(int tileSizeX, int tileSizeY);														// 보스의 이동 변수 초기화
+	void settingBossVariable();																						// 보스에서 사용할 변수 초기화
 
 	// 보스 정보 겟터 함수
 	int getBoss_HP() { return hp; }																					// 보스의 HP를 받아온다.
 	int getBoss_Shield() { return shield; }																			// 보스의 실드를 받아온다.
 	float getBoss_Atk() { return attack; }																			// 보스의 공격력을 받아온다.
 	float getBoss_MegicAtk() { return magicAttack; }
+	BOSS_DIRECTION getBoss_Direction() { return direction; }														// 보스가 바라보는 방향을 받아온다.
 
 	RECT getBoss_Rect() { return rc; }																				// 보스의 렉트를 받아온다.
 	POINTFLOAT getBoss_Center() { return center; }																	// 보스의 중점을 받아온다.
 	POINT getBoss_Index() { return index; }																			// 보스의 배열 인덱스를 받아온다.
+
+	int getBoss_Move_Count_Value() { return move.get_BossMoveCount(); }
+	int getBoss_Move_Count() { return move_Count; }
+
+	bool getBoss_Beat() { return boss_Bool.get_Beat; }																// 보스가 비트를 받았는지 유무
+	POINTFLOAT getBoss_BaseAttack_Pos() { return ani_Center; }														// 이펙트 애니메이션을 뿌릴 좌표
+	image* getBoss_AttImage() { return att_Image; }
 
 	// 보스 정보 셋터 함수
 	void setBoss_HP(int _hp) { hp = _hp; if (hp > 9) hp = 9; if (hp < 0) hp = 0; }									// 보스의 HP를 수정한다. (hp가 최대치 최소치를 넘어가지 않게 예외처리)
@@ -96,18 +113,42 @@ public:
 	void setBoss_Rect(RECT _rc, int _RECT_SIZEX, int _RECT_SIZEY)													//보스 이미지를 출력할 렉트 위치를 구한다. 
 	{
 		// 보스의 이미지가 클 경우를 대비해서 바텀을 기준으로 이미지 크기만큼 빼서 Top을 구했다.
-		rc = RectMake(_rc.left, (_rc.top + _RECT_SIZEY) - image->getFrameWidth(), image->getFrameWidth(), image->getFrameHeight());
+		rc = RectMake(_rc.left, (_rc.top + _RECT_SIZEY) - _image->getFrameWidth(), _image->getFrameWidth(), _image->getFrameHeight());
 	}
 
 	void setBoss_center(RECT _rc) { center.x = (_rc.left + _rc.right) / 2; center.y = (_rc.top + _rc.bottom) / 2; }	// 타일의 렉트를 받아와 중점을 구한다.
 
 	void setBoss_Index(int idx, int idy) { index.x = idx; index.y = idy; }											// 타일의 인덱스를 받아와 저장한다.
 
-	void setBoss_Image(string bossName) { image = IMAGEMANAGER->findImage(bossName); }								// 보스의 이미지를 수정한다.
+	void setBoss_Image(string bossName) { _image = IMAGEMANAGER->findImage(bossName); }								// 보스의 이미지를 수정한다.
+
+	void setBoss_ClosePlayer(bool close) { isClosePlayer = close; }													// 보스 근처에 플레이어가 있는지 없는지
+
+	void ChangeAni() { isChangeAni = true; }
+
+	void setBoss_Move_Count() { move_Count--; }																		// 보스의 무브 카운트를 감소 시킨다.
+	void setBoss_Move_Count(int num) { move_Count = num; }
+
+	void setBoss_Direction(BOSS_DIRECTION dir) { direction = dir; }													// 보스의 방향을 수정한다.
+
+	void setBoss_WorldTime(float wTime) { worldTime = wTime; }														// 월드 타임을 수정한다.
+
+	void setBoss_Move_BoolValue_Ture() { 
+		/*isMove = isJump = isChangeAni = true;*/ isMove = isJump = isChangeAni = true;	}									// 무브에 필요한 bool값을 한번에 수정한다.
+
+	void setBoss_Beat(bool value) { boss_Bool.get_Beat = value; }													// 비트를 받았는지 유무를 수정한다. (여러번 중복 받는것을 피하기 위해)
+
+	void setBoss_BaseSkill(string skillName) { attack_Ani = KEYANIMANAGER->findAnimation(skillName); }				// 해당 애니메이션을 찾아서 넣어준다.
+
+	void setBoss_BaseSkill_Image(string skillName) { att_Image = IMAGEMANAGER->findImage(skillName); }
+
+	void setBoss_BaseAttack_Pos(float x, float y) { ani_Center.x = x; ani_Center.y = y; }							// 이펙트 애니메이션을 뿌릴 좌표를 셋팅한다.
 
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수
 	void boss_Move();																								// 보스 이동 연산 함수
+	void start_AttackAni() { attack_Ani->start(); }																	// 이펙트 애니메이션을 시작한다.
+
 };
 
 // 선형보간 (inear intetpolation)

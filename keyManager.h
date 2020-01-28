@@ -28,10 +28,17 @@ public:
 	//키를 토글하면
 	bool isToggleKey(int key);
 
+	bool isOncekeytwoDown(int one, int two);
+
 	bitset<KEYMAX> getKeyUp() { return _keyUp; }
 	bitset<KEYMAX> getKeyDown() { return _keyDown; }
 
 	void setKeyDown(int key, bool state) { _keyDown.set(key, state); }
+	void setKeyTwoDown(int one,int two, bool state) 
+	{ 
+		_keyDown.set(one, state);
+		_keyDown.set(two, state);
+	}
 	void setKeyUp(int key, bool state) { _keyUp.set(key, state); }
 
 };

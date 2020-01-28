@@ -25,5 +25,6 @@ public:
 	void render();
 
 	void jumping(float* x, float* y, float jumpPower, float gravity, bool upJump = false);
+	bool getJumping() { return _isJumping;}
 };
 

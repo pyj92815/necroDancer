@@ -190,3 +190,17 @@ void imageManager::frameRender(string strKey, HDC hdc, int destX, int destY, int
 
 	if (img) img->frameRender(hdc, destX, destY, currentFrameX, currentFrameY);
 }
+
+void imageManager::frameBottomRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY)
+{
+	image* img = findImage(strKey);
+
+	if (img) img->frameBottomRender(hdc, destX, destY, currentFrameX, currentFrameY);
+}
+
+void imageManager::frameWallBottomRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY)
+{
+	image* img = findImage(strKey);
+
+	if (img) img->frameWallBottomRender(hdc, destX, destY, currentFrameX, currentFrameY);
+}

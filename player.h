@@ -1,50 +1,36 @@
 #pragma once
-#include "gameNode.h"
-#include "animation.h"
-#include "jump.h"
-#include "action.h"		    // 보간개념 이동할때 사용하기 위한 
-
-enum PLAYERSTATE	// (미사용) 추후 수정 예정 
-{
-	PLAYERSTATE_LEFTSTOP,
-	PLAYERSTATE_RIGHTSTOP,
-	PLAYERSTATE_UP,
-	PLAYERSTATE_DOWN,
-	PLAYERSTATE_RIGHT,
-	PLAYERSTATE_LEFT
-};
-
-struct tagPlayer
-{
-	animation* headAni;		// 머리 애니매이션
-	animation* bodyAni;		// 몸   애니매이션 
-	PLAYERSTATE state;		// 플레이어의 상태
-	image* headImage;		// 머리 이미지 
-	image* bodyImage;		// 몸통 
-	RECT rc;				// RECT
-	float x, y;				// 좌표 X,Y  
-	int idx, idy;			// 타일의 인덱스 번호 
-	int count;				// 프레임 카운터 
-	int currnetFrameX, currnetFrameY;	// 프레임 X,Y
-	int direction;			// 플레이어의 방향   1 ( 좌 , 우 ) 0 
-	int sight;				// 플레이어의 시야값 기본 1
-};
+#include "gameNode.h"			// 게임노드
+#include "alphaImageEffect.h"   // 이펙트 사용
+#include "playerLibrary.h"		// 라이브러리
+#include "animation.h"		    // 애니매이션
+#include "jump.h"				// 점프
 
 class player : public gameNode
 {
 private:
-	tagPlayer _player;	//  머리
+	//벽 타일 판단 MAP
+	map<PLAYERDIRECTION, tagTile*>				_mPlayerTile;
+	map<PLAYERDIRECTION, tagTile*>::iterator	_miPlayerTile;
 
-	jump* _jump;		// 점프 
-	action* _action;    // 선형보간
+	//공격판정 판단 MAP
+	map<PLAYERDIRECTION, Enemy*>			_mPlayerEnemyTile;
+	map<PLAYERDIRECTION, Enemy*>::iterator	_miPlayerEnemyTile;
 
-	float _distance;	// 타일 중점 거리 
-	float _time;		// 시간 
-	float _angle;		// 각도 
+	//이펙트 vector
+	vector<alphaImageEffect*>		     _vEffect; 
+	vector<alphaImageEffect*>::iterator _viEffect;
+private:
+	tagPlayer	_player;	// 플레이어
+	jump*		_jump;		// 점프 
+
 	float _worldTimeCount;	// 월드 타임 
-
+	float _distance;		// 타일 중점 거리 
+	float _time;			// 시간 
+	float _angle;			// 각도 
+	float _shadow;
 	bool _isMoving;			// BOOL 선형보간이동
-	bool _isKeyPress;		// KEY 입력중 판단 
+	bool _isKeyPress;		// KEY 입력 중 노트 판단 
+	bool _isKeyDown;		// KEY 입력 판단
 public:
 	player();
 	~player();
@@ -53,11 +39,75 @@ public:
 	void release();
 	void update();
 	void render();
+	// 세팅 함수 
 
-	void playerMove();
-	void keyControl();
-	//접근자 
-	tagPlayer getPlayer() { return _player; }	// 플레이어 값 반환 
-	int getSight() { return _player.sight; }	// 시야 값 반환 
-	PLAYERSTATE getState() { return _player.state; }	// 플레이어의 상태 값 반환 (HG가 추가했음)
+
+	void keyControl();	 // 사용키
+	void playerMove();	 // 이동 
+
+	// 이펙트 관련 함수 
+	void playerEffect_Miss();					
+	void playerEffect_Shovel(tagTile* tile);
+	void playerEffect_Attack(const char* imageName,tagTile* tile, int frameY);
+	void playerEffect_Attack(const char* imageName, float x, float y, int frameY);
+	void playerEffect_Attack(const char* imageName, int x, int y, int frameY);
+
+	// 타일검출
+	void tileCheck();	
+
+	//플레이어 상태판단
+	void StateMove();		// 이동 판단		
+	void StateAttack();		// 공격
+	void StateShovel();		// (벽 판단 추가 예정)
+
+	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 접근자 설정자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	tagPlayer			getPlayer()			{ return _player; }			   //  전역 사용 
+	PLAYERDIRECTION		getDirection()		{ return _player.direction; }  //  방향 
+	bool   getPlayerKey()	{ return _isKeyPress;}	  // 비트매니저 사용 
+	float* getPlayerY()		{ return &_shadow; }	  // 제트오더 사용 
+	tagPlayer* PlayerAddress() { return &_player; }
+
+	void setPlayerKeyDown()				  { _isKeyDown = false; }  // 비트매니저 KEY초기화
+	void setPlayerKey(bool value = false) {	_isKeyPress = value;}  // 비트매니저 사용  
+
+	//벽 타일 세팅
+	void setPlayerTile(map<PLAYERDIRECTION, tagTile*> tile)		 { _mPlayerTile = tile; }
+	void setPlayerEnemyTile(map<PLAYERDIRECTION, Enemy*> tile)	 { _mPlayerEnemyTile = tile; }
+
+	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+	//이미지 세팅
+	void imageSetting()
+	{
+		//플레이어 이미지
+		IMAGEMANAGER->addFrameImage("player1_heads", "./image/player/player1_heads.bmp", 384, 96, 8, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("player1_armor_body_xmas", "./image/player/player1_armor_body_xmas.bmp", 384, 240, 8, 5, true, RGB(255, 0, 255));
+		//이펙트
+		IMAGEMANAGER->addImage("shovel_basic", "./image/player/shovel_basic.bmp", 48, 48, true, RGB(255, 0, 255), true); // 삽 
+		IMAGEMANAGER->addImage("player_effect_missed", "./image/player/TEMP_missed.bmp", 72, 26, true, RGB(255, 0, 255), true);  // 빗나감 
+		IMAGEMANAGER->addFrameImage("swipe_dagger", "./image/player/swipe_dagger.bmp", 144, 192, 3, 4, true, RGB(255, 0, 255));
+		// 긴검
+		IMAGEMANAGER->addFrameImage("swipe_longsword상하", "./image/player/swipe_longsword상하.bmp", 192, 192, 4, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("swipe_longsword좌우", "./image/player/swipe_longsword좌우.bmp", 384, 96, 4, 2, true, RGB(255, 0, 255));
+		// 넓은 검
+		IMAGEMANAGER->addFrameImage("swipe_broadsword상하", "./image/player/swipe_broadsword상하.bmp", 432, 96, 3, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("swipe_broadsword좌우", "./image/player/swipe_broadsword좌우.bmp", 144, 288, 3, 2, true, RGB(255, 0, 255));
+		// 레이피어 
+		IMAGEMANAGER->addFrameImage("swipe_rapier상하", "./image/player/swipe_rapier상하.bmp", 192, 192, 4, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("swipe_rapier좌우", "./image/player/swipe_rapier좌우.bmp", 384, 96, 4, 2, true, RGB(255, 0, 255));
+	
+		//오른쪽 애니매이션
+		int headRight[] = { 0,1,2,3,4,5,6,7 };
+		KEYANIMANAGER->addArrayFrameAnimation("headRight", "player1_heads", headRight, 8, 10, true);
+		int bodyRight[] = { 0,1,2,3 };
+		KEYANIMANAGER->addArrayFrameAnimation("bodyRight", "player1_armor_body_xmas", bodyRight, 4, 10, true);
+		
+		// 왼쪽 애니매이션
+		int headLeft[] = { 15,14,13,12,11,10,9,8 };
+		KEYANIMANAGER->addArrayFrameAnimation("headLeft", "player1_heads", headLeft, 8, 10, true);
+		int bodyLeft[] = { 7,6,5,4 };
+		KEYANIMANAGER->addArrayFrameAnimation("bodyLeft", "player1_armor_body_xmas", bodyLeft, 4, 10, true);
+	}
 };
+
+
