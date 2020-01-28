@@ -25,6 +25,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.direction = PLAYERDIRECTION_RIGHT;				// 방향 오른쪽	RIGHT
 	_player.weapon = PLAYERWAEPON_NONE;						// 무기			NONE
 	_player.sight = 7;										// 시야 값		7
+	_player.damage = 1;										// 데미지        1
 	_player.idx = idx;										// 인덱스 X
 	_player.idy = idy;										// 인덱스 Y
 	_player.x = _player.idx * tileSizeX + (tileSizeX / 2);
@@ -108,10 +109,11 @@ void player::playerEffect_Shovel(tagTile* tile)
 {
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
-	effect->init("shovel_basic", tile->rc.left,tile->rc.top, 10,TIMESLOW);
+	effect->init("shovel_basic", tile->rc.left,tile->rc.top - 30, 10,TIMESLOW);
 	_vEffect.push_back(effect);
 	CAMERAMANAGER->Camera_WorldDC_Shake(); // 문제는 예외처리 때문에 카메라 0,0에서는 작동 안함 
 }
+
 // 타일 위치
 void player::playerEffect_Attack(const char* imageName,tagTile* tile, int frameY)
 {
@@ -128,6 +130,7 @@ void player::playerEffect_Attack(const char* imageName, float x, float y, int fr
 	effect->init(imageName, x, y, 0, frameY, FRAMEIMAGE);
 	_vEffect.push_back(effect);
 }
+
 // idx, idy의 위치
 void player::playerEffect_Attack(const char* imageName, int x, int y, int frameY)
 {
@@ -347,8 +350,8 @@ void player::tileCheck()
 					_miPlayerTile->second->type = TYPE_TERRAIN;
 					_miPlayerTile->second->wall = W_NONE;
 					_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-					_miPlayerTile->second->terrainFrameX = 0;
-					_miPlayerTile->second->terrainFrameY = 0;
+					_miPlayerTile->second->terrainFrameX = 1;
+					_miPlayerTile->second->terrainFrameY = 1;
 				}
 				else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
 				{

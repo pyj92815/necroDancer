@@ -63,7 +63,7 @@ void stageScene::render()
 		{
 			if ((*_viTotalList)->wall != W_NONE)
 			{
-				IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 52, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
+				IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
 				continue;
 			}
 			if ((*_viTotalList)->trap != TRAP_NONE)
@@ -112,7 +112,7 @@ void stageScene::render()
 			{
 				if (_zOrderVector[i]->Object->tile->wall != W_NONE)
 				{
-					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 52, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY);
+					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 30, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY);
 				}
 				if (_zOrderVector[i]->Object->tile->trap != TRAP_NONE)
 				{
@@ -263,7 +263,7 @@ void stageScene::setVision(POINT index, int sight)
 	if (recursionContinue)
 	{
 		_tiles[index.y * TILEX + index.x].alphaValue = 0;
-	
+		_tiles[index.y * TILEX + index.x].alphaEyesight = true;
 		setVision(PointMake(index.x, index.y - 1), sight - 1);
 		setVision(PointMake(index.x, index.y + 1), sight - 1);
 		setVision(PointMake(index.x - 1, index.y), sight - 1);

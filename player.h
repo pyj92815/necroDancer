@@ -74,6 +74,9 @@ public:
 	void setPlayerTile(map<PLAYERDIRECTION, tagTile*> tile)		 { _mPlayerTile = tile; }
 	void setPlayerEnemyTile(map<PLAYERDIRECTION, Enemy*> tile)	 { _mPlayerEnemyTile = tile; }
 
+	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+	//이미지 세팅
 	void imageSetting()
 	{
 		//플레이어 이미지

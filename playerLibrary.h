@@ -35,4 +35,5 @@ struct tagPlayer				//플레이어의 정보
 	float armor;				// 방어
 	int idx, idy;				// 인덱스 (idx,idy)
 	int sight;					// 시야값
+	int damage;					// 공격력 
 };
