@@ -96,21 +96,31 @@ enum TRAP
 enum ARMOR
 {
 	//방어구
-	A_HELMET,
+	A_HELMET, A_SHOVEL,
 	A_ARMOR_1, A_ARMOR_2, A_ARMOR_3, A_ARMOR_4,
 	A_BOOTS,
 	A_RING,
-	A_TORCH_1, A_TORCH_2, A_TORCH_3, A_NONE
+	A_TORCH_1, A_TORCH_2, A_TORCH_3, 
+	A_NONE
 };
 enum WEAPON
 {
 	//무기
-	WP_DAGGER_1, WP_DAGGER_2, WP_SWORD, WP_LONG_SWORD,
+	WP_DAGGER_1, WP_DAGGER_2, WP_RAPIER, WP_BROAD_SWORD,
 	WP_BOMB, WP_RIFLE, WP_SHOTGUN,
-	WP_SPEAR, WP_MACE,
+	WP_SPEAR, WP_MACE,WP_LONG_SWORD,
 	WP_WHIP, WP_NINETAILS_WHIP,
 	WP_BOW, WP_CROSS_BOW,
 	WP_NONE
+};
+
+enum STUFF
+{
+	ST_DIAMOND,
+	ST_ONE_COIN, ST_ONE_HALF_COIN,
+	ST_COINS, ST_MORE_COINS,
+	ST_APPLE, ST_CHEESE, ST_MEAT,
+	ST_NONE,
 };
 
 enum OBJECT
@@ -136,7 +146,7 @@ enum TYPE
 	TYPE_TERRAIN,
 	TYPE_WALL,
 	TYPE_TRAP,
-	TYPE_ITEM_ARMOR, TYPE_ITEM_WEAPON,
+	TYPE_ITEM_ARMOR, TYPE_ITEM_WEAPON, TYPE_ITEM_STUFF,
 	TYPE_OBJECT,
 	TYPE_ENEMY,
 	TYPE_CHARACTER,
@@ -153,6 +163,7 @@ struct tagTile
 	WEAPON weapon;			//무기
 	OBJECT obj;				//오브젝트
 	CHARACTER character;	//캐릭터
+	STUFF stuff;			//소지품
 	RECT rc;				//렉트
 	int terrainFrameX;		//터레인 번호
 	int terrainFrameY;		//터레인 번호
@@ -168,6 +179,8 @@ struct tagTile
 	int armorFrameY;			//아이템 번호
 	int weaponFrameX;			//아이템 번호
 	int weaponFrameY;			//아이템 번호
+	int stuffFrameX;			//아이템 번호
+	int stuffFrameY;			//아이템 번호
 	int trapFrameX;			//함정 번호
 	int trapFrameY;			//함정 번호
 	

@@ -1,5 +1,6 @@
 #pragma once
 
+class EnemyManager;
 class Enemy;
 
 enum PLAYERDIRECTION			// 플레이어의 방향

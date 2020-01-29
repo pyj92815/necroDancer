@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "player.h"
+#include "EnemyManager.h"
 #include "Enemy.h"
 
 player::player()
@@ -554,8 +555,11 @@ void player::itempCheck()
 		case WP_DAGGER_2:
 			makeItem(WP_DAGGER_2, A_NONE, 1, 0, 0, 1, 0, 0);
 			break;
-		case WP_SWORD: // 레이피어
-			makeItem(WP_SWORD, A_NONE, 2, 0, 0, 1, 0, 0);
+		case WP_RAPIER: // 레이피어
+			makeItem(WP_RAPIER, A_NONE, 2, 0, 0, 1, 0, 0);
+			break;
+		case WP_BROAD_SWORD:  // 브로드소드
+			makeItem(WP_BROAD_SWORD, A_NONE, 2, 2, 0, 1, 0, 0);
 			break;
 		case WP_LONG_SWORD:  // 브로드소드
 			makeItem(WP_LONG_SWORD, A_NONE, 3, 0, 0, 1, 0, 0);
@@ -665,3 +669,5 @@ void player::StateMove()
 		break;
 	}
 }
+
+

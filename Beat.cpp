@@ -84,12 +84,10 @@ void Beat::render()
 
 void Beat::HitNoteEffect(float x, float y)
 {
-    if (!_effect) return;
     alphaImageEffect* noteHitEffect;
     noteHitEffect = new alphaImageEffect;
     noteHitEffect->init("GreenNote", x, y, 5,STOP);
     _vEffect.push_back(noteHitEffect);
-    _effect = false;
 }
 
 void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
@@ -225,42 +223,17 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
                 inputIntervalCount += TIMEMANAGER->getElapsedTime(); // 입력할 수 있는 시간 구함
 
                 // 플레이어가 키 입력시
-                if (_player->getPlayerKey() && _vNoteLeft[0].isRender && inputIntervalCount > 0)
+               // if (_player->getPlayerKey() && _vNoteLeft[0].isRender && inputIntervalCount > 0.000f)
+                if (_player->getPlayerKey() && _vNoteLeft[0].isRender && Interval)
                 {
                     _player->setPlayerKey();
                     HitNoteEffect(_vNoteLeft[0].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteLeft[0].rc.bottom - _vNoteLeft[0].rc.top) / 2));
                     _vNoteLeft[0].isRender = false;
-                    _effect = true;
-
                     HitNoteEffect(_vNoteRight[0].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteRight[0].rc.bottom - _vNoteRight[0].rc.top) / 2));
                     _vNoteRight[0].isRender = false;
-                    _effect = true;
                 }
-
-                if (!_vNoteLeft[0].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
-                _vNoteLeft[0].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
-                inputIntervalCount += TIMEMANAGER->getElapsedTime(); // 입력할 수 있는 시간 구함
-
             }
 
-            // 플레이어가 키 입력시
-            if (_player->getPlayerKey() && _vNoteLeft[0].isRender && inputIntervalCount > 0)
-            {
-                _player->setPlayerKey();
-                HitNoteEffect(_vNoteLeft[0].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteLeft[0].rc.bottom - _vNoteLeft[0].rc.top) / 2));
-                _vNoteLeft[0].isRender = false;
-                _effect = true;
-
-                HitNoteEffect(_vNoteRight[0].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteRight[0].rc.bottom - _vNoteRight[0].rc.top) / 2));
-                _vNoteRight[0].isRender = false;
-                _effect = true;
-            }
-
-            // 이펙트, 부드러운 효과를 주기 위해 안에서도 선언
-            for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
-            {
-                (*_viEffect)->update();
-            }
             _vNoteRight[i].pos.x -= (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)) * (NOTE_INTERVAL)*SOUNDMANAGER->getPitch(_currentSongName, _pitch); // 노트 이동 (델타 타임 / 현재 노트 시간(ms)값 * 노트 간격 * 현재 곡 pitch 값)
             _vNoteRight[i].img->setX(_vNoteRight[i].pos.x - _vNoteRight[i].img->getWidth() / 2); // 이미지 위치 세팅
             _vNoteRight[i].img->setY(_vNoteRight[i].pos.y - _vNoteRight[i].img->getHeight() / 2); // 이미지 위치 세팅
@@ -271,7 +244,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             _vNoteLeft[i].img->setY(_vNoteLeft[i].pos.y - _vNoteLeft[i].img->getHeight() / 2);
             _vNoteLeft[i].rc = RectMakeCenter(_vNoteLeft[i].pos.x, _vNoteLeft[i].pos.y, _vNoteLeft[i].img->getWidth(), _vNoteLeft[i].img->getHeight());
 
-            if (inputIntervalCount > 0.0f)
+            if (inputIntervalCount > 0.000f)
             {
                 Interval = true;
             }
