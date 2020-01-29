@@ -21,8 +21,8 @@ cameraManager::cameraManager()
 	_mapToolImage = IMAGEMANAGER->addImage("mapToolMap", 5200, 5200);
 	_mapToolDC = _mapToolImage->getMemDC();*/
 
-	_cameraWorldSizeX = 5200;
-	_cameraWorldSizeY = 5200;
+	_cameraWorldSizeX = 2080;
+	_cameraWorldSizeY = 2080;
 
 	_cameraMapTileSizeX = WINSIZEX;
 	_cameraMapTileSizeY = WINSIZEY;

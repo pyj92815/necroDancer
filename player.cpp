@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "player.h"
+#include "EnemyManager.h"
 #include "Enemy.h"
 
 player::player()
@@ -665,3 +666,5 @@ void player::StateMove()
 		break;
 	}
 }
+
+
