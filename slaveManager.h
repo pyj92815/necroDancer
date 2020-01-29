@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "slave.h"
+#include "bossKinds.h"
 #include "slaveManager_Library.h"
 
 class slaveManager : public gameNode

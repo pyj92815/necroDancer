@@ -14,6 +14,7 @@ void setWindowsSize(int x, int y, int width, int height);
 
 HRESULT mapTool::init()
 {
+	
 	//■■■■■■■■■■■■■■■■■ 맵툴 사이즈를 정의 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_WINSIZEX = 1800;
 	_WINSIZEY = 900;
@@ -54,7 +55,20 @@ void mapTool::update()
 	if (PtInRect(&_top, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() - SCREENMOVESPEED); }
 	if (PtInRect(&_right, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX() + SCREENMOVESPEED, CAMERAMANAGER->get_CameraY()); }
 	if (PtInRect(&_bottom, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() + SCREENMOVESPEED); }
-	
+	CAMERAMANAGER->CameraMapTool_Correction();
+
+	_itemButton.rc = RectMake(100, 825, 52, 52);
+	_stuffButton.rc = RectMake(210, 825, 52, 52);
+	_armorButton.rc = RectMake(320, 825, 52, 52);
+	_weaponButton.rc = RectMake(430, 825, 52, 52);
+	_terrainButton.rc = RectMake(1100, 825, 52, 52);
+	_wallButton.rc = RectMake(1210, 825, 52, 52);
+	_trapButton.rc = RectMake(1320, 825, 52, 52);
+	_eraseButton.rc = RectMake(1430, 825, 52, 52);
+	_saveButton.rc = RectMake(1525, 825, 52, 52);
+	_loadButton.rc = RectMake(1600, 825, 52, 52);
+	_exitButton.rc = RectMake(1700, 830, 52, 52);
+
 	// 마우스 위치의 타일의 렉트를 가져온다.
 	mouseRectUpdate();
 }
@@ -63,10 +77,11 @@ void mapTool::save()
 {
 	HANDLE file;
 	DWORD write;
-	// "SaveFile.map"
+	//"Loby_SaveFile.mpa"
+	//"SaveFile.map"
 	//"Boss_SaveFile.map"
 	//"Stage_SaveFile.map"
-	file = CreateFile("SaveFile.map", GENERIC_WRITE, 0, NULL,
+	file = CreateFile("Loby_SaveFile.map", GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
@@ -81,7 +96,7 @@ void mapTool::load()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -96,7 +111,7 @@ void mapTool::load()
 
 void mapTool::render()
 {
-	PatBlt(CAMERAMANAGER->getWorldDC(), 0, 0, _WINSIZEX, _WINSIZEY, BLACKNESS);
+	PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), _WINSIZEX, _WINSIZEY, BLACKNESS);
 	//TextOut(getMemDC(), 700, 700, str,strlen(str)); 
 	//지형
 	for (int i = 0; i < TILEX * TILEY; ++i)
@@ -106,8 +121,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_TERRAIN;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameBottomRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
 				_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		}
 	}
@@ -119,9 +134,22 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_TRAP;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameBottomRender("trapTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
 				_tiles[i].trapFrameX, _tiles[i].trapFrameY);
+		}
+	}
+	//소지품
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		if (_tiles[i].stuff == ST_NONE) continue;
+		if (_tiles[i].isRender == true)
+		{
+			_tiles[i].type = TYPE_ITEM_STUFF;
+			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
+			IMAGEMANAGER->frameRender("stuffTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
+				_tiles[i].stuffFrameX, _tiles[i].stuffFrameY);
 		}
 	}
 	//방어구
@@ -132,8 +160,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_ITEM_ARMOR;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameBottomRender("armorTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("armorTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
 				_tiles[i].armorFrameX, _tiles[i].armorFrameY);
 		}
 	}
@@ -146,8 +174,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_ITEM_WEAPON;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameBottomRender("weaponTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("weaponTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
 				_tiles[i].weaponFrameX, _tiles[i].weaponFrameY);
 		}
 	}
@@ -160,8 +188,8 @@ void mapTool::render()
 		{
 			_tiles[i].type = TYPE_WALL;
 			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
-			IMAGEMANAGER->frameWallBottomRender("wallTiles", CAMERAMANAGER->getWorldDC(),
-				_tiles[i].rc.left, _tiles[i].rc.bottom,
+			IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top - 30,
 				_tiles[i].wallFrameX, _tiles[i].wallFrameY);
 		}
 	}
@@ -175,14 +203,25 @@ void mapTool::render()
 	
 	//Rectangle(getMemDC(), _saveButton.rc);
 	//Rectangle(getMemDC(), _loadButton.rc);
-	IMAGEMANAGER->findImage("save")->alphaRender(getMemDC(), _saveButton.rc.left, _saveButton.rc.top, 200);
-	IMAGEMANAGER->findImage("load")->alphaRender(getMemDC(), _loadButton.rc.left, _loadButton.rc.top, 200);
-	Rectangle(getMemDC(), _terrainButton.rc);
-	Rectangle(getMemDC(), _wallButton.rc); 
-	Rectangle(getMemDC(), _trapButton.rc);
-	Rectangle(getMemDC(), _eraseButton.rc);
-	Rectangle(getMemDC(), _armorButton.rc);
-	Rectangle(getMemDC(), _weaponButton.rc);
+	//Rectangle(getMemDC(), _terrainButton.rc);
+	//Rectangle(getMemDC(), _wallButton.rc);
+	//Rectangle(getMemDC(), _trapButton.rc);
+	//Rectangle(getMemDC(), _armorButton.rc);
+	//Rectangle(getMemDC(), _weaponButton.rc);
+	//Rectangle(getMemDC(), _eraseButton.rc);
+	IMAGEMANAGER->findImage("save")->render(getMemDC(), _saveButton.rc.left, _saveButton.rc.top);
+	IMAGEMANAGER->findImage("load")->render(getMemDC(), _loadButton.rc.left, _loadButton.rc.top);
+	IMAGEMANAGER->findImage("terrain")->render(getMemDC(), _terrainButton.rc.left, _terrainButton.rc.top);
+	IMAGEMANAGER->findImage("wall")->render(getMemDC(), _wallButton.rc.left, _wallButton.rc.top);
+	IMAGEMANAGER->findImage("trap")->render(getMemDC(), _trapButton.rc.left, _trapButton.rc.top);
+	IMAGEMANAGER->findImage("item")->render(getMemDC(), _itemButton.rc.left, _itemButton.rc.top);
+	IMAGEMANAGER->findImage("stuff")->render(getMemDC(), _stuffButton.rc.left, _stuffButton.rc.top);
+	IMAGEMANAGER->findImage("armor")->render(getMemDC(), _armorButton.rc.left, _armorButton.rc.top);
+	IMAGEMANAGER->findImage("weapon")->render(getMemDC(), _weaponButton.rc.left, _weaponButton.rc.top);
+	IMAGEMANAGER->findImage("eraser")->render(getMemDC(), _eraseButton.rc.left, _eraseButton.rc.top);
+	IMAGEMANAGER->findImage("exit")->render(getMemDC(), _exitButton.rc.left, _exitButton.rc.top);
+
+
 
 	//Rectangle(getMemDC(), _left);
 	IMAGEMANAGER->findImage("left")->alphaRender(getMemDC(), _left.left, _left.top, 200);
@@ -224,6 +263,29 @@ void mapTool::render()
 		
 		// 팔렛트 이미지 출력
 		IMAGEMANAGER->render("terrainTiles", getMemDC(), _palette.terrainTile.left, _palette.terrainTile.top + 24);
+	}
+
+	if (_crtSelect == CTRL_STUFF)
+	{
+
+		IMAGEMANAGER->findImage("stuffTiles")->alphaFrameRender(getMemDC(),
+			_mouseEffect.mouseRect.left, _mouseEffect.mouseRect.top,
+			_mouseEffect.frameX, _mouseEffect.frameY, 200);
+
+		// 무브 렉트 출력
+		//Rectangle(getMemDC(), _palette.armorTile);
+		IMAGEMANAGER->render("itemPalette", getMemDC(), _palette.stuffTile.left - 26, _palette.stuffTile.top);
+		// 팔렛트 렉트 출력
+		for (int i = 0; i < ITEMTILEY; ++i)
+		{
+			for (int j = 0; j < ITEMTILEX; ++j)
+			{
+				Rectangle(getMemDC(), _stuffTile[i * ITEMTILEX + j].rcTile);
+			}
+		}
+
+		// 팔렛트 이미지 출력
+		IMAGEMANAGER->render("stuffTiles", getMemDC(), _palette.stuffTile.left, _palette.stuffTile.top + 24);
 	}
 
 	if (_crtSelect == CTRL_ARMOR)
@@ -277,7 +339,6 @@ void mapTool::render()
 		{
 			Rectangle(CAMERAMANAGER->getWorldDC(), _trapTile[i].rcTile);
 		}*/
-
 		IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(getMemDC(),
 			_mouseEffect.mouseRect.left, _mouseEffect.mouseRect.top,
 			_mouseEffect.frameX, _mouseEffect.frameY, 200);
@@ -293,7 +354,6 @@ void mapTool::render()
 				Rectangle(getMemDC(), _trapTile[i * TRAPTILEX + j].rcTile);
 			}
 		}
-
 		// 팔렛트 이미지 출력
 		IMAGEMANAGER->render("trapTiles", getMemDC(), _palette.trapTile.left, _palette.trapTile.top + 24);
 	}
@@ -307,7 +367,6 @@ void mapTool::render()
 			{
 				Rectangle(getMemDC(), _wallTile[i].rcTile);
 			}*/
-
 		IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(getMemDC(),
 			_mouseEffect.mouseRect.left, _mouseEffect.mouseRect.top - 32,
 			_mouseEffect.frameX, _mouseEffect.frameY, 200);
@@ -323,13 +382,9 @@ void mapTool::render()
 				Rectangle(getMemDC(), _wallTile[i * WALLTILEX + j].rcTile);
 			}
 		}
-
 		// 팔렛트 이미지 출력
 		IMAGEMANAGER->render("wallTiles", getMemDC(), _palette.wallTile.left, _palette.wallTile.top + 24);
 	}
-
-
-	
 	/*_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
 	_btnLoad = CreateWindow("button", "불러오기", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON , 1200, 500, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
 	_btnObjectDraw = CreateWindow("button", "오브젝트", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 1100, 700, 100, 30, _hWnd, HMENU(2), _hInstance, NULL);
@@ -344,18 +399,10 @@ void mapTool::render()
 
 void mapTool::setup()
 {
-	_armorButton.rc = RectMake(320, 825, 52, 52);
-	_weaponButton.rc = RectMake(430, 825, 52, 52);
-	_saveButton.rc = RectMake(1625, 825, 52, 52);
-	_loadButton.rc = RectMake(1700, 825, 52, 52);
-	_terrainButton.rc = RectMake(1100, 825, 52, 52);
-	_wallButton.rc = RectMake(1210, 825, 52, 52);
-	_trapButton.rc = RectMake(1320, 825, 52, 52);
-	_eraseButton.rc = RectMake(1430, 825, 52, 52);
-	
 	// 팔레트 이동 창으로 사용할 렉트
 	_palette.terrainTile = RectMake(_WINSIZEX - 25 - TERRAINTILEX * TILESIZE, 25, TERRAINTILEX * TILESIZE, 25);
 	_palette.trapTile = RectMake(_WINSIZEX - 25 - TRAPTILEX * TILESIZE, 25, TRAPTILEX * TILESIZE, 25);
+	_palette.stuffTile = RectMake(_WINSIZEX - 25 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
 	_palette.armorTile = RectMake(_WINSIZEX - 25 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
 	_palette.weaponTile = RectMake(_WINSIZEX - 25 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
 	_palette.wallTile = RectMake(_WINSIZEX - 25 - WALLTILEX * TILESIZE, 25, WALLTILEX * TILESIZE, 25);
@@ -376,6 +423,18 @@ void mapTool::setup()
 			SetRect(&_terrainTile[i * TERRAINTILEX + j].rcTile,
 				_palette.terrainTile.left + j * TILESIZE, _palette.terrainTile.bottom + i * TILESIZE,
 				_palette.terrainTile.left + j * TILESIZE + TILESIZE, _palette.terrainTile.bottom + i * TILESIZE + TILESIZE);
+		}
+	}
+	//소지품 타일 셋팅
+	for (int i = 0; i < ITEMTILEY; ++i)
+	{
+		for (int j = 0; j < ITEMTILEX; ++j)
+		{
+			_stuffTile[i * ITEMTILEX + j].terrainFrameX = j;
+			_stuffTile[i * ITEMTILEX + j].terrainFrameY = i;
+			SetRect(&_stuffTile[i * ITEMTILEX + j].rcTile,
+				_palette.stuffTile.left + j * TILESIZE, _palette.stuffTile.bottom + i * TILESIZE,
+				_palette.stuffTile.left + j * TILESIZE + TILESIZE, _palette.stuffTile.bottom + i * TILESIZE + TILESIZE);
 		}
 	}
 	//방어구 타일 셋팅
@@ -415,7 +474,7 @@ void mapTool::setup()
 				_palette.trapTile.left + j * TILESIZE + TILESIZE, _palette.trapTile.bottom + i * TILESIZE + TILESIZE);
 		}
 	}
-	//벽 타일 셋팅 추후 수정 필요함 
+	//벽 타일 셋팅
 	for (int i = 0; i < WALLTILEY; ++i)
 	{
 		for (int j = 0; j < WALLTILEX; ++j)
@@ -453,6 +512,8 @@ void mapTool::setup()
 		_tiles[i].isRender = false;
 		_tiles[i].terrainFrameX = 5;
 		_tiles[i].terrainFrameY = 5;
+		_tiles[i].stuffFrameX = 3;
+		_tiles[i].stuffFrameY = 4;
 		_tiles[i].armorFrameX = 3;
 		_tiles[i].armorFrameY = 4;
 		_tiles[i].weaponFrameX = 3;
@@ -463,10 +524,12 @@ void mapTool::setup()
 		_tiles[i].wallFrameY = 3;
 		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		_tiles[i].terrain = TR_NONE;
+		_tiles[i].stuff = ST_NONE;
 		_tiles[i].armor = A_NONE;
 		_tiles[i].weapon = WP_NONE;
 		_tiles[i].trap = TRAP_NONE;
 		_tiles[i].wall = W_NONE;
+		_tiles[i].alphaValue = 255; // 0~255 
 	}
 }
 
@@ -486,6 +549,22 @@ void mapTool::setMap()
 					// 마우스 이펙트에 쓰일 프레임 x, y를 받아온다.
 					_mouseEffect.frameX = _terrainTile[i].terrainFrameX;
 					_mouseEffect.frameY = _terrainTile[i].terrainFrameY;
+					break;
+				}
+			}
+		}
+		if (_crtSelect == CTRL_STUFF)
+		{
+			for (int i = 0; i < ITEMTILEX * ITEMTILEY; i++)
+			{
+				//방어구
+				if (PtInRect(&_stuffTile[i].rcTile, _ptMouse))
+				{
+					_currentTile.x = _stuffTile[i].terrainFrameX;
+					_currentTile.y = _stuffTile[i].terrainFrameY;
+
+					_mouseEffect.frameX = _stuffTile[i].terrainFrameX;
+					_mouseEffect.frameY = _stuffTile[i].terrainFrameY;
 					break;
 				}
 			}
@@ -582,6 +661,14 @@ void mapTool::setMap()
 
 					_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 				}
+				else if (_crtSelect == CTRL_STUFF)
+				{
+					_tiles[i].type = TYPE_ITEM_STUFF;
+					_tiles[i].stuffFrameX = _currentTile.x;
+					_tiles[i].stuffFrameY = _currentTile.y;
+
+					_tiles[i].stuff = stuffSelect(_currentTile.x, _currentTile.y);
+				}
 				else if (_crtSelect == CTRL_ARMOR)
 				{
 					_tiles[i].type = TYPE_ITEM_ARMOR;
@@ -622,6 +709,9 @@ void mapTool::setMap()
 					_tiles[i].trapFrameX = NULL;
 					_tiles[i].trapFrameY = NULL;
 					_tiles[i].trap = TRAP_NONE;
+					_tiles[i].stuffFrameX = NULL;
+					_tiles[i].stuffFrameY = NULL;
+					_tiles[i].stuff = ST_NONE;
 					_tiles[i].armorFrameX = NULL;
 					_tiles[i].armorFrameY = NULL;
 					_tiles[i].armor = A_NONE;
@@ -726,9 +816,32 @@ TRAP mapTool::trapSelect(int frameX, int frameY)
 	return TRAP_NONE;
 }
 
+STUFF mapTool::stuffSelect(int frameX, int frameY)
+{
+	if (frameX == 0 && frameY == 0) return ST_DIAMOND;
+	for (int i =0;i<3;i++) { if (frameX == i + 1 && frameY == 0) return ST_NONE; }
+	if (frameX == 0 && frameY == 1) return ST_ONE_COIN;
+	if (frameX == 1 && frameY == 1) return ST_ONE_HALF_COIN;
+	if (frameX == 0 && frameY == 2) return ST_COINS;
+	if (frameX == 1 && frameY == 2) return ST_MORE_COINS;
+	for(int i=0; i<2;i++)
+	{
+		if (frameX == i + 2 && frameY == 1) return ST_NONE; 
+		if (frameX == i + 2 && frameY == 2) return ST_NONE;
+	}
+	if (frameX == 0 && frameY == 3) return ST_APPLE;
+	if (frameX == 1 && frameY == 3) return ST_CHEESE;
+	if (frameX == 2 && frameY == 3) return ST_MEAT;
+	if (frameX == 3 && frameY == 3) return ST_NONE;
+	for (int i = 0; i < 5; i++){ if (frameX == i && frameY == 4) return ST_NONE;	}
+
+	return ST_NONE;
+}
+
 ARMOR mapTool::armorSelect(int frameX, int frameY)
 {
 	if (frameX == 0 && frameY == 0) return A_HELMET;
+	if (frameX == 1 && frameY == 0) return A_SHOVEL;
 	if (frameX == 0 && frameY == 1) return A_ARMOR_1;
 	if (frameX == 1 && frameY == 1) return A_ARMOR_2;
 	if (frameX == 2 && frameY == 1) return A_ARMOR_3;
@@ -739,9 +852,12 @@ ARMOR mapTool::armorSelect(int frameX, int frameY)
 	if (frameX == 1 && frameY == 4) return A_TORCH_2;
 	if (frameX == 2 && frameY == 4) return A_TORCH_3;
 	if (frameX == 3 && frameY == 4) return A_NONE;
+	for (int i = 0; i < 2; i++)
+	{
+		if (frameX == i + 2 && frameY == 0) return A_NONE;
+	}
 	for (int i = 0; i < 3; i++)
 	{
-		if (frameX == i + 1 && frameY == 0) return A_NONE;
 		if (frameX == i + 1 && frameY == 2) return A_NONE;
 		if (frameX == i + 1 && frameY == 3) return A_NONE;
 	}
@@ -753,21 +869,22 @@ WEAPON mapTool::weaponSelect(int frameX, int frameY)
 {
 	if (frameX == 0 && frameY == 0) return WP_DAGGER_1;
 	if (frameX == 1 && frameY == 0) return WP_DAGGER_2;
-	if (frameX == 2 && frameY == 0) return WP_SWORD;
-	if (frameX == 3 && frameY == 0) return WP_LONG_SWORD;
+	if (frameX == 2 && frameY == 0) return WP_RAPIER;
+	if (frameX == 3 && frameY == 0) return WP_BROAD_SWORD;
 	if (frameX == 0 && frameY == 1) return WP_BOMB;
 	if (frameX == 1 && frameY == 1) return WP_RIFLE;
 	if (frameX == 2 && frameY == 1) return WP_SHOTGUN;
 	if (frameX == 3 && frameY == 1) return WP_NONE;
 	if (frameX == 0 && frameY == 2) return WP_SPEAR;
 	if (frameX == 1 && frameY == 2) return WP_MACE;
+	if (frameX == 2 && frameY == 2) return WP_LONG_SWORD;
 	if (frameX == 0 && frameY == 3) return WP_WHIP;
 	if (frameX == 1 && frameY == 3) return WP_NINETAILS_WHIP;
 	if (frameX == 0 && frameY == 4) return WP_BOW;
 	if (frameX == 1 && frameY == 4) return WP_CROSS_BOW;
+	if (frameX == 3 && frameY == 2) return WP_NONE;
 	for (int i = 0; i < 2; i++)
 	{
-		if (frameX == i + 2 && frameY == 2) return WP_NONE;
 		if (frameX == i + 2 && frameY == 3) return WP_NONE;
 		if (frameX == i + 2 && frameY == 4) return WP_NONE;
 	}
@@ -835,6 +952,13 @@ void mapTool::palette_Click()
 		case CTRL_TERRAINDRAW:
 			// 팔렛트 렉트를 마우스로 클릭하고 있을때
 			if (PtInRect(&_palette.terrainTile, _ptMouse))
+			{
+				palette_Click(true);
+			}
+			break;
+		case CTRL_STUFF:
+			// 팔렛트 렉트를 마우스로 클릭하고 있을때
+			if (PtInRect(&_palette.stuffTile, _ptMouse))
 			{
 				palette_Click(true);
 			}
@@ -914,6 +1038,20 @@ void mapTool::palette_Rect_Update()
 				SetRect(&_terrainTile[i * TERRAINTILEX + j].rcTile,
 					_palette.terrainTile.left + j * TILESIZE, _palette.terrainTile.bottom + i * TILESIZE,
 					_palette.terrainTile.left + j * TILESIZE + TILESIZE, _palette.terrainTile.bottom + i * TILESIZE + TILESIZE);
+			}
+		}
+	}
+	if (_crtSelect == CTRL_STUFF)
+	{
+		palette_Move();
+
+		for (int i = 0; i < ITEMTILEY; ++i)
+		{
+			for (int j = 0; j < ITEMTILEX; ++j)
+			{
+				SetRect(&_stuffTile[i * ITEMTILEX + j].rcTile,
+					_palette.stuffTile.left + j * TILESIZE, _palette.stuffTile.bottom + i * TILESIZE,
+					_palette.stuffTile.left + j * TILESIZE + TILESIZE, _palette.stuffTile.bottom + i * TILESIZE + TILESIZE);
 			}
 		}
 	}
@@ -1026,7 +1164,44 @@ void mapTool::palette_Move()
 			}
 
 			break;
+		case CTRL_STUFF:
+			//방어구
+			// 만약 양수가 나온다면 이동 지점이 왼쪽이 되어야 한다.
+			if (_palette.pos_Start.x - _palette.pos_End.x > 0)
+			{
+				moveX = _palette.pos_Start.x - _palette.pos_End.x;
 
+				_palette.stuffTile.left -= moveX;
+				_palette.stuffTile.right -= moveX;
+			}
+
+			// 만약 양수가 나온다면 이동 지점이 위쪽이 되어야 한다.
+			if (_palette.pos_Start.y - _palette.pos_End.y > 0)
+			{
+				moveY = _palette.pos_Start.y - _palette.pos_End.y;
+
+				_palette.stuffTile.top -= moveY;
+				_palette.stuffTile.bottom -= moveY;
+			}
+
+			// 만약 음수가 나온다면 이동 지점이 오른쪽이 되어야 한다.
+			if (_palette.pos_Start.x - _palette.pos_End.x < 0)
+			{
+				moveX = _palette.pos_End.x - _palette.pos_Start.x;
+
+				_palette.stuffTile.left += moveX;
+				_palette.stuffTile.right += moveX;
+			}
+
+			// 만약 음수가 나온다면 이동 지점이 아래쪽이 되어야 한다.
+			if (_palette.pos_Start.y - _palette.pos_End.y < 0)
+			{
+				moveY = _palette.pos_End.y - _palette.pos_Start.y;
+
+				_palette.stuffTile.top += moveY;
+				_palette.stuffTile.bottom += moveY;
+			}
+			break;
 		case CTRL_ARMOR:
 			//방어구
 			// 만약 양수가 나온다면 이동 지점이 왼쪽이 되어야 한다.
@@ -1191,6 +1366,7 @@ void mapTool::menu_Choice()
 {
 	if (PtInRect(&_terrainButton.rc, _ptMouse)) { _crtSelect = CTRL_TERRAINDRAW; }
 	if (PtInRect(&_itemButton.rc, _ptMouse)) { _crtSelect = CTRL_ITEM; }
+	if (PtInRect(&_stuffButton.rc, _ptMouse)) { _crtSelect = CTRL_STUFF; }
 	if (PtInRect(&_armorButton.rc, _ptMouse)) { _crtSelect = CTRL_ARMOR; }
 	if (PtInRect(&_weaponButton.rc, _ptMouse)) { _crtSelect = CTRL_WEAPON; }
 	if (PtInRect(&_trapButton.rc, _ptMouse)) { _crtSelect = CTRL_TRAP; }
@@ -1252,7 +1428,7 @@ void mapTool::rectCreate_Update()
 		sizeX = _endR - _startL;
 		sizeY = _startT - _endB;
 
-		_RectCreate.rc = RectMake(_startL + CAMERAMANAGER->get_CameraX(), _startT - sizeY + sizeY + +CAMERAMANAGER->get_CameraY(), sizeX, sizeY);
+		_RectCreate.rc = RectMake(_startL + CAMERAMANAGER->get_CameraX(), _startT - sizeY + +CAMERAMANAGER->get_CameraY(), sizeX, sizeY);
 	}
 
 }
@@ -1265,6 +1441,16 @@ bool mapTool::using_Palette()
 		for (int i = 0; i < TERRAINTILEX * TERRAINTILEY; i++)
 		{
 			if (PtInRect(&_terrainTile[i].rcTile, _ptMouse))
+			{
+				return true;
+			}
+		}
+	}
+	if (_crtSelect == CTRL_STUFF)
+	{
+		for (int i = 0; i < ITEMTILEX * ITEMTILEY; i++)
+		{
+			if (PtInRect(&_stuffTile[i].rcTile, _ptMouse))
 			{
 				return true;
 			}

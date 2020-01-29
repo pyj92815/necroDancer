@@ -11,7 +11,7 @@ cameraManager::cameraManager()
 	_cameraY = 220;
 
 	_worldImage = new image;
-	_worldImage = IMAGEMANAGER->addImage("worldMap",5200, 5200);
+	_worldImage = IMAGEMANAGER->addImage("worldMap",2080, 2080);
 	_worldDC = _worldImage->getMemDC();
 
 	_isCameraMoveX = false;
@@ -21,15 +21,16 @@ cameraManager::cameraManager()
 	_mapToolImage = IMAGEMANAGER->addImage("mapToolMap", 5200, 5200);
 	_mapToolDC = _mapToolImage->getMemDC();*/
 
-	_cameraWorldSizeX = 5200;
-	_cameraWorldSizeY = 5200;
+	_cameraWorldSizeX = 2080;
+	_cameraWorldSizeY = 2080;
 
-	_cameraMapTileSizeX = WINSIZEX;
-	_cameraMapTileSizeY = WINSIZEY;
+	_cameraMapTileSizeX = 1800;
+	_cameraMapTileSizeY = 900;
 	
 	_cameraMapSizeX = NULL;
 	_cameraMapSizeY = NULL;
 
+	_cameraRect = RectMake(_cameraX, _cameraY, WINSIZEX, WINSIZEY);
 }
 
 cameraManager::~cameraManager()
@@ -104,6 +105,7 @@ void cameraManager::set_CameraXY(float x, float y)
 	_cameraY = y - _cameraSizeY / 2.0f;*/
 
 	Camera_Correction();
+	_cameraRect = RectMake(_cameraX, _cameraY, WINSIZEX, WINSIZEY);  // RECT 업데이트 
 }
 
 void cameraManager::set_CameraXY(POINT xy)
@@ -178,17 +180,15 @@ void cameraManager::CameraMapTool_Correction()
 {
 	if (_cameraX < 0) _cameraX = 0;
 	if (_cameraY < 0) _cameraY = 0;
-	if (_cameraX + _cameraSizeX > 5200)
+	if (_cameraX + 1800 > 2080)
 	{
-		_cameraX = 5200 - _cameraSizeX;
+		_cameraX = 2080 - 1800;
 	}
-	if (_cameraY + _cameraSizeY > 5200)
+	if (_cameraY + 900 > 2080)
 	{
-		_cameraY = 5200 - _cameraSizeY;
+		_cameraY = 2080 - 900;
 	}
-	//cout << "5200 넘냐 안넘냐 : " << _cameraX + _cameraSizeX << endl;
 }
-
 void cameraManager::CameraMapTool_Move()
 {
 }
@@ -209,14 +209,14 @@ void cameraManager::set_CameraPos_Update(float x, float y)
 
 	if (_cameraX < 0) _cameraX = 0;
 	if (_cameraY < 0) _cameraY = 0;
-	if (_cameraX + _cameraSizeX > 5200)
+	if (_cameraX + _cameraMapTileSizeX > 2080)
 	{
-		_cameraX = 5200 - _cameraSizeX;
+		_cameraX = 2080 - _cameraMapTileSizeX;
 	}
-	if (_cameraY + _cameraSizeY > 5200)
+	if (_cameraY + _cameraMapTileSizeY > 2080)
 	{
 
-		_cameraY = 5200 - _cameraSizeY;
+		_cameraY = 2080 - _cameraMapTileSizeY;
 	}
 }
 

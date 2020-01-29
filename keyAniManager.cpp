@@ -93,6 +93,20 @@ void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char *
 	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
 }
 
+void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char* imageKeyName, array<int, 4>* arr, int arrLen, int fps, bool loop)
+{
+	image* img = IMAGEMANAGER->findImage(imageKeyName);
+
+	animation* ani = new animation;
+
+	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
+	ani->setPlayFrame(arr, arrLen, loop);
+	ani->setFPS(fps);
+
+	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
+}
+
+
 void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char * imageKeyName, int * arr, int arrLen, int fps, bool loop, void * cbFunction)
 {
 	image* img = IMAGEMANAGER->findImage(imageKeyName);
