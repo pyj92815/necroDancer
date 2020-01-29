@@ -52,10 +52,12 @@ public:
 
 	virtual void Beat();				//
 	virtual void Action();				//enemy의 상태를 바꿔주기 위한 함수
+	virtual void Idle();
 	virtual void Move();				//enemy의 움직임 패턴을 구현할 함수
 	virtual void HalfMove();			//enemy의 벽에 부딪히거나 플레이어와 부딪힐때 절반만 움직이고 제자리로 돌아오는 움직임을 구현할 함수
 	virtual void AniChange();			//enemy의 애니메이션을 바꿔주기 위한 함수(원래 update의 넣었지만 Move함수에서 direction을 바꿀 때에만 실행)
 	virtual void Attack();				//enemy의 공격을 구현할 함수
+	virtual void Die();
 
 	//Enemy생성 함수
 	virtual void EnemyCreate(float x, float y, float HP,float damage);

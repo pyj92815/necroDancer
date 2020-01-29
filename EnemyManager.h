@@ -38,6 +38,8 @@ public:
 	void update();
 	void render();
 
+	void EnemyRemove();
+
 	void Attack();
 
 	void 임시enemy생성();

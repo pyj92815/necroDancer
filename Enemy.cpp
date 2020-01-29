@@ -19,9 +19,11 @@ void Enemy::relase()
 
 void Enemy::update()
 {
+
 	Beat();
 	AniStart();
 	Action();
+	Die();
 }
 
 void Enemy::render()
@@ -71,6 +73,10 @@ void Enemy::Beat()
 }
 
 void Enemy::Action()
+{
+}
+
+void Enemy::Idle()
 {
 }
 
@@ -125,6 +131,14 @@ void Enemy::Attack()
 	//	_enemyInfo->state = enemyState::STATE_MOVE;
 	//	break;
 	//}
+}
+
+void Enemy::Die()
+{
+	if (_enemyInfo->HP <= 0)
+	{
+		_enemyInfo->state = enemyState::STATE_DIE;
+	}
 }
 
 

@@ -22,6 +22,7 @@ void Enemy_Skeleton::Action()
 	default:
 		break;
 	}
+	
 }
 
 void Enemy_Skeleton::AniChange()

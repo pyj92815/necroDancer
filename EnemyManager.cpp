@@ -29,6 +29,7 @@ void EnemyManager::update()
 		(*_viEnemy)->setPlayerInfo(_player->getPlayer().x, _player->getPlayer().y, _player->getPlayer().idx, _player->getPlayer().idy);
 		cout << _player->getPlayer().idx << endl;
 	}
+	EnemyRemove();
 }
 
 void EnemyManager::render()
@@ -36,6 +37,22 @@ void EnemyManager::render()
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->render();
+	}
+}
+
+void EnemyManager::EnemyRemove()
+{
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
+	{
+		if ((*_viEnemy)->getEnemyInfo()->state==enemyState::STATE_DIE)
+		{
+			_vEnemy.erase(_viEnemy);
+			break;
+		}
+		else
+		{
+			++_viEnemy;
+		}
 	}
 }
 
