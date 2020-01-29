@@ -4,7 +4,6 @@ class Enemy_Dragon:public Enemy
 {
 public:
 	void Action();
-	void Move();
 	void AniChange();
 };
 

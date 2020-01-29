@@ -24,37 +24,6 @@ void Enemy_Skeleton::Action()
 	}
 }
 
-void Enemy_Skeleton::Move()
-{
-	if (_enemyInfo->idx != _playerInfo->idx)
-	{
-		if (_enemyInfo->idx > _playerInfo->idx)
-		{
-			_enemyInfo->idx -= 1;
-			_enemyInfo->x -= 52;
-		}
-		else if (_enemyInfo->idx < _playerInfo->idx)
-		{
-			_enemyInfo->idx += 1;
-			_enemyInfo->x += 52;
-		}
-	}
-	if (_enemyInfo->idx == _playerInfo->idx)
-	{
-		if (_enemyInfo->idy > _playerInfo->idy)
-		{
-			_enemyInfo->idy -= 1;
-			_enemyInfo->y -= 52;
-		}
-		else if (_enemyInfo->idy < _playerInfo->idy)
-		{
-			_enemyInfo->idy += 1;
-			_enemyInfo->y += 52;
-		}
-	}
-
-}
-
 void Enemy_Skeleton::AniChange()
 {
 	switch (_enemyInfo->direction)

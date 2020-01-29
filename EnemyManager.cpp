@@ -72,9 +72,9 @@ void EnemyManager::Attack()
 
 void EnemyManager::임시enemy생성()
 {
-	_enemyType = EnemyType::SLIME_BLUE;
+	_enemyType = EnemyType::GHOST;
 	EnemyCreate(10, 8, _enemyType);
-	_enemyType = EnemyType::ZOMBIE;
+	_enemyType = EnemyType::DRAGON;
 	EnemyCreate(14, 8, _enemyType);
 	_enemyType = EnemyType::BAT;
 	EnemyCreate(18, 8, _enemyType);
@@ -229,12 +229,12 @@ void EnemyManager::AnimationAdd()
 	//==================용 애 니 메 이 션============================================
 	int Dragon_L_IDLE[] = { 0,1 };
 	int Dragon_R_IDLE[] = { 3,2 };
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_IDLE_Ani", "Enemy_dragon", Dragon_L_IDLE, 2, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_IDLE_Ani", "Enemy_dragon", Dragon_R_IDLE, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_IDLE_Ani", "Enemy_dragon", Dragon_L_IDLE, 2, 2, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_IDLE_Ani", "Enemy_dragon", Dragon_R_IDLE, 2, 2, true);
 	int Dragon_L_Shadow[] = { 4,5 };
 	int Dragon_R_Shadow[] = { 7,6 };
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_Shadow_IDLE_Ani", "Enemy_dragon", Dragon_L_Shadow, 2, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_Shadow_IDLE_Ani", "Enemy_dragon", Dragon_R_Shadow, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_Shadow_IDLE_Ani", "Enemy_dragon", Dragon_L_Shadow, 2, 2, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_Shadow_IDLE_Ani", "Enemy_dragon", Dragon_R_Shadow, 2, 2, true);
 	//==================유 령 애 니 메 이 션==========================================
 	int Ghost_L_IDLE[] = { 0,1 };
 	int Ghost_R_IDLE[] = { 3,2 };

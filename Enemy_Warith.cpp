@@ -20,11 +20,6 @@ void Enemy_Warith::Action()
 	}
 }
 
-void Enemy_Warith::Move()
-{
-	//한 박자마다 플레이어를 쫓아 움직인다.
-}
-
 void Enemy_Warith::AniChange()
 {
 	switch (_enemyInfo->direction)

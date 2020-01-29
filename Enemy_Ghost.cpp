@@ -8,7 +8,11 @@ void Enemy_Ghost::Action()
 	case enemyState::STATE_IDLE:
 		break;
 	case enemyState::STATE_MOVE:
-		Move();
+		if (_enemyInfo->beatCount >= 1)
+		{
+			Move();
+			_enemyInfo->beatCount = 0;
+		}	
 		break;
 	case enemyState::STATE_ATTACK:
 		Attack();
@@ -18,11 +22,6 @@ void Enemy_Ghost::Action()
 	default:
 		break;
 	}
-}
-
-void Enemy_Ghost::Move()
-{
-	//한 박자마다 플레이어를 쫓아 움직인다.
 }
 
 void Enemy_Ghost::AniChange()
