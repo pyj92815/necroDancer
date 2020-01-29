@@ -190,10 +190,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
                 inputIntervalCount = 0;
                 _vNoteRight.erase(_vNoteRight.begin() + i);
                 _vNoteLeft.erase(_vNoteLeft.begin() + i);
-
                 if (_vNoteLeft.size() <= 0) break;
-
-                // 노트 등장시 서서히 알파값 증가 시키기
 
                 if (_countNote < _vMsTimeInfo.size()) // 노트 생성 수가 노트 정보 길이 - 3보다 작은 경우(노트 개수 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌))
                 {
@@ -219,7 +216,6 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
                 if (!_vNoteLeft[0].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
                 _vNoteLeft[0].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
                 inputIntervalCount += TIMEMANAGER->getElapsedTime(); // 입력할 수 있는 시간 구함
-<<<<<<< HEAD
             }
 
             // 플레이어가 키 입력시
@@ -244,22 +240,6 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             //_vNoteRight[i].pos.x -= (_deltaTime / _averageTime) * (NOTE_INTERVAL) * SOUNDMANAGER->getPitch(_currentSongName, _pitch); // 노트 이동 (델타 타임 / 현재 노트 시간(ms)값 * 노트 간격 * 현재 곡 pitch 값)
             //_vNoteRight[i].pos.x += lerp(_vNoteRight[i].pos.x, _vNoteRight[i].pos.x - NOTE_INTERVAL, TIMEMANAGER->getElapsedTime() / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)) * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
             //_vNoteRight[i].pos.x += lerp(_vNoteRight[i].pos.x, _vNoteRight[i].pos.x - NOTE_INTERVAL, _deltaTime / 0.45f) * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
-=======
-
-                // 플레이어가 키 입력시
-               // if (_player->getPlayerKey() && _vNoteLeft[0].isRender && inputIntervalCount > 0.000f)
-                if (_player->getPlayerKey() && _vNoteLeft[0].isRender && Interval)
-                {
-                    _player->setPlayerKey();
-                    HitNoteEffect(_vNoteLeft[0].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteLeft[0].rc.bottom - _vNoteLeft[0].rc.top) / 2));
-                    _vNoteLeft[0].isRender = false;
-                    HitNoteEffect(_vNoteRight[0].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteRight[0].rc.bottom - _vNoteRight[0].rc.top) / 2));
-                    _vNoteRight[0].isRender = false;
-                }
-            }
-
-            _vNoteRight[i].pos.x -= (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)) * (NOTE_INTERVAL)*SOUNDMANAGER->getPitch(_currentSongName, _pitch); // 노트 이동 (델타 타임 / 현재 노트 시간(ms)값 * 노트 간격 * 현재 곡 pitch 값)
->>>>>>> 47273c5f44bff523fc3ffc65a0f65ac5ea2e4f40
             _vNoteRight[i].img->setX(_vNoteRight[i].pos.x - _vNoteRight[i].img->getWidth() / 2); // 이미지 위치 세팅
             _vNoteRight[i].img->setY(_vNoteRight[i].pos.y - _vNoteRight[i].img->getHeight() / 2); // 이미지 위치 세팅
             _vNoteRight[i].rc = RectMakeCenter(_vNoteRight[i].pos.x, _vNoteRight[i].pos.y, _vNoteRight[i].img->getWidth(), _vNoteRight[i].img->getHeight()); // 노트의 렉터 위치 잡기
@@ -278,7 +258,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             }
             else Interval = false;
 
-            if (i != 3 && _vNoteLeft[i].alpha < 255)
+            if (i != 3 && _vNoteLeft[i].alpha < 255)    // 노트 등장시 서서히 알파값 증가 시키기
             {
                 _vNoteLeft[i].alpha += 3;
                 _vNoteRight[i].alpha += 3;
