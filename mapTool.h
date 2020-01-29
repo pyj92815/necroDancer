@@ -21,6 +21,7 @@ private:
 	tagSetTile _trapTile[TRAPTILEX * TRAPTILEY];
 	tagSetTile _armorTile[ITEMTILEX * ITEMTILEY];
 	tagSetTile _weaponTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile _stuffTile[ITEMTILEX * ITEMTILEY];
 	tagTile		 _tiles[TILEX * TILEY];
 
 	float _WINSIZEX, _WINSIZEY;
@@ -39,6 +40,7 @@ private:
 	tagButton _itemButton;		//아이템
 	tagButton _armorButton;		//방어구
 	tagButton _weaponButton;	//무기
+	tagButton _stuffButton;		//소지품
 	tagButton _eraseButton;		//지우개
 	tagButton _exitButton;		//나가기
 private:
@@ -73,6 +75,7 @@ public:
 	//어떤 함정를 선택했는가?
 	TRAP trapSelect(int frameX, int frameY);
 	//어떤 아이템을 선택했는가?
+	STUFF stuffSelect(int frameX, int frameY);
 	ARMOR armorSelect(int frameX, int frameY);
 	WEAPON weaponSelect(int frameX, int frameY);
 
