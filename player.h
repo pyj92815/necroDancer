@@ -90,6 +90,7 @@ public:
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
+
 	//이미지 세팅
 	void imageSetting()
 	{
@@ -125,6 +126,7 @@ public:
 		KEYANIMANAGER->addArrayFrameAnimation("bodyLeft", "player1_armor_body_xmas", bodyLeft, 4, 10, true);
 
 	}
+	void itemSetting();
 };
 
 
