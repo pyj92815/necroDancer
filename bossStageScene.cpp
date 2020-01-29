@@ -49,7 +49,7 @@ void bossStageScene::update()
 	_ui->update();
 
 	// 플레이어가 보스 근처에 있는지 없는지를 찾아준다.
-	closePlayer(_player, _deathMetal);
+	//closePlayer(_player, _deathMetal);
 
 	// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.
 	searchSlave(_sm->get_SlaveList(), _player);
@@ -244,8 +244,6 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 	POINTFLOAT playerCenter;
 	POINTFLOAT bossCenter;
 
-
-
 	// 원하는 값을 모두 찾았다면 반복문을 나올때 사용
 	bool find_P, find_B;
 	find_P = find_B = false;
@@ -277,8 +275,6 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 		// 둘 다 찾았다면 반복문을 나온다.
 		if (find_P && find_B) break;
 	}
-
-
 
 	// 플레이어와 보스의 거리를 저장한다.
 	float distance = getDistance(bossCenter.x, bossCenter.y,
