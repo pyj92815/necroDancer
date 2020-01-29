@@ -1,11 +1,23 @@
 #include "stdafx.h"
 #include "Enemy_Ghost.h"
 
-HRESULT Enemy_Ghost::init()
+void Enemy_Ghost::Action()
 {
-	_enemyInfo->image = IMAGEMANAGER->findImage("Enemy_ghostL");
-	_enemyInfo->animation = KEYANIMANAGER->findAnimation("Ghost_L_Shadow_IDLE_Ani");
-	return S_OK;
+	switch (_enemyInfo->state)
+	{
+	case enemyState::STATE_IDLE:
+		break;
+	case enemyState::STATE_MOVE:
+		Move();
+		break;
+	case enemyState::STATE_ATTACK:
+		Attack();
+		break;
+	case enemyState::STATE_DIE:
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy_Ghost::Move()
@@ -26,4 +38,5 @@ void Enemy_Ghost::AniChange()
 		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Ghost_R_Shadow_IDLE_Ani");
 		break;
 	}
+	_enemyInfo->aniChange = true;
 }

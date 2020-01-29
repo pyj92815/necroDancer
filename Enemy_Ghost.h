@@ -3,7 +3,7 @@
 class Enemy_Ghost:public Enemy
 {
 public:
-	HRESULT init();
+	void Action();
 	void Move();
 	void AniChange();
 };

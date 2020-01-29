@@ -1,11 +1,23 @@
 #include "stdafx.h"
 #include "Enemy_Slime_Orange.h"
 
-HRESULT Enemy_Slime_Orange::init()
+void Enemy_Slime_Orange::Action()
 {
-	_enemyInfo->image = IMAGEMANAGER->findImage("Enemy_slime_orange");
-	_enemyInfo->animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_Shadow_IDLE_Ani");
-	return S_OK;
+	switch (_enemyInfo->state)
+	{
+	case enemyState::STATE_IDLE:
+		break;
+	case enemyState::STATE_MOVE:
+		Move();
+		break;
+	case enemyState::STATE_ATTACK:
+		Attack();
+		break;
+	case enemyState::STATE_DIE:
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy_Slime_Orange::Move()
@@ -30,11 +42,12 @@ void Enemy_Slime_Orange::Move()
 		_enemyInfo->direction = Direction::RIGHT;
 		break;
 	}
-	
+
 }
 
 void Enemy_Slime_Orange::AniChange()
 {
 	if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_IDLE_Ani");
 	else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_Shadow_IDLE_Ani");
+	_enemyInfo->aniChange = true;
 }

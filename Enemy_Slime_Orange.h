@@ -3,7 +3,7 @@
 class Enemy_Slime_Orange:public Enemy
 {
 public:
-	HRESULT init();
+	void Action();
 	void Move();
 	void AniChange();
 };

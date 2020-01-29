@@ -3,7 +3,7 @@
 class Enemy_Dragon:public Enemy
 {
 public:
-	HRESULT init();
+	void Action();
 	void Move();
 	void AniChange();
 };
