@@ -180,13 +180,13 @@ void cameraManager::CameraMapTool_Correction()
 {
 	if (_cameraX < 0) _cameraX = 0;
 	if (_cameraY < 0) _cameraY = 0;
-	if (_cameraX + _cameraSizeX > 2080)
+	if (_cameraX + 1800 > 2080)
 	{
-		_cameraX = 2080 - _cameraSizeX;
+		_cameraX = 2080 - 1800;
 	}
-	if (_cameraY + _cameraSizeY > 2080)
+	if (_cameraY + 900 > 2080)
 	{
-		_cameraY = 2080 - _cameraSizeY;
+		_cameraY = 2080 - 900;
 	}
 	//cout << "5200 넘냐 안넘냐 : " << _cameraX + _cameraSizeX << endl;
 }
@@ -207,19 +207,7 @@ void cameraManager::Camera_WorldDC_Shake()
 void cameraManager::set_CameraPos_Update(float x, float y)
 {
 	_cameraX = x;
-	_cameraY = y; 
-
-	if (_cameraX < 0) _cameraX = 0;
-	if (_cameraY < 0) _cameraY = 0;
-	if (_cameraX + _cameraSizeX > 2080)
-	{
-		_cameraX = 2080 - _cameraSizeX;
-	}
-	if (_cameraY + _cameraSizeY > 2080)
-	{
-
-		_cameraY = 2080 - _cameraSizeY;
-	}
+	_cameraY = y;
 }
 
 

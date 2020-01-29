@@ -55,7 +55,7 @@ void mapTool::update()
 	if (PtInRect(&_top, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() - SCREENMOVESPEED); }
 	if (PtInRect(&_right, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX() + SCREENMOVESPEED, CAMERAMANAGER->get_CameraY()); }
 	if (PtInRect(&_bottom, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() + SCREENMOVESPEED); }
-	
+	CAMERAMANAGER->CameraMapTool_Correction();
 	// 마우스 위치의 타일의 렉트를 가져온다.
 	mouseRectUpdate();
 }
@@ -97,7 +97,7 @@ void mapTool::load()
 
 void mapTool::render()
 {
-	PatBlt(CAMERAMANAGER->getWorldDC(), 0, 0, _WINSIZEX, _WINSIZEY, BLACKNESS);
+	PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), _WINSIZEX, _WINSIZEY, BLACKNESS);
 	//TextOut(getMemDC(), 700, 700, str,strlen(str)); 
 	//지형
 	for (int i = 0; i < TILEX * TILEY; ++i)
