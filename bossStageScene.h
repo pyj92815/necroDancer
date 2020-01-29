@@ -67,9 +67,10 @@ public:
 	void searchSlave(vector<slave*> vSlaveList, player* player);				// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
 	void closePlayer_Slave(player* player, SLAVE_INFO* slave);								// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
 	void findPlayer(player* player, deathMetal* deathMetal, UImanager* ui);		// 플레이어의 위치를 찾는다. (데스메탈)
-	void findPlayer(player* player, slave* slave);								// 플레이어의 위치를 찾는다. (슬레이브)
+	SLAVE_DIRECTION findPlayer(player* player, SLAVE_INFO* slave);								// 플레이어의 위치를 찾는다. (슬레이브)
 
 	void boss_Move_Player();													// 보스가 플레이어에게 움직이는 연산
+	void slave_Move_Player();													// 슬레이브가 플레이어에게 움직이는 연산
 
 	void boss_Base_Attack_Render();
 	void boss_Base_Attack_Render(string skillName, player* player);				// 보스의 근접 공격 애니메이션을 그려준다.

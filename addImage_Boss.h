@@ -127,11 +127,11 @@ public:
 		KEYANIMANAGER->addArrayFrameAnimation("sGhost_Left", "boss_Ghost", sGhost_Left, 2, 10, true);
 
 		// 고스트 오른쪽 애니메이션 추가
-		int ghost_Right[] = { 4, 5 };
+		int ghost_Right[] = { 6, 7 };
 		KEYANIMANAGER->addArrayFrameAnimation("ghost_Right", "boss_Ghost", ghost_Right, 2, 10, true);
 
 		// 고스트 쉐도우 오른쪽 애니메이션 추가
-		int sGhost_Right[] = { 6, 7 };
+		int sGhost_Right[] = { 4, 5 };
 		KEYANIMANAGER->addArrayFrameAnimation("sGhost_Right", "boss_Ghost", sGhost_Right, 2, 10, true);
 
 

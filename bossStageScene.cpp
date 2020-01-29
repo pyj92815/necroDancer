@@ -23,7 +23,7 @@ HRESULT bossStageScene::init()
 	bossStageMap_Load();													// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
 
 	_deathMetal = new deathMetal;
-	_deathMetal->init("데스메탈", 12, 14, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
+	_deathMetal->init("데스메탈", 17, 16, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
 
 	_player = _stageScene->getPlayerAddress();								// 플레이어 링크
 	_ui = _stageScene->getUiAddress();										// ui 링크
@@ -47,20 +47,24 @@ void bossStageScene::update()
 	_deathMetal->update();
 	_player->update();
 	_ui->update();
+	_sm->update();
+	
+	// 플레이어가 보스 근처에 있는지 없는지를 찾아준다. (쉐도우 벗기)
+	closePlayer(_player, _deathMetal);
 
-	// 플레이어가 보스 근처에 있는지 없는지를 찾아준다.
-	//closePlayer(_player, _deathMetal);
-
-	// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.
+	// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.	(쉐도우 벗기)
 	searchSlave(_sm->get_SlaveList(), _player);
 
 	// 보스 움직임 연산
 	boss_Move_Player();
 
+	// 슬레이브 움직임 연산
+	slave_Move_Player();
+
 	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
 	{
 		_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+		//_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
@@ -80,8 +84,6 @@ void bossStageScene::update()
 		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
 		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
 	}
-
-	_sm->update();
 
 	if (KEYMANAGER->isToggleKey('V'))
 	{
@@ -228,8 +230,8 @@ void bossStageScene::z_Order_Player_Boss()
 
 void bossStageScene::playerPos_Setting()
 {
-	_player->PlayerAddress()->idx = 12;
-	_player->PlayerAddress()->idy = 25;
+	_player->PlayerAddress()->idx = 17;
+	_player->PlayerAddress()->idy = 28;
 	_player->PlayerAddress()->x = _player->PlayerAddress()->idx * TESTTILESIZE + (TESTTILESIZE / 2);
 	_player->PlayerAddress()->y = _player->PlayerAddress()->idy * TESTTILESIZE + (TESTTILESIZE / 3);
 	_player->PlayerAddress()->rc = RectMakeCenter(_player->PlayerAddress()->x, _player->PlayerAddress()->y,
@@ -267,7 +269,6 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 		{
 			bossCenter.x = (_vTotalList[i].rc.left + _vTotalList[i].rc.right) / 2;
 			bossCenter.y = (_vTotalList[i].rc.top + _vTotalList[i].rc.bottom) / 2;
-
 			// 찾았다면 true
 			find_B = true;
 		}
@@ -677,29 +678,185 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 
 }
 
-void bossStageScene::findPlayer(player* player, slave* slave)
+SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 {
+	// 플레이어의 방향을 잡아서 방향을 리턴값으로 보내준다.
+
+	// 플레이어의 방향을 찾는다.
+
+	// x, y 중 짧은것을 선택한다.
+
+	// 이동 시 이동 불가능 오브젝트를 찾는다.
+	
+	// 막히면 다른 방향으로
+
+	// x, y 중 같은 라인에 도착한다면 남은 라인으로만 이동을 한다.
+
+	// 슬레이브와 플레이어의 타일 중점을 구한다.
+	POINTFLOAT playerCenter;
+	POINTFLOAT slaveCenter;
+	playerCenter.x = 0;
+	playerCenter.y = 0;
+	slaveCenter.x = 0;
+	slaveCenter.y = 0;
+
+	// 둘 다 원하는 값을 찾았으면 반복문에서 빠져나온다.
+	bool findPlayer, findSlave;
+	findPlayer = findSlave = false;
+
+	// 보스맵에서 해당 인덱스를 찾기 위해 반복.
+	for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
+	{
+		// 플레이어의 인덱스와 같은 타일을 찾는다.
+		if ((*_viTotalList).idX == player->getPlayer().idx && (*_viTotalList).idY == player->getPlayer().idy)
+		{
+			// 타일의 렉트를 이용하여 중점을 저장한다.
+			playerCenter.x = ((*_viTotalList).rc.left + (*_viTotalList).rc.right) / 2;
+			playerCenter.y = ((*_viTotalList).rc.top + (*_viTotalList).rc.bottom) / 2;
+
+			findPlayer = true;
+		}
+
+		// 슬레이브의 인덱스와 같은 타일을 찾는다.
+		if ((*_viTotalList).idX == slave->pos.index.x && (*_viTotalList).idY == slave->pos.index.y)
+		{
+			// 타일의 렉트를 이용하여 중점을 저장한다.
+			slaveCenter.x = ((*_viTotalList).rc.left + (*_viTotalList).rc.right) / 2;
+			slaveCenter.y = ((*_viTotalList).rc.top + (*_viTotalList).rc.bottom) / 2;
+
+			findSlave = true;
+		}
+
+		// 값을 모두 찾았다면 반복문에서 나온다.
+		if (findPlayer && findSlave) break;
+	}
+
+	// 슬레이브와 플레이어와의 x, y의 차를 담는다. (슬레이브 기준으로 빼준다.)
+	POINTFLOAT range;
+	range.x = slaveCenter.x - playerCenter.x;
+	range.y = slaveCenter.y - playerCenter.y;
+
+	// x, y 중 짧은곳을 구한다.
+	SHORT_XY short_XY = SHORT_XY::SHORT_NONE;
+
+	// x가 짧다.
+	if (range.x < range.y)
+	short_XY = SHORT_XY::SHORT_X;
+
+	// y가 짧다.
+	if (range.x > range.y)
+	short_XY = SHORT_XY::SHORT_Y;
+
+
+	// 슬레이브와 플레이어의 인덱스 중 같은게 있다면 그 방향은 제외 하고 찾는다.
+	FIND_CHOICE_XY find_Choice = FIND_CHOICE_XY::FC_XY;	// 0 = 양방향 모두, 1 = x 방향만 찾는다. 2 = y 방향만 찾는다.
+
+	// 플레이어의 x와 슬레이브의 x가 같다면 x 방향은 도착한것 y방향을 찾도록 한다.
+	if (player->getPlayer().idx == slave->pos.index.x)	find_Choice = FIND_CHOICE_XY::FC_Y;
+	if (player->getPlayer().idy == slave->pos.index.y)	find_Choice = FIND_CHOICE_XY::FC_X;
+
+	// 플레이어의 방향을 찾는다. (플레이어가 있는 각도를 구한다.)
+	float player_Pos_Angle = 0;
+	player_Pos_Angle = getAngle(slaveCenter.x, slaveCenter.y, playerCenter.x, playerCenter.y);
+
+	// 만약 각도가 0 이하로 나온다면 (수정해준다. -각도를 +로)
+	if (player_Pos_Angle < 0)
+	{
+		float tempAngle = 0;
+		tempAngle = PI + player_Pos_Angle;
+		player_Pos_Angle = PI + tempAngle;
+	}
+
+	// 플레이어의 방향을 저장한다.
+	FIND_ANGLE find_Angle = FIND_ANGLE::FA_RT;		// 0 = 2시, 1 = 10시, 2 = 7시, 3 = 5시
+
+	if (player_Pos_Angle > 0 && player_Pos_Angle < 1.57)	find_Angle = FIND_ANGLE::FA_RT;
+	if (player_Pos_Angle > 1.57 && player_Pos_Angle < 3.14) find_Angle = FIND_ANGLE::FA_TL;
+	if (player_Pos_Angle > 3.14 && player_Pos_Angle < 4.71) find_Angle = FIND_ANGLE::FA_LB;
+	if (player_Pos_Angle > 4.71 && player_Pos_Angle < (PI * 2)) find_Angle = FIND_ANGLE::FA_BR;
+
+	// 플레이어의 방향으로 이동을 시작한다.
+	// x, y 중 짧은 방향으로 찾는다.
+	if (find_Choice == FIND_CHOICE_XY::FC_XY)
+	{
+
+	}
+
+	// y 방향만 찾으면 된다.
+	if (find_Choice == FIND_CHOICE_XY::FC_Y)
+	{
+
+	}
+
+	// x 방향만 찾으면 된다.
+	if (find_Choice == FIND_CHOICE_XY::FC_X)
+	{
+
+	}
+
+	// 만약 오브젝트를 발견 한다면 이동을 멈추거나
+
+	return SLAVE_DIRECTION::SD_DOWN;
 }
 
 void bossStageScene::boss_Move_Player()
 {
+	//// 데스메탈의 무브 카운트를 1 감소 시켜준다. (데스메탈이 비트를 받지 않았다면 이곳에 들어간다.)
+	//if (BEATMANAGER->getInterval() && !_deathMetal->getBoss_Beat())
+	//{
+	//	_deathMetal->setBoss_Beat(true);		// 비트를 받았다면 true로 바꿔준다. (여러번 들어오는것을 방지)
+	//	_deathMetal->setBoss_Move_Count();		// 무브 카운트를 1 감소한다.
+	//}
+	//
+	//// 비트의 값이 0이 됐을때 false의 값으로 바꿔준다.
+	//if (!BEATMANAGER->getInterval()) _deathMetal->setBoss_Beat(false);
+
 	// 데스메탈의 무브 카운트를 1 감소 시켜준다. (데스메탈이 비트를 받지 않았다면 이곳에 들어간다.)
-	if (BEATMANAGER->getInterval() && !_deathMetal->getBoss_Beat())
+	if (BEATMANAGER->getBeating() && !_deathMetal->getBoss_Beat())
 	{
 		_deathMetal->setBoss_Beat(true);		// 비트를 받았다면 true로 바꿔준다. (여러번 들어오는것을 방지)
 		_deathMetal->setBoss_Move_Count();		// 무브 카운트를 1 감소한다.
 	}
 
 	// 비트의 값이 0이 됐을때 false의 값으로 바꿔준다.
-	if (!BEATMANAGER->getInterval()) _deathMetal->setBoss_Beat(false);
+	if (!BEATMANAGER->getBeating()) _deathMetal->setBoss_Beat(false);
 
-	// 데스메탈의 무브 카운트가 0이 된다면 이동을 시작 한다.
-	if (_deathMetal->getBoss_Move_Count() == 0)
+	// 데스메탈의 무브 카운트가 0 이하가 된다면 이동을 시작 한다.
+	if (_deathMetal->getBoss_Move_Count() < 0)
 	{
 		// 플레이어와 데스메탈의 정보를 이용하여 이동 할 방향을 정한다.
 		findPlayer(_player, _deathMetal, _ui);
 	}
 
+
+}
+
+void bossStageScene::slave_Move_Player()
+{
+	// 슬레이브가 1마리 이상 생성 되어야만 들어간다.
+	if (_sm->get_SlaveList().size() > 0)
+	{
+		for (int i = 0; i < _sm->get_SlaveList().size(); ++i)
+		{
+			// 슬레이브의 무브 카운트를 1 감소 시켜준다. (슬레이브가 비트를 받지 않았다면 이곳에 들어간다.)
+			if (BEATMANAGER->getBeating() && !_sm->get_SlaveList()[i]->get_Slave()->b_Value.beat)
+			{
+				_sm->get_SlaveList()[i]->get_Slave()->b_Value.beat = true;		// 비트를 받았다면 true로 바꿔준다.
+				_sm->get_SlaveList()[i]->get_Slave()->operation.move_Count--;	// 무브 카운트를 1 감소한다.
+			}
+
+			// 비트 값이 0이 될때 false의 값으로 바꿔준다.
+			if (!BEATMANAGER->getBeating()) _sm->get_SlaveList()[i]->get_Slave()->b_Value.beat = false;
+
+			// 슬레이브의 무브 카운트가 0 이하가 된다면 이동을 시작한다.
+			if (_sm->get_SlaveList()[i]->get_Slave()->operation.move_Count < 0)
+			{
+				// 슬레이브 연산을 끝내고, 방향을 정해주고 이동?
+				//_sm->get_SlaveList()[i]->move(findPlayer(_player, _sm->get_SlaveList()[i]->get_Slave()));
+				findPlayer(_player, _sm->get_SlaveList()[i]->get_Slave());
+			}
+		}
+	}
 }
 
 void bossStageScene::boss_Base_Attack_Render()
