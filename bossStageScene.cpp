@@ -245,6 +245,10 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 	// 플레이어와 보스의 렉트 중점을 담는다.
 	POINTFLOAT playerCenter;
 	POINTFLOAT bossCenter;
+	playerCenter.x = 0;
+	playerCenter.y = 0;
+	bossCenter.x = 0;
+	bossCenter.y = 0;
 
 	// 원하는 값을 모두 찾았다면 반복문을 나올때 사용
 	bool find_P, find_B;
