@@ -34,6 +34,7 @@ private:
 private:
 	tagButton _saveButton;		//저장
 	tagButton _loadButton;		//로드
+	tagButton _mapButton;	//지형
 	tagButton _terrainButton;	//지형
 	tagButton _wallButton;		//벽
 	tagButton _trapButton;		//함정
@@ -45,7 +46,7 @@ private:
 	tagButton _exitButton;		//나가기
 private:
 	tagMouse _RectCreate;
-	bool _isClick;
+	bool _isClick, _isItemButtonClick, _isMapButtonClick;
 	int _startL, _startT, _endR, _endB;
 	RECT _left, _top, _right, _bottom;
 	MovePalette _palette;	// 창 이동으로 사용할 렉트
@@ -90,7 +91,5 @@ public:
 	void rectCreate_Update();			// 렉트크리에이트 갱신
 	bool using_Palette();				// 팔렛트 사용 중에 타일이 찍히지 않게 하는 함수.
 	void mouseRectUpdate();				// 마우스 렉트 업데이트 함수.
-
-	void clickButton();
 };
 
