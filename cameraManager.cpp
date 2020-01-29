@@ -24,8 +24,8 @@ cameraManager::cameraManager()
 	_cameraWorldSizeX = 5200;
 	_cameraWorldSizeY = 5200;
 
-	_cameraMapTileSizeX = WINSIZEX;
-	_cameraMapTileSizeY = WINSIZEY;
+	_cameraMapTileSizeX = 1800;
+	_cameraMapTileSizeY = 900;
 	
 	_cameraMapSizeX = NULL;
 	_cameraMapSizeY = NULL;
@@ -186,9 +186,7 @@ void cameraManager::CameraMapTool_Correction()
 	{
 		_cameraY = 2080 - _cameraSizeY;
 	}
-	//cout << "5200 넘냐 안넘냐 : " << _cameraX + _cameraSizeX << endl;
 }
-
 void cameraManager::CameraMapTool_Move()
 {
 }
@@ -209,15 +207,20 @@ void cameraManager::set_CameraPos_Update(float x, float y)
 
 	if (_cameraX < 0) _cameraX = 0;
 	if (_cameraY < 0) _cameraY = 0;
-	if (_cameraX + _cameraSizeX > 2080)
+	if (_cameraX + _cameraMapTileSizeX > 2080)
 	{
-		_cameraX = 2080 - _cameraSizeX;
+		_cameraX = 2080 - _cameraMapTileSizeX;
 	}
-	if (_cameraY + _cameraSizeY > 2080)
+	if (_cameraY + _cameraMapTileSizeY > 2080)
 	{
 
-		_cameraY = 2080 - _cameraSizeY;
+		_cameraY = 2080 - _cameraMapTileSizeY;
 	}
+
+	cout << "2080 넘냐 안넘냐 : " << _cameraX + _cameraSizeX << endl;
+	cout << "_cameraX :" << _cameraX << endl; //0이고
+	cout << "_cameraSizeX :" << _cameraSizeX << endl; // 950이 나오는데 왜 이리 나올까나?
+	cout << "마우스X :" << _cameraSizeX << endl;
 }
 
 
