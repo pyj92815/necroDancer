@@ -82,7 +82,28 @@ void Enemy::Idle()
 
 void Enemy::Move()
 {
-	if (_enemyInfo->idx != _playerInfo->idx)
+	if (_enemyInfo->idx + 1 == _playerInfo->idx && _enemyInfo->idy == _playerInfo->idy)
+	{
+		//오른쪽 공격
+		_enemyInfo->state = enemyState::STATE_ATTACK;
+	}
+	else if (_enemyInfo->idx - 1 == _playerInfo->idx && _enemyInfo->idy == _playerInfo->idy)
+	{
+		//왼쪽 공격
+		_enemyInfo->state = enemyState::STATE_ATTACK;
+	}
+	else if (_enemyInfo->idx == _playerInfo->idx && _enemyInfo->idy - 1 == _playerInfo->idy)
+	{
+		//위쪽 공격
+		_enemyInfo->state == enemyState::STATE_ATTACK;
+	}
+	else if (_enemyInfo->idx == _playerInfo->idx && _enemyInfo->idy + 1 == _playerInfo->idy)
+	{
+		//아래쪽 공격
+		_enemyInfo->state = enemyState::STATE_ATTACK;
+	}
+	
+	else if (_enemyInfo->idx != _playerInfo->idx)
 	{
 		if (_enemyInfo->idx > _playerInfo->idx)
 		{
@@ -120,17 +141,9 @@ void Enemy::AniChange()
 
 void Enemy::Attack()
 {
-	//switch (_enemyInfo->direction)
-	//{
-	//case Direction::UP:
-	//	//위로 절반 이동 후 다시 제자리로 + 해당 방향으로 공격 모션
-	//	_enemyInfo->state = enemyState::STATE_MOVE;
-	//	break;
-	//case Direction::DOWN:
-	//	//아래로 절반 이동 후 다시 제자리로 + 해당 방향으로 공격 모션
-	//	_enemyInfo->state = enemyState::STATE_MOVE;
-	//	break;
-	//}
+	//플레이어 공격후에
+	_enemyInfo->state = enemyState::STATE_MOVE;
+
 }
 
 void Enemy::Die()

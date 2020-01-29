@@ -1,6 +1,7 @@
 #pragma once
 #include"animation.h"
 #include"gameNode.h"
+#include"Collision.h"
 #include<vector>
 enum class enemyState
 {
@@ -38,6 +39,7 @@ class Enemy:public gameNode
 protected:
 	EnemyInfo* _enemyInfo;				//에너미 정보(구조체)
 	playerInfo* _playerInfo;			//전달받아올 플레이어 정보(구조체) (좌표값만 받아옴)
+	Collision* _collision;
 public:
 	Enemy() {};
 	~Enemy() {};
@@ -67,6 +69,7 @@ public:
 
 	virtual void Hit(float damage) { _enemyInfo->HP -= damage; }
 
+	//virtual void wallCheck()
 
 	//Enemy정보 접근자
 	virtual EnemyInfo* getEnemyInfo() { return _enemyInfo; }

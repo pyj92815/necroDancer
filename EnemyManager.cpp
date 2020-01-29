@@ -89,9 +89,9 @@ void EnemyManager::Attack()
 
 void EnemyManager::임시enemy생성()
 {
-	_enemyType = EnemyType::GHOST;
+	_enemyType = EnemyType::SLIME_ORANGE;
 	EnemyCreate(10, 8, _enemyType);
-	_enemyType = EnemyType::DRAGON;
+	_enemyType = EnemyType::SLIME_BLUE;
 	EnemyCreate(14, 8, _enemyType);
 	_enemyType = EnemyType::BAT;
 	EnemyCreate(18, 8, _enemyType);
