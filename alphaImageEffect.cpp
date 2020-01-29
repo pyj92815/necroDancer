@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "alphaImageEffect.h"
+#include "effect.h"
 
 alphaImageEffect::alphaImageEffect()
 {
@@ -110,6 +111,7 @@ void alphaImageEffect::render()
 {
 	_effectImage->frameRender(CAMERAMANAGER->getWorldDC(), _x, _y);
 }
+
 void alphaImageEffect::render(HDC hdc)
 {
 	if (_isRunning)

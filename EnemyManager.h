@@ -52,4 +52,8 @@ public:
 	void imageAdd();
 	void AnimationAdd();
 
+	//∂Ù»∆ √ﬂ∞°
+	vector<Enemy*> getVEnemy()			   { return _vEnemy; }
+	vector<Enemy*>::iterator  getViEnemy() { return _viEnemy; }
+
 };

@@ -237,6 +237,23 @@ void animation::setPlayFrame(int* playArr, int arrLen, BOOL loop)
 
 }
 
+void animation::setPlayFrame(array<int, 4>* playArr, int arrLen, BOOL loop)
+{
+	_obj = NULL;
+	_callbackFunction = NULL;
+	_callbackFunctionParameter = NULL;
+
+	_loop = loop;
+
+	_playList.clear();
+
+	for (int i = 0; i < playArr->size(); i++)
+	{
+		_playList.push_back((*playArr)[i]);
+	}
+}
+
+
 void animation::setPlayFrame(int* playArr, int arrLen, BOOL loop, CALLBACK_FUNCTION_STUDY cbFunction)
 {
 	_obj = NULL;

@@ -14,14 +14,13 @@ HRESULT boss_Skeleton_Yellow::init()
 	return S_OK;
 }
 
-void boss_Skeleton_Yellow::release()
-{
-}
-
 void boss_Skeleton_Yellow::update()
 {
+
 }
 
-void boss_Skeleton_Yellow::render()
+void boss_Skeleton_Yellow::boss_Skeleton_Yellow_ChangeAnimation()
 {
 }
+
+

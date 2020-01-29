@@ -14,14 +14,13 @@ HRESULT boss_Skeleton::init()
 	return S_OK;
 }
 
-void boss_Skeleton::release()
-{
-}
-
 void boss_Skeleton::update()
 {
+
 }
 
-void boss_Skeleton::render()
+void boss_Skeleton::boss_Skeleton_ChangeAnimation()
 {
 }
+
+
