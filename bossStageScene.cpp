@@ -23,7 +23,7 @@ HRESULT bossStageScene::init()
 	bossStageMap_Load();													// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
 
 	_deathMetal = new deathMetal;
-	_deathMetal->init("데스메탈", 17, 16, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
+	_deathMetal->init("데스메탈", 13, 15, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
 
 	_player = _stageScene->getPlayerAddress();								// 플레이어 링크
 	_ui = _stageScene->getUiAddress();										// ui 링크
@@ -35,6 +35,9 @@ HRESULT bossStageScene::init()
 	_sm = new slaveManager;
 	_sm->init();
 
+	// 보스 등장 씬에 관련 변수 초기화
+	bossSceneSetting();
+
 	return S_OK;
 }
 
@@ -44,52 +47,61 @@ void bossStageScene::release()
 
 void bossStageScene::update()
 {
-	_deathMetal->update();
-	_player->update();
-	_ui->update();
-	_sm->update();
-	
-	// 플레이어가 보스 근처에 있는지 없는지를 찾아준다. (쉐도우 벗기)
-	closePlayer(_player, _deathMetal);
+	// 플레이어 인덱스 출력
+	//cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
 
-	// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.	(쉐도우 벗기)
-	searchSlave(_sm->get_SlaveList(), _player);
+	// 보스 등장 씬이 끝나면 플레이가 가능하다.
+	bossSceneStart();
 
-	// 보스 움직임 연산
-	boss_Move_Player();
-
-	// 슬레이브 움직임 연산
-	slave_Move_Player();
-
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+	if (_scene_Starter.isOpen)
 	{
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-		//_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-	}
+		_deathMetal->update();
+		_player->update();
+		_ui->update();
+		_sm->update();
 
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
-	{
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-	}
+		// 플레이어가 보스 근처에 있는지 없는지를 찾아준다. (쉐도우 벗기)
+		closePlayer(_player, _deathMetal);
 
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
-	{
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-	}
+		// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.	(쉐도우 벗기)
+		searchSlave(_sm->get_SlaveList(), _player);
 
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
-	{
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-		_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-	}
+		// 보스 움직임 연산
+		boss_Move_Player();
 
-	if (KEYMANAGER->isToggleKey('V'))
-	{
-		BEATMANAGER->update();
-	}
+		// 슬레이브 움직임 연산
+		slave_Move_Player();
 
+		// 슬레이브 테스트용 소환
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+		{
+			_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+			//_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+		}
+
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
+		{
+			_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+			_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+		}
+
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
+		{
+			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+		}
+
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+		{
+			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+		}
+
+		if (KEYMANAGER->isToggleKey('V'))
+		{
+			BEATMANAGER->update();
+		}
+	}
 }
 
 void bossStageScene::render()
@@ -102,12 +114,12 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList).type != TYPE_NONE)
 			{
-	
+
 				// 타일의 속성에 따라 이미지를 뿌린다.
 				findTileImage();
 
 			}
-	
+
 		}
 	}
 
@@ -130,6 +142,9 @@ void bossStageScene::render()
 	{
 		BEATMANAGER->render();
 	}
+
+
+	bossSceneRender();
 }
 
 void bossStageScene::bossStageMap_Load()
@@ -230,8 +245,8 @@ void bossStageScene::z_Order_Player_Boss()
 
 void bossStageScene::playerPos_Setting()
 {
-	_player->PlayerAddress()->idx = 17;
-	_player->PlayerAddress()->idy = 28;
+	_player->PlayerAddress()->idx = 13;
+	_player->PlayerAddress()->idy = 26;
 	_player->PlayerAddress()->x = _player->PlayerAddress()->idx * TESTTILESIZE + (TESTTILESIZE / 2);
 	_player->PlayerAddress()->y = _player->PlayerAddress()->idy * TESTTILESIZE + (TESTTILESIZE / 3);
 	_player->PlayerAddress()->rc = RectMakeCenter(_player->PlayerAddress()->x, _player->PlayerAddress()->y,
@@ -901,4 +916,121 @@ void bossStageScene::boss_Base_Attack_Render(string skillName, player* player)
 		TILESIZE, TILESIZE);
 	// 이펙트가 뿌려질 중점 좌표와 뿌려질 이펙트 이미지를 담는 벡터
 	_vEffect.push_back(temp_Effect);
+}
+
+void bossStageScene::bossSceneSetting()
+{
+	_scene_Starter.isOpen = false;
+	_scene_Starter.startMoveImg = false;
+	_scene_Starter.image_Speed = 10;
+	_scene_Starter.main_OK = false;
+	_scene_Starter.bottom_OK = false;
+	_scene_Starter.top_OK = false;
+
+	_scene_Starter.main_Img = IMAGEMANAGER->findImage("deathMetal_Main");
+	_scene_Starter.top_Img = IMAGEMANAGER->findImage("deathMetal_TopBlade");
+	_scene_Starter.bottom_Img = IMAGEMANAGER->findImage("deathMetal_BottomBlade");
+
+	_scene_Starter.main_Img->setX(WINSIZEX);
+	_scene_Starter.main_Img->setY(80);
+
+	_scene_Starter.top_Img->setX(-WINSIZEX);
+	_scene_Starter.top_Img->setY(100);
+
+	_scene_Starter.bottom_Img->setX(WINSIZEX + 100);
+	_scene_Starter.bottom_Img->setY(WINSIZEY - 150);
+}
+
+void bossStageScene::bossSceneStart()
+{
+	if (!_scene_Starter.isOpen)
+	{
+		// 처음 보스 등장 씬이 날아온다. 정해진 위치까지 도착하면, 엔터를 누르면 더 빠르게 위치로 날아간다.
+		// 그리고 엔터를 다시 누르면 등장 씬은 다시 왔던길로 되돌아가고 다 돌아갔으면 게임이 시작된다.
+		if (!_scene_Starter.startMoveImg)
+		{
+			// 이미지를 전부 보여줬으면 더 이상 이동하면 안된다.
+			if (_scene_Starter.top_Img->getX() + _scene_Starter.image_Speed <= 0)
+			{
+				_scene_Starter.top_Img->setX(_scene_Starter.top_Img->getX() + _scene_Starter.image_Speed);
+			}
+			// 이미지가 도착했으면 true
+			else _scene_Starter.top_OK = true;
+
+			if (_scene_Starter.main_Img->getX() - _scene_Starter.image_Speed >= 0)
+			{
+				_scene_Starter.main_Img->setX(_scene_Starter.main_Img->getX() - _scene_Starter.image_Speed);
+			}
+			// 이미지가 도착했으면 true
+			else _scene_Starter.main_OK = true;
+
+			if (_scene_Starter.main_Img->getX() < WINSIZEX - 130)
+			{
+				if (_scene_Starter.bottom_Img->getX() - _scene_Starter.image_Speed > WINSIZEX - _scene_Starter.bottom_Img->getWidth())
+				{
+					_scene_Starter.bottom_Img->setX(_scene_Starter.bottom_Img->getX() - _scene_Starter.image_Speed);
+				}
+				// 이미지가 도착했으면 true
+				else _scene_Starter.bottom_OK = true;
+			}
+
+			// 모든 이미지가 도착 했을때 엔터를 누르면 사라지는 연산을 시작한다.
+			if (_scene_Starter.main_OK && _scene_Starter.bottom_OK && _scene_Starter.top_OK)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+				{
+					// 이미지 무브가 모두 끝났으니 true의 값을 넣는다.
+					_scene_Starter.startMoveImg = true;
+				}
+			}
+
+			else if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+			{
+				_scene_Starter.image_Speed = 16;
+			}
+		}
+
+		if (_scene_Starter.startMoveImg)
+		{
+			// 이미지가 모두 사라질때까지 반복한다.
+			if (_scene_Starter.top_Img->getX() + _scene_Starter.top_Img->getWidth() >= 0)
+			{
+				_scene_Starter.top_Img->setX(_scene_Starter.top_Img->getX() - _scene_Starter.image_Speed);
+			}
+			// 이미지가 사라졌으면 false
+			else _scene_Starter.top_OK = false;
+
+			if (_scene_Starter.main_Img->getX() <= WINSIZEX)
+			{
+				_scene_Starter.main_Img->setX(_scene_Starter.main_Img->getX() + _scene_Starter.image_Speed);
+			}
+			// 이미지가 사라졌으면 false
+			else _scene_Starter.main_OK = false;
+
+
+			if (_scene_Starter.bottom_Img->getX() <= WINSIZEX)
+			{
+				_scene_Starter.bottom_Img->setX(_scene_Starter.bottom_Img->getX() + _scene_Starter.image_Speed);
+			}
+			// 이미지가 사라졌으면 false
+			else _scene_Starter.bottom_OK = false;
+
+
+			// 모든 이미지가 사라진다면 게임이 시작 된다.
+			if (!_scene_Starter.main_OK && !_scene_Starter.bottom_OK && !_scene_Starter.top_OK)
+			{
+				_scene_Starter.isOpen = true;
+			}
+		}
+	}
+}
+
+void bossStageScene::bossSceneRender()
+{
+	if (!_scene_Starter.isOpen)
+	{
+		_scene_Starter.top_Img->render(getMemDC(), _scene_Starter.top_Img->getX(), _scene_Starter.top_Img->getY());
+		_scene_Starter.bottom_Img->render(getMemDC(), _scene_Starter.bottom_Img->getX(), _scene_Starter.bottom_Img->getY());
+		_scene_Starter.main_Img->render(getMemDC(), _scene_Starter.main_Img->getX(), _scene_Starter.main_Img->getY());
+	}
 }

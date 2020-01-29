@@ -21,6 +21,8 @@ private:
 	ADD_BOSS_IMAGE*								_addBossImage;					// 보스 이미지 생성
 	ADD_SLAVE_IMAGE*							_addSlaveImage;					// 보스 슬레이브 이미지 생성
 
+	BOSS_STAGE_OPEN								_scene_Starter;					// 보스 등장씬 관련 변수
+
 	tagTile										_tiles[TILEX * TILEY];			// 맵을 받아 올 타일 변수
 	vector<tagTile>								_vTotalList;					// 보스 스테이지의 타일 정보 벡터로 저장해서 사용한다.
 	vector<tagTile>::iterator					_viTotalList;
@@ -65,9 +67,9 @@ public:
 	// 보스 & 슬레이브
 	void closePlayer(player* player, deathMetal* deathMetal);					// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
 	void searchSlave(vector<slave*> vSlaveList, player* player);				// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
-	void closePlayer_Slave(player* player, SLAVE_INFO* slave);								// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
+	void closePlayer_Slave(player* player, SLAVE_INFO* slave);					// 플레이어가 근처에 있다면 쉐도우 이미지를 벗는다.
 	void findPlayer(player* player, deathMetal* deathMetal, UImanager* ui);		// 플레이어의 위치를 찾는다. (데스메탈)
-	SLAVE_DIRECTION findPlayer(player* player, SLAVE_INFO* slave);								// 플레이어의 위치를 찾는다. (슬레이브)
+	SLAVE_DIRECTION findPlayer(player* player, SLAVE_INFO* slave);				// 플레이어의 위치를 찾는다. (슬레이브)
 
 	void boss_Move_Player();													// 보스가 플레이어에게 움직이는 연산
 	void slave_Move_Player();													// 슬레이브가 플레이어에게 움직이는 연산
@@ -77,6 +79,10 @@ public:
 
 	// 스테이지 씬과의 링크
 	void stageSceneAddressLink(stageScene* stageScene) { _stageScene = stageScene; }
+
+	void bossSceneSetting();													// 보스 등장씬 변수 초기화
+	void bossSceneStart();														// 보스 등장씬 연산
+	void bossSceneRender();														// 보스 등장씬 출력
 
 };
 
