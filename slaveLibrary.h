@@ -35,6 +35,7 @@ struct SLAVE_STATUS
 {
 	SLAVE_TYPE			type;						// 슬레이브의 타입을 담는다.
 	SLAVE_DIRECTION		direction;					// 슬레이브가 바라보는 방향을 담는다.
+	SLAVE_DIRECTION		save_Direction;				// 슬레이브 방향 세이브 변수
 
 	int					hp;							// 슬레이브의 체력을 담는다.
 	float				attack;						// 슬레이브의 공격력을 담는다.
@@ -58,8 +59,11 @@ struct SLAVE_IMAGE
 // 불의 마을
 struct SLAVE_BOOL
 {
-	bool				close_Player;				// 슬레이브 근처에 플레이어가 있는지 없는지 여부.
-	bool				changeAni;					// 애니메이션을 체인지 해야 하는지 여부.
+	bool				isClosePlayer;				// 슬레이브 근처에 플레이어가 있는지 없는지 여부.
+	bool				save_ClosePlayer;			// 슬레이브가 근처에 있는지 세이브를 한다.
+	bool				isChangeAni;				// 움직였다면 애니메이션을 바꿔줘야한다.
+	bool				change_Ani;					// 애니메이션을 체인지가 가능한지 여부
+	bool				distanceCheck;				// 플레이어와 거리 체크 
 };
 
 // 슬레이브의 연산 변수
@@ -126,8 +130,11 @@ public:
 		slave->operation.tile_SizeY = TILESIZE;				
 
 		// bool 변수 초기화
-		slave->b_Value.changeAni = false;
-		slave->b_Value.close_Player = false;
+		slave->b_Value.change_Ani = false;
+		slave->b_Value.isChangeAni = false;
+		slave->b_Value.isClosePlayer = false;
+		slave->b_Value.save_ClosePlayer = false;
+		slave->b_Value.distanceCheck = false;
 
 		// 이미지, 애니메이션 할당
 		slave->image.img = new image;
