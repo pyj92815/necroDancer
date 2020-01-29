@@ -11,7 +11,7 @@ class player;
 class alphaEffect;
 
 #define WINSIZEX_HALF WINSIZEX / 2	// 윈도우 가로 사이즈 절반
-#define NOTE_INTERVAL WINSIZEX_HALF / 4 // 노트 사이 간격
+#define NOTE_INTERVAL WINSIZEX_HALF / 3 // 노트 사이 간격
 #define NOTE_RADIUS_X 6 // 노트 하나의 가로 반지름 길이
 #define HEARTFRAME_RATE 3 // 심장 박동 프레임 지연 시간
 
@@ -33,7 +33,6 @@ struct tagNote // 노트 구조체
 	image* img;
 	bool isCol; // 심장 박동 애니메이션 중복 방지를 위한 bool
 	bool isRender;
-
 	int alpha;
 };
 
@@ -58,7 +57,8 @@ private:
 	int _oldStageID, _currentStageID; // 현재 스테이지와 이전 스테이지 값
 	unsigned int _songPos; // 현재 곡의 진행시간(ms) 
 	unsigned int _songLength;  // FMOD::SOUND에 getLength()함수가 망가져서 만들었음 ㅠㅠ... getLength() 함수를 대신하여 곡의 길이를 받을 수 있게 만든 변수
-	unsigned int _averageSpeed;
+	float _averageTime;
+	//float _tempX;
 	float _songLeftTime; // 현재 곡의 남은 시간
 	float _pitch; // 현재 곡의 pitch값 (1이 기본 값, 1미만 시 곡이 느려짐, 1이상 시 빨라짐)
 	float _noteSpeed; // 노트의 이동속도
@@ -76,6 +76,7 @@ private:
 	bool Interval;
 	player* _player;
 	bool _effect;
+
 
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
@@ -110,4 +111,6 @@ public:
 	void HitNoteEffect(float x, float y);
 	bool getInterval() { return  Interval; }
 	float getHeartMiddle() { return (heartRC.left + heartRC.right) / 2; }
+	//float lerp(float start, float end, float timeAmount) { return float(start + ((float)(end - start) * timeAmount)); }
+	float lerp(float start, float end, float timeAmount) { return (float)(end - start) * timeAmount; }
 };

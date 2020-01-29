@@ -29,7 +29,7 @@ void Beat::update()
     update_SceneCheck();
 
     // 플레이어 움직임
-    //update_PlayerMoveTest();
+    update_PlayerMoveTest();
 
     // 노래 & 노트 조절
     update_SongAndNoteControl();
@@ -46,13 +46,13 @@ void Beat::update()
 
 void Beat::render()
 {
-
     Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
     Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
     Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
     Rectangle(_backBuffer->getMemDC(), test_Player);
+
     Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
-    //IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
+    IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
 
     if (_vNoteLeft.size() > 0) // 왼쪽 노트 렌더
     {
@@ -77,8 +77,6 @@ void Beat::render()
     {
         (*_viEffect)->render(_backBuffer->getMemDC());
     }
-    //Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
-    IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
     render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
 
@@ -87,7 +85,7 @@ void Beat::HitNoteEffect(float x, float y)
     if (!_effect) return;
     alphaImageEffect* noteHitEffect;
     noteHitEffect = new alphaImageEffect;
-    noteHitEffect->init("GreenNote", x, y, 5,STOP);
+    noteHitEffect->init("GreenNote", x, y, 5, STOP);
     _vEffect.push_back(noteHitEffect);
     _effect = false;
 }
@@ -114,7 +112,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
 {
     _currentStage = STAGE_LOBBY;
     _noteFileName = _currentSongName = _oldSongName = "";
-    _averageSpeed = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating = _activeAction = _deltaTime = _countNote = _countComma = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = _noteSpeed = 0;
+    _averageTime = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating = _activeAction = _deltaTime = _countNote = _countComma = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = _noteSpeed = 0;
 
     test_ShopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
     test_ShopKeeper = RectMakeCenter(test_ShopKeeperPos.x, test_ShopKeeperPos.y, 50, 50);
@@ -131,7 +129,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     heartImg = IMAGEMANAGER->findImage("Heart");
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
-    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 20, heartImg->getFrameHeight());
+    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 30, heartImg->getFrameHeight());
 }
 
 void Beat::update_SceneCheck() // 씬 정보를 받아올 함수
@@ -200,7 +198,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
 
                 // 노트 등장시 서서히 알파값 증가 시키기
 
-                if (_countNote < _vMsTimeInfo.size() - 3) // 노트 생성 수가 노트 정보 길이 - 3보다 작은 경우(노트 개수 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌))
+                if (_countNote < _vMsTimeInfo.size()) // 노트 생성 수가 노트 정보 길이 - 3보다 작은 경우(노트 개수 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌))
                 {
                     CreateNewNoteWhilePlay(true); // 노트 생성
                     CreateNewNoteWhilePlay(false); // 노트 생성
@@ -217,30 +215,13 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
                     }
                 }
             }
+
             RECT temp;
             if (IntersectRect(&temp, &_vNoteLeft[0].rc, &heartRC)) // 노트가 심장이랑 충돌 시 
             {
                 if (!_vNoteLeft[0].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
                 _vNoteLeft[0].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
                 inputIntervalCount += TIMEMANAGER->getElapsedTime(); // 입력할 수 있는 시간 구함
-
-                // 플레이어가 키 입력시
-                if (_player->getPlayerKey() && _vNoteLeft[0].isRender && inputIntervalCount > 0)
-                {
-                    _player->setPlayerKey();
-                    HitNoteEffect(_vNoteLeft[0].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteLeft[0].rc.bottom - _vNoteLeft[0].rc.top) / 2));
-                    _vNoteLeft[0].isRender = false;
-                    _effect = true;
-
-                    HitNoteEffect(_vNoteRight[0].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteRight[0].rc.bottom - _vNoteRight[0].rc.top) / 2));
-                    _vNoteRight[0].isRender = false;
-                    _effect = true;
-                }
-
-                if (!_vNoteLeft[0].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
-                _vNoteLeft[0].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
-                inputIntervalCount += TIMEMANAGER->getElapsedTime(); // 입력할 수 있는 시간 구함
-
             }
 
             // 플레이어가 키 입력시
@@ -261,12 +242,18 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             {
                 (*_viEffect)->update();
             }
-            _vNoteRight[i].pos.x -= (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)) * (NOTE_INTERVAL)*SOUNDMANAGER->getPitch(_currentSongName, _pitch); // 노트 이동 (델타 타임 / 현재 노트 시간(ms)값 * 노트 간격 * 현재 곡 pitch 값)
+            _vNoteRight[i].pos.x -= (_deltaTime / ((_vMsTimeInfo[1] - _vMsTimeInfo[0]) / 1000.0f)) * (NOTE_INTERVAL) * SOUNDMANAGER->getPitch(_currentSongName, _pitch); // 노트 이동 (델타 타임 / 현재 노트 시간(ms)값 * 노트 간격 * 현재 곡 pitch 값)
+            //_vNoteRight[i].pos.x -= (_deltaTime / _averageTime) * (NOTE_INTERVAL) * SOUNDMANAGER->getPitch(_currentSongName, _pitch); // 노트 이동 (델타 타임 / 현재 노트 시간(ms)값 * 노트 간격 * 현재 곡 pitch 값)
+            //_vNoteRight[i].pos.x += lerp(_vNoteRight[i].pos.x, _vNoteRight[i].pos.x - NOTE_INTERVAL, TIMEMANAGER->getElapsedTime() / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)) * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+            //_vNoteRight[i].pos.x += lerp(_vNoteRight[i].pos.x, _vNoteRight[i].pos.x - NOTE_INTERVAL, _deltaTime / 0.45f) * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
             _vNoteRight[i].img->setX(_vNoteRight[i].pos.x - _vNoteRight[i].img->getWidth() / 2); // 이미지 위치 세팅
             _vNoteRight[i].img->setY(_vNoteRight[i].pos.y - _vNoteRight[i].img->getHeight() / 2); // 이미지 위치 세팅
             _vNoteRight[i].rc = RectMakeCenter(_vNoteRight[i].pos.x, _vNoteRight[i].pos.y, _vNoteRight[i].img->getWidth(), _vNoteRight[i].img->getHeight()); // 노트의 렉터 위치 잡기
-
-            _vNoteLeft[i].pos.x += (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)) * (NOTE_INTERVAL)*SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+            
+            _vNoteLeft[i].pos.x += (_deltaTime / ((_vMsTimeInfo[1] - _vMsTimeInfo[0]) / 1000.0f)) * (NOTE_INTERVAL) * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+            //_vNoteLeft[i].pos.x += (_deltaTime / _averageTime) * (NOTE_INTERVAL) * SOUNDMANAGER->getPitch(_currentSongName, _pitch); // 노트 이동 (델타 타임 / 현재 노트 시간(ms)값 * 노트 간격 * 현재 곡 pitch 값)
+            //_vNoteLeft[i].pos.x -= lerp(_vNoteRight[i].pos.x, _vNoteRight[i].pos.x - NOTE_INTERVAL, TIMEMANAGER->getElapsedTime() / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)) * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
+            //_vNoteLeft[i].pos.x -= lerp(_vNoteRight[i].pos.x, _vNoteRight[i].pos.x - NOTE_INTERVAL, _deltaTime / 0.45f) * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
             _vNoteLeft[i].img->setX(_vNoteLeft[i].pos.x - _vNoteLeft[i].img->getWidth() / 2);
             _vNoteLeft[i].img->setY(_vNoteLeft[i].pos.y - _vNoteLeft[i].img->getHeight() / 2);
             _vNoteLeft[i].rc = RectMakeCenter(_vNoteLeft[i].pos.x, _vNoteLeft[i].pos.y, _vNoteLeft[i].img->getWidth(), _vNoteLeft[i].img->getHeight());
@@ -284,11 +271,11 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             }
         }
 
-    }
-    // 이펙트 
-    for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
-    {
-        (*_viEffect)->update();
+        // 이펙트, 곡이 끝난 후에 노트 이펙트가 남아 있는 경우를 대비함.
+        for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+        {
+            (*_viEffect)->update();
+        }
     }
 }
 
@@ -319,7 +306,7 @@ void Beat::update_SoundDistanceControl() // 거리에 따라 소리크기 제어
 void Beat::update_PitchControl() // 곡 속도 제어
 {
     RECT temp;
-    if (IntersectRect(&temp, &test_Player, &test_slowPlatform)) SOUNDMANAGER->setPitch(_currentShopkeeper, 0.75f), SOUNDMANAGER->setPitch(_currentSongName, 0.875f);
+    if (IntersectRect(&temp, &test_Player, &test_slowPlatform)) SOUNDMANAGER->setPitch(_currentShopkeeper, 0.875f), SOUNDMANAGER->setPitch(_currentSongName, 0.875f);
     else if ((IntersectRect(&temp, &test_Player, &test_fastPlatform))) SOUNDMANAGER->setPitch(_currentShopkeeper, 1.125f), SOUNDMANAGER->setPitch(_currentSongName, 1.125f);
     else SOUNDMANAGER->setPitch(_currentShopkeeper, 1), SOUNDMANAGER->setPitch(_currentSongName, 1);
 }
@@ -333,7 +320,7 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
         TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
 
         char display_songPos[256];
-        sprintf_s(display_songPos, sizeof(display_songPos), "%f", _deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f) * (NOTE_INTERVAL) * SOUNDMANAGER->getPitch(_currentSongName, _pitch));
+        sprintf_s(display_songPos, sizeof(display_songPos), "%f", _deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f) * (NOTE_INTERVAL)*SOUNDMANAGER->getPitch(_currentSongName, _pitch));
         TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
 
         char display_endVec[256];
@@ -353,7 +340,7 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
         TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
 
         char display_checkAverSpeed[256];
-        sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "%d", _averageSpeed);
+        sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "%f", _averageTime);
         TextOut(getMemDC, 100, 220, display_checkAverSpeed, strlen(display_checkAverSpeed));
     }
 }
@@ -384,7 +371,6 @@ void Beat::Load() // 노트 파일 로드
             {
                 ++_countComma; // 콤마 세기
                 _vMsTimeInfo.push_back(atoi(tempWord.c_str())); // 변환 순서 : 문자열 -> char*로 변환 -> atoi는 char*을 int로 변환
-                _averageSpeed += atoi(tempWord.c_str());
                 tempWord = ""; // string 초기화
                 continue;
             }
@@ -398,15 +384,17 @@ void Beat::Load() // 노트 파일 로드
     {
         int getMS = _vMsTimeInfo[i + 1] - _vMsTimeInfo[i]; // 한 개의 비트 간격을 받아오기 위해서..
         _songLength += getMS; // 길이를 담아준다. 나중엔 _songLength가 곡의 총 길이가 된다.
+        _averageTime += getMS;
     }
+    _averageTime = _averageTime / 1000.0f / (_countComma - 1);
 }
 
 void Beat::CreateNewNote(bool dirRight) // 노트 생성, 곡 시작 직전에 (오른쪽으로 생성할 건지 말건지 정하기)
 {
-    for (int i = 0; i < 4; i++) // 새 노트로 리셋, 오른쪽
+    for (int i = 0; i < 3; i++) // 새 노트로 리셋, 오른쪽
     {
         tagNote setNote;
-        if (dirRight) setNote.pos = { (float)WINSIZEX_HALF + (NOTE_INTERVAL * (i + 1)), (float)(heartRC.top + heartRC.bottom) / 2 }; // 방향이 오른쪽인 경우
+        if (dirRight) setNote.pos = { (float)WINSIZEX_HALF + (NOTE_INTERVAL  * (i + 1)), (float)(heartRC.top + heartRC.bottom) / 2 }; // 방향이 오른쪽인 경우
         else setNote.pos = { (float)WINSIZEX_HALF - (NOTE_INTERVAL * (i + 1)), (float)(heartRC.top + heartRC.bottom) / 2 }; // 방향이 왼쪽인 경우
 
         setNote.img = new image;
@@ -419,7 +407,8 @@ void Beat::CreateNewNote(bool dirRight) // 노트 생성, 곡 시작 직전에 (오른쪽으로
         setNote.alpha = 127;
 
         if (dirRight) _vNoteRight.push_back(setNote);
-        else _vNoteLeft.push_back(setNote), ++_countNote; // *카운트 노트는 왼쪽 기준으로만 세주자! 양쪽다 하면 두 번 일하는거니깐!
+        //else _vNoteLeft.push_back(setNote), ++_countNote; // *카운트 노트는 왼쪽 기준으로만 세주자! 양쪽다 하면 두 번 일하는거니깐!
+        else _vNoteLeft.push_back(setNote); // *카운트 노트는 왼쪽 기준으로만 세주자! 양쪽다 하면 두 번 일하는거니깐!
     }
 }
 
