@@ -26,16 +26,16 @@ HRESULT playGround::init()
 
 	IMAGEMANAGER->addImage("save", "./image/mapTool/icon/i_save.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("load", "./image/mapTool/icon/i_load.bmp", 52, 52, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("item", "./image/mapTool/icon/i_item.bmp", 52, 52, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item", "./image/mapTool/icon/i_item.bmp", 72, 72, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("armor", "./image/mapTool/icon/i_armor.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("weapon", "./image/mapTool/icon/i_weapon.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("terrain", "./image/mapTool/icon/i_terrain.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("trap", "./image/mapTool/icon/i_trap.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("wall", "./image/mapTool/icon/i_wall.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("eraser", "./image/mapTool/icon/i_eraser.bmp", 52, 52, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("map", "./image/mapTool/icon/i_map.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("exit", "./image/mapTool/icon/i_exit.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("stuff", "./image/mapTool/icon/i_stuff.bmp", 52, 52, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("map", "./image/mapTool/icon/i_map.bmp", 72, 72, true, RGB(255, 0, 255));
 
 	//팔레트에 사용될 이미지들
 	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255));
