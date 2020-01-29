@@ -53,6 +53,9 @@
 #define STAGESIZE 100 * 100
 #define BOSSSTAGESIZE 40 * 80
 
+//미니맵 타일 사이즈
+#define MINTILESIZE 15
+
 enum STAGE
 {
 	LOBY_STAGE,
