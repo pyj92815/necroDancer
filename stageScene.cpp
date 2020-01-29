@@ -256,6 +256,7 @@ vector<zOrder*> stageScene::ZorderUpdate(vector<zOrder*> num)
 void stageScene::stageCollision()
 {
 	_pm->getPlayerInfo()->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _pm->getPlayerInfo()));
+	_pm->getPlayerInfo()->setPlayerEnemyTile(_collision.collision_player_Enemy_tile(&_em->getVEnemy(), _pm->getPlayerInfo()));
 }
 
 void stageScene::setVision(POINT index, int sight)

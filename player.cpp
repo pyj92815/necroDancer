@@ -70,9 +70,6 @@ void player::update()
 
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
-		for (int i = 0; i < _vInven.size(); i++)
-		{
-		}
 	}
 }
 
@@ -254,81 +251,9 @@ void player::tileCheck()
 	for (_miPlayerTile = _mPlayerTile.begin(); _miPlayerTile != _mPlayerTile.end(); ++_miPlayerTile)
 	{
 		//UP타일
-		if (_miPlayerTile->first == PLAYERDIRECTION_UP && _miPlayerTile->first == _player.direction)
+		if (_miPlayerTile->first  == _player.direction)
 		{
 			//타일의 종류를 판단
-			switch (_miPlayerTile->second->type)
-			{
-			case TYPE_WALL:
-				wallCheck();
-				action = true;
-				break;
-			case TYPE_TRAP:
-				trapCheck();
-				action = true;
-				break;
-			case TYPE_ITEM_ARMOR:
-			case TYPE_ITEM_WEAPON:
-			case TYPE_ITEM_STUFF:
-				itempCheck();
-				StateMove();
-				action = true;
-				break;
-			default:
-				break;
-			}
-			break;
-		}
-		else if (_miPlayerTile->first == PLAYERDIRECTION_DOWN && _miPlayerTile->first == _player.direction)
-		{
-			switch (_miPlayerTile->second->type)
-			{
-			case TYPE_WALL:
-				wallCheck();
-				action = true;
-				break;
-			case TYPE_TRAP:
-				trapCheck();
-				action = true;
-				break;
-			case TYPE_ITEM_ARMOR:
-			case TYPE_ITEM_WEAPON:
-			case TYPE_ITEM_STUFF:
-				itempCheck();
-				StateMove();
-				action = true;
-				break;
-			default:
-				break;
-			}
-			break;
-		}
-		else if (_miPlayerTile->first == PLAYERDIRECTION_LEFT && _miPlayerTile->first == _player.direction)
-		{
-			switch (_miPlayerTile->second->type)
-			{
-			case TYPE_WALL:
-				wallCheck();
-				action = true;
-				break;
-			case TYPE_TRAP:
-				trapCheck();
-				action = true;
-				break;
-			case TYPE_ITEM_ARMOR:
-			case TYPE_ITEM_WEAPON:
-			case TYPE_ITEM_STUFF:
-				itempCheck();
-				StateMove();
-				action = true;
-				break;
-			default:
-				break;
-			}
-			break;
-		}
-		else if (_miPlayerTile->first == PLAYERDIRECTION_RIGHT && _miPlayerTile->first == _player.direction)
-		{
 			switch (_miPlayerTile->second->type)
 			{
 			case TYPE_WALL:
@@ -356,7 +281,34 @@ void player::tileCheck()
 	// ENEMY 타일 정보 ( 작성 예정 )
 	for (_miPlayerEnemyTile = _mPlayerEnemyTile.begin(); _miPlayerEnemyTile != _mPlayerEnemyTile.end(); ++_miPlayerEnemyTile)
 	{
-		if (_player.weapon == PLAYERWAEPON_NONE) action = true; return;
+		if (_player.weapon == PLAYERWAEPON_NONE)
+		{
+			action = true;
+			break;
+		}
+		// 1. 이펙트와 몬스터 데미지다는것만 하기
+		// 2. 타일 지우는거 확인하기 
+		if (_miPlayerEnemyTile->first == _player.direction)
+		{
+			switch (_player.weapon)
+			{
+			case PLAYERWAEPON_DAGGER:
+				//_miPlayerEnemyTile->second->
+				break;
+			case PLAYERWAEPON_LONGSWORD:
+				break;
+			case PLAYERWAEPON_RAPIER:
+				break;
+			case PLAYERWAEPON_SPEAR:
+				break;
+			case PLAYERWAEPON_BROADSWORD:
+				break;
+			default:
+				break;
+			}
+		}
+	
+	
 		//up
 		//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
 			//{
@@ -433,15 +385,6 @@ void player::tileCheck()
 			//	StateMove();
 			//}
 		//right
-		//if (_miPlayerTile->second->wall != W_NONE)
-			//{
-			//	playerEffect_Shovel(_miPlayerTile->second);
-			//	_miPlayerTile->second->type = TYPE_TERRAIN;
-			//	_miPlayerTile->second->wall = W_NONE;
-			//	_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-			//	_miPlayerTile->second->terrainFrameX = 1;
-			//	_miPlayerTile->second->terrainFrameY = 1;
-			//}
 			//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
 			//{
 			//	// 몬스터 타일 돌려야 함 
@@ -731,30 +674,6 @@ void player::itempCheck()
 	}
 }
 
-void player::changeTile(TYPE type)
-{
-	for (int i = 0; i < _vInven.size();++i)
-	{
-		if (_vInven[i]->type != type) continue;
-
-		_miPlayerTile->second->type = _vInven[i]->type;
-		_miPlayerTile->second->armor = _vInven[i]->armor;
-		_miPlayerTile->second->weapon = _vInven[i]->weapon;
-		_miPlayerTile->second->stuff = _vInven[i]->stuff;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->armorFrameX = _vInven[i]->frameX;	  // 땅의 속성을 
-		_miPlayerTile->second->armorFrameY = _vInven[i]->frameY;	  // 땅의 속성을 
-		_miPlayerTile->second->weaponFrameX = _vInven[i]->frameX;	  // 땅의 속성을 
-		_miPlayerTile->second->weaponFrameY = _vInven[i]->frameY;
-		_miPlayerTile->second->stuffFrameX = _vInven[i]->frameX;	  // 땅의 속성을 
-		_miPlayerTile->second->stuffFrameY = _vInven[i]->frameY;	  // 땅의 속성을 
-		this->itemRemove(i);
-		return;
-	}
-}
-
-
-
 void player::makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey, int sight, int damege, float guard, float hp)
 {
 	if (armor == A_ARMOR_1
@@ -808,73 +727,6 @@ void player::makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int f
 	item->guard = guard;
 	item->hp = hp;
 	_vInven.push_back(item);
-}
-
-void player::makeArmor(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey, int sight, int damege, float guard, float hp)
-{
-	if (_vInven.size() != 0)
-	{
-		for (int i = 0;i < _vInven.size();i++)
-		{
-			if ((_vInven[i]->armor != A_NONE && armor != A_NONE))
-			{
-				if (_vInven[i]->armor != A_NONE)
-				{
-					_player.isArmor = true;
-					currentArmor = _vInven[i];
-				}
-
-				_vInven.erase(_vInven.begin() + i);
-				tagItem* item;
-				item = new tagItem;
-				ZeroMemory(item, sizeof(item));
-				item->weapon = weapon;
-				item->armor = armor;
-				item->stuff = stuff;
-				item->frameX = framex;
-				item->frameY = framey;
-				item->sight = sight;
-				item->damege = damege;
-				item->guard = guard;
-				item->hp = hp;
-				_vInven.push_back(item);
-				break;
-			}
-			else
-			{
-				tagItem* item;
-				item = new tagItem;
-				ZeroMemory(item, sizeof(item));
-				item->weapon = weapon;
-				item->armor = armor;
-				item->stuff = stuff;
-				item->frameX = framex;
-				item->frameY = framey;
-				item->sight = sight;
-				item->damege = damege;
-				item->guard = guard;
-				item->hp = hp;
-				_vInven.push_back(item);
-				break;
-			}
-		}
-	}
-	else
-	{
-		tagItem* item;
-		item = new tagItem;
-		ZeroMemory(item, sizeof(item));
-		item->weapon = weapon;
-		item->armor = armor;
-		item->stuff = stuff;
-		item->frameX = framex;
-		item->frameY = framey;
-		item->sight = sight;
-		item->damege = damege;
-		item->guard = guard;
-		item->hp = hp;
-		_vInven.push_back(item);
-	}
 }
 
 void player::StateMove()

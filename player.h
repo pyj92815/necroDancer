@@ -72,7 +72,6 @@ public:
 	void enemyCheck();	 // 몬스터 판단
 	void trapCheck();	 // 함정 판단
 	void itempCheck();   // 아이템 판단
-	void changeTile(TYPE type);
 
 	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey ,int sight,int damege, float guard, float hp);
 	void makeArmor(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey, int sight, int damege, float guard, float hp);
