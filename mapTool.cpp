@@ -77,7 +77,7 @@ void mapTool::save()
 {
 	HANDLE file;
 	DWORD write;
-	//"Loby_SaveFile.mpa"
+	//"Loby_SaveFile.map"
 	//"SaveFile.map"
 	//"Boss_SaveFile.map"
 	//"Stage_SaveFile.map"

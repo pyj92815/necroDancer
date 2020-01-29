@@ -39,6 +39,10 @@ private:
 	array<int,4> bodyRight; // 장비 바꾸기 위한 배열 
 	array<int,4> bodyLeft;	// 
 
+	tagItem* currentArmor;
+	tagItem* currentWeapon;
+
+
 
 public:
 	player();
@@ -68,8 +72,11 @@ public:
 	void enemyCheck();	 // 몬스터 판단
 	void trapCheck();	 // 함정 판단
 	void itempCheck();   // 아이템 판단
+	void changeTile(TYPE type);
 
-	void makeItem(WEAPON weapon, ARMOR armor,int framex, int framey ,int sight,int damege, float guard, float hp);
+	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey ,int sight,int damege, float guard, float hp);
+	void makeArmor(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey, int sight, int damege, float guard, float hp);
+
 
 	//플레이어 상태판단
 	void StateMove();		// 이동 판단		
@@ -126,7 +133,14 @@ public:
 		KEYANIMANAGER->addArrayFrameAnimation("bodyLeft", "player1_armor_body_xmas", bodyLeft, 4, 10, true);
 
 	}
-	void itemSetting();
+	void itemRemove(int num) { _vInven.erase(_vInven.begin() + num); }
+	void itemRemove()  // 시험용 안될 가능성 높음 
+	{
+		for (int i = 0; i < _vInven.size(); ++i)
+		{
+			if (_vInven[i]->type != W_NONE) this->itemRemove(i);
+		}
+	}
 };
 
 
