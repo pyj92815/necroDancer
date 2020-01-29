@@ -4,6 +4,7 @@
 #include "EnemyManager.h"
 #include "UImanager.h"
 #include "Collision.h"
+#include "miniMap.h"
 
 class bossStageScene;
 
@@ -34,6 +35,9 @@ private: // 맵 충돌
 	vector<tagTile*>						  _vTotalList;	 // 스테이지 맵 포인터 백터
 	vector<tagTile*>::iterator			     _viTotalList;
 
+	vector<tagTile*>						_vMinTotal;
+	vector<tagTile*>::iterator			   _viMinTotal;
+
 	Collision _collision;			// 충돌처리 
 private: // 제트오더
 	vector<zOrder*> _zOrderVector;
@@ -44,8 +48,8 @@ private: // 하위 계층
 	playerManager* _pm;
 	EnemyManager* _em;
 	UImanager* _ui;
-	
 	bossStageScene* _bossStageScene;
+	miniMap* _minimap;
 public:
 	stageScene() {}
 	~stageScene() {}
@@ -60,7 +64,7 @@ public:
 	// 제트오더 관련
 	void ZorderSetup();
 	vector<zOrder*>ZorderUpdate(vector<zOrder*>  num);
-
+	vector<tagTile*> getStageTile() { return _vTotalList; }
 	UImanager* getUiAddress() { return _ui; }
 	
 	// 맵 
@@ -69,5 +73,8 @@ public:
 	void bossStageSceneAddressLink(bossStageScene* bossStageScene) { _bossStageScene = bossStageScene; }
 
 	void setVision(POINT index, int sight);
+
+	//미니맵 전용
+	void stageMiniMapLoad();
 };
 

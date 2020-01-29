@@ -81,7 +81,7 @@ void mapTool::load()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
