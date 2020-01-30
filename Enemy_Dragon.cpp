@@ -29,12 +29,12 @@ void Enemy_Dragon::AniChange()
 	switch (_enemyInfo->direction)
 	{
 	case Direction::LEFT:
-		if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("Dragon_L_IDLE_Ani");
-		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Dragon_L_Shadow_IDLE_Ani");
+		if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("Dragon_L_IDLE_Ani");
+		else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("Dragon_L_Shadow_IDLE_Ani");
 		break;
 	case Direction::RIGHT:
-		if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("Dragon_R_IDLE_Ani");
-		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Dragon_R_Shadow_IDLE_Ani");
+		if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("Dragon_R_IDLE_Ani");
+		else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("Dragon_R_Shadow_IDLE_Ani");
 		break;
 	}
 	_enemyInfo->aniChange = true;

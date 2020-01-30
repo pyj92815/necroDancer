@@ -110,8 +110,8 @@ void Enemy_Slime_Orange::Attack()
 
 void Enemy_Slime_Orange::AniChange()
 {
-	if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_IDLE_Ani");
-	else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_Shadow_IDLE_Ani");
+	if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_IDLE_Ani");
+	else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_Shadow_IDLE_Ani");
 	_enemyInfo->aniChange = true;
 	light_change = _enemyInfo->Light;
 }

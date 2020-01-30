@@ -31,6 +31,7 @@ void stageScene::release()
 
 void stageScene::update()
 {
+	_em->getVEnemy().size();
 	_pm->update();
 	_em->update();
 	BEATMANAGER->update();
@@ -111,7 +112,7 @@ void stageScene::render()
 	//플레이어 렌더 
 	/*pm->render();*/
 	//몬스터 렌더 
-	_em->render();
+
 
 	//제트오더 랜더 
 	//for (int i = 0; i < _zOrderVector.size(); ++i)
@@ -149,8 +150,8 @@ void stageScene::render()
 			continue;
 		}
 	}
-	EFFECTMANAGER->render(CAMERAMANAGER->getWorldDC());
-
+	
+	_em->render();
 	_pm->effectRender();
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 	//ENEMYMANAGER->render(getMemDC());
@@ -161,7 +162,7 @@ void stageScene::render()
 	//{
 	//	
 	//}
-	
+	EFFECTMANAGER->render(CAMERAMANAGER->getWorldDC());
 }
 
 // 제트오더 사이즈 설정하기 

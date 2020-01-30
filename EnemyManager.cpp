@@ -28,9 +28,11 @@ void EnemyManager::update()
 		//플레이어의 좌표값을 전달
 		(*_viEnemy)->setPlayerInfo(_player->getPlayer().x, _player->getPlayer().y, _player->getPlayer().idx, _player->getPlayer().idy);
 		cout << _player->getPlayer().idx << endl;
+		
 	}
 	EnemyRemove();
 	EnemyInspection();
+
 }
 
 void EnemyManager::render()
@@ -38,7 +40,9 @@ void EnemyManager::render()
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->render();
+		
 	}
+
 }
 
 void EnemyManager::EnemyRemove()
@@ -57,36 +61,6 @@ void EnemyManager::EnemyRemove()
 	}
 }
 
-void EnemyManager::Attack()
-{
-	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
-	{
-		if ((*_viEnemy)->getEnemyInfo()->idx + 1 == _player->getPlayer().idx && (*_viEnemy)->getEnemyInfo()->idy == _player->getPlayer().idy)
-		{
-			//오른쪽 공격
-			(*_viEnemy)->getEnemyInfo()->state = enemyState::STATE_ATTACK;
-			(*_viEnemy)->getEnemyInfo()->AttackDirection = Direction::RIGHT;
-		}
-		if ((*_viEnemy)->getEnemyInfo()->idx - 1 == _player->getPlayer().idx && (*_viEnemy)->getEnemyInfo()->idy == _player->getPlayer().idy)
-		{
-			//왼쪽 공격
-			(*_viEnemy)->getEnemyInfo()->state = enemyState::STATE_ATTACK;
-			(*_viEnemy)->getEnemyInfo()->AttackDirection = Direction::LEFT;
-		}
-		if ((*_viEnemy)->getEnemyInfo()->idx == _player->getPlayer().idx && (*_viEnemy)->getEnemyInfo()->idy - 1 == _player->getPlayer().idy)
-		{
-			//위쪽 공격
-			(*_viEnemy)->getEnemyInfo()->state = enemyState::STATE_ATTACK;
-			(*_viEnemy)->getEnemyInfo()->AttackDirection = Direction::UP;
-		}
-		if ((*_viEnemy)->getEnemyInfo()->idx == _player->getPlayer().idx && (*_viEnemy)->getEnemyInfo()->idy + 1 == _player->getPlayer().idy)
-		{
-			//아래쪽 공격
-			(*_viEnemy)->getEnemyInfo()->state = enemyState::STATE_ATTACK;
-			(*_viEnemy)->getEnemyInfo()->AttackDirection = Direction::DOWN;
-		}
-	}
-}
 //for문을 도느라 bool값이 true false 반복하며 바뀜 else문을 바꿔야 할거 같음
 void EnemyManager::EnemyInspection()
 {
@@ -199,16 +173,20 @@ void EnemyManager::EnemyCreate(float x, float y, EnemyType enemyType)
 
 void EnemyManager::imageAdd()
 {
-	IMAGEMANAGER->addFrameImage("Enemy_bat", "./image./Enemy/bat.bmp", 384, 96, 8, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_dragon", "./image./Enemy/dragon.bmp", 432, 204, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_ghost", "./image./Enemy/ghost.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_minotaur", "./image./Enemy/minotaur.bmp", 1800, 196, 18, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_skeleton", "./image./Enemy/skeleton.bmp", 768, 100, 16, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_skeleton_yellow", "./image./Enemy/skeleton_yellow.bmp", 816, 100, 17, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_slime_blue", "./image./Enemy/slime_blue.bmp", 416, 100, 8, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_slime_orange", "./image./Enemy/slime_orange.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_wraith", "./image./Enemy/wraith.bmp", 288, 96, 6, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_zombie", "./image./Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_bat", "image/Enemy/bat.bmp", 384, 96, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_dragon", "image/Enemy/dragon.bmp", 432, 204, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_ghost", "image/Enemy/ghost.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_minotaur", "image/Enemy/minotaur.bmp", 1800, 196, 18, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_skeleton", "image/Enemy/skeleton.bmp", 768, 100, 16, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_skeleton_yellow", "image/Enemy/skeleton_yellow.bmp", 816, 100, 17, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_slime_blue", "image/Enemy/slime_blue.bmp", 416, 100, 8, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_slime_orange", "image/Enemy/slime_orange.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_wraith", "image/Enemy/wraith.bmp", 288, 96, 6, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_zombie", "image/Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_LEFT", "image/particles/swipe_enemy_LEFT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_RIGHT", "image/particles/swipe_enemy_RIGHT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_UP", "image/particles/swipe_enemy_UP.bmp", 120, 27,5,1 , true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_DOWN", "image/particles/swipe_enemy_DOWN.bmp", 120, 27,5, 1, true, RGB(255, 0, 255));
 
 }
 void EnemyManager::Enemy_Bat_Create(float x, float y)
@@ -412,5 +390,14 @@ void EnemyManager::AnimationAdd()
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_Shadow_LEFT_Ani", "Enemy_zombie", Enemy_zombie_Shadow_LEFT, 8, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_Shadow_RIGHT_Ani", "Enemy_zombie", Enemy_zombie_Shadow_RIGHT, 8, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_zombie_Shadow_DOWN_Ani", "Enemy_zombie", Enemy_zombie_Shadow_DOWN, 8, 10, true);
+	//======================에너미 공격 애니메이션=======================================================
+	int Enemy_Attack_LEFT[] = {4,3,2,1,0};
+	int Enemy_Attack_RIGHT[] = {0,1,2,3,4};
+	int Enemy_Attack_UP[] = {4,3,2,1,0};
+	int Enemy_Attack_DOWN[] = {0,1,2,3,4};
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_LEFT_Ani", "Enemy_Attack_LEFT", Enemy_Attack_LEFT, 5, 10, false);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_RIGHT_Ani", "Enemy_Attack_RIGHT", Enemy_Attack_RIGHT, 5, 10, false);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_UP_Ani", "Enemy_Attack_UP", Enemy_Attack_UP, 5, 10, false);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_DOWN_Ani", "Enemy_Attack_DOWN", Enemy_Attack_DOWN, 5, 10, false);
 }
 
