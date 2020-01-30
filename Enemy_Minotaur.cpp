@@ -8,7 +8,11 @@ void Enemy_Minotaur::Action()
 	case enemyState::STATE_IDLE:
 		break;
 	case enemyState::STATE_MOVE:
-		Move();
+		if (_enemyInfo->beatCount > 1)
+		{
+			Move();
+			_enemyInfo->beatCount = 0;
+		}
 		break;
 	case enemyState::STATE_ATTACK:
 		Attack();
@@ -27,7 +31,23 @@ void Enemy_Minotaur::Move()
 	//돌진 중에 다른 몬스터나 벽에 부딪히면 2박자간 기절 후 다음 박자에 일어나 그 다음 박자부터 움직인다.
 
 	//if(플레이어의 x = enemy의 x || 플레이어의 y = enemy의 y) _enemyInfo->state=Direction::State_ATTACK;
-
+	if (_enemyInfo->idx != _playerInfo->idx)
+	{
+	if (_enemyInfo->idx > _playerInfo->idx)
+	{
+		_enemyInfo->idx -= 1;
+		_enemyInfo->x -= 52;
+	}
+	else if (_enemyInfo->idx < _playerInfo->idx)
+	{
+		_enemyInfo->idx += 1;
+		_enemyInfo->x += 52;
+	}
+	}
+	else if (_enemyInfo->idx == _playerInfo->idx || _enemyInfo->idy == _playerInfo->idy)
+	{
+		_enemyInfo->state = enemyState::STATE_ATTACK;
+	}
 }
 
 void Enemy_Minotaur::AniChange()

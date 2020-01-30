@@ -8,7 +8,11 @@ void Enemy_Skeleton_Yellow::Action()
 	case enemyState::STATE_IDLE:
 		break;
 	case enemyState::STATE_MOVE:
-		Move();
+		if (_enemyInfo->beatCount >= 2)
+		{
+			Move();
+			_enemyInfo->beatCount = 0;
+		}
 		break;
 	case enemyState::STATE_ATTACK:
 		Attack();
@@ -19,12 +23,6 @@ void Enemy_Skeleton_Yellow::Action()
 		break;
 	}
 }
-
-void Enemy_Skeleton_Yellow::Move()
-{
-	//두 박자마다 움직인다. 체력이 1이 되면 목이 날아가고 플레이어가 공격한 반대 방향으로 도망간다.
-}
-
 void Enemy_Skeleton_Yellow::AniChange()
 {
 	switch (_enemyInfo->direction)

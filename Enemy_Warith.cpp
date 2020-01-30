@@ -8,7 +8,11 @@ void Enemy_Warith::Action()
 	case enemyState::STATE_IDLE:
 		break;
 	case enemyState::STATE_MOVE:
-		Move();
+		if (_enemyInfo->beatCount >= 1)
+		{
+			Move();
+			_enemyInfo->beatCount = 0;
+		}
 		break;
 	case enemyState::STATE_ATTACK:
 		Attack();

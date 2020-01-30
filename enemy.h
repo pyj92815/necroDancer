@@ -1,7 +1,6 @@
 #pragma once
 #include"animation.h"
 #include"gameNode.h"
-#include<vector>
 enum class enemyState
 {
 	STATE_IDLE,STATE_MOVE,STATE_ATTACK,STATE_DIE
@@ -27,6 +26,11 @@ struct EnemyInfo
 	bool Light;							//시야 안에 있는지 여부를 판단하기 위한 bool값
 	bool aniChange;						//애니메이션을 바꿨는지 판단하기 위한 bool값
 	bool Beat;
+
+	bool left;
+	bool right;
+	bool up;
+	bool down;
 };
 struct playerInfo
 {

@@ -41,7 +41,7 @@ public:
 	void EnemyRemove();
 
 	void Attack();
-
+	void EnemyInspection();
 	void 임시enemy생성();
 	
 	void EnemyCreate(float x, float y, EnemyType enemyType);
