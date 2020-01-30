@@ -35,6 +35,12 @@ void boss::render()
 	// aniRender는 센터 중심으로 그려진다.
 	_image->aniRender(CAMERAMANAGER->getWorldDC(), center.x, center.y - (_image->getFrameHeight() / 3), ani);
 
+	// 보스의 체력 게이지는 한대 맞고 표시 된다.
+	// 실제 체력 갯수에 맞게 오른쪽에서부터 왼쪽까지 그려준다.
+	// 잃은 체력은 왼쪽에서 오른쪽으로 그려준다.
+	// 실제 체력 갯수가 늘어나면 잃은 체력 갯수가 늘어남
+	if(hp < max_HP) showBossHP();
+
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
 		// 보스가 위치한 타일의 렉트
@@ -99,6 +105,31 @@ void boss::settingBossVariable()
 	boss_Bool.PHASE_BOOL.PHASE_4_Set = false;
 
 	move_Count = 0;
+
+}
+
+void boss::showBossHP()
+{
+	float tempHP_SizeX = IMAGEMANAGER->findImage("Boss_Hp_Full")->getWidth();
+	float tempHP_SizeY = IMAGEMANAGER->findImage("Boss_Hp_Full")->getHeight();
+	float tempBoss_SizeY = IMAGEMANAGER->findImage("Death_Metal")->getFrameHeight();
+
+	// 현재 남은 체력만큼 이미지를 오른쪽에서 왼쪽으로 그려준다.
+	for (int i = 0; i < hp; ++i)
+	{
+		IMAGEMANAGER->findImage("Boss_Hp_Full")->render(CAMERAMANAGER->getWorldDC(),
+			((center.x + tempHP_SizeX * 4) - tempHP_SizeX / 2) - (i * tempHP_SizeX)
+				, center.y - tempBoss_SizeY);
+	}
+
+	// 잃은 체력은 오른쪽에서 왼쪽으로 그려준다.
+	for (int i = 0; i < max_HP - hp; ++i)
+	{
+		IMAGEMANAGER->findImage("Boss_Hp_Null")->render(CAMERAMANAGER->getWorldDC(),
+			((center.x - tempHP_SizeX * 4) - tempHP_SizeX / 2) + (i * tempHP_SizeX)
+			, center.y - tempBoss_SizeY);
+	}
+
 
 }
 

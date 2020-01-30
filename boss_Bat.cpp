@@ -18,12 +18,37 @@ HRESULT boss_Bat::init()
 
 void boss_Bat::update()
 {
+	move();
 	boss_Bat_ChangeAnimation();
 	slave_Pos_Setting();
 }
 
 void boss_Bat::move()
 {
+	// 슬레이브의 무브가 true로 변하면
+	if (slave::_slave.b_Value.isMove)
+	{
+		switch (slave::_slave.status.direction)
+		{
+		case SLAVE_DIRECTION::SD_LEFT:
+			slave::_slave.pos.index.x--;
+			break;
+
+		case SLAVE_DIRECTION::SD_UP:
+			slave::_slave.pos.index.y--;
+			break;
+
+		case SLAVE_DIRECTION::SD_RIGHT:
+			slave::_slave.pos.index.x++;
+			break;
+
+		case SLAVE_DIRECTION::SD_DOWN:
+			slave::_slave.pos.index.y++;
+			break;
+		}
+
+		slave::_slave.b_Value.isMove = false;
+	}
 }
 
 void boss_Bat::boss_Bat_ChangeAnimation()
@@ -47,7 +72,7 @@ void boss_Bat::boss_Bat_ChangeAnimation()
 	}
 
 	// 박쥐가 바라보는 방향에 따라 애니메이션을 바꿔준다.
-	if (slave::_slave.b_Value.isChangeAni)	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
+	if (slave::_slave.b_Value.isChangeAni)	
 	{
 		switch (slave::_slave.status.direction)
 		{

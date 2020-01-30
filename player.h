@@ -32,9 +32,14 @@ private:
 	float _time;			// 시간 
 	float _angle;			// 각도 
 	float _shadow;
+
+	int _previousIdx;	    // 이전 idx,idy
+	int _previousIdy;
+
 	bool _isMoving;			// BOOL 선형보간이동
 	bool _isKeyPress;		// KEY 입력 중 노트 판단 
 	bool _isKeyDown;		// KEY 입력 판단
+	bool _reversMove;
 
 	array<int,4> bodyRight; // 장비 바꾸기 위한 배열 
 	array<int,4> bodyLeft;	// 
@@ -65,6 +70,7 @@ public:
 	void playerEffect_Attack(const char* imageName,tagTile* tile, int frameY);
 	void playerEffect_Attack(const char* imageName, float x, float y, int frameY);
 	void playerEffect_Attack(const char* imageName, int x, int y, int frameY);
+	void playerEffect_Attack();
 	// 타일검출
 	void tileCheck();	
 	void wallCheck();	 // 벽판단
@@ -74,6 +80,7 @@ public:
 
 	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey ,int sight,int damege, float guard, float hp);
 
+	void playerHit(int damage) { _player.hp = _player.hp - damage; }
 	//플레이어 상태판단
 	void StateMove();		// 이동 판단		
 
@@ -92,7 +99,7 @@ public:
 	void setPlayerEnemyTile(map<PLAYERDIRECTION, Enemy*> tile)	 { _mPlayerEnemyTile = tile; }
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
+	//void setEnemyAddressLink(EnemyManager* enemyManager) { }
 
 	//이미지 세팅
 	void imageSetting()
@@ -136,6 +143,12 @@ public:
 		{
 			if (_vInven[i]->type != W_NONE) this->itemRemove(i);
 		}
+	}
+
+	void collisionSetting() 
+	{
+		_mPlayerEnemyTile.clear();
+		_mPlayerTile.clear();
 	}
 };
 

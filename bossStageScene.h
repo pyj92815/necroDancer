@@ -4,6 +4,10 @@
 #include "slaveManager.h"
 #include "boss_Stage_Library.h"
 #include "addImage_Boss.h"
+#include "Collision.h"
+#include "stageScene.h"
+#include "zOrder.h"
+#include "visionFloodFill.h"
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinmainCRTStartup /subsystem:console")
@@ -21,11 +25,16 @@ private:
 	ADD_BOSS_IMAGE*								_addBossImage;					// 보스 이미지 생성
 	ADD_SLAVE_IMAGE*							_addSlaveImage;					// 보스 슬레이브 이미지 생성
 
+	Collision									_collision;						// 충돌 클래스
+
 	BOSS_STAGE_OPEN								_scene_Starter;					// 보스 등장씬 관련 변수
 
 	tagTile										_tiles[TILEX * TILEY];			// 맵을 받아 올 타일 변수
-	vector<tagTile>								_vTotalList;					// 보스 스테이지의 타일 정보 벡터로 저장해서 사용한다.
-	vector<tagTile>::iterator					_viTotalList;
+	vector<tagTile*>							_vTotalList;					// 보스 스테이지의 타일 정보 벡터로 저장해서 사용한다.
+	vector<tagTile*>::iterator					_viTotalList;
+
+	//vector<tagTile*>							_vTotalList;					// 보스 스테이지의 타일 정보 벡터로 저장해서 사용한다.
+	//vector<tagTile*>::iterator					_viTotalList;
 
 	vector<BOSS_STAGE_EFFECT_VECTOR*>			_vEffect;						// 이펙트 벡터
 	vector<BOSS_STAGE_EFFECT_VECTOR*>::iterator _viEffect;						// 이펙트 이터에이터
@@ -35,10 +44,10 @@ private:
 	player*										_player;						// 플레이어	
 	deathMetal*									_deathMetal;					// 데스메탈
 	slaveManager*								_sm;							// 슬레이브 매니저
-		
+	zOrder* _zOrder;
+	visionFloodFill* _floodFill;
 private:
 	bool distanceCheck;															// 거리를 체크한다. (범위에 들어오거나 들어오지 않을때 값이 바뀐다.)
-
 public:
 	bossStageScene();
 	~bossStageScene();
@@ -83,6 +92,9 @@ public:
 	void bossSceneSetting();													// 보스 등장씬 변수 초기화
 	void bossSceneStart();														// 보스 등장씬 연산
 	void bossSceneRender();														// 보스 등장씬 출력
+	void bossSceneDoorOpen();													// 보스방 문을 여는 연산
+	void bossClear();															// 보스 클리어 시 벽이 열리는것
 
+	
 };
 
