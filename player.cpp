@@ -70,6 +70,7 @@ void player::update()
 
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
+		playerEffect_Attack("swipe_dagger", _player.x, _player.y, 0);
 	}
 }
 

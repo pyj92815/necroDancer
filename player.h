@@ -65,7 +65,6 @@ public:
 	void playerEffect_Attack(const char* imageName,tagTile* tile, int frameY);
 	void playerEffect_Attack(const char* imageName, float x, float y, int frameY);
 	void playerEffect_Attack(const char* imageName, int x, int y, int frameY);
-
 	// 타일검출
 	void tileCheck();	
 	void wallCheck();	 // 벽판단
@@ -74,8 +73,6 @@ public:
 	void itempCheck();   // 아이템 판단
 
 	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey ,int sight,int damege, float guard, float hp);
-	void makeArmor(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey, int sight, int damege, float guard, float hp);
-
 
 	//플레이어 상태판단
 	void StateMove();		// 이동 판단		
