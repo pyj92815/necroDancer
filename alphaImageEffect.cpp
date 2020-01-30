@@ -119,7 +119,7 @@ void alphaImageEffect::render(HDC hdc)
 		switch (_type)
 		{
 		case FRAMEIMAGE:
-			_effectImage->frameRender(hdc, _x, _y,_currentFrameX,_currentFrameY);
+			_effectImage->frameRender(hdc, _x + (_effectImage->getFrameWidth() /2), _y + (_effectImage->getFrameHeight() / 2),_currentFrameX,_currentFrameY);
 		break;
 		default:
 			_effectImage->alphaRender(hdc, _x, _y, _alphaValue);

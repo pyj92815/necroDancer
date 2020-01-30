@@ -26,7 +26,7 @@ HRESULT mapTool::init()
 	//■■■■■■■■■■■■■■■■■ 마우스 클릭 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	_startL = 0;
 	_startT = 0;
-	_isClick = false;
+	_isClick = _isItemButtonClick = _isMapButtonClick = false;
 	
 	destroyAllWindows();
 	//■■■■■■■■■■■■■■■■■ 화면 움직임 ■■■■■■■■■■■■■■■■■
@@ -57,13 +57,23 @@ void mapTool::update()
 	if (PtInRect(&_bottom, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() + SCREENMOVESPEED); }
 	CAMERAMANAGER->CameraMapTool_Correction();
 
-	_itemButton.rc = RectMake(100, 825, 52, 52);
-	_stuffButton.rc = RectMake(210, 825, 52, 52);
-	_armorButton.rc = RectMake(320, 825, 52, 52);
-	_weaponButton.rc = RectMake(430, 825, 52, 52);
-	_terrainButton.rc = RectMake(1100, 825, 52, 52);
-	_wallButton.rc = RectMake(1210, 825, 52, 52);
-	_trapButton.rc = RectMake(1320, 825, 52, 52);
+	_itemButton.rc = RectMake(25, 25, 72, 72);
+	if (_crtSelect == CTRL_ITEM) { _isItemButtonClick = true; }
+	if (_crtSelect == CTRL_MAP) { _isMapButtonClick = true; }
+	if (_isItemButtonClick == true)
+	{
+		_stuffButton.rc = RectMake(100, 50, 52, 52);
+		_armorButton.rc = RectMake(150, 50, 52, 52);
+		_weaponButton.rc = RectMake(200, 50, 52, 52);
+	}
+	if (_isMapButtonClick == true)
+	{
+
+		_terrainButton.rc = RectMake(100, 122, 52, 52);
+		_wallButton.rc = RectMake(150, 122, 52, 52);
+		_trapButton.rc = RectMake(200, 122, 52, 52);
+	}
+	_mapButton.rc = RectMake(25, 97, 72, 72);
 	_eraseButton.rc = RectMake(1430, 825, 52, 52);
 	_saveButton.rc = RectMake(1525, 825, 52, 52);
 	_loadButton.rc = RectMake(1600, 825, 52, 52);
@@ -81,7 +91,7 @@ void mapTool::save()
 	//"SaveFile.map"
 	//"Boss_SaveFile.map"
 	//"Stage_SaveFile.map"
-	file = CreateFile("Loby_SaveFile.map", GENERIC_WRITE, 0, NULL,
+	file = CreateFile("SaveFile.map", GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
@@ -96,7 +106,7 @@ void mapTool::load()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -211,25 +221,32 @@ void mapTool::render()
 	//Rectangle(getMemDC(), _eraseButton.rc);
 	IMAGEMANAGER->findImage("save")->render(getMemDC(), _saveButton.rc.left, _saveButton.rc.top);
 	IMAGEMANAGER->findImage("load")->render(getMemDC(), _loadButton.rc.left, _loadButton.rc.top);
-	IMAGEMANAGER->findImage("terrain")->render(getMemDC(), _terrainButton.rc.left, _terrainButton.rc.top);
-	IMAGEMANAGER->findImage("wall")->render(getMemDC(), _wallButton.rc.left, _wallButton.rc.top);
-	IMAGEMANAGER->findImage("trap")->render(getMemDC(), _trapButton.rc.left, _trapButton.rc.top);
+	IMAGEMANAGER->findImage("map")->render(getMemDC(), _mapButton.rc.left, _mapButton.rc.top);
+	if (_crtSelect == CTRL_MAP)
+	{
+		IMAGEMANAGER->findImage("terrain")->render(getMemDC(), _terrainButton.rc.left, _terrainButton.rc.top);
+		IMAGEMANAGER->findImage("wall")->render(getMemDC(), _wallButton.rc.left, _wallButton.rc.top);
+		IMAGEMANAGER->findImage("trap")->render(getMemDC(), _trapButton.rc.left, _trapButton.rc.top);
+	}
+	if (_crtSelect == CTRL_ITEM)
+	{
+		IMAGEMANAGER->findImage("stuff")->render(getMemDC(), _stuffButton.rc.left, _stuffButton.rc.top);
+		IMAGEMANAGER->findImage("armor")->render(getMemDC(), _armorButton.rc.left, _armorButton.rc.top);
+		IMAGEMANAGER->findImage("weapon")->render(getMemDC(), _weaponButton.rc.left, _weaponButton.rc.top);
+	}	
 	IMAGEMANAGER->findImage("item")->render(getMemDC(), _itemButton.rc.left, _itemButton.rc.top);
-	IMAGEMANAGER->findImage("stuff")->render(getMemDC(), _stuffButton.rc.left, _stuffButton.rc.top);
-	IMAGEMANAGER->findImage("armor")->render(getMemDC(), _armorButton.rc.left, _armorButton.rc.top);
-	IMAGEMANAGER->findImage("weapon")->render(getMemDC(), _weaponButton.rc.left, _weaponButton.rc.top);
 	IMAGEMANAGER->findImage("eraser")->render(getMemDC(), _eraseButton.rc.left, _eraseButton.rc.top);
 	IMAGEMANAGER->findImage("exit")->render(getMemDC(), _exitButton.rc.left, _exitButton.rc.top);
 
 
 
 	//Rectangle(getMemDC(), _left);
-	IMAGEMANAGER->findImage("left")->alphaRender(getMemDC(), _left.left, _left.top, 200);
 	//Rectangle(getMemDC(), _top);
-	IMAGEMANAGER->findImage("top")->alphaRender(getMemDC(), _top.left, _top.top, 200);
 	//Rectangle(getMemDC(), _right);
-	IMAGEMANAGER->findImage("right")->alphaRender(getMemDC(), _right.left, _right.top, 200);
 	//Rectangle(getMemDC(), _bottom);
+	IMAGEMANAGER->findImage("left")->alphaRender(getMemDC(), _left.left, _left.top, 200);
+	IMAGEMANAGER->findImage("top")->alphaRender(getMemDC(), _top.left, _top.top, 200);
+	IMAGEMANAGER->findImage("right")->alphaRender(getMemDC(), _right.left, _right.top, 200);
 	IMAGEMANAGER->findImage("bottom")->alphaRender(getMemDC(), _bottom.left, _bottom.top, 200);
 
 	//Rectangle(getMemDC(), _mouseEffect.mouseRect);
@@ -400,12 +417,12 @@ void mapTool::render()
 void mapTool::setup()
 {
 	// 팔레트 이동 창으로 사용할 렉트
-	_palette.terrainTile = RectMake(_WINSIZEX - 25 - TERRAINTILEX * TILESIZE, 25, TERRAINTILEX * TILESIZE, 25);
-	_palette.trapTile = RectMake(_WINSIZEX - 25 - TRAPTILEX * TILESIZE, 25, TRAPTILEX * TILESIZE, 25);
-	_palette.stuffTile = RectMake(_WINSIZEX - 25 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
-	_palette.armorTile = RectMake(_WINSIZEX - 25 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
-	_palette.weaponTile = RectMake(_WINSIZEX - 25 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
-	_palette.wallTile = RectMake(_WINSIZEX - 25 - WALLTILEX * TILESIZE, 25, WALLTILEX * TILESIZE, 25);
+	_palette.terrainTile = RectMake(_WINSIZEX - 50 - TERRAINTILEX * TILESIZE, 25, TERRAINTILEX * TILESIZE, 25);
+	_palette.trapTile = RectMake(_WINSIZEX - 50 - TRAPTILEX * TILESIZE, 25, TRAPTILEX * TILESIZE, 25);
+	_palette.stuffTile = RectMake(_WINSIZEX - 50 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
+	_palette.armorTile = RectMake(_WINSIZEX - 50 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
+	_palette.weaponTile = RectMake(_WINSIZEX - 50 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
+	_palette.wallTile = RectMake(_WINSIZEX - 50 - WALLTILEX * TILESIZE, 25, WALLTILEX * TILESIZE, 25);
 	_palette.isClick = false;
 	_palette.pos_Start.x = _palette.pos_Start.y = _palette.pos_End.x = _palette.pos_End.y = NULL;
 
@@ -640,7 +657,18 @@ void mapTool::setMap()
 		{
 			// 팔렛트 선택 할때 뒤에 타일이 찍히지 않게 하기 위해서
 			if (using_Palette()) break;
-
+			if ((PtInRect(&_itemButton.rc, _ptMouse)) ||
+				(PtInRect(&_stuffButton.rc, _ptMouse)) ||
+				(PtInRect(&_armorButton.rc, _ptMouse)) ||
+				(PtInRect(&_weaponButton.rc, _ptMouse)) ||
+				(PtInRect(&_terrainButton.rc, _ptMouse)) ||
+				(PtInRect(&_wallButton.rc, _ptMouse)) ||
+				(PtInRect(&_trapButton.rc, _ptMouse)) ||
+				(PtInRect(&_eraseButton.rc, _ptMouse)) ||
+				(PtInRect(&_saveButton.rc, _ptMouse)) ||
+				(PtInRect(&_loadButton.rc, _ptMouse)) ||
+				(PtInRect(&_exitButton.rc, _ptMouse))) { break; }
+ 
 			RECT temp;
 
 			// ptMouse의 좌표를 월드 좌표로 바꿔준다.
@@ -931,7 +959,6 @@ void mapTool::tile_Click()
 			setMap();
 		}
 	}
-
 	//cout << "x : " << _ptMouse.x << endl;
 	//cout << "y : " << _ptMouse.y << endl;
 	//cout << "startx : " << _startL << endl;
@@ -1000,7 +1027,6 @@ void mapTool::palette_Click()
 	{
 		_palette.isClick = false;
 	}
-
 
 	// 클릭을 지속하는 순간 순간의 마우스 좌표를 계속 저장해준다.
 	if (_palette.isClick)
@@ -1364,13 +1390,20 @@ void mapTool::palette_Move()
 
 void mapTool::menu_Choice()
 {
-	if (PtInRect(&_terrainButton.rc, _ptMouse)) { _crtSelect = CTRL_TERRAINDRAW; }
-	if (PtInRect(&_itemButton.rc, _ptMouse)) { _crtSelect = CTRL_ITEM; }
-	if (PtInRect(&_stuffButton.rc, _ptMouse)) { _crtSelect = CTRL_STUFF; }
-	if (PtInRect(&_armorButton.rc, _ptMouse)) { _crtSelect = CTRL_ARMOR; }
-	if (PtInRect(&_weaponButton.rc, _ptMouse)) { _crtSelect = CTRL_WEAPON; }
-	if (PtInRect(&_trapButton.rc, _ptMouse)) { _crtSelect = CTRL_TRAP; }
-	if (PtInRect(&_wallButton.rc, _ptMouse)) { _crtSelect = CTRL_WALLDRAW; }
+	if (PtInRect(&_itemButton.rc, _ptMouse)){ _crtSelect = CTRL_ITEM; }
+	if (_isItemButtonClick == true)
+	{
+		if (PtInRect(&_stuffButton.rc, _ptMouse)) { _crtSelect = CTRL_STUFF; _isItemButtonClick = false; }
+		if (PtInRect(&_armorButton.rc, _ptMouse)) { _crtSelect = CTRL_ARMOR; _isItemButtonClick = false; }
+		if (PtInRect(&_weaponButton.rc, _ptMouse)) { _crtSelect = CTRL_WEAPON; _isItemButtonClick = false; }
+	}
+	if (PtInRect(&_mapButton.rc, _ptMouse)) { _crtSelect = CTRL_MAP; }
+	if (_isMapButtonClick == true)
+	{
+		if (PtInRect(&_terrainButton.rc, _ptMouse)) { _crtSelect = CTRL_TERRAINDRAW; _isMapButtonClick = false; }
+		if (PtInRect(&_trapButton.rc, _ptMouse)) { _crtSelect = CTRL_TRAP; _isMapButtonClick = false; }
+		if (PtInRect(&_wallButton.rc, _ptMouse)) { _crtSelect = CTRL_WALLDRAW; _isMapButtonClick = false; }
+	}
 	if (PtInRect(&_eraseButton.rc, _ptMouse)) { _crtSelect = CTRL_ERASER; }
 	if (PtInRect(&_saveButton.rc, _ptMouse))
 	{
@@ -1381,6 +1414,14 @@ void mapTool::menu_Choice()
 	{
 		_crtSelect = CTRL_LOAD;
 		load();
+	}
+	if (PtInRect(&_exitButton.rc, _ptMouse))
+	{
+		_crtSelect = CTRL_EXIT;
+		setWindowsSize(WINSTARTX, WINSTARTY, WINSIZEX, WINSIZEY);
+		resizeWindow(WINNAME, WINSIZEX, WINSIZEY);
+		_backBuffer->init(WINSIZEX, WINSIZEY);
+		SCENEMANAGER->changeScene("Stage");
 	}
 }
 
@@ -1521,8 +1562,3 @@ void mapTool::mouseRectUpdate()
 		}
 	}
 }
-
-void mapTool::clickButton()
-{
-}
-
