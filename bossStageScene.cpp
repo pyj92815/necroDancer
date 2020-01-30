@@ -37,8 +37,11 @@ HRESULT bossStageScene::init()
 
 	_zOrder = new zOrder;
 	_zOrder->init();
+
 	// 보스 등장 씬에 관련 변수 초기화
 	bossSceneSetting();
+
+	BEATMANAGER->init();
 
 	return S_OK;
 }
@@ -108,11 +111,6 @@ void bossStageScene::update()
 				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
 			}
 
-			if (KEYMANAGER->isToggleKey('V'))
-			{
-				BEATMANAGER->update();
-			}
-
 			if (KEYMANAGER->isOnceKeyDown('O'))
 			{
 				_deathMetal->setBoss_HP_Hit();
@@ -126,6 +124,11 @@ void bossStageScene::update()
 	}
 	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player,_sm,_deathMetal);
 	_zOrder->update();
+
+	if (KEYMANAGER->isToggleKey('V'))
+	{
+		BEATMANAGER->update();
+	}
 }
 
 void bossStageScene::render()
@@ -138,24 +141,25 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList)->type != TYPE_NONE)
 			{
-
+	
 				// 타일의 속성에 따라 이미지를 뿌린다.
 				findTileImage();
-
+	
 			}
-
+	
 		}
 	}
 
 	// 보스와 플레이어의 랜드 순서를 찾는다.
 	//z_Order_Player_Boss();
 
+	//_sm->render();
+
+	_zOrder->render();
+
 	// 보스가 근접 공격을 했을때 이펙트를 그려준다. (size가 0 이상이라면)
 	if (_vEffect.size() > 0)	boss_Base_Attack_Render();
 
-	_sm->render();
-
-	_zOrder->render();
 	// 월드이미지를 뿌려준다.
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 
@@ -192,6 +196,8 @@ void bossStageScene::bossStageMap_Load()
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
 		{
+			_tiles[i].alphaValue = 255;
+
 			_vTotalList.push_back(&_tiles[i]);
 		}
 

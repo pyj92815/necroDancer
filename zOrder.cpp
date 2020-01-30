@@ -36,13 +36,13 @@ void zOrder::render()
 	{
 		if (_zOrderVector[i]->Object->tile != NULL)
 		{
-			if (_zOrderVector[i]->Object->tile->alphaValue <= 0)
-			{
+			//if (_zOrderVector[i]->Object->tile->alphaValue <= 0)
+			//{
 				if (_zOrderVector[i]->Object->tile->wall != W_NONE)
 				{
 					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 30, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY);
 				}
-			}
+			//}
 			continue;
 		}
 		//플레이어 
