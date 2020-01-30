@@ -95,6 +95,7 @@ private:
 	void CreateNewNote(bool dirRight); // 곡 시작 직전에 노트를 배치하는 함수. bool은 오른쪽으로 생성할 것인지 아닌지 판별.
 	void CreateNewNoteWhilePlay(bool dirRight); // 곡 시작하고 플레이 중에 노트를 배치하는 함수. bool은 오른쪽으로 생성할 것인지 아닌지 판별.
 	float GetSongVariousTime(unsigned int playTime, unsigned int songLength); // 곡 제어나 노트 제어를 위해 특정 조건(특정 시간)을 뽑아오기 위해 쓰일 함수
+	void Move();
 
 
 public:
