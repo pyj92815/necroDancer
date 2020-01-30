@@ -48,6 +48,7 @@ void scene_Manager::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_F4))
 	{
 		SCENEMANAGER->changeScene("Boss");
+		BEATMANAGER->SetMusicID(5);
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F6))
 	{
