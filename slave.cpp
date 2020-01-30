@@ -32,7 +32,7 @@ void slave::render()
 		(_slave.image.img->getFrameHeight() / 4), _slave.image.animation);
 }
 
-void slave::move(SLAVE_DIRECTION direction)
+void slave::move()
 {
 }
 

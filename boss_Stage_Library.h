@@ -36,6 +36,7 @@ enum class SHORT_XY
 struct BOSS_STAGE_OPEN
 {
 	bool	isOpen;				// 보스의 등장씬이 끝나면 true로 바뀐다.
+	bool	isDoorOpen;			// 플레이어가 문을 열었을때
 	bool    startMoveImg;		// 보스 이미지를 움직이기 시작한다.
 
 	bool	main_OK;			// 이미지가 목적지에 도착 했다면 값이 바뀐다.

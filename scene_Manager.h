@@ -3,7 +3,6 @@
 #include "introScene.h"
 #include "loadingScene.h"
 #include "stageScene.h"
-#include "bossScene.h"
 #include "endScene.h"
 #include "bossStageScene.h" // 보스 스테이지 
 #include "mapTool.h"

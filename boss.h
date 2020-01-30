@@ -53,6 +53,9 @@ protected:
 	bool		   change_Ani;					// 애니메이션 체인지가 가능한지 여부
 	bool		   save_ClosePlayer;		    // 플레이어가 근처에 있는지 여부 세이브
 
+	int			   save_HP;						// 보스의 현재 HP를 저장해둔다.
+	int			   max_HP;						// 보스의 최대 HP
+
 public:
 	boss();
 	~boss();
@@ -68,6 +71,7 @@ public:
 	void settingBossPos(int idx, int idy, int tileSizeX, int tileSizeY);											// 보스의 각종 좌표 변수 초기화
 	void settingBossMoveVariable(int tileSizeX, int tileSizeY);														// 보스의 이동 변수 초기화
 	void settingBossVariable();																						// 보스에서 사용할 변수 초기화
+	void showBossHP();																								// 보스의 체력 이미지 표시
 
 	// 보스 정보 겟터 함수
 	int getBoss_HP() { return hp; }																					// 보스의 HP를 받아온다.

@@ -52,7 +52,8 @@ void Beat::render()
     //Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
     //Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
     //Rectangle(_backBuffer->getMemDC(), test_Player);
-    Rectangle(_backBuffer->getMemDC(), heartRC); // ½ÉÀå ·ºÆ® ·»´õ
+    //Rectangle(_backBuffer->getMemDC(), heartRC); // ½ÉÀå ·ºÆ® ·»´õ
+    IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // ½ÉÀå ·»´õ
 
     if (_vNoteLeft.size() > 0) // ¿ÞÂÊ ³ëÆ® ·»´õ
     {
@@ -408,6 +409,8 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // ³ëÆ® »ý¼º, °î ½ÃÀÛ Áß (¿À¸¥Â
     else // ¹æÇâÀÌ ¿ÞÂÊÀÎ °æ¿ì
     {
         newNote.pos = { 0, (float)(heartRC.top + heartRC.bottom) / 2 };
+        //newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2) , (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)));
+        newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2), (_deltaTime / (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) * 1000.0f) / 4.0f);
     }
     newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF, (_deltaTime / ((tempMS + bpm) / 1000.0f)) / 3);
 
