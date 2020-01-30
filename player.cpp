@@ -165,6 +165,7 @@ void player::playerMove()
 			_isMoving = false;	    // 선형 보간 
 			_isKeyDown = false;
 			//_isKeyPress = false;  // key 입력 초기화 
+			return;
 		}
 	}
 }
@@ -297,7 +298,7 @@ void player::keyControl()
 {
 	if (!_isKeyDown)
 	{
-		if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
+	/*	if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
 		{
 			_isKeyDown = true;
 			cout << "이건 체력 키 " << endl;
@@ -306,8 +307,8 @@ void player::keyControl()
 		{
 			_isKeyDown = true;
 			cout << "이건 폭탄 키 " << endl;
-		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		}*/
+		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
 			_player.direction = PLAYERDIRECTION_UP;
 			_isKeyDown = true;
@@ -784,8 +785,6 @@ void player::StateMove()
 		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 		_isMoving = true;															// MOVE
 		_jump->jumping(&_player.x, &_player.y, 7, 1.5);	//점프 
-		break;
-	default:
 		break;
 	}
 }

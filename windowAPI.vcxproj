@@ -166,7 +166,6 @@
     <ClInclude Include="bossKinds.h" />
     <ClInclude Include="bossLibrary.h" />
     <ClInclude Include="bossMove.h" />
-    <ClInclude Include="bossScene.h" />
     <ClInclude Include="bossStageScene.h" />
     <ClInclude Include="boss_Bat.h" />
     <ClInclude Include="boss_Ghost.h" />
@@ -248,7 +247,6 @@
     <ClCompile Include="Beat.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossMove.cpp" />
-    <ClCompile Include="bossScene.cpp" />
     <ClCompile Include="bossStageScene.cpp" />
     <ClCompile Include="boss_Bat.cpp" />
     <ClCompile Include="boss_Ghost.cpp" />

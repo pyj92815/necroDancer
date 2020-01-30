@@ -240,9 +240,6 @@
     <ClInclude Include="endScene.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="bossScene.h">
-      <Filter>playGround\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="scene_Manager.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
@@ -471,9 +468,6 @@
       <Filter>playGround\Scene</Filter>
     </ClCompile>
     <ClCompile Include="endScene.cpp">
-      <Filter>playGround\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="bossScene.cpp">
       <Filter>playGround\Scene</Filter>
     </ClCompile>
     <ClCompile Include="scene_Manager.cpp">

@@ -405,7 +405,7 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // 노트 생성, 곡 시작 중 (오른�
     {
         newNote.pos = { 0, (float)(heartRC.top + heartRC.bottom) / 2 };
         //newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2) , (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)));
-        newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2), (_deltaTime / (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) * 1000.0f) / 3);
+        newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2), (_deltaTime / (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) * 1000.0f) / 4.0f);
 
     }
 
@@ -463,7 +463,7 @@ void Beat::Move()
             }
         }
 
-        if (_vNoteLeft[i].pos.x > WINSIZEX_HALF)
+        if (_vNoteLeft[i].pos.x > WINSIZEX_HALF + 10)
         {
             _player->setPlayerKey();
             _player->setPlayerKeyDown();
