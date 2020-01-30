@@ -38,7 +38,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_shadow = _player.y;
 	_player.isArmor = false;
 	_player.isWeapon = false;
-
+	_reversMove = false;
 	_distance = tileSizeY;			//  타일 중점 거리
 	_time = 0.15;					//  MOVE 시간 
 
@@ -46,6 +46,11 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_isKeyPress = false;     // 노트 판단 
 	_isKeyDown = false;      // KEY 입력 판단
 
+	// 초기 세팅 장비 값 
+	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
+	_player.weapon = PLAYERWAEPON_DAGGER;
+	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
+	
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
 }
@@ -70,7 +75,7 @@ void player::update()
 
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
-		playerEffect_Attack("swipe_dagger", _player.x, _player.y, 0);
+		playerEffect_Attack();
 	}
 }
 
@@ -112,21 +117,56 @@ void player::playerMove()
 	//200정도의 거리를 2초에 걸쳐서 도달해야한다면 속도값을 구해줌
 	float moveSpeed = (elapsedTime / _time) * _distance;
 
-	//이미지를 도착지점까지 각도와 속도를 맞춰서 원하는 시간에 도달케 한다
-	_player.x = _player.x + cosf(_angle) * moveSpeed;
-	_player.y = _player.y + (-sinf(_angle) * moveSpeed);
-
-	// 만약 월드 시간이 도달하면 
-	if (_time + _worldTimeCount <= TIMEMANAGER->getWorldTime())
+	if (_reversMove)
 	{
-		_worldTimeCount = TIMEMANAGER->getWorldTime();
-		// 위치를 고정시키고 MOVE BOOL값을 false로
-		_player.x = _player.idx * _distance + (_distance / 2);
-		_player.y = _player.idy * _distance + (_distance / 3);
+		if ((_time/2) + _worldTimeCount <= TIMEMANAGER->getWorldTime())
+		{
+			_player.x = _player.x - cosf(_angle) * moveSpeed;
+			_player.y = _player.y - (-sinf(_angle) * moveSpeed);
+		}
+		else
+		{
+			_player.x = _player.x + cosf(_angle) * moveSpeed;
+			_player.y = _player.y + (-sinf(_angle) * moveSpeed);
+		}
 
-		_isMoving = false;	    // 선형 보간 
-		_isKeyDown = false;
-		//_isKeyPress = false;  // key 입력 초기화 
+		if (_time + _worldTimeCount <= TIMEMANAGER->getWorldTime())
+		{
+			_worldTimeCount = TIMEMANAGER->getWorldTime();
+			// 위치를 고정시키고 MOVE BOOL값을 false로
+			_player.idx = _previousIdx;
+			_player.idy = _previousIdy;
+
+			_player.x = _player.idx * _distance + (_distance / 2);
+			_player.y = _player.idy * _distance + (_distance / 3);
+
+			_isMoving = false;	    // 선형 보간 
+			_isKeyDown = false;
+			//_isKeyPress = false;  // key 입력 초기화 
+			_reversMove = false;
+			return;
+		}
+
+	}
+	else
+	{
+		//이미지를 도착지점까지 각도와 속도를 맞춰서 원하는 시간에 도달케 한다
+		_player.x = _player.x + cosf(_angle) * moveSpeed;
+		_player.y = _player.y + (-sinf(_angle) * moveSpeed);
+
+		// 만약 월드 시간이 도달하면 
+		if (_time + _worldTimeCount <= TIMEMANAGER->getWorldTime())
+		{
+			_worldTimeCount = TIMEMANAGER->getWorldTime();
+			// 위치를 고정시키고 MOVE BOOL값을 false로
+			_player.x = _player.idx * _distance + (_distance / 2);
+			_player.y = _player.idy * _distance + (_distance / 3);
+
+			_isMoving = false;	    // 선형 보간 
+			_isKeyDown = false;
+			//_isKeyPress = false;  // key 입력 초기화 
+			return;
+		}
 	}
 }
 
@@ -159,6 +199,7 @@ void player::playerEffect_Attack(const char* imageName, tagTile* tile, int frame
 // 좌표값 x,y의 위치
 void player::playerEffect_Attack(const char* imageName, float x, float y, int frameY)
 {
+
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
 	effect->init(imageName, x, y, 0, frameY, FRAMEIMAGE);
@@ -174,11 +215,90 @@ void player::playerEffect_Attack(const char* imageName, int x, int y, int frameY
 	_vEffect.push_back(effect);
 }
 
+void player::playerEffect_Attack()
+{
+	float x;
+	float y;
+	int frame;
+	alphaImageEffect* effect;
+	effect = new alphaImageEffect;
+
+	if (_player.direction == PLAYERDIRECTION_UP)
+	{
+		x = _player.x;
+		y = _player.y - 30;
+		frame = 0;
+	}
+	else if (_player.direction == PLAYERDIRECTION_DOWN)
+	{
+		x = _player.x;
+		y = _player.y + 30;
+		frame = 1;
+	}
+	else if (_player.direction == PLAYERDIRECTION_LEFT)
+	{
+		x = _player.x - 30;
+		y = _player.y;
+		frame = 2;
+	}
+	else if (_player.direction == PLAYERDIRECTION_RIGHT)
+	{
+		x = _player.x + 30;
+		y = _player.y;
+		frame = 3;
+	}
+
+	switch (_player.weapon)
+	{
+	case PLAYERWAEPON_DAGGER:
+		effect->init("swipe_dagger", x, y, 0, frame, FRAMEIMAGE);
+		break;
+	case PLAYERWAEPON_BROADSWORD:
+		if (_player.direction == PLAYERDIRECTION_UP || _player.direction == PLAYERDIRECTION_DOWN)
+		{
+			effect->init("swipe_broadsword상하", x, y, 0, frame % 2, FRAMEIMAGE);
+		}
+		else
+		{
+			effect->init("swipe_broadsword좌우", x, y, 0, frame % 2, FRAMEIMAGE);
+		}
+		break;
+	case PLAYERWAEPON_RAPIER:
+	case PLAYERWAEPON_SPEAR:
+		if (_player.direction == PLAYERDIRECTION_UP || _player.direction == PLAYERDIRECTION_DOWN)
+		{
+			effect->init("swipe_rapier상하", x, y, 0, frame % 2, FRAMEIMAGE);
+		}
+		else
+		{
+			effect->init("swipe_rapier좌우", x, y, 0, frame % 2, FRAMEIMAGE);
+		}
+		break;
+	case PLAYERWAEPON_LONGSWORD:
+		if (_player.direction == PLAYERDIRECTION_UP || _player.direction == PLAYERDIRECTION_DOWN)
+		{
+			effect->init("swipe_longsword상하", x, y, 0, frame % 2, FRAMEIMAGE);
+		}
+		else
+		{
+			effect->init("swipe_longsword좌우", x, y, 0, frame % 2, FRAMEIMAGE);
+		}
+		break;                                       
+
+	default:
+		return;
+		break;
+	}
+
+	_vEffect.push_back(effect);
+	CAMERAMANAGER->Camera_WorldDC_Shake();
+}
+
 void player::keyControl()
 {
 	if (!_isKeyDown)
 	{
-		if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
+	/*	if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
 		{
 			_isKeyDown = true;
 			cout << "이건 체력 키 " << endl;
@@ -187,8 +307,8 @@ void player::keyControl()
 		{
 			_isKeyDown = true;
 			cout << "이건 폭탄 키 " << endl;
-		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		}*/
+		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
 			_player.direction = PLAYERDIRECTION_UP;
 			_isKeyDown = true;
@@ -252,7 +372,7 @@ void player::tileCheck()
 	for (_miPlayerTile = _mPlayerTile.begin(); _miPlayerTile != _mPlayerTile.end(); ++_miPlayerTile)
 	{
 		//UP타일
-		if (_miPlayerTile->first  == _player.direction)
+		if (_miPlayerTile->first == _player.direction)
 		{
 			//타일의 종류를 판단
 			switch (_miPlayerTile->second->type)
@@ -282,138 +402,23 @@ void player::tileCheck()
 	// ENEMY 타일 정보 ( 작성 예정 )
 	for (_miPlayerEnemyTile = _mPlayerEnemyTile.begin(); _miPlayerEnemyTile != _mPlayerEnemyTile.end(); ++_miPlayerEnemyTile)
 	{
-		if (_player.weapon == PLAYERWAEPON_NONE)
-		{
-			action = true;
-			break;
-		}
 		// 1. 이펙트와 몬스터 데미지다는것만 하기
 		// 2. 타일 지우는거 확인하기 
 		if (_miPlayerEnemyTile->first == _player.direction)
 		{
-			switch (_player.weapon)
+			if (_player.weapon == PLAYERWAEPON_NONE)
 			{
-			case PLAYERWAEPON_DAGGER:
-				//_miPlayerEnemyTile->second->
-				break;
-			case PLAYERWAEPON_LONGSWORD:
-				break;
-			case PLAYERWAEPON_RAPIER:
-				break;
-			case PLAYERWAEPON_SPEAR:
-				break;
-			case PLAYERWAEPON_BROADSWORD:
-				break;
-			default:
-				break;
+				_reversMove = true;
+				StateMove();
 			}
+			else
+			{
+				playerEffect_Attack();
+				_miPlayerEnemyTile->second->Hit(_player.damage);
+			}
+			action = true;
+			break;
 		}
-	
-	
-		//up
-		//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
-			//{
-			//	// 몬스터 타일 돌려야 함 
-			//	switch (_player.weapon)
-			//	{
-			//	case PLAYERWAEPON_DAGGER:
-			//		playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 0);
-			//		break;
-			//	case PLAYERWAEPON_LONGSWORD:
-			//		playerEffect_Attack("swipe_longsword상하", (_player.idx) * 52, (_player.idy - 2) * 52, 0);
-
-			//		break;
-			//	case PLAYERWAEPON_BROADSWORD:
-			//		playerEffect_Attack("swipe_broadsword상하", (_player.idx - 1) * 52, (_player.idy - 1) * 52, 0);
-
-			//		break;
-			//	case PLAYERWAEPON_RAPIER:
-			//		playerEffect_Attack("swipe_rapier상하", _player.idx * 52, (_player.idy - 2) * 52, 0);
-			//		break;
-			//	default:
-			//		break;
-			//	}
-			//}
-		// down
-		//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
-			//{
-			//	// 몬스터 타일 돌려야 함 
-			//	switch (_player.weapon)
-			//	{
-			//	case PLAYERWAEPON_DAGGER:
-			//		playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 1);
-			//		break;
-			//	case PLAYERWAEPON_LONGSWORD:
-			//		playerEffect_Attack("swipe_longsword상하", _miPlayerTile->second, 1);
-
-			//		break;
-			//	case PLAYERWAEPON_BROADSWORD:
-			//		playerEffect_Attack("swipe_broadsword상하", (_player.idx - 1) * 52, (_player.idy + 1) * 52, 1);
-
-			//		break;
-			//	case PLAYERWAEPON_RAPIER:
-			//		playerEffect_Attack("swipe_rapier상하", _player.idx * 52, (_player.idy + 1) * 52, 1);
-			//		break;
-			//	default:
-			//		break;
-			//	}
-
-		//left
-		//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
-			//{
-			//	// 몬스터 타일 돌려야 함 
-			//	switch (_player.weapon)
-			//	{
-			//	case PLAYERWAEPON_DAGGER:
-			//		playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 2);
-			//		break;
-			//	case PLAYERWAEPON_LONGSWORD:
-			//		playerEffect_Attack("swipe_longsword좌우", (_player.idx - 2) * 52, _player.idy * 52, 0);
-			//		break;
-			//	case PLAYERWAEPON_BROADSWORD:
-			//		playerEffect_Attack("swipe_broadsword좌우", (_player.idx - 1) * 52, (_player.idy - 1) * 52, 0);
-
-			//		break;
-			//	case PLAYERWAEPON_RAPIER:
-			//		playerEffect_Attack("swipe_rapier좌우", (_player.idx - 2) * 52, _player.idy * 52, 0);
-			//		break;
-			//	default:
-			//		break;
-			//	}
-			//}
-			//else
-			//{
-			//	StateMove();
-			//}
-		//right
-			//else if (_player.weapon != PLAYERWAEPON_NONE) // 무기가 있는지 없는지 판단
-			//{
-			//	// 몬스터 타일 돌려야 함 
-			//	switch (_player.weapon)
-			//	{
-			//	case PLAYERWAEPON_DAGGER:
-			//		playerEffect_Attack("swipe_dagger", _miPlayerTile->second, 3);
-			//		break;
-			//	case PLAYERWAEPON_LONGSWORD:
-			//		playerEffect_Attack("swipe_longsword좌우", _miPlayerTile->second, 1);
-
-			//		break;
-			//	case PLAYERWAEPON_BROADSWORD:
-			//		playerEffect_Attack("swipe_broadsword좌우", (_player.idx + 1) * 52, (_player.idy - 1) * 52, 1);
-
-			//		break;
-			//	case PLAYERWAEPON_RAPIER:
-			//		playerEffect_Attack("swipe_rapier좌우", (_player.idx + 1) * 52, _player.idy * 52, 1);
-			//		break;
-			//	default:
-			//		break;
-			//	}
-			//}
-			//else
-			//{
-			//	StateMove();
-			//}
-			//break;
 	}
 
 	if (!action) StateMove();
@@ -543,8 +548,8 @@ void player::itempCheck()
 			return;
 			break;
 		}
-		if (_player.isArmor && ((_miPlayerTile->second->armor == A_ARMOR_1) 
-			|| (_miPlayerTile->second->armor == A_ARMOR_2) 
+		if (_player.isArmor && ((_miPlayerTile->second->armor == A_ARMOR_1)
+			|| (_miPlayerTile->second->armor == A_ARMOR_2)
 			|| (_miPlayerTile->second->armor == A_ARMOR_3)
 			|| (_miPlayerTile->second->armor == A_ARMOR_4)))
 		{
@@ -717,7 +722,7 @@ void player::makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int f
 
 	tagItem* item;
 	item = new tagItem;
-	ZeroMemory(item, sizeof(item));
+	//ZeroMemory(item, sizeof(item));
 	item->weapon = weapon;
 	item->armor = armor;
 	item->stuff = stuff;
@@ -732,6 +737,9 @@ void player::makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int f
 
 void player::StateMove()
 {
+	_previousIdx = _player.idx;
+	_previousIdy = _player.idy;
+
 	switch (_player.direction)
 	{
 	case PLAYERDIRECTION_UP:
@@ -741,7 +749,7 @@ void player::StateMove()
 		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 		_isMoving = true;															// MOVE
 
-		_jump->jumping(&_player.x, &_player.y, 2, 1.5, true); //점프 
+		if(!_reversMove) _jump->jumping(&_player.x, &_player.y, 2, 1.5, true); //점프 
 		break;
 	case PLAYERDIRECTION_DOWN:
 		_player.idy++;	// 좌표Y값++
@@ -750,7 +758,7 @@ void player::StateMove()
 		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 		_isMoving = true;															// MOVE
 
-		_jump->jumping(&_player.x, &_player.y, 8, 1.5);	//점프 
+		if (!_reversMove) _jump->jumping(&_player.x, &_player.y, 8, 1.5);	//점프 
 		break;
 	case PLAYERDIRECTION_RIGHT:
 		//이미지 관련
@@ -777,8 +785,6 @@ void player::StateMove()
 		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 		_isMoving = true;															// MOVE
 		_jump->jumping(&_player.x, &_player.y, 7, 1.5);	//점프 
-		break;
-	default:
 		break;
 	}
 }

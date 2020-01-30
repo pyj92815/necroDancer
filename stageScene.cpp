@@ -269,8 +269,8 @@ void stageScene::setVision(POINT index, int sight)
 	if (sight <= 0) return;
 
 	bool recursionContinue = true;  // 초기 조건값 
-	//recursionContinue &= (_tiles[index.y * TILEX + index.x].wall == W_NONE);  // 맞춰야 하는 조건 
-	if (_tiles[index.y * TILEX + index.x].type == TYPE_WALL) sight = sight - 3;	// 시야처리에 따른 값 조정할 예정 
+	recursionContinue &= (_tiles[index.y * TILEX + index.x].wall == W_NONE);  // 맞춰야 하는 조건 
+	//if (_tiles[index.y * TILEX + index.x].type == TYPE_WALL) sight = sight - 3;	// 시야처리에 따른 값 조정할 예정 
 
 	if (recursionContinue)
 	{

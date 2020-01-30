@@ -673,6 +673,7 @@ map<PLAYERDIRECTION, Enemy*> Collision::collision_player_Enemy_tile(vector<Enemy
 	
 	switch (playerInfo->getPlayer().weapon)
 	{
+	case PLAYERWAEPON_NONE:
 	case PLAYERWAEPON_DAGGER:
 		// 몬스터 for문을 돌린다
 		for (int i = 0; i < enemyInfo->size(); ++i)
@@ -792,8 +793,6 @@ map<PLAYERDIRECTION, Enemy*> Collision::collision_player_Enemy_tile(vector<Enemy
 
 		}// 끝
 		return _mEnemy;
-		break;
-	default:
 		break;
 	}
 	// 몬스터 충돌 처리 한후 전달하기 
