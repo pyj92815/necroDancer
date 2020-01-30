@@ -4,6 +4,7 @@
 #include "slaveManager.h"
 #include "boss_Stage_Library.h"
 #include "addImage_Boss.h"
+#include "Collision.h"
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinmainCRTStartup /subsystem:console")
@@ -20,6 +21,8 @@ class bossStageScene : public gameNode
 private:
 	ADD_BOSS_IMAGE*								_addBossImage;					// 보스 이미지 생성
 	ADD_SLAVE_IMAGE*							_addSlaveImage;					// 보스 슬레이브 이미지 생성
+
+	Collision									_collision;						// 충돌 클래스
 
 	BOSS_STAGE_OPEN								_scene_Starter;					// 보스 등장씬 관련 변수
 
@@ -83,6 +86,8 @@ public:
 	void bossSceneSetting();													// 보스 등장씬 변수 초기화
 	void bossSceneStart();														// 보스 등장씬 연산
 	void bossSceneRender();														// 보스 등장씬 출력
+	void bossSceneDoorOpen();													// 보스방 문을 여는 연산
+	void bossClear();															// 보스 클리어 시 벽이 열리는것
 
 };
 

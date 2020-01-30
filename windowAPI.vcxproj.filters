@@ -539,11 +539,11 @@
     <ClCompile Include="UImanager.cpp">
       <Filter>playGround\player</Filter>
     </ClCompile>
-    <ClCompile Include="slaveManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Option.cpp">
       <Filter>playGround\GameSettingManager\Option</Filter>
+    </ClCompile>
+    <ClCompile Include="slaveManager.cpp">
+      <Filter>playGround\boss\boss File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

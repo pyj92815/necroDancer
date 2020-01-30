@@ -162,8 +162,8 @@ public:
 			slave->status.hp = 1;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Bat");					// 슬레이브의 이미지를 찾아서 넣어준다.
 			slave->image.animation = KEYANIMANAGER->findAnimation("bat_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
-			slave->operation.move_Count = 1;										// 슬레이브의 이동 박자
-			slave->operation.save_Move_Count = 1;									// 슬레이브의 세이브 박자
+			slave->operation.move_Count = 3;										// 슬레이브의 이동 박자
+			slave->operation.save_Move_Count = 3;									// 슬레이브의 세이브 박자
 			
 			break;
 

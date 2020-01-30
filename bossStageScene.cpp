@@ -48,58 +48,76 @@ void bossStageScene::release()
 void bossStageScene::update()
 {
 	// 플레이어 인덱스 출력
-	//cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
+	cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
 
 	// 보스 등장 씬이 끝나면 플레이가 가능하다.
 	bossSceneStart();
 
 	if (_scene_Starter.isOpen)
 	{
-		_deathMetal->update();
 		_player->update();
-		_ui->update();
-		_sm->update();
 
-		// 플레이어가 보스 근처에 있는지 없는지를 찾아준다. (쉐도우 벗기)
-		closePlayer(_player, _deathMetal);
+		// 플레이어가 문을 지났는지 연산
+		bossSceneDoorOpen();
 
-		// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.	(쉐도우 벗기)
-		searchSlave(_sm->get_SlaveList(), _player);
-
-		// 보스 움직임 연산
-		boss_Move_Player();
-
-		// 슬레이브 움직임 연산
-		slave_Move_Player();
-
-		// 슬레이브 테스트용 소환
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+		// 플레이어가 보스방문을 열고 안으로 들어오면 이 값이 true로 바뀐다.
+		if (_scene_Starter.isDoorOpen)
 		{
-			_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-			//_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+			_deathMetal->update();
+			_ui->update();
+			_sm->update();
+
+			// 플레이어가 보스 근처에 있는지 없는지를 찾아준다. (쉐도우 벗기)
+			closePlayer(_player, _deathMetal);
+
+			// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.	(쉐도우 벗기)
+			searchSlave(_sm->get_SlaveList(), _player);
+
+			// 보스 움직임 연산
+			boss_Move_Player();
+
+			// 슬레이브 움직임 연산
+			slave_Move_Player();
+
+			// 슬레이브 테스트용 소환
+			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+			{
+				_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+				//_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+			}
+
+			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
+			{
+				_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+				_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+			}
+
+			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
+			{
+				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+			}
+
+			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+			{
+				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
+				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+			}
+
+			if (KEYMANAGER->isToggleKey('V'))
+			{
+				BEATMANAGER->update();
+			}
+
+			if (KEYMANAGER->isOnceKeyDown('O'))
+			{
+				_deathMetal->setBoss_HP_Hit();
+			}
 		}
 
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
+		if (_deathMetal->getBoss_HP() <= 0)
 		{
-			_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-			_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-		}
-
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
-		{
-			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-		}
-
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
-		{
-			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-		}
-
-		if (KEYMANAGER->isToggleKey('V'))
-		{
-			BEATMANAGER->update();
+			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 		}
 	}
 }
@@ -231,12 +249,12 @@ void bossStageScene::z_Order_Player_Boss()
 	if (_deathMetal->getBoss_Index().y > _player->getPlayer().idy)	// 보스가 플레이어보다 앞에 있다.
 	{
 		_player->render();
-		_deathMetal->render();
+		if (_deathMetal->getBoss_HP() > 0)	_deathMetal->render();
 
 	}
 	else	// 보스가 플레이어보다 뒤에 있다.
 	{
-		_deathMetal->render();
+		if (_deathMetal->getBoss_HP() > 0)	_deathMetal->render();
 		_player->render();
 
 	}
@@ -752,8 +770,8 @@ SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 
 	// 슬레이브와 플레이어와의 x, y의 차를 담는다. (슬레이브 기준으로 빼준다.)
 	POINTFLOAT range;
-	range.x = slaveCenter.x - playerCenter.x;
-	range.y = slaveCenter.y - playerCenter.y;
+	range.x = abs(slaveCenter.x - playerCenter.x);
+	range.y = abs(slaveCenter.y - playerCenter.y);
 
 	// x, y 중 짧은곳을 구한다.
 	SHORT_XY short_XY = SHORT_XY::SHORT_NONE;
@@ -795,27 +813,40 @@ SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 	if (player_Pos_Angle > 4.71 && player_Pos_Angle < (PI * 2)) find_Angle = FIND_ANGLE::FA_BR;
 
 	// 플레이어의 방향으로 이동을 시작한다.
-	// x, y 중 짧은 방향으로 찾는다.
 	if (find_Choice == FIND_CHOICE_XY::FC_XY)
 	{
+		// x, y 중 짧은 방향으로 찾는다.
+		switch (short_XY)
+		{
+			case SHORT_XY::SHORT_X:
+					// 플레이어 방향에 따라서 왼쪽이나 오른쪽으로 이동한다.
+					if (find_Angle == FIND_ANGLE::FA_TL || find_Angle == FIND_ANGLE::FA_LB)		return SLAVE_DIRECTION::SD_LEFT;
+					if (find_Angle == FIND_ANGLE::FA_RT || find_Angle == FIND_ANGLE::FA_BR)		return SLAVE_DIRECTION::SD_RIGHT;
+				break;
 
+			case SHORT_XY::SHORT_Y:
+					// 플레이어 방향에 따라서 위나 아래로 이동 한다.
+					if (find_Angle == FIND_ANGLE::FA_RT || find_Angle == FIND_ANGLE::FA_TL) 	return SLAVE_DIRECTION::SD_UP;
+					if (find_Angle == FIND_ANGLE::FA_LB || find_Angle == FIND_ANGLE::FA_BR)     return SLAVE_DIRECTION::SD_DOWN;
+				break;
+		}
 	}
 
 	// y 방향만 찾으면 된다.
 	if (find_Choice == FIND_CHOICE_XY::FC_Y)
 	{
-
+		// 플레이어 방향에 따라서 위나 아래로 이동 한다.
+		if (find_Angle == FIND_ANGLE::FA_RT || find_Angle == FIND_ANGLE::FA_TL) 	return SLAVE_DIRECTION::SD_UP;
+		if (find_Angle == FIND_ANGLE::FA_LB || find_Angle == FIND_ANGLE::FA_BR)     return SLAVE_DIRECTION::SD_DOWN;
 	}
 
 	// x 방향만 찾으면 된다.
 	if (find_Choice == FIND_CHOICE_XY::FC_X)
 	{
-
+		// 플레이어 방향에 따라서 왼쪽이나 오른쪽으로 이동한다.
+		if (find_Angle == FIND_ANGLE::FA_TL || find_Angle == FIND_ANGLE::FA_LB)		return SLAVE_DIRECTION::SD_LEFT;
+		if (find_Angle == FIND_ANGLE::FA_RT || find_Angle == FIND_ANGLE::FA_BR)		return SLAVE_DIRECTION::SD_RIGHT;
 	}
-
-	// 만약 오브젝트를 발견 한다면 이동을 멈추거나
-
-	return SLAVE_DIRECTION::SD_DOWN;
 }
 
 void bossStageScene::boss_Move_Player()
@@ -843,8 +874,14 @@ void bossStageScene::boss_Move_Player()
 	// 데스메탈의 무브 카운트가 0 이하가 된다면 이동을 시작 한다.
 	if (_deathMetal->getBoss_Move_Count() < 0)
 	{
-		// 플레이어와 데스메탈의 정보를 이용하여 이동 할 방향을 정한다.
-		findPlayer(_player, _deathMetal, _ui);
+		// 데스메탈이 이동 못하는곳을 찾아준다.
+		if (!_collision.collision_DeathMetal_Find_Player(_player, _deathMetal) &&
+			!_collision.collision_Charactor_Object(&_vTotalList, _deathMetal) &&
+			!_collision.collision_DeathMetal_Find_Slave(_deathMetal, _sm->get_SlaveList()))
+		{
+			// 플레이어와 데스메탈의 정보를 이용하여 이동 할 방향을 정한다.
+			findPlayer(_player, _deathMetal, _ui);
+		}  
 	}
 
 
@@ -852,7 +889,7 @@ void bossStageScene::boss_Move_Player()
 
 void bossStageScene::slave_Move_Player()
 {
-	// 슬레이브가 1마리 이상 생성 되어야만 들어간다.
+	// 슬레이브가 1마리 이상 생성 되어야만 들어간다.  
 	if (_sm->get_SlaveList().size() > 0)
 	{
 		for (int i = 0; i < _sm->get_SlaveList().size(); ++i)
@@ -870,9 +907,18 @@ void bossStageScene::slave_Move_Player()
 			// 슬레이브의 무브 카운트가 0 이하가 된다면 이동을 시작한다.
 			if (_sm->get_SlaveList()[i]->get_Slave()->operation.move_Count < 0)
 			{
-				// 슬레이브 연산을 끝내고, 방향을 정해주고 이동?
-				//_sm->get_SlaveList()[i]->move(findPlayer(_player, _sm->get_SlaveList()[i]->get_Slave()));
-				findPlayer(_player, _sm->get_SlaveList()[i]->get_Slave());
+				// 슬레이브가 이동 해야 하는 방향을 받아온다.
+				_sm->get_SlaveList()[i]->get_Slave()->status.direction = findPlayer(_player, _sm->get_SlaveList()[i]->get_Slave());
+				_sm->get_SlaveList()[i]->get_Slave()->operation.move_Count = _sm->get_SlaveList()[i]->get_Slave()->operation.save_Move_Count;
+				
+				// 플레이어나 데스메탈이 근처에 있다면 이동 하지 않는다.
+				if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+					!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+					!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+					!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+				{
+					_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+				}
 			}
 		}
 	}
@@ -926,6 +972,7 @@ void bossStageScene::bossSceneSetting()
 	_scene_Starter.main_OK = false;
 	_scene_Starter.bottom_OK = false;
 	_scene_Starter.top_OK = false;
+	_scene_Starter.isDoorOpen = false;
 
 	_scene_Starter.main_Img = IMAGEMANAGER->findImage("deathMetal_Main");
 	_scene_Starter.top_Img = IMAGEMANAGER->findImage("deathMetal_TopBlade");
@@ -1032,5 +1079,66 @@ void bossStageScene::bossSceneRender()
 		_scene_Starter.top_Img->render(getMemDC(), _scene_Starter.top_Img->getX(), _scene_Starter.top_Img->getY());
 		_scene_Starter.bottom_Img->render(getMemDC(), _scene_Starter.bottom_Img->getX(), _scene_Starter.bottom_Img->getY());
 		_scene_Starter.main_Img->render(getMemDC(), _scene_Starter.main_Img->getX(), _scene_Starter.main_Img->getY());
+	}
+}
+
+void bossStageScene::bossSceneDoorOpen()
+{
+	// 플레이어가 문에 있는 위치에 도착하면 문이 사라진다.
+	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 20 ||
+		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 20 ||
+		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 20)
+	{
+		// 문이였던 지역이 땅으로 바뀐다.
+		for (int i = 0; i < _vTotalList.size(); ++i)
+		{
+			// 인덱스와 같은 타일을 찾는다.
+			if (_vTotalList[i].idX == 12 && _vTotalList[i].idY == 20 ||
+				_vTotalList[i].idX == 13 && _vTotalList[i].idY == 20 ||
+				_vTotalList[i].idX == 14 && _vTotalList[i].idY == 20)
+			{
+				_vTotalList[i].wall = W_NONE;
+			}
+		}
+	}
+
+	// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
+	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 19 ||
+		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 19 ||
+		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 19)
+	{
+		// 문이였던 지역을 벽으로 바꿔준다.
+		for (int i = 0; i < _vTotalList.size(); ++i)
+		{
+			// 인덱스과 같은 타일에 벽을 세워준다.
+			if (_vTotalList[i].idX == 12 && _vTotalList[i].idY == 20 ||
+				_vTotalList[i].idX == 13 && _vTotalList[i].idY == 20 ||
+				_vTotalList[i].idX == 14 && _vTotalList[i].idY == 20)
+			{
+				_vTotalList[i].wall = W_BOSS_WALL;
+				_vTotalList[i].wallFrameX = 3;
+				_vTotalList[i].wallFrameY = 2;
+			}
+		}
+
+		// 보스방에 있는 아이들이 움직이기 시작한다.
+		_scene_Starter.isDoorOpen = true;
+	}
+}
+
+void bossStageScene::bossClear()
+{
+
+	for (int i = 0; i < _vTotalList.size(); ++i)
+	{
+		// 벽이 사라져야 하는 인덱스 이타일을 찾는다.
+		if (_vTotalList[i].idX == 11 && _vTotalList[i].idY == 10 ||
+			_vTotalList[i].idX == 12 && _vTotalList[i].idY == 10 ||
+			_vTotalList[i].idX == 13 && _vTotalList[i].idY == 10 ||
+			_vTotalList[i].idX == 14 && _vTotalList[i].idY == 10 ||
+			_vTotalList[i].idX == 15 && _vTotalList[i].idY == 10)
+		{
+			_vTotalList[i].wall = W_NONE;
+		}
 	}
 }

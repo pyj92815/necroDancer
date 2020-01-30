@@ -105,19 +105,19 @@ public:
 	{
 		// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 박쥐 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 		// 박쥐 왼쪽 애니메이션 추가
-		int bat_Left[] = { 0, 1, 2, 3 };
+		int bat_Left[] = { 8, 9, 10, 11 };
 		KEYANIMANAGER->addArrayFrameAnimation("bat_Left", "boss_Bat", bat_Left, 4, 10, true);
 
 		// 박쥐 쉐도우 왼쪽 애니메이션 추가
-		int sBat_Left[] = { 4, 5, 6, 7 };
+		int sBat_Left[] = { 12, 13, 14, 15 };
 		KEYANIMANAGER->addArrayFrameAnimation("sBat_Left", "boss_Bat", sBat_Left, 4, 10, true);
 
 		// 박쥐 오른쪽 애니메이션 추가
-		int bat_Right[] = { 8, 9, 10, 11 };
+		int bat_Right[] = { 0, 1, 2, 3 };
 		KEYANIMANAGER->addArrayFrameAnimation("bat_Right", "boss_Bat", bat_Right, 4, 10, true);
 
 		// 박쥐 쉐도우 오른쪽 애니메이션 추가
-		int sBat_Right[] = { 12, 13, 14, 15 };
+		int sBat_Right[] = { 4, 5, 6, 7 };
 		KEYANIMANAGER->addArrayFrameAnimation("sBat_Right", "boss_Bat", sBat_Right, 4, 10, true);
 
 
