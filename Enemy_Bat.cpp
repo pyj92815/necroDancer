@@ -8,10 +8,10 @@ void Enemy_Bat::Action()
 	case enemyState::STATE_IDLE:
 		break;
 	case enemyState::STATE_MOVE:
-		Move();
+		//Move();
 		break;
 	case enemyState::STATE_ATTACK:
-		Attack();
+		//Attack();
 		break;
 	case enemyState::STATE_DIE:
 		break;
@@ -76,13 +76,13 @@ void Enemy_Bat::AniChange()
 	switch (_enemyInfo->direction)
 	{
 	case Direction::LEFT:
-		if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("Bat_L_IDLE_Ani");
-		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Bat_L_Shadow_IDLE_Ani");
+		if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("Bat_L_IDLE_Ani");
+		else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("Bat_L_Shadow_IDLE_Ani");
 		break;
 
 	case Direction::RIGHT:
-		if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("Bat_R_IDLE_Ani");
-		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Bat_R_Shadow_IDLE_Ani");
+		if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("Bat_R_IDLE_Ani");
+		else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("Bat_R_Shadow_IDLE_Ani");
 		break;
 	}
 	_enemyInfo->aniChange = true;

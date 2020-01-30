@@ -1,7 +1,6 @@
 #pragma once
 #include"animation.h"
 #include"gameNode.h"
-#include<vector>
 enum class enemyState
 {
 	STATE_IDLE,STATE_MOVE,STATE_ATTACK,STATE_DIE
@@ -15,8 +14,10 @@ struct EnemyInfo
 	enemyState state;					//enemy의 상태를 지정할 enum문
 	Direction direction;				//enemy의 방향을 지정할 enum문
 	Direction AttackDirection;			//
-	animation* animation;	
-	image* image;
+	animation* Animation;	
+	image* Image;
+	animation* attackAnimation;
+	image* attackImage;
 	float idx, idy;
 	float x, y;			
 	RECT rc;
@@ -27,6 +28,12 @@ struct EnemyInfo
 	bool Light;							//시야 안에 있는지 여부를 판단하기 위한 bool값
 	bool aniChange;						//애니메이션을 바꿨는지 판단하기 위한 bool값
 	bool Beat;
+	bool Attack;
+
+	bool left;
+	bool right;
+	bool up;
+	bool down;
 };
 struct playerInfo
 {

@@ -33,7 +33,6 @@ void stageScene::release()
 
 void stageScene::update()
 {
-	cout << 1 << endl;
 	_pm->update();
 	_em->update();
 	BEATMANAGER->update();
@@ -115,7 +114,7 @@ void stageScene::render()
 	//플레이어 렌더 
 	/*pm->render();*/
 	//몬스터 렌더 
-	_em->render();
+
 
 	//제트오더 랜더 
 	//for (int i = 0; i < _zOrderVector.size(); ++i)
@@ -129,20 +128,14 @@ void stageScene::render()
 	//	}
 	//}
 	//제트오더 랜더 
-
 	EFFECTMANAGER->render(CAMERAMANAGER->getWorldDC());
-
+	_em->render();
 	_pm->effectRender();
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 	//ENEMYMANAGER->render(getMemDC());
 	BEATMANAGER->render();
 	_ui->render();
 	_minimap->render();
-	//for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
-	//{
-	//	
-	//}
-	
 }
 //
 //// 제트오더 사이즈 설정하기 

@@ -80,6 +80,7 @@ public:
 
 	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey ,int sight,int damege, float guard, float hp);
 
+	void playerHit(int damage) { _player.hp = _player.hp - damage; }
 	//플레이어 상태판단
 	void StateMove();		// 이동 판단		
 

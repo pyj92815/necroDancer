@@ -466,7 +466,6 @@ void Beat::Move()
             }
         }
 
-
         if (_vNoteLeft[i].pos.x - (heartImg->getFrameWidth() / 2) > WINSIZEX_HALF)
         {
             _player->setPlayerKey();

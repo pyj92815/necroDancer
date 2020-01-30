@@ -29,12 +29,12 @@ void Enemy_Ghost::AniChange()
 	switch (_enemyInfo->direction)
 	{
 	case Direction::LEFT:
-		if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("Ghost_L_IDLE_Ani");
-		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Ghost_L_Shadow_IDLE_Ani");
+		if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("Ghost_L_IDLE_Ani");
+		else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("Ghost_L_Shadow_IDLE_Ani");
 		break;
 	case Direction::RIGHT:
-		if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("Ghost_R_IDLE_Ani");
-		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Ghost_R_Shadow_IDLE_Ani");
+		if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("Ghost_R_IDLE_Ani");
+		else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("Ghost_R_Shadow_IDLE_Ani");
 		break;
 	}
 	_enemyInfo->aniChange = true;
