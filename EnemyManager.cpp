@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "EnemyManager.h"
-
+#include "player.h"
 HRESULT EnemyManager::init()
 {
 	imageAdd();	//이미지 추가 함수
 	AnimationAdd(); //애니메이션 추가 함수
-	_enemyType = EnemyType::SLIME_BLUE;
-	EnemyCreate(3, 3, _enemyType);
+	임시enemy생성();
+	_player = new player;
+
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->init();
@@ -24,7 +25,11 @@ void EnemyManager::update()
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->update();
+		//플레이어의 좌표값을 전달
+		(*_viEnemy)->setPlayerInfo(_player->getPlayer().x, _player->getPlayer().y, _player->getPlayer().idx, _player->getPlayer().idy);
+		cout << _player->getPlayer().idx << endl;
 	}
+	EnemyRemove();
 }
 
 void EnemyManager::render()
@@ -33,6 +38,65 @@ void EnemyManager::render()
 	{
 		(*_viEnemy)->render();
 	}
+}
+
+void EnemyManager::EnemyRemove()
+{
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
+	{
+		if ((*_viEnemy)->getEnemyInfo()->state==enemyState::STATE_DIE)
+		{
+			_vEnemy.erase(_viEnemy);
+			break;
+		}
+		else
+		{
+			++_viEnemy;
+		}
+	}
+}
+
+void EnemyManager::Attack()
+{
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
+	{
+		if ((*_viEnemy)->getEnemyInfo()->idx + 1 == _player->getPlayer().idx && (*_viEnemy)->getEnemyInfo()->idy == _player->getPlayer().idy)
+		{
+			//오른쪽 공격
+			(*_viEnemy)->getEnemyInfo()->state = enemyState::STATE_ATTACK;
+			(*_viEnemy)->getEnemyInfo()->AttackDirection = Direction::RIGHT;
+		}
+		if ((*_viEnemy)->getEnemyInfo()->idx - 1 == _player->getPlayer().idx && (*_viEnemy)->getEnemyInfo()->idy == _player->getPlayer().idy)
+		{
+			//왼쪽 공격
+			(*_viEnemy)->getEnemyInfo()->state = enemyState::STATE_ATTACK;
+			(*_viEnemy)->getEnemyInfo()->AttackDirection = Direction::LEFT;
+		}
+		if ((*_viEnemy)->getEnemyInfo()->idx == _player->getPlayer().idx && (*_viEnemy)->getEnemyInfo()->idy - 1 == _player->getPlayer().idy)
+		{
+			//위쪽 공격
+			(*_viEnemy)->getEnemyInfo()->state = enemyState::STATE_ATTACK;
+			(*_viEnemy)->getEnemyInfo()->AttackDirection = Direction::UP;
+		}
+		if ((*_viEnemy)->getEnemyInfo()->idx == _player->getPlayer().idx && (*_viEnemy)->getEnemyInfo()->idy + 1 == _player->getPlayer().idy)
+		{
+			//아래쪽 공격
+			(*_viEnemy)->getEnemyInfo()->state = enemyState::STATE_ATTACK;
+			(*_viEnemy)->getEnemyInfo()->AttackDirection = Direction::DOWN;
+		}
+	}
+}
+
+void EnemyManager::임시enemy생성()
+{
+	_enemyType = EnemyType::SLIME_ORANGE;
+	EnemyCreate(10, 8, _enemyType);
+	_enemyType = EnemyType::SLIME_BLUE;
+	EnemyCreate(14, 8, _enemyType);
+	_enemyType = EnemyType::BAT;
+	EnemyCreate(18, 8, _enemyType);
+	_enemyType = EnemyType::SKELETON;
+	EnemyCreate(12, 8, _enemyType);
 }
 
 void EnemyManager::EnemyCreate(float x, float y,EnemyType enemyType)
@@ -134,7 +198,7 @@ void EnemyManager::Enemy_Slime_Blue_Create(float x, float y)
 {
 	Enemy* Slime_Blue;
 	Slime_Blue = new Enemy_Slime_Blue;
-	Slime_Blue->EnemyCreate(x, y, 2.0f, 1.0f,"Enemy_slime_blue","Enemy_slime_blue_Shadow_IDLE_Ani");
+	Slime_Blue->EnemyCreate(x, y, 2.0f, 1.0f,"Enemy_slime_blue","Enemy_slime_blue_Shadow_IDLE_Ani",Direction::UP);
 	_vEnemy.push_back(Slime_Blue);
 }
 void EnemyManager::Enemy_Slime_Orange_Create(float x, float y)
@@ -182,12 +246,12 @@ void EnemyManager::AnimationAdd()
 	//==================용 애 니 메 이 션============================================
 	int Dragon_L_IDLE[] = { 0,1 };
 	int Dragon_R_IDLE[] = { 3,2 };
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_IDLE_Ani", "Enemy_dragon", Dragon_L_IDLE, 2, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_IDLE_Ani", "Enemy_dragon", Dragon_R_IDLE, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_IDLE_Ani", "Enemy_dragon", Dragon_L_IDLE, 2, 2, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_IDLE_Ani", "Enemy_dragon", Dragon_R_IDLE, 2, 2, true);
 	int Dragon_L_Shadow[] = { 4,5 };
 	int Dragon_R_Shadow[] = { 7,6 };
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_Shadow_IDLE_Ani", "Enemy_dragon", Dragon_L_Shadow, 2, 10, true);
-	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_Shadow_IDLE_Ani", "Enemy_dragon", Dragon_R_Shadow, 2, 10, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_L_Shadow_IDLE_Ani", "Enemy_dragon", Dragon_L_Shadow, 2, 2, true);
+	KEYANIMANAGER->addArrayFrameAnimation("Dragon_R_Shadow_IDLE_Ani", "Enemy_dragon", Dragon_R_Shadow, 2, 2, true);
 	//==================유 령 애 니 메 이 션==========================================
 	int Ghost_L_IDLE[] = { 0,1 };
 	int Ghost_R_IDLE[] = { 3,2 };

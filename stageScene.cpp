@@ -12,6 +12,8 @@ HRESULT stageScene::init()
 	_em = new EnemyManager;
 	_em->init();
 
+	_em->AddressLink(_pm->getPlayerInfo());
+
 	_ui = new UImanager;
 	_ui->init();
 
