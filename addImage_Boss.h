@@ -29,6 +29,12 @@ public:
 
 		// 보스, 슬레이브 근접 공격 이펙트
 		IMAGEMANAGER->addFrameImage("base_Attack", "./image/Enemy/boss/slave/boss_Slave_Attack.bmp", 270, 48, 5, 1, true, RGB(255, 0, 255));
+	
+		// 보스 체력 이미지
+		IMAGEMANAGER->addImage("Boss_Hp_Full", "./image/Enemy/boss/life_Point_Full.bmp", 24, 22, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addImage("Boss_Hp_Null", "./image/Enemy/boss/life_Point_Null.bmp", 24, 22, true, RGB(255, 0, 255));
+	
+
 	}
 
 	void add_BossAnimation()

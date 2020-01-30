@@ -4,6 +4,8 @@
 HRESULT deathMetal::init(string bossName, int idx, int idy, int TILE_SIZEX, int TILE_SIZEY)
 {
 	boss::hp = 9;														 // 데스메탈의 기본 체력 초기화
+	boss::save_HP = 9;													 // 데스메탈의 세이브 체력
+	boss::max_HP = 9;													 // 데스메탈의 맥스 체력
 	boss::shield = 2;													 // 데스메탈의 기본 실드 초기화
 	boss::attack = 1.5;													 // 데스메탈의 기본 공격력 초기화
 	boss::magicAttack = 2;												 // 데스메탈의 기본 마법공격력 초기화
@@ -173,6 +175,18 @@ void deathMetal::deathMetal_ChangeAnimation()
 	{
 		// 다음 변화가 있을때까지 들어오지 않는다.
 		boss::save_ClosePlayer = boss::isClosePlayer;
+		boss::isChangeAni = true;
+		boss::change_Ani = true;
+	}
+	
+	// 데스메탈의 체력에 변화가 있다면 애니메이션을 바꿔준다.
+	if (boss::save_HP != boss::hp)
+	{
+		// 만약 3페이즈라면 순간이동을 실행한다.
+
+		// 마법 또는 슬레이브 소환 캐스팅 도중에 맞으면 끊김
+
+		boss::save_HP = boss::hp;
 		boss::isChangeAni = true;
 		boss::change_Ani = true;
 	}
@@ -498,7 +512,7 @@ void deathMetal::deathMetal_ChangePhase()
 	}
 
 	// 만약 보스 페이즈가 2로 바뀌었고, 실드를 아직 던지지 않았다면 실행한다. (실드 던지는 애니메이션 함수)
-	if (boss::phase == BP_PHASE_2 && !boss::isThrowShield)	deathMetal_ThrowShield();
+	if (boss::phase != BP_PHASE_1 && !boss::isThrowShield)	deathMetal_ThrowShield();
 
 
 }

@@ -38,6 +38,8 @@ HRESULT bossStageScene::init()
 	// 보스 등장 씬에 관련 변수 초기화
 	bossSceneSetting();
 
+	BEATMANAGER->init();
+
 	return S_OK;
 }
 
@@ -1084,45 +1086,49 @@ void bossStageScene::bossSceneRender()
 
 void bossStageScene::bossSceneDoorOpen()
 {
-	// 플레이어가 문에 있는 위치에 도착하면 문이 사라진다.
-	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 20 ||
-		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 20 ||
-		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 20)
+	if (!_scene_Starter.isDoorOpen)
 	{
-		// 문이였던 지역이 땅으로 바뀐다.
-		for (int i = 0; i < _vTotalList.size(); ++i)
-		{
-			// 인덱스와 같은 타일을 찾는다.
-			if (_vTotalList[i].idX == 12 && _vTotalList[i].idY == 20 ||
-				_vTotalList[i].idX == 13 && _vTotalList[i].idY == 20 ||
-				_vTotalList[i].idX == 14 && _vTotalList[i].idY == 20)
-			{
-				_vTotalList[i].wall = W_NONE;
-			}
-		}
-	}
 
-	// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
-	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 19 ||
-		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 19 ||
-		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 19)
-	{
-		// 문이였던 지역을 벽으로 바꿔준다.
-		for (int i = 0; i < _vTotalList.size(); ++i)
+		// 플레이어가 문에 있는 위치에 도착하면 문이 사라진다.
+		if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 20 ||
+			_player->getPlayer().idx == 13 && _player->getPlayer().idy == 20 ||
+			_player->getPlayer().idx == 14 && _player->getPlayer().idy == 20)
 		{
-			// 인덱스과 같은 타일에 벽을 세워준다.
-			if (_vTotalList[i].idX == 12 && _vTotalList[i].idY == 20 ||
-				_vTotalList[i].idX == 13 && _vTotalList[i].idY == 20 ||
-				_vTotalList[i].idX == 14 && _vTotalList[i].idY == 20)
+			// 문이였던 지역이 땅으로 바뀐다.
+			for (int i = 0; i < _vTotalList.size(); ++i)
 			{
-				_vTotalList[i].wall = W_BOSS_WALL;
-				_vTotalList[i].wallFrameX = 3;
-				_vTotalList[i].wallFrameY = 2;
+				// 인덱스와 같은 타일을 찾는다.
+				if (_vTotalList[i].idX == 12 && _vTotalList[i].idY == 20 ||
+					_vTotalList[i].idX == 13 && _vTotalList[i].idY == 20 ||
+					_vTotalList[i].idX == 14 && _vTotalList[i].idY == 20)
+				{
+					_vTotalList[i].wall = W_NONE;
+				}
 			}
 		}
 
-		// 보스방에 있는 아이들이 움직이기 시작한다.
-		_scene_Starter.isDoorOpen = true;
+		// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
+		if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 19 ||
+			_player->getPlayer().idx == 13 && _player->getPlayer().idy == 19 ||
+			_player->getPlayer().idx == 14 && _player->getPlayer().idy == 19)
+		{
+			// 문이였던 지역을 벽으로 바꿔준다.
+			for (int i = 0; i < _vTotalList.size(); ++i)
+			{
+				// 인덱스과 같은 타일에 벽을 세워준다.
+				if (_vTotalList[i].idX == 12 && _vTotalList[i].idY == 20 ||
+					_vTotalList[i].idX == 13 && _vTotalList[i].idY == 20 ||
+					_vTotalList[i].idX == 14 && _vTotalList[i].idY == 20)
+				{
+					_vTotalList[i].wall = W_BOSS_WALL;
+					_vTotalList[i].wallFrameX = 3;
+					_vTotalList[i].wallFrameY = 2;
+				}
+			}
+
+			// 보스방에 있는 아이들이 움직이기 시작한다.
+			_scene_Starter.isDoorOpen = true;
+		}
 	}
 }
 
