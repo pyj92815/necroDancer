@@ -17,7 +17,11 @@ public:
 	virtual void update();
 	virtual void render();
 
+	// 슬레이브, 플레이어, UI
+	virtual void move(SLAVE_DIRECTION direction);				// 슬레이브의 움직임 연산
+
 	SLAVE_INFO* get_Slave() { return &_slave; }					// 슬레이브의 정보 주소를 받아온다.
+	void slave_Pos_Setting();									// 슬레이브 좌표 변수 갱신
 };
 
 // 슬레이브 기본 클래스 

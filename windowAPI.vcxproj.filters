@@ -343,7 +343,7 @@
       <Filter>playGround\boss\boss File</Filter>
     </ClInclude>
     <ClInclude Include="slaveManager_Library.h">
-      <Filter>playGround\boss\boss File</Filter>
+      <Filter>playGround\boss\boss Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
