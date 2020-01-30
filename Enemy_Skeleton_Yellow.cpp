@@ -28,12 +28,12 @@ void Enemy_Skeleton_Yellow::AniChange()
 	switch (_enemyInfo->direction)
 	{
 	case Direction::LEFT:
-		if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("skeleton_yellow_L_IDLE_Ani");
-		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("skeleton_yellow_L_Shadow_IDLE_Ani");
+		if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("skeleton_yellow_L_IDLE_Ani");
+		else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("skeleton_yellow_L_Shadow_IDLE_Ani");
 		break;
 	case Direction::RIGHT:
-		if (_enemyInfo->Light)_enemyInfo->animation = KEYANIMANAGER->findAnimation("skeleton_yellow_R_IDLE_Ani");
-		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("skeleton_yellow_R_Shadow_IDLE_Ani");
+		if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("skeleton_yellow_R_IDLE_Ani");
+		else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("skeleton_yellow_R_Shadow_IDLE_Ani");
 		break;
 	}
 	_enemyInfo->aniChange = true;
