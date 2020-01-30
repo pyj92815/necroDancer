@@ -74,7 +74,5 @@ public:
 
 	void setVision(POINT index, int sight);
 
-	//미니맵 전용
-	void stageMiniMapLoad();
 };
 

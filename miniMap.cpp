@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "miniMap.h"
-
 miniMap::miniMap()
 {
 }
@@ -15,11 +14,9 @@ HRESULT miniMap::init()
 	// 
 	// 미니맵의 크기 ( )
 	// x, y -> rc left top  비율로 줄여 => 그리기  
-
+	
 	_r = _g = _b = 0;
-
-	_em = new EnemyManager;
-
+	
 
 	return S_OK;
 }
@@ -31,7 +28,7 @@ void miniMap::release()
 
 void miniMap::update()
 {
-	
+	cout<<_em->getVEnemy()[0]->getEnemyInfo()->idx<<"adsfdafsadfsadfs"<<endl;
 }
 
 void miniMap::render()
@@ -199,6 +196,7 @@ void miniMap::render()
 		DeleteObject(brush);
 		DeleteObject(pen);
 		
+
 		}
 
 		// 기본 벽 색깔
@@ -327,6 +325,28 @@ void miniMap::render()
 		//}
 	
 	}
+	//에너미
+	//cout<<_em->getVEnemy()[0]->getEnemyInfo()->idx<<"adsfdafsadfsadfs"<<endl;
+		vector<Enemy*> vec = _em->getVEnemy();
+		vector<Enemy*>::iterator ins = vec.begin();
+		for (; ins != vec.end(); )
+		{
+			HBRUSH brush = CreateSolidBrush(RGB(255, 0, 0));
+			HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
+			HPEN pen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+			HPEN oldPen = (HPEN)SelectObject(getMemDC(), pen);
+			RECT temp;
+			temp = RectMake(750 + (*ins)->getEnemyInfo()->idx*5,
+				450 + (*ins)->getEnemyInfo()->idy*5, 7, 7);
+			Rectangle(getMemDC(), temp);
+			SelectObject(getMemDC(), oldBrush);
+			SelectObject(getMemDC(), oldPen);
+			DeleteObject(brush);
+			DeleteObject(pen);
+			ins++;
+		}
+	
+
 	//// 이외의 렌더 
 	/*
 	for (_viStageMap = _vStageMap.begin(); _viStageMap != _vStageMap.end(); ++_viStageMap)

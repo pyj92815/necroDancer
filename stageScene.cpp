@@ -19,7 +19,8 @@ HRESULT stageScene::init()
 
 	_minimap = new miniMap;
 	_minimap->init();
-
+	
+	_minimap->getEnemyPoint(_em);
 	ZorderSetup();
 	return S_OK;
 }
@@ -39,6 +40,7 @@ void stageScene::update()
 	stageCollision();
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 	_minimap->getStageMap(_vTotalList);
+	
 }
 
 void stageScene::render()
@@ -306,31 +308,6 @@ void stageScene::stageMapLoad()
 		{
 			_tiles[i].alphaValue = 255;
 			_vTotalList.push_back(&_tiles[i]);
-		}
-		i++;
-	}
-}
-
-void stageScene::stageMiniMapLoad()
-{
-	HANDLE file2;
-	DWORD read2;
-
-	file2 = CreateFile("kimmi.map", GENERIC_READ, 0, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	ReadFile(file2, _tiles, sizeof(tagTile) * MINTILESIZE * MINTILESIZE, &read2, NULL);
-
-	CloseHandle(file2);
-
-	int i = 0;
-	while (i < TILEX * TILEY)
-	{
-		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
-		if (_tiles[i].type != TYPE_NONE)
-		{
-			_tiles[i].alphaValue = 255;
-			_vMinTotal.push_back(&_tiles[i]);
 		}
 		i++;
 	}

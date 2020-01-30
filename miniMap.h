@@ -1,7 +1,8 @@
 #pragma once
 #include "gameNode.h"
-#include "enemyManager.h"
+#include "EnemyManager.h"
 #include "playerManager.h"
+
 
 class miniMap : public gameNode
 {
@@ -28,7 +29,6 @@ public:
 	virtual void render();
 
 	void getStageMap(vector<tagTile*> stageMap) { _vStageMap = stageMap; }
-
-
+	void getEnemyPoint(EnemyManager* em) { _em = em; }
 };
 
