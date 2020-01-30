@@ -3,6 +3,7 @@
 
 void Enemy_Skeleton::Action()
 {
+	
 	switch (_enemyInfo->state)
 	{
 	case enemyState::STATE_IDLE:

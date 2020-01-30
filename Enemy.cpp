@@ -10,6 +10,8 @@ HRESULT Enemy::init()
 	_enemyInfo->aniChange = true;
 	_enemyInfo->Light = true;
 	_enemyInfo->beatCount = 0;
+
+
 	return S_OK;
 }
 
@@ -19,11 +21,11 @@ void Enemy::relase()
 
 void Enemy::update()
 {
-
 	Beat();
 	AniStart();
 	Action();
 	Die();
+	_enemyInfo->rc = RectMake(_enemyInfo->idx, _enemyInfo->idy, 52, 52);
 }
 
 void Enemy::render()
@@ -105,12 +107,12 @@ void Enemy::Move()
 	
 	else if (_enemyInfo->idx != _playerInfo->idx)
 	{
-		if (_enemyInfo->idx > _playerInfo->idx)
+		if (_enemyInfo->idx > _playerInfo->idx && !_enemyInfo->left)
 		{
 			_enemyInfo->idx -= 1;
 			_enemyInfo->x -= 52;
 		}
-		else if (_enemyInfo->idx < _playerInfo->idx)
+		else if (_enemyInfo->idx < _playerInfo->idx && !_enemyInfo->right)
 		{
 			_enemyInfo->idx += 1;
 			_enemyInfo->x += 52;
@@ -118,18 +120,19 @@ void Enemy::Move()
 	}
 	else if (_enemyInfo->idx == _playerInfo->idx)
 	{
-		if (_enemyInfo->idy > _playerInfo->idy)
+		if (_enemyInfo->idy > _playerInfo->idy && !_enemyInfo->up)
 		{
 			_enemyInfo->idy -= 1;
 			_enemyInfo->y -= 52;
 		}
-		else if (_enemyInfo->idy < _playerInfo->idy)
+		else if (_enemyInfo->idy < _playerInfo->idy && !_enemyInfo->down)
 		{
 			_enemyInfo->idy += 1;
 			_enemyInfo->y += 52;
 		}
 	}
 }
+
 
 void Enemy::HalfMove()
 {
