@@ -318,14 +318,14 @@ bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, Enemy* enem
 {
 	bool isObject = false;
 
-// 에너미는 방향 정보가 없음
+	// 에너미는 방향 정보가 없음
 
-// 캐릭터가 이동해야 하는곳에 오브젝트가 있다면 true 없으면 false
-return isObject;
+	// 캐릭터가 이동해야 하는곳에 오브젝트가 있다면 true 없으면 false
+	return isObject;
 
-// 추가 하려면
-// 오브젝트라면 어떤 오브젝트인지
-// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
+	// 추가 하려면
+	// 오브젝트라면 어떤 오브젝트인지
+	// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
 }
 
 bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, deathMetal* deathMetalInfo)
@@ -405,7 +405,7 @@ map<PLAYERDIRECTION, tagTile*> Collision::collision_player_tile(vector<tagTile*>
 			_mPlayerTile.emplace(pair<PLAYERDIRECTION, tagTile*>(PLAYERDIRECTION_DOWN, (*mapInfo)[i]));
 			continue;
 		}
-		if (playerInfo->getPlayer().idx - 1== (*mapInfo)[i]->idX &&
+		if (playerInfo->getPlayer().idx - 1 == (*mapInfo)[i]->idX &&
 			playerInfo->getPlayer().idy == (*mapInfo)[i]->idY)
 		{
 			_mPlayerTile.emplace(pair<PLAYERDIRECTION, tagTile*>(PLAYERDIRECTION_LEFT, (*mapInfo)[i]));
@@ -422,24 +422,137 @@ map<PLAYERDIRECTION, tagTile*> Collision::collision_player_tile(vector<tagTile*>
 	return _mPlayerTile;
 }
 
-map<PLAYERDIRECTION, Enemy*> Collision::collision_player_Enemy_tile(vector<tagTile*>* mapInfo, player* playerInfo, PLAYERWAEPON weapon, Enemy* enemy)
+map<PLAYERDIRECTION, Enemy*> Collision::collision_player_Enemy_tile(vector<Enemy*>* enemyInfo, player* playerInfo)
 {
-	map<PLAYERDIRECTION, Enemy*> _mEnemyTile;
+	map<PLAYERDIRECTION, Enemy*> _mEnemy;
 	
 	switch (playerInfo->getPlayer().weapon)
 	{
 	case PLAYERWAEPON_DAGGER:
+		// 몬스터 for문을 돌린다
+		for (int i = 0; i < enemyInfo->size(); ++i)
+		{
+			if (0 > enemyInfo->size()) break; // 몬스터가 없으면 끝 
+			//상
+			if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy - 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_UP, (*enemyInfo)[i]));
+			}//하
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy + 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_DOWN, (*enemyInfo)[i]));
+			}//좌
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx - 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_LEFT, (*enemyInfo)[i]));
+			}//우
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx + 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_RIGHT, (*enemyInfo)[i]));
+			}
+		}// 끝
+		return _mEnemy;
 		break;
 	case PLAYERWAEPON_LONGSWORD:
-		break;
 	case PLAYERWAEPON_RAPIER:
-		break;
 	case PLAYERWAEPON_SPEAR:
+		// 몬스터 for문을 돌린다
+		for (int i = 0; i < enemyInfo->size(); ++i)
+		{
+			//상
+			if (((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy - 1) ||
+				((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx
+					&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy - 2))
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_UP, (*enemyInfo)[i]));
+			}//하
+			else if (((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy + 1) ||
+				((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx
+					&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy + 2))
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_DOWN, (*enemyInfo)[i]));
+			}//좌
+			else if (((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx - 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy) ||
+				((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx - 2
+					&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy))
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_LEFT, (*enemyInfo)[i]));
+			}//우
+			else if (((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx + 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy) ||
+				((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx + 2
+					&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy))
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_RIGHT, (*enemyInfo)[i]));
+			}
+		}// 끝
+		return _mEnemy;
 		break;
-	case PLAYERWAEPON_NONE:
+	case PLAYERWAEPON_BROADSWORD:
+		// 몬스터 for문을 돌린다
+		for (int i = 0; i < enemyInfo->size(); ++i)
+		{
+			//상
+			if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy - 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_UP, (*enemyInfo)[i]));
+			}//하
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy + 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_DOWN, (*enemyInfo)[i]));
+			}//좌
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx - 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_LEFT, (*enemyInfo)[i]));
+			}//우
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx + 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_RIGHT, (*enemyInfo)[i]));
+			}// 대각 상좌
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx - 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy - 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_UP, (*enemyInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_LEFT, (*enemyInfo)[i]));
+			}// 대각 상우
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx + 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy - 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_UP, (*enemyInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_RIGHT, (*enemyInfo)[i]));
+			}// 대각 하좌
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx - 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy + 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION,Enemy*>(PLAYERDIRECTION_DOWN, (*enemyInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION,Enemy*>(PLAYERDIRECTION_LEFT, (*enemyInfo)[i]));
+			}// 대각 하우
+			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx + 1
+				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy + 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_DOWN, (*enemyInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_RIGHT, (*enemyInfo)[i]));
+			}
+
+		}// 끝
+		return _mEnemy;
+		break;
+	default:
 		break;
 	}
+	// 몬스터 충돌 처리 한후 전달하기 
 
-	return _mEnemyTile;
+	return _mEnemy;
 }
 

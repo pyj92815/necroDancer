@@ -1,11 +1,23 @@
 #include "stdafx.h"
 #include "Enemy_Minotaur.h"
 
-HRESULT Enemy_Minotaur::init()
+void Enemy_Minotaur::Action()
 {
-	_enemyInfo->image = IMAGEMANAGER->findImage("Enemy_minotaurL");
-	_enemyInfo->animation = KEYANIMANAGER->findAnimation("Minotaur_L_Shadow_IDLE_Ani");
-	return S_OK;
+	switch (_enemyInfo->state)
+	{
+	case enemyState::STATE_IDLE:
+		break;
+	case enemyState::STATE_MOVE:
+		Move();
+		break;
+	case enemyState::STATE_ATTACK:
+		Attack();
+		break;
+	case enemyState::STATE_DIE:
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy_Minotaur::Move()
@@ -31,4 +43,5 @@ void Enemy_Minotaur::AniChange()
 		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("Minotaur_R_Shadow_IDLE_Ani");
 		break;
 	}
+	_enemyInfo->aniChange = true;
 }

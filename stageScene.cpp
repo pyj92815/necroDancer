@@ -12,6 +12,8 @@ HRESULT stageScene::init()
 	_em = new EnemyManager;
 	_em->init();
 
+	_em->AddressLink(_pm->getPlayerInfo());
+
 	_ui = new UImanager;
 	_ui->init();
 
@@ -55,8 +57,9 @@ void stageScene::render()
 				{
 					IMAGEMANAGER->findImage("terrainTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY);
 				}
-				continue;
+				
 			}
+
 			if ((*_viTotalList)->trap != TRAP_NONE)
 			{
 				if ((*_viTotalList)->alphaValue <= 0)
@@ -65,6 +68,22 @@ void stageScene::render()
 				}
 				continue;
 			}
+			else if ((*_viTotalList)->armor != A_NONE)
+			{
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->armorFrameX, (*_viTotalList)->armorFrameY);
+				continue;
+			}
+			else if ((*_viTotalList)->weapon != WP_NONE)
+			{
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->weaponFrameX, (*_viTotalList)->weaponFrameY);
+				continue;
+			}
+			else if ((*_viTotalList)->stuff != ST_NONE)
+			{
+				IMAGEMANAGER->findImage("stuffTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->stuffFrameX, (*_viTotalList)->stuffFrameY);
+				continue;
+			}
+
 		}
 		else continue;
 	}
@@ -78,7 +97,7 @@ void stageScene::render()
 		{
 			if ((*_viTotalList)->alphaValue <= 0)
 			{
-				if ((*_viTotalList)->wall != W_NONE)
+				if ((*_viTotalList)->type == TYPE_WALL)
 				{
 					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
 					continue;
@@ -239,6 +258,7 @@ vector<zOrder*> stageScene::ZorderUpdate(vector<zOrder*> num)
 void stageScene::stageCollision()
 {
 	_pm->getPlayerInfo()->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _pm->getPlayerInfo()));
+	_pm->getPlayerInfo()->setPlayerEnemyTile(_collision.collision_player_Enemy_tile(&_em->getVEnemy(), _pm->getPlayerInfo()));
 }
 
 void stageScene::setVision(POINT index, int sight)
@@ -250,7 +270,7 @@ void stageScene::setVision(POINT index, int sight)
 
 	bool recursionContinue = true;  // 초기 조건값 
 	//recursionContinue &= (_tiles[index.y * TILEX + index.x].wall == W_NONE);  // 맞춰야 하는 조건 
-	if (_tiles[index.y * TILEX + index.x].wall != W_NONE) sight = sight - 3;	// 시야처리에 따른 값 조정할 예정 
+	if (_tiles[index.y * TILEX + index.x].type == TYPE_WALL) sight = sight - 3;	// 시야처리에 따른 값 조정할 예정 
 
 	if (recursionContinue)
 	{
@@ -271,7 +291,7 @@ void stageScene::stageMapLoad()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);

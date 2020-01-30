@@ -19,6 +19,11 @@ HRESULT boss_Bat::init()
 void boss_Bat::update()
 {
 	boss_Bat_ChangeAnimation();
+	slave_Pos_Setting();
+}
+
+void boss_Bat::move()
+{
 }
 
 void boss_Bat::boss_Bat_ChangeAnimation()
@@ -41,82 +46,80 @@ void boss_Bat::boss_Bat_ChangeAnimation()
 		slave::_slave.b_Value.change_Ani = true;
 	}
 
-	// 데스메탈이 바라보는 방향에 따라 애니메이션을 바꿔준다.
+	// 박쥐가 바라보는 방향에 따라 애니메이션을 바꿔준다.
 	if (slave::_slave.b_Value.isChangeAni)	// 보스가 움직였다면 애니메이션을 바꿔주어야한다.
 	{
 		switch (slave::_slave.status.direction)
 		{
 			case SLAVE_DIRECTION::SD_LEFT:
 
-				// 플레이어와의 거리가 가까울 경우 데스메탈이 보인다.
+				// 플레이어와의 거리가 가까울 경우 박쥐가 보인다.
 				if (slave::_slave.b_Value.isClosePlayer)
 				{
 					slave::_slave.image.animation = KEYANIMANAGER->findAnimation("bat_Left");
 				}
 
-				// 플레이어와의 거리가 멀 경우 데스메탈은 쉐도우 상태 이미지이다.
+				// 플레이어와의 거리가 멀 경우 박쥐은 쉐도우 상태 이미지이다.
 				else
 				{
 					slave::_slave.image.animation = KEYANIMANAGER->findAnimation("sBat_Left");
 				}
 
-				// 데스메탈이 해당 방향을 보고 있을때 각도를 초기화해준다.
+				// 박쥐가 해당 방향을 보고 있을때 각도를 초기화해준다.
 				slave::_slave.operation.angle = PI;
-				break;
-
-			case SLAVE_DIRECTION::SD_UP:
-
-				// 플레이어와의 거리가 가까울 경우 데스메탈이 보인다.
-				if (slave::_slave.b_Value.isClosePlayer)
-				{
-					slave::_slave.image.animation = KEYANIMANAGER->findAnimation("bat_Left");
-				}
-
-				// 플레이어와의 거리가 멀 경우 데스메탈은 쉐도우 상태 이미지이다.
-				else
-				{
-					slave::_slave.image.animation = KEYANIMANAGER->findAnimation("sBat_Left");
-				}
-
-				// 데스메탈이 해당 방향을 보고 있을때 각도를 초기화해준다.
-				slave::_slave.operation.angle = PI / 180 * 90;
-
 				break;
 
 			case SLAVE_DIRECTION::SD_RIGHT:
 
-				// 플레이어와의 거리가 가까울 경우 데스메탈이 보인다.
+				// 플레이어와의 거리가 가까울 경우 박쥐가 보인다.
 				if (slave::_slave.b_Value.isClosePlayer)
 				{
 					slave::_slave.image.animation = KEYANIMANAGER->findAnimation("bat_Right");
 				}
 
-				// 플레이어와의 거리가 멀 경우 데스메탈은 쉐도우 상태 이미지이다.
+				// 플레이어와의 거리가 멀 경우 박쥐은 쉐도우 상태 이미지이다.
 				else
 				{
 					slave::_slave.image.animation = KEYANIMANAGER->findAnimation("sBat_Right");
 				}
 
-				// 데스메탈이 해당 방향을 보고 있을때 각도를 초기화해준다.
+				// 박쥐가 해당 방향을 보고 있을때 각도를 초기화해준다.
 				slave::_slave.operation.angle = 0;
 				break;
 
-			case SLAVE_DIRECTION::SD_DOWN:
+			case SLAVE_DIRECTION::SD_UP: case SLAVE_DIRECTION::SD_DOWN:
 
-				// 플레이어와의 거리가 가까울 경우 데스메탈이 보인다.
-				if (slave::_slave.b_Value.isClosePlayer)
+				// 박쥐가 왼쪽을 바라보고 있다가 위 또는 아래로 올라 갔을 경우
+				if (slave::_slave.operation.angle == PI)
 				{
-					slave::_slave.image.animation = KEYANIMANAGER->findAnimation("bat_Right");
+					// 플레이어와의 거리가 가까울 경우 박쥐가 보인다.
+					if (slave::_slave.b_Value.isClosePlayer)
+					{
+						slave::_slave.image.animation = KEYANIMANAGER->findAnimation("bat_Left");
+					}
+
+					// 플레이어와의 거리가 멀 경우 박쥐은 쉐도우 상태 이미지이다.
+					else
+					{
+						slave::_slave.image.animation = KEYANIMANAGER->findAnimation("sBat_Left");
+					}
 				}
 
-				// 플레이어와의 거리가 멀 경우 데스메탈은 쉐도우 상태 이미지이다.
-				else
+				// 박쥐가 오른쪽을 바라보고 있다가  위 또는 아래로 올라 갔을 경우
+				if (slave::_slave.operation.angle == 0)
 				{
-					slave::_slave.image.animation = KEYANIMANAGER->findAnimation("sBat_Right");
-				}
+					// 플레이어와의 거리가 가까울 경우 박쥐가 보인다.
+					if (slave::_slave.b_Value.isClosePlayer)
+					{
+						slave::_slave.image.animation = KEYANIMANAGER->findAnimation("bat_Right"); 
+					}
 
-				// 데스메탈이 해당 방향을 보고 있을때 각도를 초기화해준다.
-				slave::_slave.operation.angle = PI / 180 * 270;
+					// 플레이어와의 거리가 멀 경우 박쥐는 쉐도우 상태 이미지이다.
+					else
+					{
+						slave::_slave.image.animation = KEYANIMANAGER->findAnimation("sBat_Right");
+					}
+				}
 
 				break;
 		}

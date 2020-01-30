@@ -1,11 +1,23 @@
 #include "stdafx.h"
 #include "Enemy_Skeleton_Yellow.h"
 
-HRESULT Enemy_Skeleton_Yellow::init()
+void Enemy_Skeleton_Yellow::Action()
 {
-	_enemyInfo->image = IMAGEMANAGER->findImage("Enemy_skeleton_yellowL");
-	_enemyInfo->animation = KEYANIMANAGER->findAnimation("skeleton_yellow_L_Shadow_IDLE_Ani");
-	return S_OK;
+	switch (_enemyInfo->state)
+	{
+	case enemyState::STATE_IDLE:
+		break;
+	case enemyState::STATE_MOVE:
+		Move();
+		break;
+	case enemyState::STATE_ATTACK:
+		Attack();
+		break;
+	case enemyState::STATE_DIE:
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy_Skeleton_Yellow::Move()
@@ -26,4 +38,5 @@ void Enemy_Skeleton_Yellow::AniChange()
 		else _enemyInfo->animation = KEYANIMANAGER->findAnimation("skeleton_yellow_R_Shadow_IDLE_Ani");
 		break;
 	}
+	_enemyInfo->aniChange = true;
 }
