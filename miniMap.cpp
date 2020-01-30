@@ -327,7 +327,6 @@ void miniMap::render()
 		//}
 	
 	}
-	for(_em->getViEnemy())
 	//// 이외의 렌더 
 	/*
 	for (_viStageMap = _vStageMap.begin(); _viStageMap != _vStageMap.end(); ++_viStageMap)
