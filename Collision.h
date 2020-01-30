@@ -54,7 +54,7 @@ public:
 	//ÇÏ³ª·Î
 	map<PLAYERDIRECTION, tagTile*>  collision_player_tile(vector<tagTile*>* mapInfo, player* playerInfo);
 
-	map<PLAYERDIRECTION, Enemy*>  collision_player_Enemy_tile(vector<tagTile*>* mapInfo, player* playerInfo, PLAYERWAEPON weapon, Enemy* enemy);
+	map<PLAYERDIRECTION, Enemy*>  collision_player_Enemy_tile(vector<Enemy*>* enemyInfo, player* playerInfo);
 
 
 };

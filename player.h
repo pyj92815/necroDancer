@@ -19,6 +19,10 @@ private:
 	//이펙트 vector
 	vector<alphaImageEffect*>		     _vEffect; 
 	vector<alphaImageEffect*>::iterator _viEffect;
+
+	//인벤토리 
+	vector<tagItem*>				_vInven;
+	vector<tagItem*>::iterator  _viInven;
 private:
 	tagPlayer	_player;	// 플레이어
 	jump*		_jump;		// 점프 
@@ -31,6 +35,15 @@ private:
 	bool _isMoving;			// BOOL 선형보간이동
 	bool _isKeyPress;		// KEY 입력 중 노트 판단 
 	bool _isKeyDown;		// KEY 입력 판단
+
+	array<int,4> bodyRight; // 장비 바꾸기 위한 배열 
+	array<int,4> bodyLeft;	// 
+
+	tagItem* currentArmor;
+	tagItem* currentWeapon;
+
+
+
 public:
 	player();
 	~player();
@@ -39,6 +52,7 @@ public:
 	void release();
 	void update();
 	void render();
+	void effectRender();
 	// 세팅 함수 
 
 
@@ -51,14 +65,17 @@ public:
 	void playerEffect_Attack(const char* imageName,tagTile* tile, int frameY);
 	void playerEffect_Attack(const char* imageName, float x, float y, int frameY);
 	void playerEffect_Attack(const char* imageName, int x, int y, int frameY);
-
 	// 타일검출
 	void tileCheck();	
+	void wallCheck();	 // 벽판단
+	void enemyCheck();	 // 몬스터 판단
+	void trapCheck();	 // 함정 판단
+	void itempCheck();   // 아이템 판단
+
+	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey ,int sight,int damege, float guard, float hp);
 
 	//플레이어 상태판단
 	void StateMove();		// 이동 판단		
-	void StateAttack();		// 공격
-	void StateShovel();		// (벽 판단 추가 예정)
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 접근자 설정자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	tagPlayer			getPlayer()			{ return _player; }			   //  전역 사용 
@@ -75,6 +92,7 @@ public:
 	void setPlayerEnemyTile(map<PLAYERDIRECTION, Enemy*> tile)	 { _mPlayerEnemyTile = tile; }
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
 
 	//이미지 세팅
 	void imageSetting()
@@ -99,14 +117,25 @@ public:
 		//오른쪽 애니매이션
 		int headRight[] = { 0,1,2,3,4,5,6,7 };
 		KEYANIMANAGER->addArrayFrameAnimation("headRight", "player1_heads", headRight, 8, 10, true);
+
 		int bodyRight[] = { 0,1,2,3 };
 		KEYANIMANAGER->addArrayFrameAnimation("bodyRight", "player1_armor_body_xmas", bodyRight, 4, 10, true);
-		
+
 		// 왼쪽 애니매이션
 		int headLeft[] = { 15,14,13,12,11,10,9,8 };
 		KEYANIMANAGER->addArrayFrameAnimation("headLeft", "player1_heads", headLeft, 8, 10, true);
-		int bodyLeft[] = { 7,6,5,4 };
+
+		int	bodyLeft[] = { 7,6,5,4 };
 		KEYANIMANAGER->addArrayFrameAnimation("bodyLeft", "player1_armor_body_xmas", bodyLeft, 4, 10, true);
+
+	}
+	void itemRemove(int num) { _vInven.erase(_vInven.begin() + num); }
+	void itemRemove()  // 시험용 안될 가능성 높음 
+	{
+		for (int i = 0; i < _vInven.size(); ++i)
+		{
+			if (_vInven[i]->type != W_NONE) this->itemRemove(i);
+		}
 	}
 };
 

@@ -12,9 +12,13 @@ HRESULT stageScene::init()
 	_em = new EnemyManager;
 	_em->init();
 
+	_em->AddressLink(_pm->getPlayerInfo());
+
 	_ui = new UImanager;
 	_ui->init();
 
+	_minimap = new miniMap;
+	_minimap->init();
 
 	ZorderSetup();
 	return S_OK;
@@ -26,6 +30,7 @@ void stageScene::release()
 
 void stageScene::update()
 {
+	_em->getVEnemy().size();
 	_pm->update();
 	_em->update();
 	BEATMANAGER->update();
@@ -34,6 +39,7 @@ void stageScene::update()
 	_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
+	_minimap->getStageMap(_vTotalList);
 }
 
 void stageScene::render()
@@ -52,50 +58,59 @@ void stageScene::render()
 				{
 					IMAGEMANAGER->findImage("terrainTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY);
 				}
-				else
+				
+			}
+
+			if ((*_viTotalList)->trap != TRAP_NONE)
+			{
+				if ((*_viTotalList)->alphaValue <= 0)
 				{
-					//IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY, (*_viTotalList)->alphaValue);
+					IMAGEMANAGER->findImage("trapTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY);
 				}
 				continue;
 			}
+			else if ((*_viTotalList)->armor != A_NONE)
+			{
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->armorFrameX, (*_viTotalList)->armorFrameY);
+				continue;
+			}
+			else if ((*_viTotalList)->weapon != WP_NONE)
+			{
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->weaponFrameX, (*_viTotalList)->weaponFrameY);
+				continue;
+			}
+			else if ((*_viTotalList)->stuff != ST_NONE)
+			{
+				IMAGEMANAGER->findImage("stuffTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->stuffFrameX, (*_viTotalList)->stuffFrameY);
+				continue;
+			}
+
+		}
+		else continue;
+	}
+	// 이외의 렌더 
+	for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
+	{
+		if ((*_viTotalList)->type == TYPE_NONE) continue;
+
+		RECT temp;
+		if (IntersectRect(&temp, &CAMERAMANAGER->getCamera_Rect(), &(*_viTotalList)->rc))
+		{
+			if ((*_viTotalList)->alphaValue <= 0)
+			{
+				if ((*_viTotalList)->type == TYPE_WALL)
+				{
+					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
+					continue;
+				}
+			}
 		}
 	}
-	//// 이외의 렌더 
-	//for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
-	//{
-	//	if ((*_viTotalList)->type == TYPE_NONE) continue;
-	//	if ((*_viTotalList)->alphaValue <= 0)
-	//	{
-	//		if ((*_viTotalList)->wall != W_NONE)
-	//		{
-	//			IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
-	//			continue;
-	//		}
-	//		if ((*_viTotalList)->trap != TRAP_NONE)
-	//		{
-	//			IMAGEMANAGER->findImage("trapTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY);
-	//			continue;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if ((*_viTotalList)->wall != W_NONE)
-	//		{
-	//			IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY, (*_viTotalList)->alphaValue);
-	//			continue;
-	//		}
-	//		if ((*_viTotalList)->trap != TRAP_NONE)
-	//		{
-	//			IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY, (*_viTotalList)->alphaValue);
-	//			continue;
-	//		}
-	//	}
-	//}
 
 	//플레이어 렌더 
 	/*pm->render();*/
 	//몬스터 렌더 
-	_em->render();
+
 
 	//제트오더 랜더 
 	//for (int i = 0; i < _zOrderVector.size(); ++i)
@@ -119,23 +134,7 @@ void stageScene::render()
 				{
 					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 30, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY);
 				}
-				if (_zOrderVector[i]->Object->tile->trap != TRAP_NONE)
-				{
-					IMAGEMANAGER->findImage("trapTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top, _zOrderVector[i]->Object->tile->trapFrameX, _zOrderVector[i]->Object->tile->trapFrameY);
-				}
-
 			}
-	/*		else
-			{
-				if (_zOrderVector[i]->Object->tile->wall != W_NONE)
-				{
-					IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 30, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY, _zOrderVector[i]->Object->tile->alphaValue);
-				}
-				if (_zOrderVector[i]->Object->tile->trap != TRAP_NONE)
-				{
-					IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top, _zOrderVector[i]->Object->tile->trapFrameX, _zOrderVector[i]->Object->tile->trapFrameY, _zOrderVector[i]->Object->tile->alphaValue);
-				}
-			}*/
 			continue;
 		}
 		if (_zOrderVector[i]->Object->player != NULL)
@@ -149,27 +148,34 @@ void stageScene::render()
 			continue;
 		}
 	}
-	EFFECTMANAGER->render(CAMERAMANAGER->getWorldDC());
+	
+	_em->render();
+	_pm->effectRender();
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
-
 	//ENEMYMANAGER->render(getMemDC());
 	BEATMANAGER->render();
 	_ui->render();
+	_minimap->render();
+	//for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
+	//{
+	//	
+	//}
+	EFFECTMANAGER->render(CAMERAMANAGER->getWorldDC());
 }
 
 // 제트오더 사이즈 설정하기 
 void stageScene::ZorderSetup()
 {
 	_zOrderVector.clear();
-	int startX = _pm->getPlayerInfo()->getPlayer().idx - 15;
+	int startX = _pm->getPlayerInfo()->getPlayer().idx;
 	int startY = _pm->getPlayerInfo()->getPlayer().idy - 10;
-	if (_pm->getPlayerInfo()->getPlayer().idx - 15 < 0) startX = 0;
+	if (_pm->getPlayerInfo()->getPlayer().idx < 0) startX = 0;
 	if (_pm->getPlayerInfo()->getPlayer().idy - 10 < 0) startY = 0;
 
 	// 2n+ 1 개 만큼
 	for (int i = startY; i < startY + 21; i++)
 	{
-		for (int j = startX; j < startX + 31; j++)
+		for (int j = startX; j < startX + 1; j++)
 		{
 			if (i > TILEY) continue;
 			if (j > TILEX) continue;
@@ -253,6 +259,7 @@ vector<zOrder*> stageScene::ZorderUpdate(vector<zOrder*> num)
 void stageScene::stageCollision()
 {
 	_pm->getPlayerInfo()->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _pm->getPlayerInfo()));
+	_pm->getPlayerInfo()->setPlayerEnemyTile(_collision.collision_player_Enemy_tile(&_em->getVEnemy(), _pm->getPlayerInfo()));
 }
 
 void stageScene::setVision(POINT index, int sight)
@@ -264,7 +271,7 @@ void stageScene::setVision(POINT index, int sight)
 
 	bool recursionContinue = true;  // 초기 조건값 
 	//recursionContinue &= (_tiles[index.y * TILEX + index.x].wall == W_NONE);  // 맞춰야 하는 조건 
-	if (_tiles[index.y * TILEX + index.x].wall != W_NONE) sight = sight - 3;	// 시야처리에 따른 값 조정할 예정 
+	if (_tiles[index.y * TILEX + index.x].type == TYPE_WALL) sight = sight - 3;	// 시야처리에 따른 값 조정할 예정 
 
 	if (recursionContinue)
 	{
@@ -274,7 +281,6 @@ void stageScene::setVision(POINT index, int sight)
 		setVision(PointMake(index.x, index.y + 1), sight - 1);
 		setVision(PointMake(index.x - 1, index.y), sight - 1);
 		setVision(PointMake(index.x + 1, index.y), sight - 1);
-
 	}
 	else _tiles[index.y * TILEX + index.x].alphaValue = 0;
 	// 1. 벽 넘어서 까지 시야처리를 어떻게 해야할지 
@@ -286,7 +292,7 @@ void stageScene::stageMapLoad()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -306,6 +312,30 @@ void stageScene::stageMapLoad()
 	}
 }
 
+void stageScene::stageMiniMapLoad()
+{
+	HANDLE file2;
+	DWORD read2;
+
+	file2 = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file2, _tiles, sizeof(tagTile) * MINTILESIZE * MINTILESIZE, &read2, NULL);
+
+	CloseHandle(file2);
+
+	int i = 0;
+	while (i < TILEX * TILEY)
+	{
+		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
+		if (_tiles[i].type != TYPE_NONE)
+		{
+			_tiles[i].alphaValue = 255;
+			_vMinTotal.push_back(&_tiles[i]);
+		}
+		i++;
+	}
+}
 
 
 

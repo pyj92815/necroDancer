@@ -26,12 +26,6 @@ HRESULT loadingScene::init()
 		0				//스레드의 생성 후 스레드의 ID를 넘겨준다 보통은 NULL로 둠.
 	);
 
-	_addBossImage->add_BossImage();
-	_addBossImage->add_BossAnimation();
-	
-	_addSlaveImage->add_SlaveImage();
-	_addSlaveImage->add_SlaveAnimation();
-
 	return S_OK;
 }
 

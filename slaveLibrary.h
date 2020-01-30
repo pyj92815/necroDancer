@@ -35,6 +35,7 @@ struct SLAVE_STATUS
 {
 	SLAVE_TYPE			type;						// 슬레이브의 타입을 담는다.
 	SLAVE_DIRECTION		direction;					// 슬레이브가 바라보는 방향을 담는다.
+	SLAVE_DIRECTION		save_Direction;				// 슬레이브 방향 세이브 변수
 
 	int					hp;							// 슬레이브의 체력을 담는다.
 	float				attack;						// 슬레이브의 공격력을 담는다.
@@ -58,8 +59,15 @@ struct SLAVE_IMAGE
 // 불의 마을
 struct SLAVE_BOOL
 {
-	bool				close_Player;				// 슬레이브 근처에 플레이어가 있는지 없는지 여부.
-	bool				changeAni;					// 애니메이션을 체인지 해야 하는지 여부.
+	bool				isClosePlayer;				// 슬레이브 근처에 플레이어가 있는지 없는지 여부.
+	bool				save_ClosePlayer;			// 슬레이브가 근처에 있는지 세이브를 한다.
+	bool				isChangeAni;				// 움직였다면 애니메이션을 바꿔줘야한다.
+	bool				change_Ani;					// 애니메이션을 체인지가 가능한지 여부
+	bool				distanceCheck;				// 플레이어와 거리 체크 
+
+	bool				isMove;						// 무브 여부
+
+	bool				beat;						// 비트를 받았다면 ture
 };
 
 // 슬레이브의 연산 변수
@@ -71,6 +79,7 @@ struct SLAVE_OPERATION
 	// 이동
 	float				angle;						// 이동에 쓰일 각도
 	int					move_Count;					// 이동 카운트 (몇 박자마다 움직이는지)
+	int					save_Move_Count;			// 이동 카운트를 저장 해 둔다.
 	float				move_Time;					// 다음 타일까지 이동에 걸리는 시간
 	float				move_Speed;					// 다음 타일까지 이동하는 속도
 	float				move_Distance;				// 다음 타일까지의 거리
@@ -117,7 +126,8 @@ public:
 
 		// 연산 변수 초기화
 		slave->operation.angle = 0;													
-		slave->operation.move_Count = 0;											
+		slave->operation.move_Count = 0;	
+		slave->operation.save_Move_Count = 0;
 		slave->operation.move_Distance = 0;											
 		slave->operation.move_Speed = 0;											
 		slave->operation.move_Time = 0.2f;											
@@ -126,8 +136,12 @@ public:
 		slave->operation.tile_SizeY = TILESIZE;				
 
 		// bool 변수 초기화
-		slave->b_Value.changeAni = false;
-		slave->b_Value.close_Player = false;
+		slave->b_Value.change_Ani = false;
+		slave->b_Value.isChangeAni = false;
+		slave->b_Value.isClosePlayer = false;
+		slave->b_Value.save_ClosePlayer = false;
+		slave->b_Value.distanceCheck = false;
+		slave->b_Value.isMove = false;
 
 		// 이미지, 애니메이션 할당
 		slave->image.img = new image;
@@ -148,7 +162,9 @@ public:
 			slave->status.hp = 1;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Bat");					// 슬레이브의 이미지를 찾아서 넣어준다.
 			slave->image.animation = KEYANIMANAGER->findAnimation("bat_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
-
+			slave->operation.move_Count = 1;										// 슬레이브의 이동 박자
+			slave->operation.save_Move_Count = 1;									// 슬레이브의 세이브 박자
+			
 			break;
 
 		case SLAVE_TYPE::SLAVE_GHOST:
@@ -157,6 +173,8 @@ public:
 			slave->status.hp = 1;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Ghost");				// 슬레이브의 이미지를 찾아서 넣어준다.
 			slave->image.animation = KEYANIMANAGER->findAnimation("ghost_Left");	// 슬레이브의 애니메이션을 찾아서 넣어준다.
+			slave->operation.move_Count = 1;										// 슬레이브의 이동 박자
+			slave->operation.save_Move_Count = 1;									// 슬레이브의 세이브 박자
 
 			break;
 
@@ -166,6 +184,8 @@ public:
 			slave->status.hp = 2;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Skeleton");			// 슬레이브의 이미지를 찾아서 넣어준다.
 			slave->image.animation = KEYANIMANAGER->findAnimation("skel_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
+			slave->operation.move_Count = 2;										// 슬레이브의 이동 박자
+			slave->operation.save_Move_Count = 2;									// 슬레이브의 세이브 박자
 
 			break;
 
@@ -175,6 +195,8 @@ public:
 			slave->status.hp = 2;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Skeleton_Yellow");		// 슬레이브의 이미지를 찾아서 넣어준다.
 			slave->image.animation = KEYANIMANAGER->findAnimation("skelY_Left");	// 슬레이브의 애니메이션을 찾아서 넣어준다.
+			slave->operation.move_Count = 2;										// 슬레이브의 이동 박자
+			slave->operation.save_Move_Count = 2;									// 슬레이브의 세이브 박자
 
 			break;
 

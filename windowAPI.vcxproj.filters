@@ -327,12 +327,6 @@
     <ClInclude Include="miniMap.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="slaveManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="slaveManager_Library.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Option.h">
       <Filter>playGround\GameSettingManager\Option</Filter>
     </ClInclude>
@@ -341,6 +335,15 @@
     </ClInclude>
     <ClInclude Include="playerLibrary.h">
       <Filter>playGround\player</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Stage_Library.h">
+      <Filter>playGround\boss\boss Stage Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager.h">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClInclude>
+    <ClInclude Include="slaveManager_Library.h">
+      <Filter>playGround\boss\boss Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

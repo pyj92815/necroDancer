@@ -12,6 +12,8 @@
 #include"Enemy_Zombie.h"
 #include<vector>
 
+class player;
+
 enum class EnemyType
 {
 	BAT,DRAGON,GHOST,MINOTAUR,SKELETON,SKELETON_YELLOW,SLIME_BLUE,SLIME_ORANGE,WRAITH,ZOMBIE
@@ -25,6 +27,7 @@ private:
 
 	EnemyType _enemyType;
 
+	player* _player;
 
 public:
 	EnemyManager() {};
@@ -35,6 +38,11 @@ public:
 	void update();
 	void render();
 
+	void EnemyRemove();
+
+	void EnemyInspection();
+	void 임시enemy생성();
+	
 	void EnemyCreate(float x, float y, EnemyType enemyType);
 
 	void Enemy_Bat_Create(float x, float y);
@@ -52,4 +60,8 @@ public:
 	void imageAdd();
 	void AnimationAdd();
 
+	void AddressLink(player* pl) { _player = pl; }
+
+	virtual vector<Enemy*> getVEnemy() { return _vEnemy; }
+	virtual vector<Enemy*>::iterator getViEnemy() { return _viEnemy; }
 };

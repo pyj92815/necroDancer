@@ -21,6 +21,7 @@ private:
 	tagSetTile _trapTile[TRAPTILEX * TRAPTILEY];
 	tagSetTile _armorTile[ITEMTILEX * ITEMTILEY];
 	tagSetTile _weaponTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile _stuffTile[ITEMTILEX * ITEMTILEY];
 	tagTile		 _tiles[TILEX * TILEY];
 
 	float _WINSIZEX, _WINSIZEY;
@@ -33,17 +34,19 @@ private:
 private:
 	tagButton _saveButton;		//저장
 	tagButton _loadButton;		//로드
+	tagButton _mapButton;	//지형
 	tagButton _terrainButton;	//지형
 	tagButton _wallButton;		//벽
 	tagButton _trapButton;		//함정
 	tagButton _itemButton;		//아이템
 	tagButton _armorButton;		//방어구
 	tagButton _weaponButton;	//무기
+	tagButton _stuffButton;		//소지품
 	tagButton _eraseButton;		//지우개
 	tagButton _exitButton;		//나가기
 private:
 	tagMouse _RectCreate;
-	bool _isClick;
+	bool _isClick, _isItemButtonClick, _isMapButtonClick;
 	int _startL, _startT, _endR, _endB;
 	RECT _left, _top, _right, _bottom;
 	MovePalette _palette;	// 창 이동으로 사용할 렉트
@@ -73,6 +76,7 @@ public:
 	//어떤 함정를 선택했는가?
 	TRAP trapSelect(int frameX, int frameY);
 	//어떤 아이템을 선택했는가?
+	STUFF stuffSelect(int frameX, int frameY);
 	ARMOR armorSelect(int frameX, int frameY);
 	WEAPON weaponSelect(int frameX, int frameY);
 
@@ -87,7 +91,5 @@ public:
 	void rectCreate_Update();			// 렉트크리에이트 갱신
 	bool using_Palette();				// 팔렛트 사용 중에 타일이 찍히지 않게 하는 함수.
 	void mouseRectUpdate();				// 마우스 렉트 업데이트 함수.
-
-	void clickButton();
 };
 
