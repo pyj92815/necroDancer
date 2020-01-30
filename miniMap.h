@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
-
+#include "enemyManager.h"
+#include "playerManager.h"
 
 class miniMap : public gameNode
 {
@@ -11,6 +12,11 @@ private:
 
 	vector<tagTile*>					_vStageMap;
 	vector<tagTile*>::iterator			_viStageMap;
+
+	EnemyManager* _em;
+	int _r;
+	int _g;
+	int _b;
 
 public:
 	miniMap();

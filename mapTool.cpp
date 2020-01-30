@@ -91,7 +91,7 @@ void mapTool::save()
 	//"SaveFile.map"
 	//"Boss_SaveFile.map"
 	//"Stage_SaveFile.map"
-	file = CreateFile("Boss_SaveFile.map", GENERIC_WRITE, 0, NULL,
+	file = CreateFile("kimmi.map", GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
@@ -106,7 +106,7 @@ void mapTool::load()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("kimmi.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);

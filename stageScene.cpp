@@ -291,7 +291,7 @@ void stageScene::stageMapLoad()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("kimmi.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -316,7 +316,7 @@ void stageScene::stageMiniMapLoad()
 	HANDLE file2;
 	DWORD read2;
 
-	file2 = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
+	file2 = CreateFile("kimmi.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file2, _tiles, sizeof(tagTile) * MINTILESIZE * MINTILESIZE, &read2, NULL);
