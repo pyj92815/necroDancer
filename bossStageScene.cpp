@@ -96,11 +96,7 @@ void bossStageScene::update()
 			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
 			_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
 		}
-
-		if (KEYMANAGER->isToggleKey('V'))
-		{
-			BEATMANAGER->update();
-		}
+		BEATMANAGER->update();
 	}
 }
 
@@ -138,11 +134,7 @@ void bossStageScene::render()
 	_ui->render();
 
 	// 테스트 비트 출력 토글
-	if (KEYMANAGER->isToggleKey('V'))
-	{
-		BEATMANAGER->render();
-	}
-
+	BEATMANAGER->render();
 
 	bossSceneRender();
 }

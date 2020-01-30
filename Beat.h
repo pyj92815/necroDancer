@@ -76,11 +76,13 @@ private:
 	player* _player;
 	bool _effect;
 
+	int musicID; // 음악의 인덱스를 정해주는 변수
+
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
 	void init_SetObjs(); // Beat 클래스에 있는 여러 오브젝트 정보들 초기화
 
-	void update_SceneCheck(); // Scene정보를 받아올 함수
+	void update_SetSceneMusic(); // Scene정보를 받아올 함수
 	void update_PlayerMoveTest(); // 테스트용 플레이어
 	void update_SongAndNoteControl(); // 곡과 노트를 제어하는 함수
 	void update_BeatEffect(); // 심장 박동 시 바꿔줄 이미지나 효과들
@@ -97,7 +99,6 @@ private:
 	float GetSongVariousTime(unsigned int playTime, unsigned int songLength); // 곡 제어나 노트 제어를 위해 특정 조건(특정 시간)을 뽑아오기 위해 쓰일 함수
 	void Move();
 
-
 public:
 	virtual HRESULT init();
 	virtual void release();
@@ -112,4 +113,7 @@ public:
 	float getHeartMiddle() { return (heartRC.left + heartRC.right) / 2; }
 	//float lerp(float start, float end, float timeAmount) { return float(start + ((float)(end - start) * timeAmount)); }
 	float lerp(float start, float end, float timeAmount) { return (float)((end - start) * timeAmount); }
+
+	void SetMusicID(int _musicID) { musicID = _musicID; } // 음악 인덱스를 새로 지정해주는 setter! (id --> <1 = 로비>,  <2 = 스테이지 1_1>,  <3 = 스테이지 1_2>, <4 = 스테이지 1_3>, <5 = 보스>) 
+	int GetMusicID() { return musicID; } // 음악 인덱스를 가져오는 getter
 };
