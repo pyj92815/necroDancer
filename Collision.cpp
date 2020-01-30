@@ -446,7 +446,197 @@ bool Collision::collision_Charactor_Trab(vector<tagTile>* mapInfo, deathMetal* d
 	// 어떤 함정인지 찾아야 하고, 그 함정에 기능을 실행 시켜야함
 }
 
-bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, player* playerInfo)
+
+//bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, player* playerInfo)
+//{
+//	bool isObject = false;
+//
+//	// 타일에서 오브젝트가 있는지 찾아준다. (벽, 상자 등등)
+//	for (int i = 0; i < mapInfo->size(); ++i)
+//	{
+//		// 플레이어가 바라보는 방향에 오브젝트가 있다면 true의 값이 된다.
+//		switch (playerInfo->getPlayer().direction)
+//		{
+//		case PLAYERDIRECTION_LEFT:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				playerInfo->getPlayer().idx - 1 == (*mapInfo)[i].idX &&
+//				playerInfo->getPlayer().idy == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case PLAYERDIRECTION_UP:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				playerInfo->getPlayer().idx == (*mapInfo)[i].idX &&
+//				playerInfo->getPlayer().idy - 1 == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case PLAYERDIRECTION_RIGHT:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				playerInfo->getPlayer().idx + 1 == (*mapInfo)[i].idX &&
+//				playerInfo->getPlayer().idy == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case PLAYERDIRECTION_DOWN:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				playerInfo->getPlayer().idx == (*mapInfo)[i].idX &&
+//				playerInfo->getPlayer().idy + 1 == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//		}
+//
+//		// 오브젝트를 찾았다면 반복문을 나간다.
+//		if (isObject) break;
+//	}
+//	// 캐릭터가 이동해야 하는곳에 오브젝트가 있다면 true 없으면 false
+//	return isObject;
+//
+//	// 추가 하려면
+//	// 오브젝트라면 어떤 오브젝트인지
+//	// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
+//}
+//
+//bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, Enemy* enemyInfo)
+//{
+//	bool isObject = false;
+//
+//	// 에너미는 방향 정보가 없음
+//
+//	// 캐릭터가 이동해야 하는곳에 오브젝트가 있다면 true 없으면 false
+//	return isObject;
+//
+//	// 추가 하려면
+//	// 오브젝트라면 어떤 오브젝트인지
+//	// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
+//}
+//
+//bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, deathMetal* deathMetalInfo)
+//{
+//	bool isObject = false;
+//
+//	// 타일맵에 오브젝트가 있는지 찾는다. (벽, 상자 등등)
+//	for (int i = 0; i < mapInfo->size(); ++i)
+//	{
+//		// 데스메탈이 바라보는 방향에 오브젝트가 있다면 true의 값이 된다.
+//		switch (deathMetalInfo->getBoss_Direction())
+//		{
+//		case BD_LEFT:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				deathMetalInfo->getBoss_Index().x - 1 == (*mapInfo)[i].idX &&
+//				deathMetalInfo->getBoss_Index().y == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case BD_UP:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				deathMetalInfo->getBoss_Index().x == (*mapInfo)[i].idX &&
+//				deathMetalInfo->getBoss_Index().y - 1 == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case BD_RIGHT:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				deathMetalInfo->getBoss_Index().x + 1 == (*mapInfo)[i].idX &&
+//				deathMetalInfo->getBoss_Index().y == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case BD_DOWN:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				deathMetalInfo->getBoss_Index().x == (*mapInfo)[i].idX &&
+//				deathMetalInfo->getBoss_Index().y + 1 == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//		}
+//
+//		// 오브젝트를 찾았으면 반복문을 나간다.
+//		if (isObject) break;
+//	}
+//
+//	// 캐릭터가 이동해야 하는곳에 오브젝트가 있다면 true 없으면 false
+//	return isObject;
+//
+//	// 추가 하려면
+//	// 오브젝트라면 어떤 오브젝트인지
+//	// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
+//}
+//
+//bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, SLAVE_INFO* slave)
+//{
+//	bool isObject = false;
+//
+//	// 타일맵에 오브젝트가 있는지 찾는다. (벽, 상자 등등)
+//	for (int i = 0; i < mapInfo->size(); ++i)
+//	{
+//		// 데스메탈이 바라보는 방향에 오브젝트가 있다면 true의 값이 된다.
+//		switch (slave->status.direction)
+//		{
+//		case SLAVE_DIRECTION::SD_LEFT:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				slave->pos.index.x - 1 == (*mapInfo)[i].idX &&
+//				slave->pos.index.y == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case SLAVE_DIRECTION::SD_UP:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				slave->pos.index.x == (*mapInfo)[i].idX &&
+//				slave->pos.index.y - 1 == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case SLAVE_DIRECTION::SD_RIGHT:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				slave->pos.index.x + 1 == (*mapInfo)[i].idX &&
+//				slave->pos.index.y == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//
+//		case SLAVE_DIRECTION::SD_DOWN:
+//			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
+//				slave->pos.index.x == (*mapInfo)[i].idX &&
+//				slave->pos.index.y + 1 == (*mapInfo)[i].idY)
+//			{
+//				isObject = true;
+//			}
+//			break;
+//		}
+//
+//		// 오브젝트를 찾았으면 반복문을 나간다.
+//		if (isObject) break;
+//	}
+//
+//	// 캐릭터가 이동해야 하는곳에 오브젝트가 있다면 true 없으면 false
+//	return isObject;
+//}
+
+
+
+
+bool Collision::collision_Charactor_Object(vector<tagTile*>* mapInfo, player* playerInfo)
 {
 	bool isObject = false;
 
@@ -457,36 +647,36 @@ bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, player* pla
 		switch (playerInfo->getPlayer().direction)
 		{
 		case PLAYERDIRECTION_LEFT:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				playerInfo->getPlayer().idx - 1 == (*mapInfo)[i].idX &&
-				playerInfo->getPlayer().idy == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				playerInfo->getPlayer().idx - 1 == (*mapInfo)[i]->idX &&
+				playerInfo->getPlayer().idy == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case PLAYERDIRECTION_UP:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				playerInfo->getPlayer().idx == (*mapInfo)[i].idX &&
-				playerInfo->getPlayer().idy - 1 == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				playerInfo->getPlayer().idx == (*mapInfo)[i]->idX &&
+				playerInfo->getPlayer().idy - 1 == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case PLAYERDIRECTION_RIGHT:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				playerInfo->getPlayer().idx + 1 == (*mapInfo)[i].idX &&
-				playerInfo->getPlayer().idy == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				playerInfo->getPlayer().idx + 1 == (*mapInfo)[i]->idX &&
+				playerInfo->getPlayer().idy == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case PLAYERDIRECTION_DOWN:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				playerInfo->getPlayer().idx == (*mapInfo)[i].idX &&
-				playerInfo->getPlayer().idy + 1 == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				playerInfo->getPlayer().idx == (*mapInfo)[i]->idX &&
+				playerInfo->getPlayer().idy + 1 == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
@@ -504,7 +694,7 @@ bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, player* pla
 	// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
 }
 
-bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, Enemy* enemyInfo)
+bool Collision::collision_Charactor_Object(vector<tagTile*>* mapInfo, Enemy* enemyInfo)
 {
 	bool isObject = false;
 
@@ -518,7 +708,7 @@ bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, Enemy* enem
 	// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
 }
 
-bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, deathMetal* deathMetalInfo)
+bool Collision::collision_Charactor_Object(vector<tagTile*>* mapInfo, deathMetal* deathMetalInfo)
 {
 	bool isObject = false;
 
@@ -529,36 +719,36 @@ bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, deathMetal*
 		switch (deathMetalInfo->getBoss_Direction())
 		{
 		case BD_LEFT:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				deathMetalInfo->getBoss_Index().x - 1 == (*mapInfo)[i].idX &&
-				deathMetalInfo->getBoss_Index().y == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				deathMetalInfo->getBoss_Index().x - 1 == (*mapInfo)[i]->idX &&
+				deathMetalInfo->getBoss_Index().y == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case BD_UP:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				deathMetalInfo->getBoss_Index().x == (*mapInfo)[i].idX &&
-				deathMetalInfo->getBoss_Index().y - 1 == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				deathMetalInfo->getBoss_Index().x == (*mapInfo)[i]->idX &&
+				deathMetalInfo->getBoss_Index().y - 1 == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case BD_RIGHT:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				deathMetalInfo->getBoss_Index().x + 1 == (*mapInfo)[i].idX &&
-				deathMetalInfo->getBoss_Index().y == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				deathMetalInfo->getBoss_Index().x + 1 == (*mapInfo)[i]->idX &&
+				deathMetalInfo->getBoss_Index().y == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case BD_DOWN:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				deathMetalInfo->getBoss_Index().x == (*mapInfo)[i].idX &&
-				deathMetalInfo->getBoss_Index().y + 1 == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				deathMetalInfo->getBoss_Index().x == (*mapInfo)[i]->idX &&
+				deathMetalInfo->getBoss_Index().y + 1 == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
@@ -577,7 +767,7 @@ bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, deathMetal*
 	// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
 }
 
-bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, SLAVE_INFO* slave)
+bool Collision::collision_Charactor_Object(vector<tagTile*>* mapInfo, SLAVE_INFO* slave)
 {
 	bool isObject = false;
 
@@ -588,36 +778,36 @@ bool Collision::collision_Charactor_Object(vector<tagTile>* mapInfo, SLAVE_INFO*
 		switch (slave->status.direction)
 		{
 		case SLAVE_DIRECTION::SD_LEFT:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				slave->pos.index.x - 1 == (*mapInfo)[i].idX &&
-				slave->pos.index.y == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				slave->pos.index.x - 1 == (*mapInfo)[i]->idX &&
+				slave->pos.index.y == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case SLAVE_DIRECTION::SD_UP:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				slave->pos.index.x == (*mapInfo)[i].idX &&
-				slave->pos.index.y - 1 == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				slave->pos.index.x == (*mapInfo)[i]->idX &&
+				slave->pos.index.y - 1 == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case SLAVE_DIRECTION::SD_RIGHT:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				slave->pos.index.x + 1 == (*mapInfo)[i].idX &&
-				slave->pos.index.y == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				slave->pos.index.x + 1 == (*mapInfo)[i]->idX &&
+				slave->pos.index.y == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}
 			break;
 
 		case SLAVE_DIRECTION::SD_DOWN:
-			if ((*mapInfo)[i].type == TYPE_OBJECT || (*mapInfo)[i].type == TYPE_WALL &&
-				slave->pos.index.x == (*mapInfo)[i].idX &&
-				slave->pos.index.y + 1 == (*mapInfo)[i].idY)
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				slave->pos.index.x == (*mapInfo)[i]->idX &&
+				slave->pos.index.y + 1 == (*mapInfo)[i]->idY)
 			{
 				isObject = true;
 			}

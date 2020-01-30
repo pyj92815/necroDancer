@@ -236,6 +236,7 @@
     <ClInclude Include="video.h" />
     <ClInclude Include="windowAPI.h" />
     <ClInclude Include="addImage_Boss.h" />
+    <ClInclude Include="zOrder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
@@ -308,6 +309,7 @@
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="video.cpp" />
     <ClCompile Include="windowAPI.cpp" />
+    <ClCompile Include="zOrder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowAPI.rc" />

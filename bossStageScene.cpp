@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "bossStageScene.h"
-#include "stageScene.h"
+
 #include "player.h"
 #include "UImanager.h"
 
@@ -35,6 +35,8 @@ HRESULT bossStageScene::init()
 	_sm = new slaveManager;
 	_sm->init();
 
+	_zOrder = new zOrder;
+	_zOrder->init();
 	// 보스 등장 씬에 관련 변수 초기화
 	bossSceneSetting();
 
@@ -47,6 +49,8 @@ void bossStageScene::release()
 
 void bossStageScene::update()
 {
+
+	
 	// 플레이어 인덱스 출력
 	cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
 
@@ -120,6 +124,8 @@ void bossStageScene::update()
 			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 		}
 	}
+	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player,_sm,_deathMetal);
+	_zOrder->update();
 }
 
 void bossStageScene::render()
@@ -130,7 +136,7 @@ void bossStageScene::render()
 		for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); _viTotalList++)
 		{
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
-			if ((*_viTotalList).type != TYPE_NONE)
+			if ((*_viTotalList)->type != TYPE_NONE)
 			{
 
 				// 타일의 속성에 따라 이미지를 뿌린다.
@@ -142,13 +148,14 @@ void bossStageScene::render()
 	}
 
 	// 보스와 플레이어의 랜드 순서를 찾는다.
-	z_Order_Player_Boss();
+	//z_Order_Player_Boss();
 
 	// 보스가 근접 공격을 했을때 이펙트를 그려준다. (size가 0 이상이라면)
 	if (_vEffect.size() > 0)	boss_Base_Attack_Render();
 
 	_sm->render();
 
+	_zOrder->render();
 	// 월드이미지를 뿌려준다.
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 
@@ -160,7 +167,6 @@ void bossStageScene::render()
 	{
 		BEATMANAGER->render();
 	}
-
 
 	bossSceneRender();
 }
@@ -186,7 +192,7 @@ void bossStageScene::bossStageMap_Load()
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
 		{
-			_vTotalList.push_back(_tiles[i]);
+			_vTotalList.push_back(&_tiles[i]);
 		}
 
 		i++;
@@ -198,7 +204,7 @@ void bossStageScene::bossStageMap_Load()
 void bossStageScene::findTileImage()
 {
 	// 지형이 NONE이 아니라면 출력
-	if ((*_viTotalList).terrain != TR_NONE)
+	if ((*_viTotalList)->terrain != TR_NONE)
 	{
 		//	TR_BASIC_STAGE_TILE, TR_BASIC_COMBO_TILE,
 		//	TR_BOSS_STAGE_TILE, TR_BOSS_COMBO_TILE,
@@ -207,24 +213,24 @@ void bossStageScene::findTileImage()
 		//	TR_END,
 		//	TR_CEMENT, TR_DESERT, TR_GRASS, TR_WATER
 		IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
-			(*_viTotalList).rc.left, (*_viTotalList).rc.top,
-			(*_viTotalList).terrainFrameX, (*_viTotalList).terrainFrameY);
+			(*_viTotalList)->rc.left, (*_viTotalList)->rc.top,
+			(*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY);
 	}
 
 	// 벽이 NONE이 아니라면 출력
-	if ((*_viTotalList).wall != W_NONE)
+	if ((*_viTotalList)->wall != W_NONE)
 	{
 		//	W_WALL, W_ITEM_WALL, W_WALL2, W_SHOP_WALL,
 		//	W_END_WALL, W_BOSS_WALL,
 		//	W_DOOR, W_TORCH, W_FIRE_WALL,
 		//	W_NONE
 		IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
-			(*_viTotalList).rc.left, (*_viTotalList).rc.top - 32,
-			(*_viTotalList).wallFrameX, (*_viTotalList).wallFrameY);
+			(*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30,
+			(*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
 	}
 	
 	// 함정이 NONE이 아니라면 출력
-	if ((*_viTotalList).trap != TRAP_NONE)
+	if ((*_viTotalList)->trap != TRAP_NONE)
 	{
 		//	TRAP_FAST_BEAT, TRAP_SLOW_BEAT, TRAP_MUTE,
 		//	TRAP_LT_JUMP, TRAP_T_JUMP, TRAP_RT_JUMP,
@@ -236,8 +242,8 @@ void bossStageScene::findTileImage()
 		//	TRAP_SHADOW, TRAP_NIDDLE_SHADOW,
 		//	TRAP_NONE
 		IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
-			(*_viTotalList).rc.left, (*_viTotalList).rc.top,
-			(*_viTotalList).trapFrameX, (*_viTotalList).trapFrameY);
+			(*_viTotalList)->rc.left, (*_viTotalList)->rc.top,
+			(*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY);
 	}
 
 }
@@ -248,14 +254,14 @@ void bossStageScene::z_Order_Player_Boss()
 	// 그렇지 않다면 보스를 먼저 그려준다.
 	if (_deathMetal->getBoss_Index().y > _player->getPlayer().idy)	// 보스가 플레이어보다 앞에 있다.
 	{
-		_player->render();
+		//_player->render();
 		if (_deathMetal->getBoss_HP() > 0)	_deathMetal->render();
 
 	}
 	else	// 보스가 플레이어보다 뒤에 있다.
 	{
 		if (_deathMetal->getBoss_HP() > 0)	_deathMetal->render();
-		_player->render();
+		//_player->render();
 
 	}
 
@@ -292,20 +298,20 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 	for (int i = 0; i < _vTotalList.size(); ++i)
 	{
 		// 플레이어 인덱스와 같은 타일을 찾아서 렉트의 중점을 구한다.
-		if (_vTotalList[i].idX == player->getPlayer().idx && _vTotalList[i].idY == player->getPlayer().idy)
+		if (_vTotalList[i]->idX == player->getPlayer().idx && _vTotalList[i]->idY == player->getPlayer().idy)
 		{
-			playerCenter.x = (_vTotalList[i].rc.left + _vTotalList[i].rc.right) / 2;
-			playerCenter.y = (_vTotalList[i].rc.top + _vTotalList[i].rc.bottom) / 2;
+			playerCenter.x = (_vTotalList[i]->rc.left + _vTotalList[i]->rc.right) / 2;
+			playerCenter.y = (_vTotalList[i]->rc.top + _vTotalList[i]->rc.bottom) / 2;
 
 			// 찾았다면 true
 			find_P = true;
 		}
 
 		// 보스 인덱스와 같은 타일을 찾아서 렉트의 중점을 구한다.
-		if (_vTotalList[i].idX == deathMetal->getBoss_Index().x && _vTotalList[i].idY == deathMetal->getBoss_Index().y)
+		if (_vTotalList[i]->idX == deathMetal->getBoss_Index().x && _vTotalList[i]->idY == deathMetal->getBoss_Index().y)
 		{
-			bossCenter.x = (_vTotalList[i].rc.left + _vTotalList[i].rc.right) / 2;
-			bossCenter.y = (_vTotalList[i].rc.top + _vTotalList[i].rc.bottom) / 2;
+			bossCenter.x = (_vTotalList[i]->rc.left + _vTotalList[i]->rc.right) / 2;
+			bossCenter.y = (_vTotalList[i]->rc.top + _vTotalList[i]->rc.bottom) / 2;
 			// 찾았다면 true
 			find_B = true;
 		}
@@ -405,20 +411,20 @@ void bossStageScene::closePlayer_Slave(player* player, SLAVE_INFO* slave)
 	for (int i = 0; i < _vTotalList.size(); ++i)
 	{
 		// 플레이어 인덱스와 같은 타일을 찾아서 렉트의 중점을 구한다.
-		if (_vTotalList[i].idX == player->getPlayer().idx && _vTotalList[i].idY == player->getPlayer().idy)
+		if (_vTotalList[i]->idX == player->getPlayer().idx && _vTotalList[i]->idY == player->getPlayer().idy)
 		{
-			playerCenter.x = (_vTotalList[i].rc.left + _vTotalList[i].rc.right) / 2;
-			playerCenter.y = (_vTotalList[i].rc.top + _vTotalList[i].rc.bottom) / 2;
+			playerCenter.x = (_vTotalList[i]->rc.left + _vTotalList[i]->rc.right) / 2;
+			playerCenter.y = (_vTotalList[i]->rc.top + _vTotalList[i]->rc.bottom) / 2;
 
 			// 찾았다면 true
 			find_P = true;
 		}
 
 		// 슬레이브 인덱스와 같은 타일을 찾아서 렉트의 중점을 구한다.
-		if (_vTotalList[i].idX == slave->pos.index.x && _vTotalList[i].idY == slave->pos.index.y)
+		if (_vTotalList[i]->idX == slave->pos.index.x && _vTotalList[i]->idY == slave->pos.index.y)
 		{
-			slaveCenter.x = (_vTotalList[i].rc.left + _vTotalList[i].rc.right) / 2;
-			slaveCenter.y = (_vTotalList[i].rc.top + _vTotalList[i].rc.bottom) / 2;
+			slaveCenter.x = (_vTotalList[i]->rc.left + _vTotalList[i]->rc.right) / 2;
+			slaveCenter.y = (_vTotalList[i]->rc.top + _vTotalList[i]->rc.bottom) / 2;
 
 			// 찾았다면 true
 			find_S = true;
@@ -745,21 +751,21 @@ SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 	for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); ++_viTotalList)
 	{
 		// 플레이어의 인덱스와 같은 타일을 찾는다.
-		if ((*_viTotalList).idX == player->getPlayer().idx && (*_viTotalList).idY == player->getPlayer().idy)
+		if ((*_viTotalList)->idX == player->getPlayer().idx && (*_viTotalList)->idY == player->getPlayer().idy)
 		{
 			// 타일의 렉트를 이용하여 중점을 저장한다.
-			playerCenter.x = ((*_viTotalList).rc.left + (*_viTotalList).rc.right) / 2;
-			playerCenter.y = ((*_viTotalList).rc.top + (*_viTotalList).rc.bottom) / 2;
+			playerCenter.x = ((*_viTotalList)->rc.left + (*_viTotalList)->rc.right) / 2;
+			playerCenter.y = ((*_viTotalList)->rc.top + (*_viTotalList)->rc.bottom) / 2;
 
 			findPlayer = true;
 		}
 
 		// 슬레이브의 인덱스와 같은 타일을 찾는다.
-		if ((*_viTotalList).idX == slave->pos.index.x && (*_viTotalList).idY == slave->pos.index.y)
+		if ((*_viTotalList)->idX == slave->pos.index.x && (*_viTotalList)->idY == slave->pos.index.y)
 		{
 			// 타일의 렉트를 이용하여 중점을 저장한다.
-			slaveCenter.x = ((*_viTotalList).rc.left + (*_viTotalList).rc.right) / 2;
-			slaveCenter.y = ((*_viTotalList).rc.top + (*_viTotalList).rc.bottom) / 2;
+			slaveCenter.x = ((*_viTotalList)->rc.left + (*_viTotalList)->rc.right) / 2;
+			slaveCenter.y = ((*_viTotalList)->rc.top + (*_viTotalList)->rc.bottom) / 2;
 
 			findSlave = true;
 		}
@@ -1093,11 +1099,11 @@ void bossStageScene::bossSceneDoorOpen()
 		for (int i = 0; i < _vTotalList.size(); ++i)
 		{
 			// 인덱스와 같은 타일을 찾는다.
-			if (_vTotalList[i].idX == 12 && _vTotalList[i].idY == 20 ||
-				_vTotalList[i].idX == 13 && _vTotalList[i].idY == 20 ||
-				_vTotalList[i].idX == 14 && _vTotalList[i].idY == 20)
+			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 20 ||
+				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 20 ||
+				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 20)
 			{
-				_vTotalList[i].wall = W_NONE;
+				_vTotalList[i]->wall = W_NONE;
 			}
 		}
 	}
@@ -1111,13 +1117,13 @@ void bossStageScene::bossSceneDoorOpen()
 		for (int i = 0; i < _vTotalList.size(); ++i)
 		{
 			// 인덱스과 같은 타일에 벽을 세워준다.
-			if (_vTotalList[i].idX == 12 && _vTotalList[i].idY == 20 ||
-				_vTotalList[i].idX == 13 && _vTotalList[i].idY == 20 ||
-				_vTotalList[i].idX == 14 && _vTotalList[i].idY == 20)
+			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 20 ||
+				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 20 ||
+				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 20)
 			{
-				_vTotalList[i].wall = W_BOSS_WALL;
-				_vTotalList[i].wallFrameX = 3;
-				_vTotalList[i].wallFrameY = 2;
+				_vTotalList[i]->wall = W_BOSS_WALL;
+				_vTotalList[i]->wallFrameX = 3;
+				_vTotalList[i]->wallFrameY = 2;
 			}
 		}
 
@@ -1132,13 +1138,13 @@ void bossStageScene::bossClear()
 	for (int i = 0; i < _vTotalList.size(); ++i)
 	{
 		// 벽이 사라져야 하는 인덱스 이타일을 찾는다.
-		if (_vTotalList[i].idX == 11 && _vTotalList[i].idY == 10 ||
-			_vTotalList[i].idX == 12 && _vTotalList[i].idY == 10 ||
-			_vTotalList[i].idX == 13 && _vTotalList[i].idY == 10 ||
-			_vTotalList[i].idX == 14 && _vTotalList[i].idY == 10 ||
-			_vTotalList[i].idX == 15 && _vTotalList[i].idY == 10)
+		if (_vTotalList[i]->idX == 11 && _vTotalList[i]->idY == 10 ||
+			_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 10 ||
+			_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 10 ||
+			_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 10 ||
+			_vTotalList[i]->idX == 15 && _vTotalList[i]->idY == 10)
 		{
-			_vTotalList[i].wall = W_NONE;
+			_vTotalList[i]->wall = W_NONE;
 		}
 	}
 }

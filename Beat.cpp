@@ -48,11 +48,11 @@ void Beat::update()
 
 void Beat::render()
 {
-    Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
-    Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
-    Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
-    Rectangle(_backBuffer->getMemDC(), test_Player);
-    Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
+    //Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
+    //Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
+    //Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
+    //Rectangle(_backBuffer->getMemDC(), test_Player);
+    //Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
     IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
 
     if (_vNoteLeft.size() > 0) // 왼쪽 노트 렌더
