@@ -68,58 +68,127 @@ void Enemy::Idle()
 
 void Enemy::Move()
 {
-	if (_enemyInfo->idx + 1 == _playerInfo->idx && _enemyInfo->idy == _playerInfo->idy)
+	bool same;
+	int x = _enemyInfo->idx + _playerInfo->idx;
+	int y = _enemyInfo->idy + _playerInfo->idy;
+
+	if (_enemyInfo->idx - 1 == _playerInfo->idx && _enemyInfo->idy == _playerInfo->idy)
 	{
-		//오른쪽 공격
-		_enemyInfo->state = enemyState::STATE_ATTACK;
-		_enemyInfo->AttackDirection = Direction::RIGHT;
-	}
-	else if (_enemyInfo->idx - 1 == _playerInfo->idx && _enemyInfo->idy == _playerInfo->idy)
-	{
-		//왼쪽 공격
 		_enemyInfo->state = enemyState::STATE_ATTACK;
 		_enemyInfo->AttackDirection = Direction::LEFT;
 	}
-	else if (_enemyInfo->idx == _playerInfo->idx && _enemyInfo->idy - 1 == _playerInfo->idy)
+	else if (_enemyInfo->idx + 1 == _playerInfo->idx && _enemyInfo->idy == _playerInfo->idy)
 	{
-		//위쪽 공격
-		_enemyInfo->state == enemyState::STATE_ATTACK;
+		_enemyInfo->state = enemyState::STATE_ATTACK;
+		_enemyInfo->AttackDirection = Direction::RIGHT;
+	}
+	else if (_enemyInfo->idx  == _playerInfo->idx && _enemyInfo->idy-1 == _playerInfo->idy)
+	{
+		_enemyInfo->state = enemyState::STATE_ATTACK;
 		_enemyInfo->AttackDirection = Direction::UP;
 	}
-	else if (_enemyInfo->idx == _playerInfo->idx && _enemyInfo->idy + 1 == _playerInfo->idy)
+	else if (_enemyInfo->idx == _playerInfo->idx && _enemyInfo->idy+1 == _playerInfo->idy)
 	{
-		//아래쪽 공격
 		_enemyInfo->state = enemyState::STATE_ATTACK;
 		_enemyInfo->AttackDirection = Direction::DOWN;
 	}
-	
-	else if (_enemyInfo->idx != _playerInfo->idx)
+	//enemy와 플레어의 y축이 같다면(x축 이동)
+	else if (_enemyInfo->idy == _playerInfo->idy)
 	{
-		if (_enemyInfo->idx > _playerInfo->idx && !_enemyInfo->left)
+		//enemy가 플레이어의 오른쪽에 있다면 왼쪽으로 이동
+		if (_enemyInfo->idx > _playerInfo->idx)
 		{
 			_enemyInfo->idx -= 1;
 			_enemyInfo->x -= 52;
 		}
-		else if (_enemyInfo->idx < _playerInfo->idx && !_enemyInfo->right)
+		//enemy가 플레이어의 왼쪽에 있다면 오른쪽으로 이동
+		else if (_enemyInfo->idx < _playerInfo->idx)
 		{
 			_enemyInfo->idx += 1;
 			_enemyInfo->x += 52;
 		}
 	}
+	//enemy와 플레이어의 x축이 같다면(y축 이동)
 	else if (_enemyInfo->idx == _playerInfo->idx)
 	{
-		if (_enemyInfo->idy > _playerInfo->idy && !_enemyInfo->up)
+		//enemy가 플레이어의 아래쪽에 있다면 위로 이동
+		if (_enemyInfo->idy > _playerInfo->idy)
 		{
 			_enemyInfo->idy -= 1;
 			_enemyInfo->y -= 52;
 		}
-		else if (_enemyInfo->idy < _playerInfo->idy && !_enemyInfo->down)
+		//enemy가 플레이어의 위쪽에 있다면 아래로 이동
+		else if (_enemyInfo->idy < _playerInfo->idy)
 		{
 			_enemyInfo->idy += 1;
 			_enemyInfo->y += 52;
 		}
 	}
+	//y축이 더 가까움(y축 이동)
+	else if (x> y)
+	{
+		//enemy가 플레이어보다 밑에 있다면
+		if (_enemyInfo->idy > _playerInfo->idy)
+		{
+			_enemyInfo->idy -= 1;
+			_enemyInfo->y -= 52;
+		}
+		//enemy가 플레이어보다 위에 있다면
+		else if (_enemyInfo->idy < _playerInfo->idy)
+		{
+			_enemyInfo->idy += 1;
+			_enemyInfo->y += 52;
+		}
+		
+	}
+	//x축이 더 가까움(x축 이동)
+	else if (x < y)
+	{
+		if (_enemyInfo->idx > _playerInfo->idx)
+		{
+			_enemyInfo->idx -= 1;
+			_enemyInfo->x -= 52;
+		}
+		else if (_enemyInfo->idx < _playerInfo->idx)
+		{
+			_enemyInfo->idx += 1;
+			_enemyInfo->x += 52;
+		}
+	}
+	//x y축의 거리가 같음(랜덤하게 x,y 둘중 하나 연산)
+	else if (x == y)
+	{
+		//랜덤 숫자를 받아서 그 숫자가 1이면(x축 이동)
+		if (RND->getInt(2) % 2 == 1)
+		{
+			if (_enemyInfo->idx > _playerInfo->idx)
+			{
+				_enemyInfo->idx -= 1;
+				_enemyInfo->x -= 52;
+			}
+			else if (_enemyInfo->idx < _playerInfo->idx)
+			{
+				_enemyInfo->idx += 1;
+				_enemyInfo->x += 52;
+			}
+		}
+		//숫자가 0이면(y축 이동)
+		else if (RND->getInt(2) % 2 == 0)
+		{
+			if (_enemyInfo->idy > _playerInfo->idy)
+			{
+				_enemyInfo->idy -= 1;
+				_enemyInfo->y -= 52;
+			}
+			else if (_enemyInfo->idy < _playerInfo->idy)
+			{
+				_enemyInfo->idy += 1;
+				_enemyInfo->y += 52;
+			}
+		}
+	}
 }
+
 
 
 void Enemy::HalfMove()
