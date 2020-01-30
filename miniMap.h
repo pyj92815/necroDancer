@@ -15,6 +15,8 @@ private:
 	vector<tagTile*>::iterator			_viStageMap;
 
 	EnemyManager* _em;
+	playerManager* _pm;
+
 	int _r;
 	int _g;
 	int _b;
@@ -30,5 +32,6 @@ public:
 
 	void getStageMap(vector<tagTile*> stageMap) { _vStageMap = stageMap; }
 	void getEnemyPoint(EnemyManager* em) { _em = em; }
+	void getPlayerPoint(playerManager* pm) { _pm = pm; }
 };
 

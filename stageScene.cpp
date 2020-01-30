@@ -21,6 +21,7 @@ HRESULT stageScene::init()
 	_minimap->init();
 	
 	_minimap->getEnemyPoint(_em);
+	
 	ZorderSetup();
 	return S_OK;
 }
@@ -41,7 +42,7 @@ void stageScene::update()
 	stageCollision();
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 	_minimap->getStageMap(_vTotalList);
-	
+	_minimap->getPlayerPoint(_pm);
 }
 
 void stageScene::render()

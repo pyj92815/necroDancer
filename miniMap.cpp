@@ -33,11 +33,7 @@ void miniMap::update()
 
 void miniMap::render()
 {
-	//enum OBJECT
-	//{
-	//	OBJ_WATER,										//바닦에 뿌려지는 오브젝트
-	//	OBJ_FALLING_DOOR,								//떨어지는 바닦
-	//};
+	
 	
 	for (_viStageMap = _vStageMap.begin(); _viStageMap != _vStageMap.end(); ++_viStageMap)
 	{
@@ -185,6 +181,7 @@ void miniMap::render()
 		}
 		if ((*_viStageMap)->alphaValue <= 0)
 		{
+		//타일
 		HBRUSH brush = CreateSolidBrush(RGB(_r, _g, _b));
 		HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
 		HPEN pen = CreatePen(PS_SOLID,2,RGB(_r, _g, _b));
@@ -195,149 +192,44 @@ void miniMap::render()
 		SelectObject(getMemDC(), oldPen);
 		DeleteObject(brush);
 		DeleteObject(pen);
-		
+
+
+		////플레이어
+		HBRUSH brush3 = CreateSolidBrush(RGB(0, 0, 255));
+		HBRUSH oldBrush3 = (HBRUSH)SelectObject(getMemDC(), brush3);
+		HPEN pen3 = CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
+		HPEN oldPen3 = (HPEN)SelectObject(getMemDC(), pen3);
+		RECT temp3 = RectMake(750 + _pm->getPlayerInfo()->getPlayer().rc.left / 10,
+			450 + _pm->getPlayerInfo()->getPlayer().rc.top / 10, 4, 4);
+		Rectangle(getMemDC(), temp3);
+		SelectObject(getMemDC(), oldBrush3);
+		SelectObject(getMemDC(), oldPen3);
+		DeleteObject(brush3);
+		DeleteObject(pen3);
 
 		}
 
-		// 기본 벽 색깔
-		//if ((*_viStageMap)->terrain != TR_NONE && (*_viStageMap)->wall != W_END_WALL&& (*_viStageMap)->wall != W_BOSS_WALL
-		//	&& (*_viStageMap)->wall != W_WALL2 && (*_viStageMap)->wall != W_SHOP_WALL&& (*_viStageMap)->trap == TRAP_NONE
-		//	&& (*_viStageMap)->wall != W_DOOR && (*_viStageMap)->terrain != TR_STAIR)		//땅과 end벽,돌벽,함정을 제외한 기본벽
-		//{
-		//	if ((*_viStageMap)->alphaValue <= 0)
-		//	{
-		//		HBRUSH brush = CreateSolidBrush(RGB(153,102,0));
-		//		HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
-		//		RECT temp;
-		//		temp = RectMake(750 + (*_viStageMap)->rc.left / 10, 450 + (*_viStageMap)->rc.top / 10,
-		//			6,6);
-		//		Rectangle(getMemDC(), temp);
-		//		SelectObject(getMemDC(), oldBrush);
-		//		DeleteObject(brush);
-		//	
-		//	}
-		//	else
-		//	{
-		//		//안밝혀진 부분
-		//	}
-		//	continue;
-		//}
-
-		//// 문 색깔
-		//if ((*_viStageMap)->terrain != TR_NONE && (*_viStageMap)->wall != W_END_WALL && (*_viStageMap)->wall != W_BOSS_WALL
-		//	&& (*_viStageMap)->wall != W_WALL2 && (*_viStageMap)->wall != W_SHOP_WALL && (*_viStageMap)->trap == TRAP_NONE
-		//	&& (*_viStageMap)->wall != W_WALL && (*_viStageMap)->terrain != TR_STAIR)
-		//{
-		//	if ((*_viStageMap)->alphaValue <= 0)
-		//	{
-		//		HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
-		//		HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
-		//		RECT temp;
-		//		temp = RectMake(750 + (*_viStageMap)->rc.left / 10, 450 + (*_viStageMap)->rc.top / 10,
-		//			6, 6);
-		//		Rectangle(getMemDC(), temp);
-		//		SelectObject(getMemDC(), oldBrush);
-		//		DeleteObject(brush);
-
-		//	}
-		//	else
-		//	{
-		//		//안밝혀진 부분
-		//	}
-		//	continue;
-		//}
-
-		//// 계단 색깔
-		//if ((*_viStageMap)->terrain != TR_NONE && (*_viStageMap)->wall != W_END_WALL && (*_viStageMap)->wall != W_BOSS_WALL
-		//	&& (*_viStageMap)->wall != W_WALL2 && (*_viStageMap)->wall != W_SHOP_WALL && (*_viStageMap)->trap == TRAP_NONE
-		//	&& (*_viStageMap)->wall != W_WALL && (*_viStageMap)->wall != W_DOOR)
-		//{
-		//	if ((*_viStageMap)->alphaValue <= 0)
-		//	{
-		//		HBRUSH brush = CreateSolidBrush(RGB(255,10, 255));
-		//		HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
-		//		RECT temp;
-		//		temp = RectMake(750 + (*_viStageMap)->rc.left / 10, 450 + (*_viStageMap)->rc.top / 10,
-		//			6, 6);
-		//		Rectangle(getMemDC(), temp);
-		//		SelectObject(getMemDC(), oldBrush);
-		//		DeleteObject(brush);
-
-		//	}
-		//	else
-		//	{
-		//		//안밝혀진 부분
-		//	}
-		//	continue;
-		//}
-		//// 돌벽 색깔
-		//if ((*_viStageMap)->terrain != TR_NONE && (*_viStageMap)->wall != W_END_WALL && (*_viStageMap)->wall != W_BOSS_WALL
-		//	&& (*_viStageMap)->wall != W_SHOP_WALL && (*_viStageMap)->trap == TRAP_NONE && (*_viStageMap)->wall != W_DOOR
-		//	&& (*_viStageMap)->wall != W_WALL && (*_viStageMap)->terrain != TR_STAIR)
-		//{
-		//	if ((*_viStageMap)->alphaValue <= 0)
-		//	{
-		//		HBRUSH brush = CreateSolidBrush(RGB(102,51,0));
-		//		HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
-		//		RECT temp;
-		//		temp = RectMake(750 + (*_viStageMap)->rc.left / 10, 450 + (*_viStageMap)->rc.top / 10,
-		//			6, 6);
-		//		Rectangle(getMemDC(), temp);
-		//		SelectObject(getMemDC(), oldBrush);
-		//		DeleteObject(brush);
-
-		//	}
-		//	else
-		//	{
-		//		//안밝혀진 부분
-		//	}
-		//	continue;
-		//}
-		////NPC 벽
-		//if ((*_viStageMap)->terrain != TR_NONE && (*_viStageMap)->wall != W_END_WALL && (*_viStageMap)->wall != W_BOSS_WALL
-		//	&& (*_viStageMap)->trap == TRAP_NONE && (*_viStageMap)->wall != W_DOOR
-		//	&& (*_viStageMap)->wall != W_WALL && (*_viStageMap)->terrain != TR_STAIR && (*_viStageMap)->wall != W_WALL2)
-		//{
-		//	if ((*_viStageMap)->alphaValue <= 0)
-		//	{
-		//		HBRUSH brush = CreateSolidBrush(RGB(255,255, 0));
-		//		HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
-		//		RECT temp;
-		//		temp = RectMake(750 + (*_viStageMap)->rc.left / 10, 450 + (*_viStageMap)->rc.top / 10,
-		//			6, 6);
-		//		Rectangle(getMemDC(), temp);
-		//		SelectObject(getMemDC(), oldBrush);
-		//		DeleteObject(brush);
-
-		//	}
-		//	else
-		//	{
-		//		//안밝혀진 부분
-		//	}
-		//	continue;
-		//}
-
-
-
-		//if ((*_viStageMap)->terrain != TR_NONE && (*_viStageMap)->wall != W_END_WALL )
-		//{
-
-		//}
+		
 	
 	}
+	
+
 	//에너미
-	//cout<<_em->getVEnemy()[0]->getEnemyInfo()->idx<<"adsfdafsadfsadfs"<<endl;
-		vector<Enemy*> vec = _em->getVEnemy();
-		vector<Enemy*>::iterator ins = vec.begin();
-		for (; ins != vec.end(); )
+
+	/*vector<Enemy*> vec = _em->getVEnemy();
+	vector<Enemy*>::iterator ins = vec.begin();
+	for (; ins != vec.end(); )
+	{
+		RECT temp2;
+		if (IntersectRect(&temp2, &CAMERAMANAGER->getCamera_Rect(), &(*ins)->getEnemyInfo()->rc))
 		{
 			HBRUSH brush = CreateSolidBrush(RGB(255, 0, 0));
 			HBRUSH oldBrush = (HBRUSH)SelectObject(getMemDC(), brush);
 			HPEN pen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
 			HPEN oldPen = (HPEN)SelectObject(getMemDC(), pen);
 			RECT temp;
-			temp = RectMake(750 + (*ins)->getEnemyInfo()->idx*5,
-				450 + (*ins)->getEnemyInfo()->idy*5, 7, 7);
+			temp = RectMake(750 + (*ins)->getEnemyInfo()->rc.left / 10,
+				450 + (*ins)->getEnemyInfo()->rc.top / 10, 4, 4);
 			Rectangle(getMemDC(), temp);
 			SelectObject(getMemDC(), oldBrush);
 			SelectObject(getMemDC(), oldPen);
@@ -345,101 +237,11 @@ void miniMap::render()
 			DeleteObject(pen);
 			ins++;
 		}
+		else continue;
+	}*/
 	
 
-	//// 이외의 렌더 
-	/*
-	for (_viStageMap = _vStageMap.begin(); _viStageMap != _vStageMap.end(); ++_viStageMap)
-	{
-		if ((*_viStageMap)->type == TYPE_NONE) continue;
-		if ((*_viStageMap)->alphaValue <= 0)
-		{
-			if ((*_viStageMap)->wall != W_NONE)
-			{
-				continue;
-			}
-			if ((*_viStageMap)->trap != TRAP_NONE)
-			{
-				
-				continue;
-			}
-
-			if ((*_viStageMap)->terrain != TR_NONE &&(*_viStageMap)->terrain != TR_STAIR) //기본 땅
-			{
-				HBRUSH brush2 = CreateSolidBrush(RGB(230,230,154));
-				HBRUSH oldBrush2 = (HBRUSH)SelectObject(getMemDC(), brush2);
-				RECT temp;
-				temp = RectMake(750 + (*_viStageMap)->rc.left / 10, 450 + (*_viStageMap)->rc.top / 10,
-					6,6);
-				Rectangle(getMemDC(), temp);
-				SelectObject(getMemDC(), oldBrush2);
-				DeleteObject(brush2);
-				continue;
-			}
-			if ((*_viStageMap)->wall != W_NONE) 
-			{
-			
-				continue;
-			}
-
-		}
-		else
-		{
-			if ((*_viStageMap)->wall != W_NONE)
-			{
-				
-				continue;
-			}
-			if ((*_viStageMap)->trap != TRAP_NONE)
-			{
-				
-				continue;
-			}
-		}
+	
 
 
-		
-//아이템
-enum ARMOR
-{
-	//방어구
-	A_HELMET, A_SHOVEL,
-	A_ARMOR_1, A_ARMOR_2, A_ARMOR_3, A_ARMOR_4,
-	A_BOOTS,
-	A_RING,
-	A_TORCH_1, A_TORCH_2, A_TORCH_3, 
-	A_NONE
-};
-enum WEAPON
-{
-	//무기
-	WP_DAGGER_1, WP_DAGGER_2, WP_RAPIER, WP_BROAD_SWORD,
-	WP_BOMB, WP_RIFLE, WP_SHOTGUN,
-	WP_SPEAR, WP_MACE,WP_LONG_SWORD,
-	WP_WHIP, WP_NINETAILS_WHIP,
-	WP_BOW, WP_CROSS_BOW,
-	WP_NONE
-};
-
-enum STUFF
-{
-	ST_DIAMOND,
-	ST_ONE_COIN, ST_ONE_HALF_COIN,
-	ST_COINS, ST_MORE_COINS,
-	ST_APPLE, ST_CHEESE, ST_MEAT,
-	ST_NONE,
-};
-
-enum OBJECT
-{
-	OBJ_WATER,										//바닦에 뿌려지는 오브젝트
-	OBJ_FALLING_DOOR,								//떨어지는 바닦
-};
-
-enum CHARACTER
-{
-	CHAR_ENEMY,										//적
-	CHAR_PLAYER,									//플레이어
-};
-*/
 }

@@ -64,7 +64,7 @@ void Enemy_Slime_Blue::Move()
 		}
 		//아래로 이동
 		_enemyInfo->y += 52;
-		_enemyInfo->y += 1;
+		_enemyInfo->idy += 1;
 		_enemyInfo->direction = Direction::UP;
 		break;
 	}
