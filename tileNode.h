@@ -233,3 +233,4 @@ enum EFFECTTYPE
 	STOP,	 // 가만히 자리에서 사라짐			// 비트
 	FRAMEIMAGE,
 };
+

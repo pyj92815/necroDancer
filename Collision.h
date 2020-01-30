@@ -55,17 +55,30 @@ public:
 
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 오브젝트 충돌 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	//// 맵 정보, 플레이어 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
+	//bool collision_Charactor_Object(vector<tagTile>* mapInfo, player* playerInfo);
+
+	//// 맵 정보, 에너미 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
+	//bool collision_Charactor_Object(vector<tagTile>* mapInfo, Enemy* enemyInfo);
+
+	//// 맵 정보, 데스메탈 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
+	//bool collision_Charactor_Object(vector<tagTile>* mapInfo, deathMetal* deathMetalInfo);
+
+	//// 맵 정보, 슬레이브 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
+	//bool collision_Charactor_Object(vector<tagTile>* mapInfo, SLAVE_INFO* slave);
+
+
 	// 맵 정보, 플레이어 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
-	bool collision_Charactor_Object(vector<tagTile>* mapInfo, player* playerInfo);
+	bool collision_Charactor_Object(vector<tagTile*>* mapInfo, player* playerInfo);
 
 	// 맵 정보, 에너미 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
-	bool collision_Charactor_Object(vector<tagTile>* mapInfo, Enemy* enemyInfo);
+	bool collision_Charactor_Object(vector<tagTile*>* mapInfo, Enemy* enemyInfo);
 
 	// 맵 정보, 데스메탈 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
-	bool collision_Charactor_Object(vector<tagTile>* mapInfo, deathMetal* deathMetalInfo);
+	bool collision_Charactor_Object(vector<tagTile*>* mapInfo, deathMetal* deathMetalInfo);
 
 	// 맵 정보, 슬레이브 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
-	bool collision_Charactor_Object(vector<tagTile>* mapInfo, SLAVE_INFO* slave);
+	bool collision_Charactor_Object(vector<tagTile*>* mapInfo, SLAVE_INFO* slave);
 
 	//락훈추가
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 플레이어 타일 충돌 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
