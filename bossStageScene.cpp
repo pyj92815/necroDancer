@@ -53,7 +53,7 @@ void bossStageScene::release()
 void bossStageScene::update()
 {
 
-	
+
 	// 플레이어 인덱스 출력
 	cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
 
@@ -121,14 +121,12 @@ void bossStageScene::update()
 		{
 			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 		}
-	}
-	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player,_sm,_deathMetal);
-	_zOrder->update();
 
-	if (KEYMANAGER->isToggleKey('V'))
-	{
 		BEATMANAGER->update();
+
 	}
+	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player, _sm, _deathMetal);
+	_zOrder->update();
 }
 
 void bossStageScene::render()
@@ -167,10 +165,10 @@ void bossStageScene::render()
 	_ui->render();
 
 	// 테스트 비트 출력 토글
-	if (KEYMANAGER->isToggleKey('V'))
-	{
-		BEATMANAGER->render();
-	}
+
+
+	BEATMANAGER->render();
+
 
 	bossSceneRender();
 }
