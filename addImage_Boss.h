@@ -6,6 +6,11 @@ class ADD_BOSS_IMAGE
 public:
 	void add_BossImage()
 	{
+		// 보스 등장씬 이미지
+		IMAGEMANAGER->addImage("deathMetal_Main", "./image/Enemy/boss/bossStageIMG/deathMetal_Main_Image.bmp", 960, 392, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addImage("deathMetal_TopBlade", "./image/Enemy/boss/bossStageIMG/deathMetal_Main_TopBlade.bmp", 602, 68, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addImage("deathMetal_BottomBlade", "./image/Enemy/boss/bossStageIMG/deathMetal_Main_Name.bmp", 728, 96, true, RGB(255, 0, 255));
+
 		// 보스 이미지
 		IMAGEMANAGER->addImage("deathMetal_SceneImage", "./image/Enemy/boss/deathMetal_Image.bmp", 960, 398, true, RGB(255, 0, 255));
 		IMAGEMANAGER->addImage("deathMetal_Shield", "./image/Enemy/boss/deathMetal_Shield.bmp", 90, 46, true, RGB(255, 0, 255));
