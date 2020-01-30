@@ -6,25 +6,7 @@
 #include "Collision.h"
 #include "miniMap.h"
 #include "zOrder.h"
-//struct tagClass
-//{
-//	tagTile* tile;
-//	playerManager* player;
-//	Enemy* enemy;
-//};
-//
-//struct zOrder
-//{
-//	float* y;
-//	tagClass* Object;
-//
-//	zOrder(float* y, tagClass* Object)
-//	{
-//		this->y = y;
-//		this->Object = Object;
-//	};
-//	zOrder() { ; }
-//};
+#include "visionFloodFill.h"
 
 class bossStageScene;
 
@@ -49,6 +31,8 @@ private: // ÇÏÀ§ °èÃþ
 	bossStageScene* _bossStageScene;
 	miniMap* _minimap;
 	zOrder* _zOrder;
+	visionFloodFill* _floodFill;
+
 public:
 	stageScene() {}
 	~stageScene() {}

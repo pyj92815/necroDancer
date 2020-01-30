@@ -234,6 +234,7 @@
     <ClInclude Include="UImanager.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="video.h" />
+    <ClInclude Include="visionFloodFill.h" />
     <ClInclude Include="windowAPI.h" />
     <ClInclude Include="addImage_Boss.h" />
     <ClInclude Include="zOrder.h" />
@@ -308,6 +309,7 @@
     <ClCompile Include="UImanager.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="video.cpp" />
+    <ClCompile Include="visionFloodFill.cpp" />
     <ClCompile Include="windowAPI.cpp" />
     <ClCompile Include="zOrder.cpp" />
   </ItemGroup>

@@ -345,6 +345,9 @@
     <ClInclude Include="zOrder.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="visionFloodFill.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -543,6 +546,9 @@
       <Filter>playGround\boss\boss File</Filter>
     </ClCompile>
     <ClCompile Include="zOrder.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="visionFloodFill.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

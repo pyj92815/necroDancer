@@ -26,6 +26,7 @@ HRESULT bossStageScene::init()
 	_deathMetal->init("데스메탈", 13, 15, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
 
 	_player = _stageScene->getPlayerAddress();								// 플레이어 링크
+	_player->collisionSetting();
 	_ui = _stageScene->getUiAddress();										// ui 링크
 
 	playerPos_Setting();													// 보스 스테이지에 입장 한 플레이어의 위치를 생성 위치를 잡아준다.
@@ -37,6 +38,9 @@ HRESULT bossStageScene::init()
 
 	_zOrder = new zOrder;
 	_zOrder->init();
+
+	_floodFill = new visionFloodFill;
+	_floodFill->init();
 	// 보스 등장 씬에 관련 변수 초기화
 	bossSceneSetting();
 
@@ -107,12 +111,7 @@ void bossStageScene::update()
 				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
 				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
 			}
-
-			if (KEYMANAGER->isToggleKey('V'))
-			{
-				BEATMANAGER->update();
-			}
-
+	
 			if (KEYMANAGER->isOnceKeyDown('O'))
 			{
 				_deathMetal->setBoss_HP_Hit();
@@ -124,8 +123,11 @@ void bossStageScene::update()
 			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 		}
 	}
+	BEATMANAGER->update();
 	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player,_sm,_deathMetal);
 	_zOrder->update();
+	_floodFill->setVision(_tiles, _player->getPlayer().idx, _player->getPlayer().idy, _player->getPlayer().sight);
+	_player->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _player));
 }
 
 void bossStageScene::render()
@@ -138,9 +140,8 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList)->type != TYPE_NONE)
 			{
-
-				// 타일의 속성에 따라 이미지를 뿌린다.
-				findTileImage();
+					// 타일의 속성에 따라 이미지를 뿌린다.
+				if((*_viTotalList)->alphaValue <= 0) findTileImage();
 
 			}
 
@@ -156,6 +157,7 @@ void bossStageScene::render()
 	_sm->render();
 
 	_zOrder->render();
+	_player->effectRender();
 	// 월드이미지를 뿌려준다.
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
 
@@ -192,6 +194,7 @@ void bossStageScene::bossStageMap_Load()
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
 		{
+			_tiles[i].alphaValue = 255;
 			_vTotalList.push_back(&_tiles[i]);
 		}
 

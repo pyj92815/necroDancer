@@ -144,6 +144,12 @@ public:
 			if (_vInven[i]->type != W_NONE) this->itemRemove(i);
 		}
 	}
+
+	void collisionSetting() 
+	{
+		_mPlayerEnemyTile.clear();
+		_mPlayerTile.clear();
+	}
 };
 
 

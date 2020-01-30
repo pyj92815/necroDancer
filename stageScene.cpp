@@ -23,6 +23,8 @@ HRESULT stageScene::init()
 	_zOrder = new zOrder;
 	_zOrder->init();
 
+	_floodFill = new visionFloodFill;
+	_floodFill->init();
 	//ZorderSetup();
 	return S_OK;
 }
@@ -42,8 +44,9 @@ void stageScene::update()
 	//ZorderSetup();
 	//_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
-	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
+	//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 	_minimap->getStageMap(_vTotalList);
+	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
 }
 
 void stageScene::render()
@@ -62,9 +65,7 @@ void stageScene::render()
 				{
 					IMAGEMANAGER->findImage("terrainTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top, (*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY);
 				}
-				
 			}
-
 			if ((*_viTotalList)->trap != TRAP_NONE)
 			{
 				if ((*_viTotalList)->alphaValue <= 0)
