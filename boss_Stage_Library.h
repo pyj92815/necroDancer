@@ -32,3 +32,19 @@ enum class SHORT_XY
 	SHORT_X,					// x가 짧다.
 	SHORT_Y						// y가 짧다
 };
+
+struct BOSS_STAGE_OPEN
+{
+	bool	isOpen;				// 보스의 등장씬이 끝나면 true로 바뀐다.
+	bool    startMoveImg;		// 보스 이미지를 움직이기 시작한다.
+
+	bool	main_OK;			// 이미지가 목적지에 도착 했다면 값이 바뀐다.
+	bool	top_OK;				// 이미지가 목적지에 도착 했다면 값이 바뀐다.
+	bool	bottom_OK;			// 이미지가 목적지에 도착 했다면 값이 바뀐다.
+
+	int		image_Speed;		// 이미지가 움직이는 속도
+
+	image*	main_Img;			// 등장씬 메인
+	image*	top_Img;			// 등장씬 탑 
+	image*	bottom_Img;			// 등장씬 바텀
+};
