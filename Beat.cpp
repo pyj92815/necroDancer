@@ -52,7 +52,7 @@ void Beat::render()
     //Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
     //Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
     //Rectangle(_backBuffer->getMemDC(), test_Player);
-    //Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
+    Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
 
     if (_vNoteLeft.size() > 0) // 왼쪽 노트 렌더
     {
@@ -130,7 +130,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     heartImg = IMAGEMANAGER->findImage("Heart");
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
-    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 70, heartImg->getFrameHeight());
+    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth(), heartImg->getFrameHeight());
 }
 
 void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
@@ -443,7 +443,7 @@ void Beat::Move()
         _vNoteLeft[i].pos.x += _vNoteLeft[i].speed * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
 
         RECT temp;
-        if (IntersectRect(&temp, &_vNoteLeft[i].rc, &heartRC) && _vNoteLeft[i].isRender) // 노트가 심장이랑 충돌 시 
+        if (IntersectRect(&temp, &_vNoteLeft[i].rc, &heartRC) ) // 노트가 심장이랑 충돌 시 
         {
             if (!_vNoteLeft[i].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
             _vNoteLeft[i].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
