@@ -48,12 +48,11 @@ void Beat::update()
 
 void Beat::render()
 {
-    Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
-    Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
-    Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
-    Rectangle(_backBuffer->getMemDC(), test_Player);
-    Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
-    IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
+    //Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
+    //Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
+    //Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
+    //Rectangle(_backBuffer->getMemDC(), test_Player);
+    //Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
 
     if (_vNoteLeft.size() > 0) // 왼쪽 노트 렌더
     {
@@ -78,6 +77,7 @@ void Beat::render()
     {
         (*_viEffect)->render(_backBuffer->getMemDC());
     }
+    IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
     render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
 
@@ -129,7 +129,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     heartImg = IMAGEMANAGER->findImage("Heart");
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
-    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 50, heartImg->getFrameHeight());
+    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 70, heartImg->getFrameHeight());
 }
 
 void Beat::update_SceneCheck() // 씬 정보를 받아올 함수
@@ -373,8 +373,10 @@ void Beat::CreateNewNote(bool dirRight) // 노트 생성, 곡 시작 직전에 (오른쪽으로
         }
         else // 방향이 왼쪽인 경우
         {
+            int tempMs = _vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote];
+            int bpm = 60000 / tempMs;
             setNote.pos = { (float)WINSIZEX_HALF - (NOTE_INTERVAL * (i + 1)), (float)(heartRC.top + heartRC.bottom) / 2 };
-            setNote.speed = lerp(setNote.pos.x, setNote.pos.x + NOTE_INTERVAL, _deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f));
+            setNote.speed = lerp(setNote.pos.x, setNote.pos.x + NOTE_INTERVAL, (_deltaTime / ((tempMs + bpm) / 1000.0f)));
         }
 
         setNote.img = new image;
@@ -403,10 +405,12 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // 노트 생성, 곡 시작 중 (오른�
     }
     else // 방향이 왼쪽인 경우
     {
+        int tempMs = _vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote];
+        int bpm = 60000 / tempMs;
         newNote.pos = { 0, (float)(heartRC.top + heartRC.bottom) / 2 };
         //newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2) , (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)));
-        newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2), (_deltaTime / (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) * 1000.0f) / 3);
-
+        //newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF + (heartImg->getFrameWidth() / 2), (_deltaTime / (60000 / (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote])) + (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) * 1000.0f)  / 3);
+        newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF,   (_deltaTime / ((tempMs + bpm) / 1000.0f)) / 3);
     }
 
     if (_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote"); // 반복 곡인 경우에는 계속 초록색 노트 이미지를 지정해준다.
@@ -463,7 +467,7 @@ void Beat::Move()
             }
         }
 
-        if (_vNoteLeft[i].pos.x > WINSIZEX_HALF)
+        if (_vNoteLeft[i].pos.x - (heartImg->getFrameWidth() / 2) > WINSIZEX_HALF)
         {
             _player->setPlayerKey();
             _player->setPlayerKeyDown();
