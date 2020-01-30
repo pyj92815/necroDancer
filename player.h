@@ -16,6 +16,14 @@ private:
 	map<PLAYERDIRECTION, Enemy*>			_mPlayerEnemyTile;
 	map<PLAYERDIRECTION, Enemy*>::iterator	_miPlayerEnemyTile;
 
+	//슬레이브 
+	map<PLAYERDIRECTION, slave*>            _mPlayerSlaveTile;
+	map<PLAYERDIRECTION, slave*>::iterator _miPlayerSlaveTile;
+
+	//데스메탈
+	map<PLAYERDIRECTION, deathMetal*>            _mPlayerdeathMetalTile;
+	map<PLAYERDIRECTION, deathMetal*>::iterator   _miPlayerdeathMetalTile;
+
 	//이펙트 vector
 	vector<alphaImageEffect*>		     _vEffect; 
 	vector<alphaImageEffect*>::iterator _viEffect;
@@ -26,7 +34,7 @@ private:
 private:
 	tagPlayer	_player;	// 플레이어
 	jump*		_jump;		// 점프 
-
+	NOWSTAGE _nowStage;     // 현재 스테이지 
 	float _worldTimeCount;	// 월드 타임 
 	float _distance;		// 타일 중점 거리 
 	float _time;			// 시간 
@@ -97,7 +105,9 @@ public:
 	//벽 타일 세팅
 	void setPlayerTile(map<PLAYERDIRECTION, tagTile*> tile)		 { _mPlayerTile = tile; }
 	void setPlayerEnemyTile(map<PLAYERDIRECTION, Enemy*> tile)	 { _mPlayerEnemyTile = tile; }
-
+	void setSlaveTile(map<PLAYERDIRECTION, slave*> tile) { _mPlayerSlaveTile = tile; }
+	void setDeathMetal(map<PLAYERDIRECTION, deathMetal*> tile) { _mPlayerdeathMetalTile = tile; }
+	
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	//void setEnemyAddressLink(EnemyManager* enemyManager) { }
 
@@ -145,11 +155,21 @@ public:
 		}
 	}
 
-	void collisionSetting() 
+	// 보스에서 몬스터 타일 초기화 
+	void collisionSettingStage() 
 	{
-		_mPlayerEnemyTile.clear();
-		_mPlayerTile.clear();
+		if (!_mPlayerEnemyTile.empty()) _mPlayerEnemyTile.clear();
+		if (!_mPlayerTile.empty())_mPlayerTile.clear();
 	}
+	// 스테이지에서 보스 타일 초기화 
+	void collisionSettingBoss()
+	{
+		if(!_mPlayerSlaveTile.empty())_mPlayerSlaveTile.clear();
+		if(!_mPlayerdeathMetalTile.empty())_mPlayerdeathMetalTile.clear();
+	}
+
+	void setStage() { _nowStage = NOWSTAGE_STAGE; }
+	void setBossStage() { _nowStage = NOWSTAGE_BOSS; }
 };
 
 

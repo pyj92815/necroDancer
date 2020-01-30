@@ -2,9 +2,12 @@
 #include "player.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
+#include "deathMetal.h"
+#include "slave.h"
 
 player::player()
 {
+	_nowStage = NOWSTAGE_STAGE;
 }
 
 player::~player()
@@ -50,7 +53,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
 	_player.weapon = PLAYERWAEPON_DAGGER;
 	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
-	
+
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
 }
@@ -75,7 +78,14 @@ void player::update()
 
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
-		playerEffect_Attack();
+		char str[256];
+		sprintf(str, "지금 스테이지 : %d", (int)_nowStage);
+		cout << str << endl;
+		for (_miPlayerSlaveTile = _mPlayerSlaveTile.begin(); _miPlayerSlaveTile != _mPlayerSlaveTile.end(); ++_miPlayerSlaveTile)
+		{
+			if (0 > _mPlayerSlaveTile.size()) break;
+			cout << _miPlayerSlaveTile->second->get_Slave()->pos.rc.bottom <<endl;
+		}
 	}
 }
 
@@ -119,7 +129,7 @@ void player::playerMove()
 
 	if (_reversMove)
 	{
-		if ((_time/2) + _worldTimeCount <= TIMEMANAGER->getWorldTime())
+		if ((_time / 2) + _worldTimeCount <= TIMEMANAGER->getWorldTime())
 		{
 			_player.x = _player.x - cosf(_angle) * moveSpeed;
 			_player.y = _player.y - (-sinf(_angle) * moveSpeed);
@@ -283,7 +293,7 @@ void player::playerEffect_Attack()
 		{
 			effect->init("swipe_longsword좌우", x, y, 0, frame % 2, FRAMEIMAGE);
 		}
-		break;                                       
+		break;
 
 	default:
 		return;
@@ -298,16 +308,16 @@ void player::keyControl()
 {
 	if (!_isKeyDown)
 	{
-	/*	if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
-		{
-			_isKeyDown = true;
-			cout << "이건 체력 키 " << endl;
-		}
-		else if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_DOWN))
-		{
-			_isKeyDown = true;
-			cout << "이건 폭탄 키 " << endl;
-		}*/
+		/*	if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
+			{
+				_isKeyDown = true;
+				cout << "이건 체력 키 " << endl;
+			}
+			else if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_DOWN))
+			{
+				_isKeyDown = true;
+				cout << "이건 폭탄 키 " << endl;
+			}*/
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
 			_player.direction = PLAYERDIRECTION_UP;
@@ -400,27 +410,68 @@ void player::tileCheck()
 	}
 	if (action) return;
 	// ENEMY 타일 정보 ( 작성 예정 )
-	for (_miPlayerEnemyTile = _mPlayerEnemyTile.begin(); _miPlayerEnemyTile != _mPlayerEnemyTile.end(); ++_miPlayerEnemyTile)
+	if (_nowStage == NOWSTAGE_STAGE)
 	{
-		// 1. 이펙트와 몬스터 데미지다는것만 하기
-		// 2. 타일 지우는거 확인하기 
-		if (_miPlayerEnemyTile->first == _player.direction)
+		for (_miPlayerEnemyTile = _mPlayerEnemyTile.begin(); _miPlayerEnemyTile != _mPlayerEnemyTile.end(); ++_miPlayerEnemyTile)
 		{
-			if (_player.weapon == PLAYERWAEPON_NONE)
+			// 1. 이펙트와 몬스터 데미지다는것만 하기
+			// 2. 타일 지우는거 확인하기 
+			if (_miPlayerEnemyTile->first == _player.direction)
 			{
-				_reversMove = true;
-				StateMove();
+				if (_player.weapon == PLAYERWAEPON_NONE)
+				{
+					_reversMove = true;
+					StateMove();
+				}
+				else
+				{
+					playerEffect_Attack();
+					_miPlayerEnemyTile->second->Hit(_player.damage);
+				}
+				action = true;
+				break;
 			}
-			else
-			{
-				playerEffect_Attack();
-				_miPlayerEnemyTile->second->Hit(_player.damage);
-			}
-			action = true;
-			break;
 		}
 	}
-
+	else // 보스방 구조체가 두개라서 공격 두개 할수도 있음 
+	{
+		for (_miPlayerSlaveTile = _mPlayerSlaveTile.begin(); _miPlayerSlaveTile != _mPlayerSlaveTile.end(); ++_miPlayerSlaveTile)
+		{
+			if (0 > _mPlayerSlaveTile.size()) break;
+			if (_miPlayerSlaveTile->first == _player.direction)
+			{
+				if (_player.weapon == PLAYERWAEPON_NONE)
+				{
+					_reversMove = true;
+					StateMove();
+				}
+				else
+				{
+					playerEffect_Attack();
+				}
+				action = true;
+				break;
+			}
+		}
+		if (action) return;
+		for (_miPlayerdeathMetalTile = _mPlayerdeathMetalTile.begin(); _miPlayerdeathMetalTile != _mPlayerdeathMetalTile.end(); ++_miPlayerdeathMetalTile)
+		{
+			if (_miPlayerdeathMetalTile->first == _player.direction)
+			{
+				if (_player.weapon == PLAYERWAEPON_NONE)
+				{
+					_reversMove = true;
+					StateMove();
+				}
+				else
+				{
+					playerEffect_Attack();
+				}
+				action = true;
+				break;
+			}
+		}
+	}
 	if (!action) StateMove();
 }
 
@@ -749,7 +800,7 @@ void player::StateMove()
 		_worldTimeCount = TIMEMANAGER->getWorldTime();								// 월드 시간 
 		_isMoving = true;															// MOVE
 
-		if(!_reversMove) _jump->jumping(&_player.x, &_player.y, 2, 1.5, true); //점프 
+		if (!_reversMove) _jump->jumping(&_player.x, &_player.y, 2, 1.5, true); //점프 
 		break;
 	case PLAYERDIRECTION_DOWN:
 		_player.idy++;	// 좌표Y값++

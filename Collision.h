@@ -88,6 +88,10 @@ public:
 
 	map<PLAYERDIRECTION, Enemy*>  collision_player_Enemy_tile(vector<Enemy*>* enemyInfo, player* playerInfo);
 
+	// 보스방에서 
+	map<PLAYERDIRECTION,slave*> collision_player_slave_tile(vector<slave*>* slaveInfo, player* playerInfo);
+
+	map<PLAYERDIRECTION, deathMetal*> collision_player_Metal_tile(deathMetal* metalInfo, player* playerInfo);
 
 };
 

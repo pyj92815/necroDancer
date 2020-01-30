@@ -27,8 +27,7 @@ void EnemyManager::update()
 		(*_viEnemy)->update();
 		//플레이어의 좌표값을 전달
 		(*_viEnemy)->setPlayerInfo(_player->getPlayer().x, _player->getPlayer().y, _player->getPlayer().idx, _player->getPlayer().idy);
-		cout << _player->getPlayer().idx << endl;
-		
+
 	}
 	EnemyRemove();
 	EnemyInspection();

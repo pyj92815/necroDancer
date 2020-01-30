@@ -8,11 +8,13 @@ HRESULT stageScene::init()
 
 	_pm = new playerManager;
 	_pm->init();
+	
 
 	_em = new EnemyManager;
 	_em->init();
 
 	_em->AddressLink(_pm->getPlayerInfo());
+	_pm->getPlayerInfo()->collisionSettingBoss();
 
 	_ui = new UImanager;
 	_ui->init();
@@ -25,6 +27,9 @@ HRESULT stageScene::init()
 
 	_floodFill = new visionFloodFill;
 	_floodFill->init();
+
+
+	_pm->getPlayerInfo()->setStage();
 	//ZorderSetup();
 	return S_OK;
 }
