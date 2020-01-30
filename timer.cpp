@@ -26,6 +26,9 @@ HRESULT timer::init()
 	_FPSFrameCount = 0;
 	_FPSTimeElapsed = 0;
 	_worldTime = 0;
+	_countTime = 0;
+
+	_countTimeResetSwitch = _countTimeSwitch = false;
 
 	return S_OK;
 }
@@ -50,6 +53,7 @@ void timer::tick(float lockFPS)
 		}
 	}
 
+
 	_lastTime = _curTime;
 	_FPSFrameCount++;
 	_FPSTimeElapsed += _timeElapsed;
@@ -62,6 +66,15 @@ void timer::tick(float lockFPS)
 		_FPSTimeElapsed = 0.0f;
 	}
 
+	if (_countTimeSwitch)
+	{
+		_countTime += _timeElapsed;
+	}
+	if (_countTimeResetSwitch)
+	{
+		_countTimeResetSwitch = false;
+		_countTime = 0;
+	}
 }
 
 unsigned long timer::getFrameRate(char * str) const

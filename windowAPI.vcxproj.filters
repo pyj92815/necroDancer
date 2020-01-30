@@ -240,9 +240,6 @@
     <ClInclude Include="endScene.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="bossScene.h">
-      <Filter>playGround\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="scene_Manager.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
@@ -344,6 +341,9 @@
     </ClInclude>
     <ClInclude Include="slaveManager_Library.h">
       <Filter>playGround\boss\boss Library</Filter>
+    </ClInclude>
+    <ClInclude Include="zOrder.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -473,9 +473,6 @@
     <ClCompile Include="endScene.cpp">
       <Filter>playGround\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="bossScene.cpp">
-      <Filter>playGround\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="scene_Manager.cpp">
       <Filter>playGround\Scene</Filter>
     </ClCompile>
@@ -539,11 +536,14 @@
     <ClCompile Include="UImanager.cpp">
       <Filter>playGround\player</Filter>
     </ClCompile>
-    <ClCompile Include="slaveManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Option.cpp">
       <Filter>playGround\GameSettingManager\Option</Filter>
+    </ClCompile>
+    <ClCompile Include="slaveManager.cpp">
+      <Filter>playGround\boss\boss File</Filter>
+    </ClCompile>
+    <ClCompile Include="zOrder.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
