@@ -23,12 +23,14 @@ private:
 	vector<Enemy*>::iterator _viEnemy;
 	vector<tagTile*> _vTile;
 	vector<tagTile*>::iterator _viTile;
-
+	
 	EnemyType _enemyType;
 
 	player* _player;
 	map<CHARACTER, POINT>            _mEnemyPoint;
 	map<CHARACTER, POINT>::iterator _miEnemyPoint;
+
+	float _timer;
 public:
 	EnemyManager() {};
 	~EnemyManager() {};

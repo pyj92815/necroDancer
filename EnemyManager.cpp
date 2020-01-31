@@ -13,6 +13,9 @@ HRESULT EnemyManager::init(map<CHARACTER, POINT> menemPoint)
 	{
 		(*_viEnemy)->init();
 	}
+
+	_timer = 0;
+
 	return S_OK;
 }
 
@@ -71,6 +74,7 @@ void EnemyManager::release()
 
 void EnemyManager::update()
 {
+	_timer += TIMEMANAGER->getElapsedTime();
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->update();
@@ -80,7 +84,12 @@ void EnemyManager::update()
 	}
 	EnemyRemove();
 	EnemyInspection();
-	Attack();
+	if (_timer > 1)
+	{
+		Attack();
+		_timer = 0;
+	}
+	
 	WallInspection();
 }
 
@@ -120,7 +129,7 @@ void EnemyManager::WallInspection()
 					{
 						_vEnemy[j]->getEnemyInfo()->right = true;
 						
-						cout << "ASDSADA" << endl;
+						//cout << "ASDSADA" << endl;
 					}
 				}
 					
@@ -154,6 +163,7 @@ void EnemyManager::WallInspection()
 
 void EnemyManager::Attack()
 {
+	
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		if ((*_viEnemy)->getEnemyInfo()->Attack)
