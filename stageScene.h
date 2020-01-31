@@ -32,6 +32,8 @@ private: // ÇÏÀ§ °èÃþ
 	visionFloodFill* _floodFill;
 
 	int _playerIdx, _playerIdy;
+	int _bossIdx, _bossIdy;
+	int _stageIdx, _stageIdy;
 
 public:
 	stageScene() {}
@@ -56,5 +58,6 @@ public:
 	void bossStageSceneAddressLink(bossStageScene* bossStageScene) { _bossStageScene = bossStageScene; }
 
 	void setVision(POINT index, int sight);
-};
+	void nextPage();
 
+};

@@ -41,11 +41,13 @@ HRESULT stageScene::init()
 	_pm->getPlayerInfo()->setStage();
 
 	//ZorderSetup();
+	BEATMANAGER->SetMusicID(1);
 	return S_OK;
 }
 
 void stageScene::release()
 {
+	_vTotalList.clear();
 }
 
 void stageScene::update()
@@ -67,6 +69,7 @@ void stageScene::update()
 	_minimap->getStageMap(_vTotalList);
 	_minimap->getPlayerPoint(_pm);
 	_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	nextPage();
 	
 }
 
@@ -284,6 +287,19 @@ void stageScene::setVision(POINT index, int sight)
 	// 2. 알파블렌더가 렉에 원인인데 어떻게 할지
 }
 
+void stageScene::nextPage()
+{
+	if (_bossIdx == _pm->getPlayerInfo()->getPlayer().idx && _bossIdy == _pm->getPlayerInfo()->getPlayer().idy)
+	{
+		SCENEMANAGER->changeScene("Boss");
+	}
+	if (_stageIdx == _pm->getPlayerInfo()->getPlayer().idx && _stageIdy == _pm->getPlayerInfo()->getPlayer().idy)
+	{
+		SCENEMANAGER->changeScene("Stage");
+	}
+
+}
+
 void stageScene::stageMapLoad()
 {
 	HANDLE file;
@@ -338,6 +354,16 @@ void stageScene::stageMapLoad()
 				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_DRAGON, PointMake(_tiles[i].idX, _tiles[i].idY)));
 				break;
 			}
+		}
+		if (_tiles[i].terrain == TR_BOSS_STAIR)
+		{
+			_bossIdx = _tiles[i].idX;
+			_bossIdy = _tiles[i].idY;
+		}
+		if (_tiles[i].terrain == TR_STAIR)
+		{
+			_stageIdx = _tiles[i].idX;
+			_stageIdy = _tiles[i].idY;
 		}
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)

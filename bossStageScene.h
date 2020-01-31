@@ -97,7 +97,8 @@ public:
 	void bossSceneDoorOpen();													// 보스방 문을 여는 연산
 	void bossClear();															// 보스 클리어 시 벽이 열리는것
 
+
 	void boss_PhaseMove();														// 보스 페이즈 연산
-	
+	void setVolumeBossStage();
 };
 
