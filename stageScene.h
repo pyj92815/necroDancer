@@ -18,11 +18,9 @@ private: // 맵 충돌
 	vector<tagTile*>::iterator			     _viTotalList;
 
 	Collision _collision;			// 충돌처리 
-private: // 제트오더
-	//vector<zOrder*> _zOrderVector;
-
-	//vector<pair<float, tagClass*>> 				    _vZorder;
-	//vector<pair<float, tagClass*>>::iterator	   _viZorder;
+private: // Enemy 포인터 
+	map<CHARACTER, POINT>		   	_mEnemyPoint;
+	map<CHARACTER, POINT>::iterator _miEnemyPoint;
 
 private: // 하위 계층 	
 	playerManager* _pm;

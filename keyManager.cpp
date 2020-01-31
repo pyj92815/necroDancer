@@ -76,16 +76,16 @@ bool keyManager::isToggleKey(int key)
 
 bool keyManager::isOncekeytwoDown(int one, int two)
 {
-	if (GetAsyncKeyState(one) & 0x8000 && GetAsyncKeyState(two) & 0x8000)
+	if ((GetAsyncKeyState(one) & 0x8000) && (GetAsyncKeyState(two) & 0x8000))
 	{
-		if (!this->getKeyDown()[one] && !this->getKeyDown()[two])
+		if ((!(this->getKeyDown()[one]) && !(this->getKeyDown()[two])))
 		{
 			this->setKeyTwoDown(one, two, true);
 
 			return true;
 		}
 	}
-	else this->setKeyTwoDown(one, two, false);
+	// 예외처리 지움
 
 	return false;
 }

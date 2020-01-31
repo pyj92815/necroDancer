@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "EnemyManager.h"
 #include "player.h"
-HRESULT EnemyManager::init()
+HRESULT EnemyManager::init(map<CHARACTER, POINT> mEnemyPount)
 {
+	_mEnemyPoint = mEnemyPount;	  // 애너미 위치 정보
+	EnemyInspection();			  // 애너미 순서 
 	imageAdd();	//이미지 추가 함수
 	AnimationAdd(); //애니메이션 추가 함수
-	임시enemy생성();
+
 	_player = new player;
+	EnemyCreate();
 
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
@@ -107,67 +110,54 @@ void EnemyManager::EnemyInspection()
 	}
 }
 
-void EnemyManager::임시enemy생성()
-{
-	_enemyType = EnemyType::BAT;
-	EnemyCreate(10, 8, _enemyType);
-	_enemyType = EnemyType::DRAGON;
-	EnemyCreate(12, 8, _enemyType);
-	_enemyType = EnemyType::GHOST;
-	EnemyCreate(14, 8, _enemyType);
-	_enemyType = EnemyType::MINOTAUR;
-	EnemyCreate(16, 8, _enemyType);
-	_enemyType = EnemyType::SKELETON;
-	EnemyCreate(11, 10, _enemyType);
-	_enemyType = EnemyType::SKELETON_YELLOW;
-	EnemyCreate(12, 10, _enemyType);
-	_enemyType = EnemyType::SLIME_BLUE;
-	EnemyCreate(14, 10, _enemyType);
-	_enemyType = EnemyType::SLIME_ORANGE;
-	EnemyCreate(16, 10, _enemyType);
-	_enemyType = EnemyType::WRAITH;
-	EnemyCreate(10, 12, _enemyType);
-	_enemyType = EnemyType::ZOMBIE;
-	EnemyCreate(12, 12, _enemyType);
-}
 
-void EnemyManager::EnemyCreate(float x, float y, EnemyType enemyType)
+void EnemyManager::EnemyCreate()
 {
-	switch (_enemyType)
+	for (_miEnemyPoint = _mEnemyPoint.begin(); _miEnemyPoint != _mEnemyPoint.end(); ++_miEnemyPoint)
 	{
-	case EnemyType::BAT:
-		Enemy_Bat_Create(x, y);
-		break;
-	case EnemyType::DRAGON:
-		Enemy_Dragon_Create(x, y);
-		break;
-	case EnemyType::GHOST:
-		Enemy_Ghost_Create(x, y);
-		break;
-	case EnemyType::MINOTAUR:
-		Enemy_Minotaur_Create(x, y);
-		break;
-	case EnemyType::SKELETON:
-		Enemy_Skeleton_Create(x, y);
-		break;
-	case EnemyType::SKELETON_YELLOW:
-		Enemy_Skeleton_Yellow_Create(x, y);
-		break;
-	case EnemyType::SLIME_BLUE:
-		Enemy_Slime_Blue_Create(x, y);
-		break;
-	case EnemyType::SLIME_ORANGE:
-		Enemy_Slime_Orange_Create(x, y);
-		break;
-	case EnemyType::WRAITH:
-		Enemy_Wraith_Create(x, y);
-		break;
-	case EnemyType::ZOMBIE:
-		Enemy_Zombie_Create(x, y);
-		break;
-	default:
-		break;
+		switch (_miEnemyPoint->first)
+		{
+		case CHAR_PLAYER:
+			break;
+		case CHAR_BAT:
+			Enemy_Bat_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SLIME_BLUE:
+			Enemy_Slime_Blue_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SLIME_ORANGE:
+			Enemy_Slime_Orange_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_GHOST:
+			Enemy_Ghost_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_WRAITH:
+			Enemy_Wraith_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SKELETON:
+			Enemy_Skeleton_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SKELETON_YELLOW:
+			Enemy_Skeleton_Yellow_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_ZOMBIE:
+			Enemy_Zombie_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_MINO:
+			Enemy_Minotaur_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_DRAGON:
+			Enemy_Dragon_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_BOSS:
+			break;
+		case CHAR_NONE:
+			break;
+		default:
+			break;
+		}
 	}
+
 }
 
 void EnemyManager::imageAdd()
