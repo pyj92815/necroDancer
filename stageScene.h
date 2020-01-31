@@ -57,4 +57,3 @@ public:
 
 	void setVision(POINT index, int sight);
 };
-

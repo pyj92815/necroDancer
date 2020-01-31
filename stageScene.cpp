@@ -41,6 +41,7 @@ HRESULT stageScene::init()
 	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 
 	//ZorderSetup();
+	BEATMANAGER->SetMusicID(1);
 	return S_OK;
 }
 
