@@ -13,7 +13,6 @@ HRESULT EnemyManager::init(map<CHARACTER, POINT> menemPoint)
 	{
 		(*_viEnemy)->init();
 	}
-
 	return S_OK;
 }
 

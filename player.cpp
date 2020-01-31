@@ -48,7 +48,6 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_reversMove = false;
 	_distance = tileSizeY;			//  타일 중점 거리
 	_time = 0.15;					//  MOVE 시간 
-
 	_isMoving = false;		 // MOVE 판단
 	_isKeyPress = false;     // 노트 판단 
 	_isKeyDown = false;      // KEY 입력 판단
