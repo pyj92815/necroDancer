@@ -19,9 +19,7 @@ enum CTRL
 	CTRL_TRAP,			//함정 그리기 버튼
 	CTRL_WALLDRAW,		//벽 그리기 버튼
 	CTRL_FLOOR_OBJ,		//바닦에 있는 오브젝트
-	CTRL_PLAYER,		//플레이어 그리기 버튼
-	CTRL_ENEMY,			//적 그리기 버튼
-	CTRL_PLAY,			//게임 시작을 알리는 버튼(나머지 버튼이 사라짐)
+	CTRL_CHARACTER,		//플레이어 그리기 버튼
 	CTRL_ERASER,		//지우개 버튼 (잘못찍은 오브젝트등을 지움지움)
 	CTRL_EXIT
 };
