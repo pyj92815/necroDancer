@@ -23,6 +23,7 @@ HRESULT stageScene::init()
 	_pm->getPlayerInfo()->collisionSettingBoss();
 
 	_ui = new UImanager;
+	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 	_ui->init();
 	
 	_minimap = new miniMap;
@@ -38,7 +39,6 @@ HRESULT stageScene::init()
 
 
 	_pm->getPlayerInfo()->setStage();
-	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 
 	//ZorderSetup();
 	BEATMANAGER->SetMusicID(1);
@@ -69,7 +69,7 @@ void stageScene::update()
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 	_minimap->getStageMap(_vTotalList);
 	_minimap->getPlayerPoint(_pm);
-	_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	//_ui->setInven(_pm->getPlayerInfo()->getVInven());
 	nextPage();
 	
 }
