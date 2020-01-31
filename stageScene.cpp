@@ -24,10 +24,12 @@ HRESULT stageScene::init()
 
 	_ui = new UImanager;
 	_ui->init();
-
+	
 	_minimap = new miniMap;
 	_minimap->init();
-
+	
+	_minimap->getEnemyPoint(_em);
+	
 	_zOrder = new zOrder;
 	_zOrder->init();
 
@@ -36,6 +38,8 @@ HRESULT stageScene::init()
 
 
 	_pm->getPlayerInfo()->setStage();
+	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
+
 	//ZorderSetup();
 	return S_OK;
 }
@@ -57,8 +61,13 @@ void stageScene::update()
 	//_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
 	//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
-	//_minimap->getStageMap(_vTotalList);
+
 	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
+	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
+	//_minimap->getStageMap(_vTotalList);
+	_minimap->getPlayerPoint(_pm);
+	_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	
 }
 
 void stageScene::render()
@@ -339,7 +348,4 @@ void stageScene::stageMapLoad()
 		i++;
 	}
 }
-
-
-
 

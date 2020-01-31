@@ -109,8 +109,9 @@ public:
 	void setDeathMetal(map<PLAYERDIRECTION, deathMetal*> tile) { _mPlayerdeathMetalTile = tile; }
 	
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	//void setEnemyAddressLink(EnemyManager* enemyManager) { }
+<	//void setEnemyAddressLink(EnemyManager* enemyManager) { }
 	void itemUse();
+	vector<tagItem*> getVInven() { return _vInven; }
 
 	//이미지 세팅
 	void imageSetting()
