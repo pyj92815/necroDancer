@@ -94,9 +94,7 @@ void bossStageScene::update()
 
 			// 슬레이브 움직임 연산
 			slave_Move_Player();
-
-			cout << _deathMetal->getBoss_Index().x << ": y:" << _deathMetal->getBoss_Index().y << endl;
-		
+	
 			// 슬레이브 테스트용 소환
 			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
 			{
@@ -158,12 +156,17 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList)->type != TYPE_NONE)
 			{
-
-					// 타일의 속성에 따라 이미지를 뿌린다.
+				RECT temp;
+				if (IntersectRect(&temp, &CAMERAMANAGER->getCamera_Rect(), &(*_viTotalList)->rc))
+				{
 				if((*_viTotalList)->alphaValue <= 0) findTileImage();
 
+				}
+
+					// 타일의 속성에 따라 이미지를 뿌린다.
+
 				// 타일의 속성에 따라 이미지를 뿌린다.
-				findTileImage();
+				//findTileImage();
 	
 			}
 	

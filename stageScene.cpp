@@ -69,6 +69,7 @@ void stageScene::update()
 	//_minimap->getStageMap(_vTotalList);
 	_minimap->getPlayerPoint(_pm);
 	_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	nextPage();
 	
 }
 
@@ -354,12 +355,12 @@ void stageScene::stageMapLoad()
 				break;
 			}
 		}
-		if (_tiles[i].terrain == TR_BOSS_STAGE_TILE)
+		if (_tiles[i].terrain == TR_BOSS_STAIR)
 		{
 			_bossIdx = _tiles[i].idX;
 			_bossIdy = _tiles[i].idY;
 		}
-		if (_tiles[i].terrain == TR_BASIC_STAGE_TILE)
+		if (_tiles[i].terrain == TR_STAIR)
 		{
 			_stageIdx = _tiles[i].idX;
 			_stageIdy = _tiles[i].idY;
