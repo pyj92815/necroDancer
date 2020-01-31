@@ -410,9 +410,9 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // 노트 생성, 곡 시작 중 (오른�
     {
         newNote.pos = { 0, (float)(heartRC.top + heartRC.bottom) / 2 };
         //newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2) , (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)));
-        newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2), (_deltaTime / (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) * 1000.0f) / 4.0f);
+        //newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2), (_deltaTime / (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) * 1000.0f) / 4.0f);
     }
-    newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF, (_deltaTime / ((tempMS + bpm) / 1000.0f)) / 3);
+	newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF, (_deltaTime / ((tempMS + bpm) / 1000.0f)) / 3);
 
     if (_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote"); // 반복 곡인 경우에는 계속 초록색 노트 이미지를 지정해준다.
     else if (_songLeftTime > (float)(_songLength / 1000) * 0.15f && !_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote"); // 현재 남은 곡의 전체 곡 길이의 15%보다 큰 경우 초록색 노트 이미지 지정 
