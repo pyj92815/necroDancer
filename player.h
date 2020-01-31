@@ -39,7 +39,7 @@ private:
 	float _distance;		// 타일 중점 거리 
 	float _time;			// 시간 
 	float _angle;			// 각도 
-	float _shadow;
+	float _shadow;			// 그림자
 
 	int _previousIdx;	    // 이전 idx,idy
 	int _previousIdy;

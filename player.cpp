@@ -328,7 +328,6 @@ void player::keyControl()
 			if (BEATMANAGER->getInterval())
 			{
 				_isKeyDown = true;
-
 			}
 			else
 			{
