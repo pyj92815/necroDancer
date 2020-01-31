@@ -7,15 +7,15 @@ class mapTool: public gameNode
 
 private:
 	
-	tagCurrentTile _currentTile;
-	tagSetTile _terrainTile[TERRAINTILEX * TERRAINTILEY];
-	tagSetTile _wallTile[WALLTILEX * WALLTILEY];
-	tagSetTile _trapTile[TRAPTILEX * TRAPTILEY];
-	tagSetTile _armorTile[ITEMTILEX * ITEMTILEY];
-	tagSetTile _weaponTile[ITEMTILEX * ITEMTILEY];
-	tagSetTile _stuffTile[ITEMTILEX * ITEMTILEY];
-	tagSetTile _characterTile[CHARACTERTILEX * CHARACTERTILEY];
-	tagTile		 _tiles[TILEX * TILEY];
+	tagCurrentTile  _currentTile;
+	tagSetTile		_terrainTile[TERRAINTILEX * TERRAINTILEY];
+	tagSetTile		_wallTile[WALLTILEX * WALLTILEY];
+	tagSetTile		_trapTile[TRAPTILEX * TRAPTILEY];
+	tagSetTile		_armorTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile		_weaponTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile		_stuffTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile		_characterTile[CHARACTERTILEX * CHARACTERTILEY];
+	tagTile			_tiles[TILEX * TILEY];
 
 	float _WINSIZEX, _WINSIZEY;
 	int _pos[2];
@@ -36,10 +36,15 @@ private:
 	tagButton _stuffButton;		//소지품
 	tagButton _characterButton;	//캐릭터
 	tagButton _eraseButton;		//지우개
+	tagButton _lobyButton;		//로비
+	tagButton _stageButton;		//스테이지
+	tagButton _bossButton;		//보스
+
 	tagButton _exitButton;		//나가기
 private:
 	tagMouse _RectCreate;
 	bool _isClick, _isItemButtonClick, _isMapButtonClick;
+	bool _isLobyButtonClick, _isStageButtonClick, _isBossButtonClick;
 	int _startL, _startT, _endR, _endB;
 	RECT _left, _top, _right, _bottom;
 	MovePalette _palette;	// 창 이동으로 사용할 렉트

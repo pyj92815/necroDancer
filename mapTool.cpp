@@ -27,6 +27,7 @@ HRESULT mapTool::init()
 	_startL = 0;
 	_startT = 0;
 	_isClick = _isItemButtonClick = _isMapButtonClick = false;
+	_isLobyButtonClick = _isStageButtonClick = _isBossButtonClick = false;
 	
 	destroyAllWindows();
 	//■■■■■■■■■■■■■■■■■ 화면 움직임 ■■■■■■■■■■■■■■■■■
@@ -36,7 +37,7 @@ HRESULT mapTool::init()
 	_top = RectMake(0, 0, 1800, 25);
 	_right = RectMake(1775, 0, 25, 900);
 	_bottom = RectMake(0, 875, 1800, 25);
-
+	_crtSelect == CTRL_LOBY;
 	return S_OK;
 }
 
@@ -66,6 +67,12 @@ void mapTool::update()
 		_armorButton.rc = RectMake(150, 50, 52, 52);
 		_weaponButton.rc = RectMake(200, 50, 52, 52);
 	}
+	else if (!_isItemButtonClick)
+	{
+		_stuffButton.rc = RectMake(25, 50, 52, 52);
+		_armorButton.rc = RectMake(25, 50, 52, 52);
+		_weaponButton.rc = RectMake(25, 50, 52, 52);
+	}
 	_mapButton.rc = RectMake(25, 97, 72, 72);
 	if (_isMapButtonClick == true)
 	{
@@ -74,49 +81,128 @@ void mapTool::update()
 		_wallButton.rc = RectMake(150, 122, 52, 52);
 		_trapButton.rc = RectMake(200, 122, 52, 52);
 	}
+	else if (_isMapButtonClick == false)
+	{
+
+		_terrainButton.rc = RectMake(25, 122, 52, 52);
+		_wallButton.rc = RectMake(25, 122, 52, 52);
+		_trapButton.rc = RectMake(25, 122, 52, 52);
+	}
 	_characterButton.rc = RectMake(25, 169, 72, 72);
+
+	if (_crtSelect == CTRL_LOBY) { _isLobyButtonClick = true; }
+	else if (_crtSelect == CTRL_STAGE) { _isStageButtonClick = true; }
+	else if (_crtSelect == CTRL_BOSS_STAGE) { _isBossButtonClick = true; }
+	
+	_lobyButton.rc = RectMake(740, 25, 100, 27);
+	_stageButton.rc = RectMake(850, 25, 100, 27);  
+	_bossButton.rc = RectMake(960, 25, 100, 27);
 	_eraseButton.rc = RectMake(1430, 825, 52, 52);
+
 	_saveButton.rc = RectMake(1525, 825, 52, 52);
 	_loadButton.rc = RectMake(1600, 825, 52, 52);
+
 	_exitButton.rc = RectMake(1700, 830, 52, 52);
 
 	// 마우스 위치의 타일의 렉트를 가져온다.
 	mouseRectUpdate();
+	//cout << "_crtSelect :" << _crtSelect << endl;
 }
 
 void mapTool::save()
 {
-	HANDLE file;
-	DWORD write;
-	//"Loby_SaveFile.mpa"
-	//"SaveFile.map"
-	//"Boss_SaveFile.map"
-	//"Stage_SaveFile.map"
-	file = CreateFile("SaveFile.map", GENERIC_WRITE, 0, NULL,
-		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (_isLobyButtonClick)
+	{
+		HANDLE file;
+		DWORD write;
+		//"Loby_SaveFile.mpa"
+		//"SaveFile.map"
+		//"Boss_SaveFile.map"
+		//"Stage_SaveFile.map"
+		file = CreateFile("Loby_SaveFile.map", GENERIC_WRITE, 0, NULL,
+			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
-	WriteFile(file, _pos, sizeof(int) * 2, &write, NULL);
+		WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+		WriteFile(file, _pos, sizeof(int) * 2, &write, NULL);
 
-	CloseHandle(file);
+		CloseHandle(file);
+	}
+	else if (_isStageButtonClick)
+	{
+		HANDLE file;
+		DWORD write;
+		//"Loby_SaveFile.mpa"
+		//"SaveFile.map"
+		//"Boss_SaveFile.map"
+		//"Stage_SaveFile.map"
+		file = CreateFile("Stage_SaveFile.map", GENERIC_WRITE, 0, NULL,
+			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+		WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+		WriteFile(file, _pos, sizeof(int) * 2, &write, NULL);
+
+		CloseHandle(file);
+	}
+	else if (_isBossButtonClick)
+	{
+		HANDLE file;
+		DWORD write;
+		//"Loby_SaveFile.mpa"
+		//"SaveFile.map"
+		//"Boss_SaveFile.map"
+		//"Stage_SaveFile.map"
+		file = CreateFile("Boss_SaveFile.map", GENERIC_WRITE, 0, NULL,
+			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+		WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+		WriteFile(file, _pos, sizeof(int) * 2, &write, NULL);
+
+		CloseHandle(file);
+	}
 
 }
 
 void mapTool::load()
 {
-	HANDLE file;
-	DWORD read;
+	if (_isLobyButtonClick)
+	{
+		HANDLE file;
+		DWORD read;
 
-	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		//맵을 불로온 직후 타일의 속성을 매겨준다
+		ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+		ReadFile(file, _pos, sizeof(int) * 2, &read, NULL);
 
-	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
-	ReadFile(file, _pos, sizeof(int) * 2, &read, NULL);
+		CloseHandle(file);
+	}
+	else if (_isStageButtonClick)
+	{
+		HANDLE file;
+		DWORD read;
 
-	//맵을 불로온 직후 타일의 속성을 매겨준다
+		file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		//맵을 불로온 직후 타일의 속성을 매겨준다
+		ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+		ReadFile(file, _pos, sizeof(int) * 2, &read, NULL);
 
+		CloseHandle(file);
+	}
+	else if (_isBossButtonClick)
+	{
+		HANDLE file;
+		DWORD read;
 
-	CloseHandle(file);
+		file = CreateFile("Boss_SaveFile.map", GENERIC_READ, 0, NULL,
+			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		//맵을 불로온 직후 타일의 속성을 매겨준다
+		ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+		ReadFile(file, _pos, sizeof(int) * 2, &read, NULL);
+
+		CloseHandle(file);
+	}
 }
 
 
@@ -258,10 +344,38 @@ void mapTool::render()
 	//Rectangle(getMemDC(), _top);
 	//Rectangle(getMemDC(), _right);
 	//Rectangle(getMemDC(), _bottom);
-	IMAGEMANAGER->findImage("left")->alphaRender(getMemDC(), _left.left, _left.top, 200);
-	IMAGEMANAGER->findImage("top")->alphaRender(getMemDC(), _top.left, _top.top, 200);
-	IMAGEMANAGER->findImage("right")->alphaRender(getMemDC(), _right.left, _right.top, 200);
-	IMAGEMANAGER->findImage("bottom")->alphaRender(getMemDC(), _bottom.left, _bottom.top, 200);
+	IMAGEMANAGER->findImage("left")->alphaRender(getMemDC(), _left.left, _left.top);
+	IMAGEMANAGER->findImage("top")->alphaRender(getMemDC(), _top.left, _top.top);
+	IMAGEMANAGER->findImage("right")->alphaRender(getMemDC(), _right.left, _right.top);
+	IMAGEMANAGER->findImage("bottom")->alphaRender(getMemDC(), _bottom.left, _bottom.top);
+
+	//Rectangle(getMemDC(), _lobyButton.rc);
+	//Rectangle(getMemDC(), _stageButton.rc);
+	//Rectangle(getMemDC(), _bossButton.rc);
+	if (_isLobyButtonClick == true && _isStageButtonClick == false && _isBossButtonClick == false)
+	{
+		IMAGEMANAGER->findImage("loby")->alphaRender(getMemDC(), _lobyButton.rc.left, _lobyButton.rc.top, 255);
+		IMAGEMANAGER->findImage("stage")->alphaRender(getMemDC(), _stageButton.rc.left, _stageButton.rc.top, 100);
+		IMAGEMANAGER->findImage("boss")->alphaRender(getMemDC(), _bossButton.rc.left, _bossButton.rc.top, 100);
+	}
+	else if (_isLobyButtonClick == false && _isStageButtonClick == true && _isBossButtonClick == false)
+	{
+		IMAGEMANAGER->findImage("loby")->alphaRender(getMemDC(), _lobyButton.rc.left, _lobyButton.rc.top, 100);
+		IMAGEMANAGER->findImage("stage")->alphaRender(getMemDC(), _stageButton.rc.left, _stageButton.rc.top, 255);
+		IMAGEMANAGER->findImage("boss")->alphaRender(getMemDC(), _bossButton.rc.left, _bossButton.rc.top, 100);
+	}
+	else if (_isLobyButtonClick == false && _isStageButtonClick == false && _isBossButtonClick == true)
+	{
+		IMAGEMANAGER->findImage("loby")->alphaRender(getMemDC(), _lobyButton.rc.left, _lobyButton.rc.top, 100);
+		IMAGEMANAGER->findImage("stage")->alphaRender(getMemDC(), _stageButton.rc.left, _stageButton.rc.top, 100);
+		IMAGEMANAGER->findImage("boss")->alphaRender(getMemDC(), _bossButton.rc.left, _bossButton.rc.top, 255);
+	}
+	else
+	{
+		IMAGEMANAGER->findImage("loby")->alphaRender(getMemDC(), _lobyButton.rc.left, _lobyButton.rc.top, 255);
+		IMAGEMANAGER->findImage("stage")->alphaRender(getMemDC(), _stageButton.rc.left, _stageButton.rc.top, 255);
+		IMAGEMANAGER->findImage("boss")->alphaRender(getMemDC(), _bossButton.rc.left, _bossButton.rc.top, 255);
+	}
 
 	//Rectangle(getMemDC(), _mouseEffect.mouseRect);
 
@@ -721,6 +835,7 @@ void mapTool::setMap()
 		//위에 클릭하여 저장한 타일을 맵 상에 그려라
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
+			RECT temp;
 			// 팔렛트 선택 할때 뒤에 타일이 찍히지 않게 하기 위해서
 			if (using_Palette()) break;
 			if ((PtInRect(&_itemButton.rc, _ptMouse)) ||
@@ -733,10 +848,27 @@ void mapTool::setMap()
 				(PtInRect(&_eraseButton.rc, _ptMouse)) ||
 				(PtInRect(&_saveButton.rc, _ptMouse)) ||
 				(PtInRect(&_loadButton.rc, _ptMouse)) ||
+				(PtInRect(&_characterButton.rc, _ptMouse)) ||
+				(PtInRect(&_lobyButton.rc, _ptMouse)) ||
+				(PtInRect(&_stageButton.rc, _ptMouse)) ||
+				(PtInRect(&_bossButton.rc, _ptMouse)) ||
 				(PtInRect(&_exitButton.rc, _ptMouse))) { break; }
- 
-			RECT temp;
 
+			if ((IntersectRect(&temp, &_itemButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_stuffButton.rc,  &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_armorButton.rc,  &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_weaponButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_terrainButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_wallButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_trapButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_eraseButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_saveButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_loadButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_characterButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_lobyButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_stageButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_bossButton.rc, &_RectCreate.rc)) ||
+				(IntersectRect(&temp, &_exitButton.rc, &_RectCreate.rc))) { break; }
 			// ptMouse의 좌표를 월드 좌표로 바꿔준다.
 			POINT ptMouse_Temp;
 			ptMouse_Temp.x = _ptMouse.x + CAMERAMANAGER->get_CameraX();
@@ -999,7 +1131,7 @@ WEAPON mapTool::weaponSelect(int frameX, int frameY)
 CHARACTER mapTool::characterSelect(int frameX, int frameY)
 {
 	if (frameX == 0 && frameY == 0) return CHAR_PLAYER;
-	if (frameX == 1 && frameY == 0) return CHAR_NONE;
+	if (frameX == 1 && frameY == 0) return CHAR_SHOPKEEPER;
 	if (frameX == 2 && frameY == 0) return CHAR_NONE;
 	if (frameX == 3 && frameY == 0) return CHAR_NONE;
 	if (frameX == 0 && frameY == 1) return CHAR_SLIME_BLUE;
@@ -1222,7 +1354,7 @@ void mapTool::palette_Rect_Update()
 		{
 			for (int j = 0; j < CHARACTERTILEX; ++j)
 			{
-				SetRect(&_weaponTile[i * CHARACTERTILEX + j].rcTile,
+				SetRect(&_characterTile[i * CHARACTERTILEX + j].rcTile,
 					_palette.characterTile.left + j * TILESIZE, _palette.characterTile.bottom + i * TILESIZE,
 					_palette.characterTile.left + j * TILESIZE + TILESIZE, _palette.characterTile.bottom + i * TILESIZE + TILESIZE);
 			}
@@ -1563,6 +1695,24 @@ void mapTool::menu_Choice()
 	}
 	if (PtInRect(&_eraseButton.rc, _ptMouse)) { _crtSelect = CTRL_ERASER; }
 	if (PtInRect(&_characterButton.rc, _ptMouse)) { _crtSelect = CTRL_CHARACTER; }
+	if (PtInRect(&_lobyButton.rc, _ptMouse)) 
+	{ 
+		_crtSelect = CTRL_LOBY; 
+		_isStageButtonClick = false;
+		_isBossButtonClick = false;
+	}
+	if (PtInRect(&_stageButton.rc, _ptMouse)) 
+	{ 
+		_crtSelect = CTRL_STAGE; 
+		_isLobyButtonClick = false;
+		_isBossButtonClick = false;
+	}
+	if (PtInRect(&_bossButton.rc, _ptMouse)) 
+	{ 
+		_crtSelect = CTRL_BOSS_STAGE; 
+		_isLobyButtonClick = false;
+		_isStageButtonClick = false;
+	}
 	if (PtInRect(&_saveButton.rc, _ptMouse))
 	{
 		_crtSelect = CTRL_SAVE;
