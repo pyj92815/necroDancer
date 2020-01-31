@@ -165,11 +165,6 @@ void miniMap::render()
 				_b = 255;
 			}
 			break;
-		case TYPE_ENEMY:
-			_r = 255;
-			_g = 0;
-			_b = 0;
-			break;
 		case TYPE_CHARACTER:
 			_r = 255;
 			_g = 0;
