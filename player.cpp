@@ -43,20 +43,19 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.isWeapon = false;
 	_player.torch = false;
 	_player.potion = false;
-	_player.hp = 3;
-	_player.maxHp = 10;
+	_player.hp = 6;
+	_player.maxHp = 6;
 	_reversMove = false;
 	_distance = tileSizeY;			//  타일 중점 거리
 	_time = 0.15;					//  MOVE 시간 
-
 	_isMoving = false;		 // MOVE 판단
 	_isKeyPress = false;     // 노트 판단 
 	_isKeyDown = false;      // KEY 입력 판단
 
 	// 초기 세팅 장비 값 
-	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
-	_player.weapon = PLAYERWAEPON_DAGGER;
-	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
+	//makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
+	//_player.weapon = PLAYERWAEPON_DAGGER;
+	//makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
 
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
@@ -86,6 +85,7 @@ void player::update()
 		sprintf(str, "지금 스테이지 : %d", (int)_nowStage);
 		cout << str << endl;
 		cout << " 지금 체력 : " << _player.hp << endl;
+		_player.hp--;
 	}
 }
 
@@ -105,6 +105,8 @@ void player::effectRender()
 
 void player::playerMove()
 {
+	_player.rc = RectMakeCenter(_player.x, _player.y, _player.bodyImage->getFrameWidth(), _player.headImage->getFrameHeight());
+
 	if (!_isMoving) return;
 
 	float elapsedTime = TIMEMANAGER->getElapsedTime();

@@ -1,15 +1,13 @@
 #pragma once
 #include "gameNode.h"
 #include "playerManager.h"
-#include "EnemyManager.h"
 #include "UImanager.h"
 #include "Collision.h"
 #include "miniMap.h"
 #include "zOrder.h"
 #include "visionFloodFill.h"
-
+#include"EnemyManager.h"
 class bossStageScene;
-
 class stageScene: public gameNode
 {
 private: // ¸Ê Ãæµ¹  

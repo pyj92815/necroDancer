@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "stageScene.h"
 #include "bossStageScene.h"
-
+#include"EnemyManager.h"
 HRESULT stageScene::init()
 {
 	stageMapLoad();
@@ -23,6 +23,7 @@ HRESULT stageScene::init()
 	_pm->getPlayerInfo()->collisionSettingBoss();
 
 	_ui = new UImanager;
+	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 	_ui->init();
 	
 	_minimap = new miniMap;
@@ -38,7 +39,6 @@ HRESULT stageScene::init()
 
 
 	_pm->getPlayerInfo()->setStage();
-	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 
 	//ZorderSetup();
 	BEATMANAGER->SetMusicID(1);
@@ -54,7 +54,9 @@ void stageScene::update()
 {
 	//if(OPTION->CheckOptionOpen)
 	_pm->update();
+	_em->setVtile(_vTotalList);
 	_em->update();
+	
 	BEATMANAGER->update();
 	_ui->update();
 	_zOrder->zOrderSetup(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _tiles, _pm, _em);
@@ -62,12 +64,12 @@ void stageScene::update()
 	//ZorderSetup();
 	//_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
-	//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
-
+	
 	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
-	//_minimap->getStageMap(_vTotalList);
-	_minimap->getPlayerPoint(_pm);
+	_minimap->getStageMap(_vTotalList);
+	_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().rc.left, _pm->getPlayerInfo()->getPlayer().rc.top);
+	_minimap->setEnemyXY(_em->getVEnemy());
 	_ui->setInven(_pm->getPlayerInfo()->getVInven());
 	nextPage();
 	

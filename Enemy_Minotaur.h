@@ -3,7 +3,7 @@
 class Enemy_Minotaur:public Enemy
 {
 public:
-	void Action();
+	HRESULT init();
 	void Move();
 	void AniChange();
 };

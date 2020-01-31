@@ -15,7 +15,9 @@ void Enemy_Ghost::Action()
 		}	
 		break;
 	case enemyState::STATE_ATTACK:
-		Attack();
+		
+			Attack();
+	
 		break;
 	case enemyState::STATE_DIE:
 		break;
