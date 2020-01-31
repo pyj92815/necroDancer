@@ -722,5 +722,79 @@ void UImanager::render()
 	{
 		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 60, _diaTest % 10, 0);
 	}
+	
+}
 
+void UImanager::effectRender()
+{
+	for (int i = 0; i < _vInven.size(); i++)
+	{
+		if (_vInven[i]->armor != A_NONE)
+		{
+			IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _attackInven.x * i, _y1Slot, _vInven[i]->frameX, _vInven[i]->frameY);
+		}
+		if (_vInven[i]->weapon != WP_NONE)
+		{
+			IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), i * 100, WINSIZEY / 2, _vInven[i]->frameX, _vInven[i]->frameY);
+		}
+		if (_vInven[i]->stuff != ST_NONE)
+		{
+			IMAGEMANAGER->findImage("stuffTiles")->frameRender(getMemDC(), i * 100, WINSIZEY / 2, _vInven[i]->frameX, _vInven[i]->frameY);
+		}
+	}
+}
+
+void UImanager::makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey, int sight, int damege, float guard, float hp)
+{
+	//if (armor == A_ARMOR_1
+	//	|| armor == A_ARMOR_2
+	//	|| armor == A_ARMOR_3
+	//	|| armor == A_ARMOR_4)
+	//{
+	//	for (int i = 0; i < _vInven.size(); ++i)
+	//	{
+	//		if (_vInven[i]->armor == A_ARMOR_1
+	//			|| _vInven[i]->armor == A_ARMOR_2
+	//			|| _vInven[i]->armor == A_ARMOR_3
+	//			|| _vInven[i]->armor == A_ARMOR_4)
+	//		{
+	//			currentArmor = _vInven[i];
+	//			_player.isArmor = true;
+	//			this->itemRemove(i);
+	//			break;
+	//		}
+	//	}
+	//}
+	//else if (weapon != W_NONE && stuff == ST_NONE && armor == A_NONE)
+	//{
+	//	for (int i = 0; i < _vInven.size(); ++i)
+	//	{
+	//		if (_vInven[i]->weapon == WP_DAGGER_1
+	//			|| _vInven[i]->weapon == WP_DAGGER_2
+	//			|| _vInven[i]->weapon == WP_RAPIER
+	//			|| _vInven[i]->weapon == WP_BROAD_SWORD
+	//			|| _vInven[i]->weapon == WP_LONG_SWORD)
+	//		{
+	//			currentWeapon = _vInven[i];
+	//			_player.isWeapon = true;
+	//			this->itemRemove(i);
+	//			break;
+	//		}
+	//	}
+	//}
+
+
+	//tagItem* item;
+	//item = new tagItem;
+	////ZeroMemory(item, sizeof(item));
+	//item->weapon = weapon;
+	//item->armor = armor;
+	//item->stuff = stuff;
+	//item->frameX = framex;
+	//item->frameY = framey;
+	//item->sight = sight;
+	//item->damege = damege;
+	//item->guard = guard;
+	//item->hp = hp;
+	//_vInven.push_back(item);
 }

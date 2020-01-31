@@ -99,7 +99,7 @@ public:
 	void setPlayerEnemyTile(map<PLAYERDIRECTION, Enemy*> tile)	 { _mPlayerEnemyTile = tile; }
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	//void setEnemyAddressLink(EnemyManager* enemyManager) { }
+	vector<tagItem*> getVInven() { return _vInven; }
 
 	//이미지 세팅
 	void imageSetting()

@@ -1,6 +1,8 @@
 #pragma once
 #include "gameNode.h"
 #include <map>
+#include "playerManager.h"
+
 
 
 enum HEARTSTATE
@@ -42,6 +44,9 @@ struct invenTag
 class UImanager : public gameNode
 {
 private:
+	vector<tagItem*>					_vInven;
+	vector<tagItem*>::iterator			_viInven;
+
 	//인벤토리
 	map<OBJECT, invenTag> _mInven;
 	map<OBJECT, invenTag>::iterator _miInven;
@@ -108,5 +113,9 @@ public:
 	virtual void update();
 	virtual void render();
 	void set_HP() { hp--; }
+
+	void getInven(vector<tagItem*> inven) { _vInven = inven; }
+	void effectRender();
+	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey, int sight, int damege, float guard, float hp);
 };
 

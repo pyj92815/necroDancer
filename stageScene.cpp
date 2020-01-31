@@ -138,6 +138,7 @@ void stageScene::render()
 	//ENEMYMANAGER->render(getMemDC());
 	BEATMANAGER->render();
 	_ui->render();
+	_ui->effectRender();
 	_minimap->render();
 }
 //
@@ -270,7 +271,7 @@ void stageScene::stageMapLoad()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("kimmi.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
