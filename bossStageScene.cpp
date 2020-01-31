@@ -629,7 +629,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 				if (_collision.collision_DeathMetal_Find_Player(_player, _deathMetal))
 				{
 					// 플레이어가 앞에 있다면 근접 공격을 해준다.
-					ui->set_HP();
+					//ui->set_HP();
 					_player->playerHit(deathMetal->getBoss_Atk());
 					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
@@ -682,7 +682,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 				if (_collision.collision_DeathMetal_Find_Player(_player, _deathMetal))
 				{
 					// 플레이어가 앞에 있다면 근접 공격을 해준다.
-					ui->set_HP();
+					//ui->set_HP();
 					_player->playerHit(deathMetal->getBoss_Atk());
 					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
@@ -740,7 +740,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 				if (_collision.collision_DeathMetal_Find_Player(_player, _deathMetal))
 				{
 					// 플레이어가 앞에 있다면 근접 공격을 해준다.
-					ui->set_HP();
+					//ui->set_HP();
 					_player->playerHit(deathMetal->getBoss_Atk());
 					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
@@ -793,7 +793,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 				if (_collision.collision_DeathMetal_Find_Player(_player, _deathMetal))
 				{
 					// 플레이어가 앞에 있다면 근접 공격을 해준다.
-					ui->set_HP();
+					//ui->set_HP();
 					_player->playerHit(deathMetal->getBoss_Atk());
 					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
@@ -1048,7 +1048,7 @@ void bossStageScene::slave_Move_Player()
 					!_sm->get_SlaveList()[i]->get_Slave()->b_Value.ghostJonYha)
 				{
 					_player->playerHit(_sm->get_SlaveList()[i]->get_Slave()->status.attack);
-					_ui->set_HP();
+					//_ui->set_HP();
 					// 플레이어에게 근접 공격 이펙트를 그려준다.
 					boss_Base_Attack_Render("base_Attack", _player);
 					CAMERAMANAGER->Camera_WorldDC_Shake();
