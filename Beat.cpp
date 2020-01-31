@@ -140,11 +140,11 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
 
 void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
 {
-    if (musicID == 1) _currentStage = STAGE_LOBBY, _currentStageID = (int)_currentStage, _currentSongName = "BGM_LOBBY", _currentShopkeeper = "", _noteFileName = "Music/lobby.txt", Load(), _loopSong = false;
-    else if (musicID == 2) _currentStage = STAGE_1_1, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_1", _currentShopkeeper = "NPC_Stage_1_1_shopkeeper", _noteFileName = "Music/zone1_1.txt", Load(), _loopSong = false;
-    else if (musicID == 3) _currentStage = STAGE_1_2, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_2", _currentShopkeeper = "NPC_Stage_1_2_shopkeeper", _noteFileName = "Music/zone1_2.txt", Load(), _loopSong = false;
-    else if (musicID == 4) _currentStage = STAGE_1_3, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_3", _currentShopkeeper = "NPC_Stage_1_3_shopkeeper", _noteFileName = "Music/zone1_3.txt", Load(), _loopSong = false;
-    else if (musicID == 5) _currentStage = BOSS, _currentStageID = (int)_currentStage, _currentSongName = "BGM_BOSS", _currentShopkeeper = "", _noteFileName = "Music/boss_2.txt", Load(), _loopSong = true;
+    if (musicID == 1) _currentStage = STAGE_LOBBY, _currentStageID = (int)_currentStage, _currentSongName = "BGM_LOBBY", _currentShopkeeper = "", _noteFileName = "Music/lobby.txt", _loopSong = false;
+    else if (musicID == 2) _currentStage = STAGE_1_1, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_1", _currentShopkeeper = "NPC_Stage_1_1_shopkeeper", _noteFileName = "Music/zone1_1.txt", _loopSong = false;
+    else if (musicID == 3) _currentStage = STAGE_1_2, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_2", _currentShopkeeper = "NPC_Stage_1_2_shopkeeper", _noteFileName = "Music/zone1_2.txt", _loopSong = false;
+    else if (musicID == 4) _currentStage = STAGE_1_3, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_3", _currentShopkeeper = "NPC_Stage_1_3_shopkeeper", _noteFileName = "Music/zone1_3.txt", _loopSong = false;
+    else if (musicID == 5) _currentStage = BOSS, _currentStageID = (int)_currentStage, _currentSongName = "BGM_BOSS", _currentShopkeeper = "", _noteFileName = "Music/boss_2.txt", _loopSong = true;
 }
 
 void Beat::update_PlayerMoveTest() // 테스트용 플레이어
@@ -164,6 +164,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
     // 현재 스테이지가 기존 스테이지와 다를 때 초기화해주는 것들(노트 속도, 남은 시간, 벡터들, 재생 곡 교체, 현재 곡 정보를 담을 키 값들 교체, 델타 타임 다시 받기, 초기 노트 생성)
     if (_currentStageID != _oldStageID)
     {
+        Load();
         musicID_Temp = musicID;
         _songLeftTime = 0;
         _vNoteLeft.clear();
@@ -172,6 +173,15 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
         _oldSongName = _currentSongName;
         _oldShopKeeper = _currentShopkeeper;
         _oldStageID = _currentStageID;
+        TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
+        TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
+
+        CreateNewNote(true);
+        CreateNewNote(false);
+    }
+
+    if (_songPos > 0) // 곡이 시작되었을때
+    {
 
         if (TIMEMANAGER->getFrameRate() > 10)
         {
@@ -182,15 +192,6 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             _deltaTime = 0.016f;
         }
 
-        TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
-        TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
-
-        CreateNewNote(true);
-        CreateNewNote(false);
-    }
-
-    if (_songPos > 0) // 곡이 시작되었을때
-    {
         for (int i = 0; i < _vNoteLeft.size(); i++)
         {
             noteTimeIntervalCount = TIMEMANAGER->getCountTime();
