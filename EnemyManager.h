@@ -27,22 +27,23 @@ private:
 	EnemyType _enemyType;
 
 	player* _player;
-
+	map<CHARACTER, POINT>            _mEnemyPoint;
+	map<CHARACTER, POINT>::iterator _miEnemyPoint;
 public:
 	EnemyManager() {};
 	~EnemyManager() {};
 
-	HRESULT init();
+	HRESULT init(map<CHARACTER,POINT> menemPoint);
 	void release();
 	void update();
 	void render();
-	
+	void EnemyCreate();
 	void WallInspection();
 	void Attack();
 	void EnemyRemove();
 
 	void EnemyInspection();
-	void 임시enemy생성();
+
 	
 	void EnemyCreate(float x, float y, EnemyType enemyType);
 
