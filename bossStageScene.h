@@ -7,6 +7,8 @@
 #include "Collision.h"
 #include "stageScene.h"
 #include "zOrder.h"
+#include "visionFloodFill.h"
+
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinmainCRTStartup /subsystem:console")
 #else
@@ -43,6 +45,7 @@ private:
 	deathMetal*									_deathMetal;					// 데스메탈
 	slaveManager*								_sm;							// 슬레이브 매니저
 	zOrder* _zOrder;
+	visionFloodFill* _floodFill;
 private:
 	bool distanceCheck;															// 거리를 체크한다. (범위에 들어오거나 들어오지 않을때 값이 바뀐다.)
 public:

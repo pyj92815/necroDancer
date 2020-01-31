@@ -26,6 +26,7 @@ HRESULT bossStageScene::init()
 	_deathMetal->init("데스메탈", 13, 15, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
 
 	_player = _stageScene->getPlayerAddress();								// 플레이어 링크
+	_player->collisionSettingStage();
 	_ui = _stageScene->getUiAddress();										// ui 링크
 
 	playerPos_Setting();													// 보스 스테이지에 입장 한 플레이어의 위치를 생성 위치를 잡아준다.
@@ -38,9 +39,14 @@ HRESULT bossStageScene::init()
 	_zOrder = new zOrder;
 	_zOrder->init();
 
+	_floodFill = new visionFloodFill;
+	_floodFill->init();
+
 	// 보스 등장 씬에 관련 변수 초기화
 	bossSceneSetting();
 
+
+	_player->setBossStage(); // 보스스테이지 락훈 추가 
 	BEATMANAGER->init();
 
 	return S_OK;
@@ -55,7 +61,7 @@ void bossStageScene::update()
 
 
 	// 플레이어 인덱스 출력
-	cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
+	//cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
 
 	// 보스 등장 씬이 끝나면 플레이가 가능하다.
 	bossSceneStart();
@@ -86,6 +92,8 @@ void bossStageScene::update()
 			// 슬레이브 움직임 연산
 			slave_Move_Player();
 
+			cout << _deathMetal->getBoss_Index().x << ": y:" << _deathMetal->getBoss_Index().y << endl;
+		
 			// 슬레이브 테스트용 소환
 			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
 			{
@@ -117,16 +125,24 @@ void bossStageScene::update()
 			}
 		}
 
+		BEATMANAGER->update();
+		
 		if (_deathMetal->getBoss_HP() <= 0)
 		{
 			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 		}
 
-		BEATMANAGER->update();
+	
 
 	}
-	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player, _sm, _deathMetal);
+	_player->setDeathMetal(_collision.collision_player_Metal_tile(_deathMetal, _player));
+	_player->setSlaveTile(_collision.collision_player_slave_tile(&_sm->get_SlaveList(), _player));
+
+
+	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player,_sm,_deathMetal);
 	_zOrder->update();
+	_floodFill->setVision(_tiles, _player->getPlayer().idx, _player->getPlayer().idy, _player->getPlayer().sight);
+	_player->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _player));
 }
 
 void bossStageScene::render()
@@ -139,7 +155,10 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList)->type != TYPE_NONE)
 			{
-	
+
+					// 타일의 속성에 따라 이미지를 뿌린다.
+				if((*_viTotalList)->alphaValue <= 0) findTileImage();
+
 				// 타일의 속성에 따라 이미지를 뿌린다.
 				findTileImage();
 	
@@ -153,10 +172,13 @@ void bossStageScene::render()
 
 	//_sm->render();
 
-	_zOrder->render();
-
 	// 보스가 근접 공격을 했을때 이펙트를 그려준다. (size가 0 이상이라면)
 	if (_vEffect.size() > 0)	boss_Base_Attack_Render();
+
+	_sm->render();
+
+	_zOrder->render();
+	_player->effectRender();
 
 	// 월드이미지를 뿌려준다.
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
@@ -196,7 +218,6 @@ void bossStageScene::bossStageMap_Load()
 		if (_tiles[i].type != TYPE_NONE)
 		{
 			_tiles[i].alphaValue = 255;
-
 			_vTotalList.push_back(&_tiles[i]);
 		}
 
@@ -260,12 +281,12 @@ void bossStageScene::z_Order_Player_Boss()
 	if (_deathMetal->getBoss_Index().y > _player->getPlayer().idy)	// 보스가 플레이어보다 앞에 있다.
 	{
 		//_player->render();
-		if (_deathMetal->getBoss_HP() > 0)	_deathMetal->render();
+		//if (_deathMetal->getBoss_HP() > 0)	_deathMetal->render();
 
 	}
 	else	// 보스가 플레이어보다 뒤에 있다.
 	{
-		if (_deathMetal->getBoss_HP() > 0)	_deathMetal->render();
+		//if (_deathMetal->getBoss_HP() > 0)	_deathMetal->render();
 		//_player->render();
 
 	}

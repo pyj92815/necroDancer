@@ -2,6 +2,14 @@
 
 class EnemyManager;
 class Enemy;
+class deathMetal;
+class slave;
+
+enum NOWSTAGE // 스테이지를 나타냄 
+{
+	NOWSTAGE_STAGE,
+	NOWSTAGE_BOSS
+};
 
 enum PLAYERDIRECTION			// 플레이어의 방향
 {

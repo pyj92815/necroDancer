@@ -196,15 +196,15 @@ bool Collision::collision_DeathMetal_Find_Slave(deathMetal* deathMetal, vector<s
 				isAttack = true;
 			}
 			break;
-	
+
 		case BD_UP:
-			if (deathMetal->getBoss_Index().x  == _vSlaveList[i]->get_Slave()->pos.index.x &&
+			if (deathMetal->getBoss_Index().x == _vSlaveList[i]->get_Slave()->pos.index.x &&
 				deathMetal->getBoss_Index().y - 1 == _vSlaveList[i]->get_Slave()->pos.index.y)
 			{
 				isAttack = true;
 			}
 			break;
-	
+
 		case BD_RIGHT:
 			if (deathMetal->getBoss_Index().x + 1 == _vSlaveList[i]->get_Slave()->pos.index.x &&
 				deathMetal->getBoss_Index().y == _vSlaveList[i]->get_Slave()->pos.index.y)
@@ -212,7 +212,7 @@ bool Collision::collision_DeathMetal_Find_Slave(deathMetal* deathMetal, vector<s
 				isAttack = true;
 			}
 			break;
-	
+
 		case BD_DOWN:
 			if (deathMetal->getBoss_Index().x == _vSlaveList[i]->get_Slave()->pos.index.x &&
 				deathMetal->getBoss_Index().y + 1 == _vSlaveList[i]->get_Slave()->pos.index.y)
@@ -237,7 +237,7 @@ bool Collision::collision_Slave_Find_Player(player* playerInfo, SLAVE_INFO* slav
 	switch (slave->status.direction)
 	{
 	case SLAVE_DIRECTION::SD_LEFT:
-		if (slave->pos.index.x - 1== playerInfo->getPlayer().idx &&
+		if (slave->pos.index.x - 1 == playerInfo->getPlayer().idx &&
 			slave->pos.index.y == playerInfo->getPlayer().idy)
 		{
 			isAttack = true;
@@ -860,7 +860,7 @@ map<PLAYERDIRECTION, tagTile*> Collision::collision_player_tile(vector<tagTile*>
 map<PLAYERDIRECTION, Enemy*> Collision::collision_player_Enemy_tile(vector<Enemy*>* enemyInfo, player* playerInfo)
 {
 	map<PLAYERDIRECTION, Enemy*> _mEnemy;
-	
+
 	switch (playerInfo->getPlayer().weapon)
 	{
 	case PLAYERWAEPON_NONE:
@@ -971,8 +971,8 @@ map<PLAYERDIRECTION, Enemy*> Collision::collision_player_Enemy_tile(vector<Enemy
 			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx - 1
 				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy + 1)
 			{
-				_mEnemy.insert(pair<PLAYERDIRECTION,Enemy*>(PLAYERDIRECTION_DOWN, (*enemyInfo)[i]));
-				_mEnemy.insert(pair<PLAYERDIRECTION,Enemy*>(PLAYERDIRECTION_LEFT, (*enemyInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_DOWN, (*enemyInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, Enemy*>(PLAYERDIRECTION_LEFT, (*enemyInfo)[i]));
 			}// 대각 하우
 			else if ((*enemyInfo)[i]->getEnemyInfo()->idx == playerInfo->getPlayer().idx + 1
 				&& (*enemyInfo)[i]->getEnemyInfo()->idy == playerInfo->getPlayer().idy + 1)
@@ -988,5 +988,266 @@ map<PLAYERDIRECTION, Enemy*> Collision::collision_player_Enemy_tile(vector<Enemy
 	// 몬스터 충돌 처리 한후 전달하기 
 
 	return _mEnemy;
+}
+
+map<PLAYERDIRECTION, slave*> Collision::collision_player_slave_tile(vector<slave*>* slaveInfo, player* playerInfo)
+{
+	map<PLAYERDIRECTION, slave*> _mEnemy;
+	
+	switch (playerInfo->getPlayer().weapon)
+	{
+	case PLAYERWAEPON_NONE:
+	case PLAYERWAEPON_DAGGER:
+		// 몬스터 for문을 돌린다
+		for (int i = 0; i < slaveInfo->size(); ++i)
+		{
+			if (0 > slaveInfo->size()) break; // 몬스터가 없으면 끝 
+			//상
+			if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy - 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_UP, (*slaveInfo)[i]));
+			}//하
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy + 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_DOWN, (*slaveInfo)[i]));
+			}//좌
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx - 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_LEFT, (*slaveInfo)[i]));
+			}//우
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx + 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_RIGHT, (*slaveInfo)[i]));
+			}
+		}// 끝
+		return _mEnemy;
+		break;
+	case PLAYERWAEPON_LONGSWORD:
+	case PLAYERWAEPON_RAPIER:
+	case PLAYERWAEPON_SPEAR:
+		// 몬스터 for문을 돌린다
+		for (int i = 0; i < slaveInfo->size(); ++i)
+		{
+			//상
+			if (((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy - 1) ||
+				((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx
+					&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy - 2))
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_UP, (*slaveInfo)[i]));
+			}//하
+			else if (((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy + 1) ||
+				((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx
+					&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy + 2))
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_DOWN, (*slaveInfo)[i]));
+			}//좌
+			else if (((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx - 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy) ||
+				((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx - 2
+					&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy))
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_LEFT, (*slaveInfo)[i]));
+			}//우
+			else if (((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx + 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy) ||
+				((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx + 2
+					&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy))
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_RIGHT, (*slaveInfo)[i]));
+			}
+		}// 끝
+		return _mEnemy;
+		break;
+	case PLAYERWAEPON_BROADSWORD:
+		// 몬스터 for문을 돌린다
+		for (int i = 0; i < slaveInfo->size(); ++i)
+		{
+			//상
+			if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy - 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_UP, (*slaveInfo)[i]));
+			}//하
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy + 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_DOWN, (*slaveInfo)[i]));
+			}//좌
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx - 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_LEFT, (*slaveInfo)[i]));
+			}//우
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx + 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_RIGHT, (*slaveInfo)[i]));
+			}// 대각 상좌
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx - 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy - 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_UP, (*slaveInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_LEFT, (*slaveInfo)[i]));
+			}// 대각 상우
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx + 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy - 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_UP, (*slaveInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_RIGHT, (*slaveInfo)[i]));
+			}// 대각 하좌
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx - 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy + 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_DOWN, (*slaveInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_LEFT, (*slaveInfo)[i]));
+			}// 대각 하우
+			else if ((*slaveInfo)[i]->get_Slave()->pos.index.x == playerInfo->getPlayer().idx + 1
+				&& (*slaveInfo)[i]->get_Slave()->pos.index.y == playerInfo->getPlayer().idy + 1)
+			{
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_DOWN, (*slaveInfo)[i]));
+				_mEnemy.insert(pair<PLAYERDIRECTION, slave*>(PLAYERDIRECTION_RIGHT, (*slaveInfo)[i]));
+			}
+
+		}// 끝
+		return _mEnemy;
+		break;
+	}
+	// 몬스터 충돌 처리 한후 전달하기 
+
+	return _mEnemy;
+}
+
+map<PLAYERDIRECTION, deathMetal*> Collision::collision_player_Metal_tile(deathMetal* metalInfo, player* playerInfo)
+{
+	map<PLAYERDIRECTION, deathMetal*> _mDeathMetal;
+
+	switch (playerInfo->getPlayer().weapon)
+	{
+	case PLAYERWAEPON_NONE:
+	case PLAYERWAEPON_DAGGER:
+		// 몬스터 for문을 돌린다
+
+		//상
+		if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx
+			&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy - 1)
+		{
+			_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_UP, metalInfo));
+		}//하
+		else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx
+			&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy + 1)
+		{
+			_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_DOWN, metalInfo));
+		}//좌
+		else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx - 1
+			&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy)
+		{
+			_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_LEFT, metalInfo));
+		}//우
+		else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx + 1
+			&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy)
+		{
+			_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_RIGHT, metalInfo));
+		}
+
+		return _mDeathMetal;
+	break;
+	case PLAYERWAEPON_LONGSWORD:
+	case PLAYERWAEPON_RAPIER:
+	case PLAYERWAEPON_SPEAR:
+		// 몬스터 for문을 돌린다
+	
+			//상
+			if (((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx
+				&& (*metalInfo).getBoss_Index().y== playerInfo->getPlayer().idy - 1) ||
+				((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx
+					&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy - 2))
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_UP, metalInfo));
+			}//하
+			else if (((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy + 1) ||
+				((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx
+					&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy + 2))
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_DOWN, metalInfo));
+			}//좌
+			else if (((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx - 1
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy) ||
+				((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx - 2
+					&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy))
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_LEFT, metalInfo));
+			}//우
+			else if (((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx + 1
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy) ||
+				((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx + 2
+					&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy))
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_RIGHT, metalInfo));
+			}
+	
+		return _mDeathMetal;
+		break;
+	case PLAYERWAEPON_BROADSWORD:
+		// 몬스터 for문을 돌린다
+	
+			//상
+			if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy - 1)
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_UP, metalInfo));
+			}//하
+			else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy + 1)
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_DOWN, metalInfo));
+			}//좌
+			else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx - 1
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy)
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_LEFT, metalInfo));
+			}//우
+			else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx + 1
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy)
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_RIGHT, metalInfo));
+			}// 대각 상좌
+			else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx - 1
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy - 1)
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_UP, metalInfo));
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_LEFT, metalInfo));
+			}// 대각 상우
+			else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx + 1
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy - 1)
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_UP, metalInfo));
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_RIGHT, metalInfo));
+			}// 대각 하좌
+			else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx - 1
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy + 1)
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_DOWN, metalInfo));
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_LEFT, metalInfo));
+			}// 대각 하우
+			else if ((*metalInfo).getBoss_Index().x == playerInfo->getPlayer().idx + 1
+				&& (*metalInfo).getBoss_Index().y == playerInfo->getPlayer().idy + 1)
+			{
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_DOWN, metalInfo));
+				_mDeathMetal.insert(pair<PLAYERDIRECTION, deathMetal*>(PLAYERDIRECTION_RIGHT, metalInfo));
+			}
+
+		return _mDeathMetal;
+		break;
+	}
+
+
+	return _mDeathMetal;
 }
 
