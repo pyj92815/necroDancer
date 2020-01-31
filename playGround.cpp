@@ -38,6 +38,11 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addImage("map", "./image/mapTool/icon/i_map.bmp", 72, 72, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("character", "./image/mapTool/icon/i_char.bmp", 72, 72, true, RGB(255, 0, 255));
 
+	IMAGEMANAGER->addImage("loby", "./image/mapTool/icon/loby.bmp", 100, 27, true, RGB(255, 0, 255), true);
+	IMAGEMANAGER->addImage("stage", "./image/mapTool/icon/stage.bmp", 100, 27, true, RGB(255, 0, 255), true);
+	IMAGEMANAGER->addImage("boss", "./image/mapTool/icon/boss.bmp", 100, 27, true, RGB(255, 0, 255), true);
+
+
 	//팔레트에 사용될 이미지들
 	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("wallTiles", "./image/mapTool/wall/wall.bmp", 832, 416, WALLTILEX, WALLTILEY, true, RGB(255, 0, 255));
