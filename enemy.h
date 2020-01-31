@@ -41,6 +41,8 @@ struct EnemyInfo
 	bool right;
 	bool up;
 	bool down;
+	bool object;
+	bool correction;
 };
 struct playerInfo
 {

@@ -16,6 +16,11 @@ HRESULT Enemy::init()
 	_enemyInfo->parentLight = _enemyInfo->Light;
 	_enemyInfo->routeX = 0;
 	_enemyInfo->routeY = 0;
+	_enemyInfo->left = false;
+	_enemyInfo->right = false;
+	_enemyInfo->up = false;
+	_enemyInfo->down = false;
+	_enemyInfo->correction = false;
 	//_collision = new Collision;
 
 	return S_OK;
@@ -41,8 +46,61 @@ void Enemy::update()
 		AniChange();
 		_enemyInfo->parentLight = _enemyInfo->Light;
 	}
+	
 	if(!_enemyInfo->Attack)
-	moveAction();
+		switch (_enemyInfo->direction)
+		{
+		case Direction::LEFT:
+			if (!_enemyInfo->left)
+			{
+				moveAction();
+				_enemyInfo->correction = false;
+			}
+			else
+			{
+				_enemyInfo->x = _enemyInfo->idx * 52+26;
+				_enemyInfo->y = _enemyInfo->idy * 52+26;
+			}
+			break;
+		case Direction::RIGHT:
+			if (!_enemyInfo->right)
+			{
+				moveAction();
+				_enemyInfo->correction = false;
+			}
+			else
+			{
+				_enemyInfo->x = _enemyInfo->idx * 52+26;
+				_enemyInfo->y = _enemyInfo->idy * 52+26;
+			}
+			break;
+		case Direction::UP:
+			if (!_enemyInfo->up)
+			{
+				moveAction();
+				_enemyInfo->correction = false;
+			}
+			else
+			{
+				_enemyInfo->x = _enemyInfo->idx * 52+26;
+				_enemyInfo->y = _enemyInfo->idy * 52+26;
+			}
+			break;
+		case Direction::DOWN:
+			if (!_enemyInfo->down)
+			{
+				moveAction();
+				_enemyInfo->correction = false;
+			}
+			else
+			{
+				_enemyInfo->x = _enemyInfo->idx * 52+26;
+				_enemyInfo->y = _enemyInfo->idy * 52+26;
+			}
+			
+			break;
+		}
+	
 	//enemyMove();
 	_enemyInfo->rc = RectMake(_enemyInfo->idx * 52, _enemyInfo->idy * 52, 52, 52);
 	
@@ -120,7 +178,7 @@ void Enemy::Move()
 	else if (_enemyInfo->idy == _playerInfo->idy)
 	{
 		//enemy가 플레이어의 오른쪽에 있다면 왼쪽으로 이동
-		if (_enemyInfo->idx > _playerInfo->idx)
+		if (_enemyInfo->idx > _playerInfo->idx && !_enemyInfo->left)
 		{
 			_enemyInfo->direction = Direction::LEFT;
 			_enemyInfo->idx -= 1;
@@ -129,7 +187,7 @@ void Enemy::Move()
 			}
 		
 		//enemy가 플레이어의 왼쪽에 있다면 오른쪽으로 이동
-		else if (_enemyInfo->idx < _playerInfo->idx)
+		else if (_enemyInfo->idx < _playerInfo->idx && !_enemyInfo->right)
 		{
 			_enemyInfo->direction = Direction::RIGHT;
 			_enemyInfo->idx += 1;
@@ -139,10 +197,10 @@ void Enemy::Move()
 		}
 	}
 	//enemy와 플레이어의 x축이 같다면(y축 이동)
-	else if (_enemyInfo->idx == _playerInfo->idx)
+	else if (_enemyInfo->idx == _playerInfo->idx )
 	{
 		//enemy가 플레이어의 아래쪽에 있다면 위로 이동
-		if (_enemyInfo->idy > _playerInfo->idy)
+		if (_enemyInfo->idy > _playerInfo->idy && !_enemyInfo->up)
 		{
 			_enemyInfo->direction = Direction::UP;
 			_enemyInfo->idy -= 1;
@@ -151,7 +209,7 @@ void Enemy::Move()
 			
 		}
 		//enemy가 플레이어의 위쪽에 있다면 아래로 이동
-		else if (_enemyInfo->idy < _playerInfo->idy)
+		else if (_enemyInfo->idy < _playerInfo->idy && !_enemyInfo->down)
 		{
 			_enemyInfo->direction = Direction::DOWN;
 			_enemyInfo->idy += 1;
@@ -164,7 +222,7 @@ void Enemy::Move()
 	else if (x > y)
 	{
 		//enemy가 플레이어보다 밑에 있다면
-		if (_enemyInfo->idy > _playerInfo->idy)
+		if (_enemyInfo->idy > _playerInfo->idy && !_enemyInfo->up)
 		{
 			_enemyInfo->direction = Direction::UP;
 			_enemyInfo->idy -= 1;
@@ -173,7 +231,7 @@ void Enemy::Move()
 			
 		}
 		//enemy가 플레이어보다 위에 있다면
-		else if (_enemyInfo->idy < _playerInfo->idy)
+		else if (_enemyInfo->idy < _playerInfo->idy && !_enemyInfo->down)
 		{
 			_enemyInfo->direction = Direction::DOWN;
 			_enemyInfo->idy += 1;
@@ -187,7 +245,7 @@ void Enemy::Move()
 	//x축이 더 가까움(x축 이동)
 	else if (x < y)
 	{
-		if (_enemyInfo->idx > _playerInfo->idx)
+		if (_enemyInfo->idx > _playerInfo->idx && !_enemyInfo->left)
 		{
 			_enemyInfo->direction = Direction::LEFT;
 			_enemyInfo->idx -= 1;
@@ -195,7 +253,7 @@ void Enemy::Move()
 			enemyAngle();
 			
 		}
-		else if (_enemyInfo->idx < _playerInfo->idx)
+		else if (_enemyInfo->idx < _playerInfo->idx && !_enemyInfo->right)
 		{
 			_enemyInfo->direction = Direction::RIGHT;
 			_enemyInfo->idx += 1;
@@ -257,20 +315,21 @@ void Enemy::enemyAngle()
 	switch (_enemyInfo->direction)
 	{
 	case Direction::LEFT:
-		
+		if (_enemyInfo->left)break;
 		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x - 52, _enemyInfo->y);
 		break;
 	case Direction::RIGHT:
+		if (_enemyInfo->right)break;
 		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x + 52, _enemyInfo->y);
 		
 		break;
 	case Direction::UP:
-		
+		if (_enemyInfo->up)break;
 		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x, _enemyInfo->y-52);
 		
 		break;
 	case Direction::DOWN:
-		
+		if (_enemyInfo->down)break;
 		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x, _enemyInfo->y+52);
 		
 		break;

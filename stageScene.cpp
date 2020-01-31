@@ -46,7 +46,9 @@ void stageScene::update()
 {
 	//if(OPTION->CheckOptionOpen)
 	_pm->update();
+	_em->setVtile(_vTotalList);
 	_em->update();
+	
 	BEATMANAGER->update();
 	_ui->update();
 	_zOrder->zOrderSetup(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _tiles, _pm, _em);

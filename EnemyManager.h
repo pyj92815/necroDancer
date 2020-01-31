@@ -25,7 +25,6 @@ private:
 	vector<tagTile*>::iterator _viTile;
 
 	EnemyType _enemyType;
-	
 
 	player* _player;
 
@@ -38,7 +37,7 @@ public:
 	void update();
 	void render();
 	
-	void WallInspection(vector<tagTile>* vtile);
+	void WallInspection();
 	void Attack();
 	void EnemyRemove();
 
@@ -64,5 +63,7 @@ public:
 
 	vector<Enemy*> getVEnemy() { return _vEnemy; }
 	vector<Enemy*>::iterator getViEnemy() { return _viEnemy; }
+
+	void setVtile(vector<tagTile*> tile);
 
 };
