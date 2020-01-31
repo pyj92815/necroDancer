@@ -16,7 +16,7 @@ HRESULT stageScene::init()
 
 	_ui = new UImanager;
 	_ui->init();
-
+	
 	_minimap = new miniMap;
 	_minimap->init();
 	
@@ -24,7 +24,7 @@ HRESULT stageScene::init()
 	
 	_zOrder = new zOrder;
 	_zOrder->init();
-
+	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 	//ZorderSetup();
 	return S_OK;
 }
@@ -47,6 +47,8 @@ void stageScene::update()
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 	_minimap->getStageMap(_vTotalList);
 	_minimap->getPlayerPoint(_pm);
+	_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	
 }
 
 void stageScene::render()
@@ -138,7 +140,6 @@ void stageScene::render()
 	//ENEMYMANAGER->render(getMemDC());
 	BEATMANAGER->render();
 	_ui->render();
-	_ui->effectRender();
 	_minimap->render();
 }
 //

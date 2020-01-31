@@ -29,6 +29,7 @@ void miniMap::release()
 void miniMap::update()
 {
 	cout<<_em->getVEnemy()[0]->getEnemyInfo()->idx<<"adsfdafsadfsadfs"<<endl;
+	
 }
 
 void miniMap::render()
@@ -194,18 +195,18 @@ void miniMap::render()
 		DeleteObject(pen);
 
 
-		////플레이어
-		HBRUSH brush3 = CreateSolidBrush(RGB(0, 0, 255));
-		HBRUSH oldBrush3 = (HBRUSH)SelectObject(getMemDC(), brush3);
-		HPEN pen3 = CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
-		HPEN oldPen3 = (HPEN)SelectObject(getMemDC(), pen3);
-		RECT temp3 = RectMake(750 + _pm->getPlayerInfo()->getPlayer().rc.left / 10,
-			450 + _pm->getPlayerInfo()->getPlayer().rc.top / 10, 4, 4);
-		Rectangle(getMemDC(), temp3);
-		SelectObject(getMemDC(), oldBrush3);
-		SelectObject(getMemDC(), oldPen3);
-		DeleteObject(brush3);
-		DeleteObject(pen3);
+		//////플레이어
+		//HBRUSH brush3 = CreateSolidBrush(RGB(0, 0, 255));
+		//HBRUSH oldBrush3 = (HBRUSH)SelectObject(getMemDC(), brush3);
+		//HPEN pen3 = CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
+		//HPEN oldPen3 = (HPEN)SelectObject(getMemDC(), pen3);
+		//RECT temp3 = RectMake(750 + _pm->getPlayerInfo()->getPlayer().rc.left / 10,
+		//	450 + _pm->getPlayerInfo()->getPlayer().rc.top / 10, 4, 4);
+		//Rectangle(getMemDC(), temp3);
+		//SelectObject(getMemDC(), oldBrush3);
+		//SelectObject(getMemDC(), oldPen3);
+		//DeleteObject(brush3);
+		//DeleteObject(pen3);
 
 		}
 
