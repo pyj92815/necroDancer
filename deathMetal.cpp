@@ -21,6 +21,7 @@ HRESULT deathMetal::init(string bossName, int idx, int idy, int TILE_SIZEX, int 
 	boss::isCasting = false;											 // 데스메탈이 마법을 캐스팅 중이라면 이 값이 true로 바뀐다.
 	boss::isClosePlayer = false;										 // 데스메탈이 플레이어 근처에 있다면 이 값이 true로 바뀐다.
 	boss::save_ClosePlayer = boss::isClosePlayer;						 // 근처에 플레이어가 있는지 여부를 저장해둔다. 
+	boss::isShield_Hit = false;
 
 	clearThrowShield();													 // 데스메탈의 실드 정보를 초기화 해준다.
 
@@ -513,7 +514,6 @@ void deathMetal::deathMetal_ChangePhase()
 
 	// 만약 보스 페이즈가 2로 바뀌었고, 실드를 아직 던지지 않았다면 실행한다. (실드 던지는 애니메이션 함수)
 	if (boss::phase != BP_PHASE_1 && !boss::isThrowShield)	deathMetal_ThrowShield();
-
 
 }
 

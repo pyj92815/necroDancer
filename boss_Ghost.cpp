@@ -16,12 +16,37 @@ HRESULT boss_Ghost::init()
 
 void boss_Ghost::update()
 {
+	move();
 	boss_Ghost_ChangeAnimation();
-	slave::slave_Pos_Setting();
+	slave_Pos_Setting();
 }
 
 void boss_Ghost::move()
 {
+	// 슬레이브의 무브가 true로 변하면
+	if (slave::_slave.b_Value.isMove)
+	{
+		switch (slave::_slave.status.direction)
+		{
+		case SLAVE_DIRECTION::SD_LEFT:
+			slave::_slave.pos.index.x--;
+			break;
+
+		case SLAVE_DIRECTION::SD_UP:
+			slave::_slave.pos.index.y--;
+			break;
+
+		case SLAVE_DIRECTION::SD_RIGHT:
+			slave::_slave.pos.index.x++;
+			break;
+
+		case SLAVE_DIRECTION::SD_DOWN:
+			slave::_slave.pos.index.y++;
+			break;
+		}
+
+		slave::_slave.b_Value.isMove = false;
+	}
 }
 
 void boss_Ghost::boss_Ghost_ChangeAnimation()
@@ -131,5 +156,7 @@ void boss_Ghost::boss_Ghost_ChangeAnimation()
 		slave::_slave.image.animation->start();
 	}
 }
+
+
 
 

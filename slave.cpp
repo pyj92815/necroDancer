@@ -28,8 +28,18 @@ void slave::update()
 
 void slave::render()
 {
-	_slave.image.img->aniRender(CAMERAMANAGER->getWorldDC(), _slave.pos.center.x, _slave.pos.center.y -
-		(_slave.image.img->getFrameHeight() / 4), _slave.image.animation);
+	if (!_slave.b_Value.ghostMoveStop)
+	{
+		_slave.image.img->aniRender(CAMERAMANAGER->getWorldDC(), _slave.pos.center.x, _slave.pos.center.y -
+			(_slave.image.img->getFrameHeight() / 4), _slave.image.animation);
+	}
+
+	if (_slave.b_Value.ghostMoveStop)
+	{
+		//_slave.image.img->setAlpha(50);
+		_slave.image.img->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _slave.pos.center.x, _slave.pos.center.y -
+			(_slave.image.img->getFrameHeight() / 4), 200);
+	}
 }
 
 void slave::move()

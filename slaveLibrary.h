@@ -64,10 +64,14 @@ struct SLAVE_BOOL
 	bool				isChangeAni;				// 움직였다면 애니메이션을 바꿔줘야한다.
 	bool				change_Ani;					// 애니메이션을 체인지가 가능한지 여부
 	bool				distanceCheck;				// 플레이어와 거리 체크 
+	
+	bool				ghostMoveStop;				// 고스트 움직임 정지
 
 	bool				isMove;						// 무브 여부
 
 	bool				beat;						// 비트를 받았다면 ture
+
+	bool				isAttack;					// 공격 가능할때 true
 };
 
 // 슬레이브의 연산 변수
@@ -142,6 +146,8 @@ public:
 		slave->b_Value.save_ClosePlayer = false;
 		slave->b_Value.distanceCheck = false;
 		slave->b_Value.isMove = false;
+		slave->b_Value.isAttack = false;
+		slave->b_Value.ghostMoveStop = false;
 
 		// 이미지, 애니메이션 할당
 		slave->image.img = new image;
@@ -161,7 +167,7 @@ public:
 			slave->status.direction = SLAVE_DIRECTION::SD_DOWN;						// 기본 방향은 아래를 향한다.
 			slave->status.hp = 1;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Bat");					// 슬레이브의 이미지를 찾아서 넣어준다.
-			slave->image.animation = KEYANIMANAGER->findAnimation("bat_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
+			slave->image.animation = KEYANIMANAGER->findAnimation("sBat_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
 			slave->operation.move_Count = 3;										// 슬레이브의 이동 박자
 			slave->operation.save_Move_Count = 3;									// 슬레이브의 세이브 박자
 			
@@ -172,7 +178,7 @@ public:
 			slave->status.direction = SLAVE_DIRECTION::SD_DOWN;						// 기본 방향은 아래를 향한다.
 			slave->status.hp = 1;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Ghost");				// 슬레이브의 이미지를 찾아서 넣어준다.
-			slave->image.animation = KEYANIMANAGER->findAnimation("ghost_Left");	// 슬레이브의 애니메이션을 찾아서 넣어준다.
+			slave->image.animation = KEYANIMANAGER->findAnimation("sGhost_Left");	// 슬레이브의 애니메이션을 찾아서 넣어준다.
 			slave->operation.move_Count = 1;										// 슬레이브의 이동 박자
 			slave->operation.save_Move_Count = 1;									// 슬레이브의 세이브 박자
 
@@ -183,7 +189,7 @@ public:
 			slave->status.direction = SLAVE_DIRECTION::SD_DOWN;						// 기본 방향은 아래를 향한다.
 			slave->status.hp = 2;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Skeleton");			// 슬레이브의 이미지를 찾아서 넣어준다.
-			slave->image.animation = KEYANIMANAGER->findAnimation("skel_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
+			slave->image.animation = KEYANIMANAGER->findAnimation("sSkel_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
 			slave->operation.move_Count = 2;										// 슬레이브의 이동 박자
 			slave->operation.save_Move_Count = 2;									// 슬레이브의 세이브 박자
 
@@ -194,7 +200,7 @@ public:
 			slave->status.direction = SLAVE_DIRECTION::SD_DOWN;						// 기본 방향은 아래를 향한다.
 			slave->status.hp = 2;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Skeleton_Yellow");		// 슬레이브의 이미지를 찾아서 넣어준다.
-			slave->image.animation = KEYANIMANAGER->findAnimation("skelY_Left");	// 슬레이브의 애니메이션을 찾아서 넣어준다.
+			slave->image.animation = KEYANIMANAGER->findAnimation("sSkelY_Left");	// 슬레이브의 애니메이션을 찾아서 넣어준다.
 			slave->operation.move_Count = 2;										// 슬레이브의 이동 박자
 			slave->operation.save_Move_Count = 2;									// 슬레이브의 세이브 박자
 
@@ -205,7 +211,7 @@ public:
 			slave->status.direction = SLAVE_DIRECTION::SD_DOWN;						// 기본 방향은 아래를 향한다.
 			slave->status.hp = 1;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Bat");					// 슬레이브의 이미지를 찾아서 넣어준다.
-			slave->image.animation = KEYANIMANAGER->findAnimation("bat_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
+			slave->image.animation = KEYANIMANAGER->findAnimation("sBat_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
 
 			break;
 		}
