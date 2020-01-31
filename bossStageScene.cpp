@@ -50,7 +50,6 @@ HRESULT bossStageScene::init()
 
 	//BEATMANAGER->init();
 	SOUNDMANAGER->stop("BGM_LOBBY");
-
 	return S_OK;
 }
 

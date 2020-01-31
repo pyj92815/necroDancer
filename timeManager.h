@@ -16,6 +16,9 @@ public:
 	void update(float lockFPS = 0.0f);
 	void render(HDC hdc);
 
+	// FPS
+	inline int getFrameRate() { return _timer->getFrameRate(); }
+
 	//DeltaÅ¸ÀÓ
 	inline float getElapsedTime() const { return _timer->getElapsedTime(); }
 

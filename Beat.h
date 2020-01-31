@@ -57,6 +57,7 @@ private:
 	unsigned int _songPos; // 현재 곡의 진행시간(ms) 
 	unsigned int _songLength;  // FMOD::SOUND에 getLength()함수가 망가져서 만들었음 ㅠㅠ... getLength() 함수를 대신하여 곡의 길이를 받을 수 있게 만든 변수
 
+	float _deltaTime;
 	float _songLeftTime; // 현재 곡의 남은 시간
 	float _pitch; // 현재 곡의 pitch값 (1이 기본 값, 1미만 시 곡이 느려짐, 1이상 시 빨라짐)
 
@@ -78,7 +79,6 @@ private:
 
 	int musicID; // 음악의 인덱스를 정해주는 변수
 	int musicID_Temp;
-	int test;
 
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
