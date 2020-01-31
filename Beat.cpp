@@ -135,7 +135,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     heartImg = IMAGEMANAGER->findImage("Heart");
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
-    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth(), heartImg->getFrameHeight());
+    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 20, heartImg->getFrameHeight());
 }
 
 void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
@@ -187,10 +187,10 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
         {
             _deltaTime = TIMEMANAGER->getElapsedTime();
         }
-        else
-        {
-            _deltaTime = 0.016f;
-        }
+        //else
+        //{
+        //    _deltaTime = 0.016f;
+        //}
 
         for (int i = 0; i < _vNoteLeft.size(); i++)
         {
@@ -213,7 +213,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
                 TIMEMANAGER->setCountTime(0);
                 noteTimeIntervalCount = 0;
 
-                if (_countNote < _vMsTimeInfo.size() - 5) // 노트 생성 수가 노트 정보 길이 - 3보다 작은 경우(노트 개수 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌))
+                if (_countNote < _vMsTimeInfo.size() - 4) // 노트 생성 수가 노트 정보 길이 - 3보다 작은 경우(노트 개수 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌))
                 {
                     CreateNewNoteWhilePlay(true); // 노트 생성
                     CreateNewNoteWhilePlay(false); // 노트 생성
@@ -254,6 +254,14 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
         {
             (*_viEffect)->update();
         }
+    }
+
+    if(_vNoteLeft.size() == 1)
+    {
+    for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+    {
+        (*_viEffect)->update();
+    }
     }
 }
 
@@ -322,7 +330,7 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
 void Beat::Load() // 노트 파일 로드
 {
     // 선형 보간 이동시 _noteInfo[0]과 _noteInfo.size() - 1요소는 의미없는 값이므로 제외한다. 단, _noteInfo[0]은 애니메이션이 움직여야하니 애니메이션 흘러가는 값에는 추가
-    if (_vMsTimeInfo.size() < 0)
+    if (_vMsTimeInfo.size() > 0)
     {
         _vMsTimeInfo.clear(); // 벡터 재사용을 위한 클리어
         //_countNote = _countComma = 0; // 노트 정보를 새로 받아오기 위해 초기화
