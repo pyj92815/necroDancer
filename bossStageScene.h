@@ -48,6 +48,9 @@ private:
 	visionFloodFill*							_floodFill;
 private:
 	bool distanceCheck;															// 거리를 체크한다. (범위에 들어오거나 들어오지 않을때 값이 바뀐다.)
+
+	int _endX;   // 엔딩씬으로 가기 위한 좌표 값 
+	int _endY;
 public:
 	bossStageScene();
 	~bossStageScene();
@@ -100,5 +103,7 @@ public:
 
 	void boss_PhaseMove();														// 보스 페이즈 연산
 	void setVolumeBossStage();
+
+	void endScene();
 };
 

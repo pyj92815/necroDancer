@@ -384,7 +384,7 @@ void deathMetal::deathMetal_ChangeAnimation()
 				}
 
 				// 데스메탈이 해당 방향을 보고 있을때 각도를 초기화해준다.
-				boss::angle = 0;
+				boss::angle = PI*2;
 
 				break;
 

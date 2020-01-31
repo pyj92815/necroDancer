@@ -1,8 +1,12 @@
 #pragma once
 #include "gameNode.h"
+#include "video.h"
 
 class endScene:public gameNode
 {
+private:
+	video* _video;
+
 public:
 	endScene();
 	~endScene();

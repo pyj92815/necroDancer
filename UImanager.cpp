@@ -140,11 +140,7 @@ void UImanager::update()
 	_coinTest = _player->coin;
 	_diaTest = _player->diamond;
 	hp = _player->hp;
-	for (_miInven = _mInven.begin(); _miInven != _mInven.end(); ++_miInven)
-	{
-
-
-	}
+	
 	//=========테스트용 조작 키====================
 	if (KEYMANAGER->isOnceKeyDown('Z'))
 	{

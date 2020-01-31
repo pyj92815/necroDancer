@@ -30,7 +30,8 @@ void bossMove::startMove(float* time, float* distance, float* angle, float* spee
 	// 도착지점까지 각도와 속도에 맞춰서 원하는 시간에 도달하게 한다.
 	(*_center).x = (*_center).x + cosf(*angle) * *speed;
 	(*_center).y = (*_center).y + (-sinf(*angle) * *speed);
-	
+
+
 	// 만약 해당 시간에 도달했다면
 	if (*time + *worldTime <= TIMEMANAGER->getWorldTime())
 	{
