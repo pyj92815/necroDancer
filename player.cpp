@@ -489,17 +489,11 @@ void player::wallCheck()
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->terrainFrameX = 1;
-		_miPlayerTile->second->terrainFrameY = 1;
 		break;
 	case W_ITEM_WALL:
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
-		_miPlayerTile->second->terrain = TR_NONE;
-		_miPlayerTile->second->terrainFrameX = 1;
-		_miPlayerTile->second->terrainFrameY = 1;
 		if (RND->getInt(10) % 2 == 0)
 		{
 			_miPlayerTile->second->type = TYPE_ITEM_ARMOR;
@@ -521,16 +515,10 @@ void player::wallCheck()
 	case W_DOOR:
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->terrainFrameX = 1;
-		_miPlayerTile->second->terrainFrameY = 1;
 		break;
 	default:
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->terrainFrameX = 1;
-		_miPlayerTile->second->terrainFrameY = 1;
 		break;
 	}
 }
@@ -621,9 +609,6 @@ void player::itempCheck()
 			_miPlayerTile->second->armor = A_NONE;
 			_miPlayerTile->second->weapon = WP_NONE;
 			_miPlayerTile->second->stuff = ST_NONE;
-			_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-			_miPlayerTile->second->terrainFrameX = 1;	  // 顶狼 加己阑 
-			_miPlayerTile->second->terrainFrameY = 1;
 		}
 	}
 	if (_miPlayerTile->second->type == TYPE_ITEM_WEAPON)
@@ -688,9 +673,6 @@ void player::itempCheck()
 			_miPlayerTile->second->armor = A_NONE;
 			_miPlayerTile->second->weapon = WP_NONE;
 			_miPlayerTile->second->stuff = ST_NONE;
-			_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-			_miPlayerTile->second->terrainFrameX = 1;	  // 顶狼 加己阑 
-			_miPlayerTile->second->terrainFrameY = 1;
 		}
 	}
 	if (_miPlayerTile->second->type == TYPE_ITEM_STUFF)
@@ -729,9 +711,6 @@ void player::itempCheck()
 		_miPlayerTile->second->armor = A_NONE;
 		_miPlayerTile->second->weapon = WP_NONE;
 		_miPlayerTile->second->stuff = ST_NONE;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->terrainFrameX = 1;	  // 顶狼 加己阑 
-		_miPlayerTile->second->terrainFrameY = 1;
 	}
 }
 

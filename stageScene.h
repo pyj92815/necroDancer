@@ -33,6 +33,8 @@ private: // ÇÏÀ§ °èÃþ
 	zOrder* _zOrder;
 	visionFloodFill* _floodFill;
 
+	int _playerIdx, _playerIdy;
+
 public:
 	stageScene() {}
 	~stageScene() {}

@@ -68,8 +68,16 @@ void cameraManager::set_CameraXY(int x, int y)
 	Camera_Correction();
 }
 
-void cameraManager::set_CameraXY(float x, float y)
+void cameraManager::set_CameraXY(float x, float y , bool fast)
 {
+	if (fast)
+	{
+		_cameraX = x - _cameraSizeX / 2.0f;
+		_cameraY = y - _cameraSizeY / 2.0f;
+		Camera_Correction();
+		_cameraRect = RectMake(_cameraX, _cameraY, WINSIZEX, WINSIZEY);  // RECT 업데이트 
+		return;
+	}
 	// 카메라의 위치를 판단한다.
 	float winX = (x - _cameraSizeX / 2.0f); // 카메라의 시작위치 X
 	float winY = (y - _cameraSizeY / 2.0f); // 카메라의 시작위치 Y

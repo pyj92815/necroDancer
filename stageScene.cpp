@@ -6,10 +6,14 @@ HRESULT stageScene::init()
 {
 	stageMapLoad();
 
+	if (_playerIdx <0 || _playerIdy <0 ||_playerIdx > TILEX || _playerIdy> TILEY)
+	{
+		_playerIdx = 10;
+		_playerIdy = 10;
+	}
 	_pm = new playerManager;
-	_pm->init();
-	
-
+	_pm->init(_playerIdx,_playerIdy);
+	CAMERAMANAGER->set_CameraXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y, true);
 	_em = new EnemyManager;
 	_em->init();
 
@@ -284,6 +288,19 @@ void stageScene::stageMapLoad()
 	int i = 0;
 	while (i < TILEX * TILEY)
 	{
+		if (_tiles[i].type == TYPE_CHARACTER)
+		{
+			switch (_tiles[i].character)
+			{
+			case CHAR_PLAYER:
+				_playerIdx = _tiles[i].idX;
+				_playerIdy = _tiles[i].idY;
+
+				break;
+			default:
+				break;
+			}
+		}
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
 		{

@@ -12,7 +12,7 @@ public:
 	playerManager() {}
 	~playerManager() {}
 
-	HRESULT init();
+	HRESULT init(int idx,int idy);
 	void release();
 	void update();
 	void render();
