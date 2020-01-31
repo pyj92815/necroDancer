@@ -822,6 +822,65 @@ bool Collision::collision_Charactor_Object(vector<tagTile*>* mapInfo, SLAVE_INFO
 	return isObject;
 }
 
+bool Collision::collision_Charactor_Object_Back(vector<tagTile*>* mapInfo, deathMetal* deathMetalInfo)
+{
+	bool isObject = false;
+
+	// 타일맵에 오브젝트가 있는지 찾는다. (벽, 상자 등등)
+	for (int i = 0; i < mapInfo->size(); ++i)
+	{
+		// 데스메탈이 바라보는 방향에 반대편에 오브젝트가 있다면 true의 값이 된다.
+		switch (deathMetalInfo->getBoss_Direction())
+		{
+			// 왼쪽을 바라보고 있다면 오른쪽을 찾는다.
+		case BD_LEFT:
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				deathMetalInfo->getBoss_Index().x + 1 == (*mapInfo)[i]->idX &&
+				deathMetalInfo->getBoss_Index().y == (*mapInfo)[i]->idY)
+			{
+				isObject = true;
+			}
+			break;
+
+			// 위를 바라보고 있다면 아래를 찾는다.
+		case BD_UP:
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				deathMetalInfo->getBoss_Index().x == (*mapInfo)[i]->idX &&
+				deathMetalInfo->getBoss_Index().y + 1 == (*mapInfo)[i]->idY)
+			{
+				isObject = true;
+			}
+			break;
+
+			// 오른쪽을 바라보고 있다면 왼쪽을 찾는다.
+		case BD_RIGHT:
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				deathMetalInfo->getBoss_Index().x - 1 == (*mapInfo)[i]->idX &&
+				deathMetalInfo->getBoss_Index().y == (*mapInfo)[i]->idY)
+			{
+				isObject = true;
+			}
+			break;
+
+			// 아래를 바라보고 있으면 위를 찾는다.
+		case BD_DOWN:
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				deathMetalInfo->getBoss_Index().x == (*mapInfo)[i]->idX &&
+				deathMetalInfo->getBoss_Index().y - 1 == (*mapInfo)[i]->idY)
+			{
+				isObject = true;
+			}
+			break;
+		}
+
+		// 오브젝트를 찾았으면 반복문을 나간다.
+		if (isObject) break;
+	}
+
+	// 캐릭터가 이동해야 하는곳에 오브젝트가 있다면 true 없으면 false
+	return isObject;
+}
+
 map<PLAYERDIRECTION, tagTile*> Collision::collision_player_tile(vector<tagTile*>* mapInfo, player* playerInfo)
 {
 	map<PLAYERDIRECTION, tagTile*> _mPlayerTile;

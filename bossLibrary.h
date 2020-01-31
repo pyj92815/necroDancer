@@ -65,4 +65,5 @@ struct BOSS_BOOL
 	BOSS_PHASE_SETTING_BOOL		PHASE_BOOL;
 
 	bool						get_Beat;		// 박자를 받았으면 true로 변한다.
+	bool						boss_Die;		// 보스가 죽었다면 true의 값을 가진다.
 };

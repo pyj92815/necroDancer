@@ -30,5 +30,7 @@ public:
 	// SLAVE_NONE				 없음
 	void create_Slave(SLAVE_TYPE type, int idx, int idy);
 	//void create_Slave(SLAVE_TYPE type, int idx, int idy) { _library->create_Slave(&_vSlaveList, type, idx, idy); }
+
+	void delete_Slave();								// 슬레이브 삭제
 };
 

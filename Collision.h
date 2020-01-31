@@ -80,6 +80,9 @@ public:
 	// 맵 정보, 슬레이브 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
 	bool collision_Charactor_Object(vector<tagTile*>* mapInfo, SLAVE_INFO* slave);
 
+	// 맵 정보, 데스메탈 정보를 가져와서 뒤쪽에 오브젝트가 있는지 찾아준다. (이동 가능 true, 이동 불가능 false)
+	bool collision_Charactor_Object_Back(vector<tagTile*>* mapInfo, deathMetal* deathMetalInfo);
+
 	//락훈추가
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 플레이어 타일 충돌 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 

@@ -469,6 +469,7 @@ void player::tileCheck()
 				else
 				{
 					playerEffect_Attack();
+					_miPlayerSlaveTile->second->slave_Hit(_player.damage);
 				}
 				action = true;
 				break;

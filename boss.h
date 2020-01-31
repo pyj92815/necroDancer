@@ -37,6 +37,7 @@ protected:
 	bool		isCasting;						// 스킬 시전 유무를 저장
 	bool		isClosePlayer;					// 플레이어가 근처에 있는지 저장
 	bool		isThrowShield;					// 실드를 던졌는지 여부
+	bool		isShield_Hit;					// 실드가 피격 당했다면 true
 
 	float		angle;							// 보스가 이동할때 쓰일각도
 	float       time;							// 보스가 다음 타일까지 이동할때 걸리는 시간
@@ -72,6 +73,7 @@ public:
 	void settingBossMoveVariable(int tileSizeX, int tileSizeY);														// 보스의 이동 변수 초기화
 	void settingBossVariable();																						// 보스에서 사용할 변수 초기화
 	void showBossHP();																								// 보스의 체력 이미지 표시
+	void setBoss_isShield_Hit(bool shield_Hit) { isShield_Hit = shield_Hit; }										// 실드 정보를 수정한다.
 
 	// 보스 정보 겟터 함수
 	int getBoss_HP() { return hp; }																					// 보스의 HP를 받아온다.
@@ -90,11 +92,15 @@ public:
 	bool getBoss_Beat() { return boss_Bool.get_Beat; }																// 보스가 비트를 받았는지 유무
 	POINTFLOAT getBoss_BaseAttack_Pos() { return ani_Center; }														// 이펙트 애니메이션을 뿌릴 좌표
 	image* getBoss_AttImage() { return att_Image; }
+	BOSS_PHASESTATE getBoss_Phase() { return phase;	}																// 보스 페이즈 받아오기.
+	bool getBoss_isShield_Hit() { return isShield_Hit; }															// 실드 피격 상태 받아오기.
+
+	bool getBoss_Dead() { return boss_Bool.boss_Die; }																// 보스 죽었는지 여부
 
 	// 보스 정보 셋터 함수
 	void setBoss_HP(int _hp) { hp = _hp; if (hp > 9) hp = 9; if (hp < 0) hp = 0; }									// 보스의 HP를 수정한다. (hp가 최대치 최소치를 넘어가지 않게 예외처리)
 	void setBoss_HP_Hit() { hp--; if (hp < 0) hp = 0; }																// 보스의 체력이 1 감소한다. (hp가 최소치를 넘어가지 않게 예외처리)
-	void setBoss_HP_Hit(int damage) { hp -= damage; if (hp < 0) hp = 0; }											// 받아 온 수치만큼 보스의 체력이 감소한다. (hp가 최소치를 넘어가지 않게 예외처리)
+	void setBoss_HP_Hit(int damage) { hp -= damage; if (hp < 0) hp = 0; }	 										// 받아 온 수치만큼 보스의 체력이 감소한다. (hp가 최소치를 넘어가지 않게 예외처리)
 
 	void setBoss_HP_Heal() { hp++; if (hp > 9) hp = 9; }															// 보스의 체력을 1 증가한다. (hp가 최대치를 넘어가지 않게 예외처리)
 	void setBoss_HP_Heal(int heal) { hp += heal; if (hp > 9) hp = 9; }												// 받아 온 수치만큼 보스의 체력을 증가한다. (hp가 최대치를 넘어가지 않게 예외처리) 
@@ -147,6 +153,8 @@ public:
 	void setBoss_BaseSkill_Image(string skillName) { att_Image = IMAGEMANAGER->findImage(skillName); }
 
 	void setBoss_BaseAttack_Pos(float x, float y) { ani_Center.x = x; ani_Center.y = y; }							// 이펙트 애니메이션을 뿌릴 좌표를 셋팅한다.
+
+	void setBoss_Shield_Hit_True() { isShield_Hit = true; }																// 실드가 피격 당하면 true
 
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수

@@ -67,7 +67,7 @@ void zOrder::render()
 		{
 			_zOrderVector[i]->Object->slaveEnemy->render();
 		}
-		if (_zOrderVector[i]->Object->deathMetalboss != NULL)
+		if (_zOrderVector[i]->Object->deathMetalboss != NULL && !_zOrderVector[i]->Object->deathMetalboss->getBoss_Dead())
 		{
 			_zOrderVector[i]->Object->deathMetalboss->render();
 		}

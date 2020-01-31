@@ -28,21 +28,23 @@ void boss_Bat::move()
 	// 슬레이브의 무브가 true로 변하면
 	if (slave::_slave.b_Value.isMove)
 	{
-		switch (slave::_slave.status.direction)
+		int rNum = RND->getInt(4);
+
+		switch (rNum)
 		{
-		case SLAVE_DIRECTION::SD_LEFT:
+		case 0:
 			slave::_slave.pos.index.x--;
 			break;
 
-		case SLAVE_DIRECTION::SD_UP:
+		case 1:
 			slave::_slave.pos.index.y--;
 			break;
 
-		case SLAVE_DIRECTION::SD_RIGHT:
+		case 2:
 			slave::_slave.pos.index.x++;
 			break;
 
-		case SLAVE_DIRECTION::SD_DOWN:
+		case 3:
 			slave::_slave.pos.index.y++;
 			break;
 		}
