@@ -16,7 +16,7 @@ HRESULT Enemy::init()
 	_enemyInfo->parentLight = _enemyInfo->Light;
 	_enemyInfo->routeX = 0;
 	_enemyInfo->routeY = 0;
-	
+	//_collision = new Collision;
 
 	return S_OK;
 }
@@ -45,6 +45,7 @@ void Enemy::update()
 	moveAction();
 	//enemyMove();
 	_enemyInfo->rc = RectMake(_enemyInfo->idx * 52, _enemyInfo->idy * 52, 52, 52);
+	//_collision->collision_Charactor_Object(,_enemyInfo)
 }
 
 void Enemy::render()

@@ -1,6 +1,7 @@
 #pragma once
 #include"animation.h"
 #include"gameNode.h"
+
 enum class enemyState
 {
 	STATE_IDLE,STATE_MOVE,STATE_ATTACK,STATE_DIE
@@ -52,8 +53,8 @@ class Enemy:public gameNode
 protected:
 	EnemyInfo* _enemyInfo;				//에너미 정보(구조체)
 	playerInfo* _playerInfo;			//전달받아올 플레이어 정보(구조체) (좌표값만 받아옴)
-
-
+	
+	
 	float _time = 0.25;
 
 public:
@@ -93,7 +94,7 @@ public:
 	//Enemy정보 접근자
 	virtual EnemyInfo* getEnemyInfo() { return _enemyInfo; }
 	virtual void setPlayerInfo(float x, float y, float idx, float idy) { _playerInfo->idx = idx; _playerInfo->idy = idy; _playerInfo->x = x;_playerInfo->y = y; }
-
+	
 	//enemy move
 
 	virtual void moveAction();

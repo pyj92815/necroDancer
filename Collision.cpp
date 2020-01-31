@@ -694,11 +694,52 @@ bool Collision::collision_Charactor_Object(vector<tagTile*>* mapInfo, player* pl
 	// 오브젝트가 정해졌으면 어떤 효과가 있는지 처리?
 }
 
-bool Collision::collision_Charactor_Object(vector<tagTile*>* mapInfo, Enemy* enemyInfo)
+bool Collision::collision_Charactor_Object(vector<tagTile*>* mapInfo, EnemyInfo* enemyInfo)
 {
 	bool isObject = false;
 
-	// 에너미는 방향 정보가 없음
+	// 타일에서 오브젝트가 있는지 찾아준다. (벽, 상자 등등)
+	for (int i = 0; i < mapInfo->size(); ++i)
+	{
+		switch (enemyInfo->direction)
+		{
+		case Direction::LEFT:
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				enemyInfo->idx - 1 == (*mapInfo)[i]->idX &&
+				enemyInfo->idy == (*mapInfo)[i]->idY)
+			{
+				isObject = true;
+			}
+			break;
+		case Direction::RIGHT:
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				enemyInfo->idx + 1 == (*mapInfo)[i]->idX &&
+				enemyInfo->idy == (*mapInfo)[i]->idY)
+			{
+				isObject = true;
+			}
+			break;
+		case Direction::UP:
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				enemyInfo->idx  == (*mapInfo)[i]->idX &&
+				enemyInfo->idy -1 == (*mapInfo)[i]->idY)
+			{
+				isObject = true;
+			}
+			break;
+		case Direction::DOWN:
+			if ((*mapInfo)[i]->type == TYPE_OBJECT || (*mapInfo)[i]->type == TYPE_WALL &&
+				enemyInfo->idx  == (*mapInfo)[i]->idX &&
+				enemyInfo->idy +1 == (*mapInfo)[i]->idY)
+			{
+				isObject = true;
+			}
+			break;
+		}
+	}
+
+	
+
 
 	// 캐릭터가 이동해야 하는곳에 오브젝트가 있다면 true 없으면 false
 	return isObject;
