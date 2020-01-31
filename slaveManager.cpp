@@ -18,6 +18,7 @@ void slaveManager::update()
 		(*_viSlaveList)->update();
 	}
 
+	delete_Slave();
 }
 
 void slaveManager::render()
@@ -53,5 +54,24 @@ void slaveManager::create_Slave(SLAVE_TYPE type, int idx, int idy)
 	}		
 	new_Slave->init(type, idx, idy);							// 해당 슬레이브를 만든다.
 	_vSlaveList.push_back(new_Slave);							// 새로 만들어진 슬레이브를 저장한다.
+}
+
+void slaveManager::delete_Slave()
+{
+	for (int i = 0; i < _vSlaveList.size(); ++i)
+	{
+		// 에너미의 체력이 모두 떨어지면 삭제
+		if (_vSlaveList[i]->get_Slave()->status.hp <= 0 && !_vSlaveList[i]->get_Slave()->b_Value.ghostJonYha)
+		{
+			_vSlaveList.erase(_vSlaveList.begin() + i);
+			break;
+		}
+
+		// 고스트는 무적 상태일때 죽지 않아야 한다.
+		if (_vSlaveList[i]->get_Slave()->b_Value.ghostJonYha)
+		{
+			_vSlaveList[i]->get_Slave()->status.hp = 1;
+		}
+	}
 }
 
