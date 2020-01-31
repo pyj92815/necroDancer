@@ -44,6 +44,26 @@ void EnemyManager::render()
 
 }
 
+void EnemyManager::Attack()
+{
+	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
+	{
+		
+		switch ((*_viEnemy)->getEnemyInfo()->AttackDirection)
+		{
+		case Direction::LEFT:
+			break;
+		case Direction::RIGHT:
+			break;
+		case Direction::UP:
+			break;
+		case Direction::DOWN:
+			break;
+		}
+
+	}
+}
+
 void EnemyManager::EnemyRemove()
 {
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();)
@@ -182,11 +202,10 @@ void EnemyManager::imageAdd()
 	IMAGEMANAGER->addFrameImage("Enemy_slime_orange", "image/Enemy/slime_orange.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_wraith", "image/Enemy/wraith.bmp", 288, 96, 6, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_zombie", "image/Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_LEFT", "image/particles/swipe_enemy_LEFT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_RIGHT", "image/particles/swipe_enemy_RIGHT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_UP", "image/particles/swipe_enemy_UP.bmp", 120, 27,5,1 , true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_DOWN", "image/particles/swipe_enemy_DOWN.bmp", 120, 27,5, 1, true, RGB(255, 0, 255));
-
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Left", "image/particles/swipe_enemy_LEFT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Right", "image/particles/swipe_enemy_RIGHT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Up", "image/particles/swipe_enemy_UP.bmp", 120, 27, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Down", "image/particles/swipe_enemy_DOWN.bmp", 120, 27, 5, 1, true, RGB(255, 0, 255));
 }
 void EnemyManager::Enemy_Bat_Create(float x, float y)
 {
@@ -392,11 +411,12 @@ void EnemyManager::AnimationAdd()
 	//======================에너미 공격 애니메이션=======================================================
 	int Enemy_Attack_LEFT[] = {4,3,2,1,0};
 	int Enemy_Attack_RIGHT[] = {0,1,2,3,4};
-	int Enemy_Attack_UP[] = {4,3,2,1,0};
-	int Enemy_Attack_DOWN[] = {0,1,2,3,4};
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_LEFT_Ani", "Enemy_Attack_LEFT", Enemy_Attack_LEFT, 5, 10, false);
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_RIGHT_Ani", "Enemy_Attack_RIGHT", Enemy_Attack_RIGHT, 5, 10, false);
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_UP_Ani", "Enemy_Attack_UP", Enemy_Attack_UP, 5, 10, false);
-	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_DOWN_Ani", "Enemy_Attack_DOWN", Enemy_Attack_DOWN, 5, 10, false);
+	int Enemy_Attack_UP[] = {0,1,2,3,4};
+	int Enemy_Attack_DOWN[] = {4,3,2,1,0};
+
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_LEFT_Ani", "Enemy_Attack_Left", Enemy_Attack_LEFT,5,10,true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_RIGHT_Ani","Enemy_Attack_Right", Enemy_Attack_RIGHT,5,10,true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_UP_Ani", "Enemy_Attack_Up", Enemy_Attack_UP,5,10,true);
+	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_DOWN_Ani","Enemy_Attack_Down", Enemy_Attack_DOWN,5,10,true);
 }
 

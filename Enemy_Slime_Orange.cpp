@@ -1,19 +1,6 @@
 #include "stdafx.h"
 #include "Enemy_Slime_Orange.h"
 
-HRESULT Enemy_Slime_Orange::init()
-{
-	ZeroMemory(&_playerInfo, sizeof(_playerInfo));
-	_playerInfo = new playerInfo;
-
-	_enemyInfo->Beat = true;
-	_enemyInfo->aniChange = true;
-	_enemyInfo->Light = false;
-	_enemyInfo->beatCount = 0;
-	light_change = _enemyInfo->Light;
-	return S_OK;
-}
-
 void Enemy_Slime_Orange::Action()
 {
 	switch (_enemyInfo->state)
@@ -36,10 +23,7 @@ void Enemy_Slime_Orange::Action()
 		break;
 	}
 	//
-	if (light_change != _enemyInfo->Light)
-	{
-		AniChange();
-	}
+
 }
 
 void Enemy_Slime_Orange::Move()
@@ -113,5 +97,4 @@ void Enemy_Slime_Orange::AniChange()
 	if (_enemyInfo->Light)_enemyInfo->Animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_IDLE_Ani");
 	else _enemyInfo->Animation = KEYANIMANAGER->findAnimation("Enemy_slime_orange_Shadow_IDLE_Ani");
 	_enemyInfo->aniChange = true;
-	light_change = _enemyInfo->Light;
 }

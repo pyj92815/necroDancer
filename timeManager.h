@@ -28,5 +28,7 @@ public:
 	
 	inline void setCountTimeResetSwitch(bool resetSwitch) { *(_timer->getCountTimeResetSwitchPt()) = resetSwitch; }
 	inline void setCountTimeSwitch(bool ONOff_Switch) { *(_timer->getCountTimeSwitchPt()) = ONOff_Switch; }
+
+	inline float getDaeHunWorldTime() const { return _timer->getDaeHunWorldTime();}
 };
 

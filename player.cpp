@@ -784,7 +784,7 @@ void player::StateMove()
 		_isMoving = true;															// MOVE
 
 		if (!_reversMove) _jump->jumping(&_player.x, &_player.y, 2, 1.5, true); //점프 
-		break;
+		break; 
 	case PLAYERDIRECTION_DOWN:
 		_player.idy++;	// 좌표Y값++
 		//선형보간
