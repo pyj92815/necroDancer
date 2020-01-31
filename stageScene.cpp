@@ -64,11 +64,10 @@ void stageScene::update()
 	//ZorderSetup();
 	//_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
-	//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
-
+	
 	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
-	//_minimap->getStageMap(_vTotalList);
+	_minimap->getStageMap(_vTotalList);
 	_minimap->getPlayerPoint(_pm);
 	_ui->setInven(_pm->getPlayerInfo()->getVInven());
 	nextPage();
