@@ -122,61 +122,65 @@ void bossStageScene::update()
 				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
 			}
 
-			//if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
-			//{
-			//	// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
-			//	int tempX, tempY;
-			//	tempX = tempY = 0;
-			//	int rndX, rndY;
-			//	rndX = rndY = 0;
-			//
-			//	// 2마리를 소환해야 하기 때문에 2번을 돈다.
-			//	for (int i = 0; i < 2; ++i)
-			//	{
-			//		rndX = RND->getInt(9) + 8;
-			//		rndY = RND->getInt(8) + 10;
-			//		// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
-			//		for (int j = 0; j < _vTotalList.size(); ++j)
-			//		{
-			//			// 보스방 범위에서만 소환이 가능해야 한다.
-			//			if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
-			//				_vTotalList[j]->idY >= 10 && _vTotalList[j]->idY <= 18)
-			//			{
-			//				// 보스가 있는 위치에는 나오면 안돼
-			//				if (_deathMetal->getBoss_Index().x != rndX &&
-			//					_deathMetal->getBoss_Index().y != rndY)
-			//				{
-			//					tempX = rndX;
-			//					tempY = rndY;
-			//				}
-			//
-			//				// 기존에 슬레이브가 있는 위치에는 나오면 안돼
-			//				for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
-			//				{
-			//					if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
-			//						_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
-			//					{
-			//						tempX = rndX;
-			//						tempY = rndY;
-			//					}
-			//				}
-			//
-			//				// 플레이어 위치에는 나오면 안돼
-			//				if (_player->getPlayer().idx != rndX &&
-			//					_player->getPlayer().idy != rndY)
-			//				{
-			//					tempX = rndX;
-			//					tempY = rndY;
-			//				}
-			//			}
-			//
-			//			if (tempX && tempY) break;
-			//		}
-			//
-			//		// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
-			//		if(tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
-			//	}
-			//}
+			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+			{
+				// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
+				int tempX, tempY;
+				tempX = tempY = 0;
+				int rndX, rndY;
+				rndX = rndY = 0;
+			
+				// 2마리를 소환해야 하기 때문에 2번을 돈다.
+				for (int i = 0; i < 2; ++i)
+				{
+					rndX = RND->getInt(9) + 8;
+					rndY = RND->getInt(8) + 10;
+					// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
+					for (int j = 0; j < _vTotalList.size(); ++j)
+					{
+						// 보스방 범위에서만 소환이 가능해야 한다.
+						if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
+							_vTotalList[j]->idY >= 10 && _vTotalList[j]->idY <= 18)
+						{
+							// 보스가 있는 위치에는 나오면 안돼
+							if (_deathMetal->getBoss_Index().x != rndX &&
+								_deathMetal->getBoss_Index().y != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+
+								break;
+							}
+			
+							// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+							for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
+							{
+								if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
+									_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+								{
+									tempX = rndX;
+									tempY = rndY;
+									break;
+								}
+							}
+			
+							// 플레이어 위치에는 나오면 안돼
+							if (_player->getPlayer().idx != rndX &&
+								_player->getPlayer().idy != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+								break;
+							}
+						}
+			
+						if (tempX && tempY) break;
+					}
+			
+					// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
+					if(tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
+				}
+			}
 
 			if (KEYMANAGER->isOnceKeyDown('O'))
 			{
