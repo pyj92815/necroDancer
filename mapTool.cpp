@@ -214,6 +214,7 @@ void mapTool::render()
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
+		if (_tiles[i].terrain== TR_NONE) continue;
 		if (_tiles[i].isRender == true)
 		{
 			_tiles[i].type = TYPE_TERRAIN;
