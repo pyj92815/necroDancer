@@ -101,21 +101,6 @@ void player::effectRender()
 	{
 		(*_viEffect)->render(CAMERAMANAGER->getWorldDC());
 	}
-	//for (int i = 0; i < _vInven.size(); i++)
-	//{
-	//	if (_vInven[i]->armor != A_NONE)
-	//	{
-	//		IMAGEMANAGER->findImage("armorTiles")->frameRender(CAMERAMANAGER->getWorldDC(), i * 100, WINSIZEY / 2, _vInven[i]->frameX, _vInven[i]->frameY);
-	//	}
-	//	if (_vInven[i]->weapon != WP_NONE)
-	//	{
-	//		IMAGEMANAGER->findImage("weaponTiles")->frameRender(CAMERAMANAGER->getWorldDC(), i * 100, WINSIZEY / 2, _vInven[i]->frameX, _vInven[i]->frameY);
-	//	}
-	//	if (_vInven[i]->stuff != ST_NONE)
-	//	{
-	//		IMAGEMANAGER->findImage("stuffTiles")->frameRender(CAMERAMANAGER->getWorldDC(), i * 100, WINSIZEY / 2, _vInven[i]->frameX, _vInven[i]->frameY);
-	//	}
-	//}
 }
 
 void player::playerMove()
