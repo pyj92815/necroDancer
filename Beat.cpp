@@ -173,6 +173,15 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
         _oldSongName = _currentSongName;
         _oldShopKeeper = _currentShopkeeper;
         _oldStageID = _currentStageID;
+        TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
+        TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
+
+        CreateNewNote(true);
+        CreateNewNote(false);
+    }
+
+    if (_songPos > 0) // 곡이 시작되었을때
+    {
 
         if (TIMEMANAGER->getFrameRate() > 10)
         {
@@ -183,15 +192,6 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             _deltaTime = 0.016f;
         }
 
-        TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
-        TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
-
-        CreateNewNote(true);
-        CreateNewNote(false);
-    }
-
-    if (_songPos > 0) // 곡이 시작되었을때
-    {
         for (int i = 0; i < _vNoteLeft.size(); i++)
         {
             noteTimeIntervalCount = TIMEMANAGER->getCountTime();
