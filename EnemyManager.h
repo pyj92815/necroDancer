@@ -11,6 +11,7 @@
 #include"Enemy_Warith.h"
 #include"Enemy_Zombie.h"
 #include"tileNode.h"
+#include"Collision.h"
 #include<vector>
 
 class player;
@@ -29,7 +30,7 @@ private:
 	tagTile* _tile;
 
 	EnemyType _enemyType;
-	
+
 
 	player* _player;
 
