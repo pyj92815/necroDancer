@@ -110,11 +110,13 @@ void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
 void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 전용 함수
 {
     _currentStage = STAGE_LOBBY;
+
+
     _noteFileName = _currentSongName = _oldSongName = ""; // 불러올 파일 이름, 현재 곡 이름, 이전 곡 이름 초기화
     noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating = _deltaTime
         = _countNote = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = 0;
 
-    musicID = 1;
+    musicID_Temp = musicID = 1;
 
     test_ShopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
     test_ShopKeeper = RectMakeCenter(test_ShopKeeperPos.x, test_ShopKeeperPos.y, 50, 50);
@@ -157,7 +159,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
     SOUNDMANAGER->getSongPosition(_currentSongName, _songPos); // 현재 진행 중인 곡의 진행 시간을 받아 옴(ms)
     _songLeftTime = GetSongVariousTime(_songPos, _songLength); // 현재 곡이 얼만큼 남았는지 알려줌
 
-    // 프로그램 최초 실행 후 재생한 곡이 아직 아무것도 없는 경우에 키를 입력한 경우
+    // 프로그램 최초 실행 시 temp랑 값이 같을때
     if (_currentSongName != "" && _oldSongName == "")
     {
         _oldSongName = _currentSongName;
@@ -307,11 +309,11 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
         TextOut(getMemDC, 100, 160, display_noteInfoLength, strlen(display_noteInfoLength));
 
         char display_songLength[256];
-        sprintf_s(display_songLength, sizeof(display_songLength), "%f", noteTimeIntervalCount);
+        sprintf_s(display_songLength, sizeof(display_songLength), "%d", _currentStageID);
         TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
 
         char display_checkInfo[256];
-        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _countNote);
+        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _oldStageID);
         TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
 
         char display_checkAverSpeed[256];
