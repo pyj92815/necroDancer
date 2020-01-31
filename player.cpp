@@ -85,6 +85,7 @@ void player::update()
 		sprintf(str, "지금 스테이지 : %d", (int)_nowStage);
 		cout << str << endl;
 		cout << " 지금 체력 : " << _player.hp << endl;
+		_player.hp--;
 	}
 }
 

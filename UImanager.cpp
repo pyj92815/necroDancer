@@ -139,7 +139,7 @@ void UImanager::update()
 
 	_coinTest = _player->coin;
 	_diaTest = _player->diamond;
-
+	hp = _player->hp;
 	for (_miInven = _mInven.begin(); _miInven != _mInven.end(); ++_miInven)
 	{
 
