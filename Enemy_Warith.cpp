@@ -15,7 +15,10 @@ void Enemy_Warith::Action()
 		}
 		break;
 	case enemyState::STATE_ATTACK:
-		Attack();
+		
+			Attack();
+		
+		
 		break;
 	case enemyState::STATE_DIE:
 		break;

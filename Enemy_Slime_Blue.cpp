@@ -58,6 +58,10 @@ void Enemy_Slime_Blue::Move()
 	_enemyInfo->Move = true;
 }
 
+void Enemy_Slime_Blue::moveAction()
+{
+}
+
 void Enemy_Slime_Blue::enemyAngle()
 {
 	switch (_enemyInfo->direction)
