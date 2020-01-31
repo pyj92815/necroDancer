@@ -13,12 +13,13 @@ struct EnemyInfo
 {
 	enemyState state;					//enemy의 상태를 지정할 enum문
 	Direction direction;				//enemy의 방향을 지정할 enum문
+	Direction parentDirection;
 	Direction AttackDirection;			//
 	animation* Animation;	
 	image* Image;
 	animation* attackAnimation;
 	image* attackImage;
-	float idx, idy;
+	int idx, idy;
 	float x, y;			
 	RECT rc;
 	RECT discoveryRc;					//플레이어를 발견할 인식 범위
@@ -38,7 +39,7 @@ struct EnemyInfo
 struct playerInfo
 {
 	float x, y;
-	float idx, idy;
+	int idx, idy;
 };
 class Enemy:public gameNode
 {

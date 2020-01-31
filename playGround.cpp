@@ -36,6 +36,7 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addImage("exit", "./image/mapTool/icon/i_exit.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("stuff", "./image/mapTool/icon/i_stuff.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("map", "./image/mapTool/icon/i_map.bmp", 72, 72, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("character", "./image/mapTool/icon/i_char.bmp", 72, 72, true, RGB(255, 0, 255));
 
 	//팔레트에 사용될 이미지들
 	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255));
@@ -44,6 +45,7 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addFrameImage("armorTiles", "./image/mapTool/item/passive.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("weaponTiles", "./image/mapTool/item/weapon.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("stuffTiles", "./image/mapTool/item/stuff.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("characterTiles", "./image/mapTool/char/character.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
 
 	_sm = new scene_Manager;
 	_sm->init();

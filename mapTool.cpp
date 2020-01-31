@@ -57,15 +57,16 @@ void mapTool::update()
 	if (PtInRect(&_bottom, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() + SCREENMOVESPEED); }
 	CAMERAMANAGER->CameraMapTool_Correction();
 
-	_itemButton.rc = RectMake(25, 25, 72, 72);
 	if (_crtSelect == CTRL_ITEM) { _isItemButtonClick = true; }
 	if (_crtSelect == CTRL_MAP) { _isMapButtonClick = true; }
+	_itemButton.rc = RectMake(25, 25, 72, 72);
 	if (_isItemButtonClick == true)
 	{
 		_stuffButton.rc = RectMake(100, 50, 52, 52);
 		_armorButton.rc = RectMake(150, 50, 52, 52);
 		_weaponButton.rc = RectMake(200, 50, 52, 52);
 	}
+	_mapButton.rc = RectMake(25, 97, 72, 72);
 	if (_isMapButtonClick == true)
 	{
 
@@ -73,7 +74,7 @@ void mapTool::update()
 		_wallButton.rc = RectMake(150, 122, 52, 52);
 		_trapButton.rc = RectMake(200, 122, 52, 52);
 	}
-	_mapButton.rc = RectMake(25, 97, 72, 72);
+	_characterButton.rc = RectMake(25, 169, 72, 72);
 	_eraseButton.rc = RectMake(1430, 825, 52, 52);
 	_saveButton.rc = RectMake(1525, 825, 52, 52);
 	_loadButton.rc = RectMake(1600, 825, 52, 52);
@@ -91,7 +92,7 @@ void mapTool::save()
 	//"SaveFile.map"
 	//"Boss_SaveFile.map"
 	//"Stage_SaveFile.map"
-	file = CreateFile("Boss_SaveFile.map", GENERIC_WRITE, 0, NULL,
+	file = CreateFile("SaveFile.map", GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
@@ -106,7 +107,7 @@ void mapTool::load()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("Stage_SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -189,7 +190,19 @@ void mapTool::render()
 				_tiles[i].weaponFrameX, _tiles[i].weaponFrameY);
 		}
 	}
-
+	//캐릭터
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		if (_tiles[i].character == CHAR_NONE) continue;
+		if (_tiles[i].isRender == true)
+		{
+			_tiles[i].type = TYPE_CHARACTER;
+			//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
+			IMAGEMANAGER->frameRender("characterTiles", CAMERAMANAGER->getWorldDC(),
+				_tiles[i].rc.left, _tiles[i].rc.top,
+				_tiles[i].characterFrameX, _tiles[i].characterFrameY);
+		}
+	}
 	//벽 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
@@ -233,7 +246,8 @@ void mapTool::render()
 		IMAGEMANAGER->findImage("stuff")->render(getMemDC(), _stuffButton.rc.left, _stuffButton.rc.top);
 		IMAGEMANAGER->findImage("armor")->render(getMemDC(), _armorButton.rc.left, _armorButton.rc.top);
 		IMAGEMANAGER->findImage("weapon")->render(getMemDC(), _weaponButton.rc.left, _weaponButton.rc.top);
-	}	
+	}
+	IMAGEMANAGER->findImage("character")->render(getMemDC(), _characterButton.rc.left, _characterButton.rc.top);
 	IMAGEMANAGER->findImage("item")->render(getMemDC(), _itemButton.rc.left, _itemButton.rc.top);
 	IMAGEMANAGER->findImage("eraser")->render(getMemDC(), _eraseButton.rc.left, _eraseButton.rc.top);
 	IMAGEMANAGER->findImage("exit")->render(getMemDC(), _exitButton.rc.left, _exitButton.rc.top);
@@ -349,7 +363,27 @@ void mapTool::render()
 		// 팔렛트 이미지 출력
 		IMAGEMANAGER->render("weaponTiles", getMemDC(), _palette.weaponTile.left, _palette.weaponTile.top + 24);
 	}
+	if (_crtSelect == CTRL_CHARACTER)
+	{
+		IMAGEMANAGER->findImage("characterTiles")->alphaFrameRender(getMemDC(),
+			_mouseEffect.mouseRect.left, _mouseEffect.mouseRect.top,
+			_mouseEffect.frameX, _mouseEffect.frameY, 200);
 
+		// 무브 렉트 출력
+		//Rectangle(getMemDC(), _palette.weaponTile);
+		IMAGEMANAGER->render("itemPalette", getMemDC(), _palette.characterTile.left - 26, _palette.characterTile.top);
+		// 팔렛트 렉트 출력
+		for (int i = 0; i < CHARACTERTILEY; ++i)
+		{
+			for (int j = 0; j < CHARACTERTILEX; ++j)
+			{
+				Rectangle(getMemDC(), _characterTile[i * CHARACTERTILEX + j].rcTile);
+			}
+		}
+
+		// 팔렛트 이미지 출력
+		IMAGEMANAGER->render("characterTiles", getMemDC(), _palette.characterTile.left, _palette.characterTile.top + 24);
+	}
 	if (_crtSelect == CTRL_TRAP)
 	{
 		/*for (int i = 0; i < TRAPTILEX * TRAPTILEY; ++i)
@@ -423,6 +457,7 @@ void mapTool::setup()
 	_palette.armorTile = RectMake(_WINSIZEX - 50 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
 	_palette.weaponTile = RectMake(_WINSIZEX - 50 - ITEMTILEX * TILESIZE, 25, ITEMTILEX * TILESIZE, 25);
 	_palette.wallTile = RectMake(_WINSIZEX - 50 - WALLTILEX * TILESIZE, 25, WALLTILEX * TILESIZE, 25);
+	_palette.characterTile = RectMake(_WINSIZEX - 50 - CHARACTERTILEX * TILESIZE, 25, CHARACTERTILEY * TILESIZE, 25);
 	_palette.isClick = false;
 	_palette.pos_Start.x = _palette.pos_Start.y = _palette.pos_End.x = _palette.pos_End.y = NULL;
 
@@ -476,6 +511,18 @@ void mapTool::setup()
 			SetRect(&_weaponTile[i * ITEMTILEX + j].rcTile,
 				_palette.weaponTile.left + j * TILESIZE, _palette.weaponTile.bottom + i * TILESIZE,
 				_palette.weaponTile.left + j * TILESIZE + TILESIZE, _palette.weaponTile.bottom + i * TILESIZE + TILESIZE);
+		}
+	}
+	//캐릭터 타일 셋팅
+	for (int i = 0; i < CHARACTERTILEY; ++i)
+	{
+		for (int j = 0; j < CHARACTERTILEX; ++j)
+		{
+			_characterTile[i * CHARACTERTILEX + j].terrainFrameX = j;
+			_characterTile[i * CHARACTERTILEX + j].terrainFrameY = i;
+			SetRect(&_characterTile[i * CHARACTERTILEX + j].rcTile,
+				_palette.characterTile.left + j * TILESIZE, _palette.characterTile.bottom + i * TILESIZE,
+				_palette.characterTile.left + j * TILESIZE + TILESIZE, _palette.characterTile.bottom + i * TILESIZE + TILESIZE);
 		}
 	}
 	//함정 타일 셋팅
@@ -539,6 +586,8 @@ void mapTool::setup()
 		_tiles[i].trapFrameY = 6;
 		_tiles[i].wallFrameX = 15;
 		_tiles[i].wallFrameY = 3;
+		_tiles[i].characterFrameX = 3;
+		_tiles[i].characterFrameY = 3;
 		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		_tiles[i].terrain = TR_NONE;
 		_tiles[i].stuff = ST_NONE;
@@ -546,6 +595,7 @@ void mapTool::setup()
 		_tiles[i].weapon = WP_NONE;
 		_tiles[i].trap = TRAP_NONE;
 		_tiles[i].wall = W_NONE;
+		_tiles[i].character = CHAR_NONE;
 		_tiles[i].alphaValue = 255; // 0~255 
 	}
 }
@@ -614,6 +664,22 @@ void mapTool::setMap()
 
 					_mouseEffect.frameX = _weaponTile[i].terrainFrameX;
 					_mouseEffect.frameY = _weaponTile[i].terrainFrameY;
+					break;
+				}
+			}
+		}
+		if (_crtSelect == CTRL_CHARACTER)
+		{
+			for (int i = 0; i < CHARACTERTILEX * CHARACTERTILEY; i++)
+			{
+				//방어구
+				if (PtInRect(&_characterTile[i].rcTile, _ptMouse))
+				{
+					_currentTile.x = _characterTile[i].terrainFrameX;
+					_currentTile.y = _characterTile[i].terrainFrameY;
+
+					_mouseEffect.frameX = _characterTile[i].terrainFrameX;
+					_mouseEffect.frameY = _characterTile[i].terrainFrameY;
 					break;
 				}
 			}
@@ -713,6 +779,14 @@ void mapTool::setMap()
 
 					_tiles[i].weapon = weaponSelect(_currentTile.x, _currentTile.y);
 				}
+				else if (_crtSelect == CTRL_CHARACTER)
+				{
+					_tiles[i].type = TYPE_CHARACTER;
+					_tiles[i].characterFrameX = _currentTile.x;
+					_tiles[i].characterFrameY = _currentTile.y;
+
+					_tiles[i].character = characterSelect(_currentTile.x, _currentTile.y);
+				}
 				else if (_crtSelect == CTRL_TRAP)
 				{
 					_tiles[i].type = TYPE_TRAP;
@@ -749,6 +823,9 @@ void mapTool::setMap()
 					_tiles[i].wallFrameX = NULL;
 					_tiles[i].wallFrameY = NULL;
 					_tiles[i].wall = W_NONE;
+					_tiles[i].characterFrameX = NULL;
+					_tiles[i].characterFrameY = NULL;
+					_tiles[i].character = CHAR_NONE;
 				}
 
 				InvalidateRect(_hWnd, NULL, false);
@@ -919,6 +996,28 @@ WEAPON mapTool::weaponSelect(int frameX, int frameY)
 	return WP_NONE;
 }
 
+CHARACTER mapTool::characterSelect(int frameX, int frameY)
+{
+	if (frameX == 0 && frameY == 0) return CHAR_PLAYER;
+	if (frameX == 1 && frameY == 0) return CHAR_NONE;
+	if (frameX == 2 && frameY == 0) return CHAR_NONE;
+	if (frameX == 3 && frameY == 0) return CHAR_NONE;
+	if (frameX == 0 && frameY == 1) return CHAR_SLIME_BLUE;
+	if (frameX == 1 && frameY == 1) return CHAR_SLIME_ORANGE;
+	if (frameX == 2 && frameY == 1) return CHAR_BAT;
+	if (frameX == 3 && frameY == 1) return CHAR_GHOST;
+	if (frameX == 0 && frameY == 2) return CHAR_SKELETON;
+	if (frameX == 1 && frameY == 2) return CHAR_SKELETON_YELLOW;
+	if (frameX == 2 && frameY == 2) return CHAR_ZOMBIE;
+	if (frameX == 3 && frameY == 2) return CHAR_WRAITH;
+	if (frameX == 0 && frameY == 3) return CHAR_MINO;
+	if (frameX == 1 && frameY == 3) return CHAR_DRAGON;
+	if (frameX == 2 && frameY == 3) return CHAR_BOSS;
+	if (frameX == 3 && frameY == 3) return CHAR_NONE;
+
+	return CHAR_NONE;
+}
+
 void mapTool::tile_Click()
 {
 	if (!_isClick)
@@ -1004,7 +1103,13 @@ void mapTool::palette_Click()
 				palette_Click(true);
 			}
 			break;
-
+		case CTRL_CHARACTER:
+			// 팔렛트 렉트를 마우스로 클릭하고 있을때
+			if (PtInRect(&_palette.characterTile, _ptMouse))
+			{
+				palette_Click(true);
+			}
+			break;
 		case CTRL_TRAP:
 			// 팔렛트 렉트를 마우스로 클릭하고 있을때
 			if (PtInRect(&_palette.trapTile, _ptMouse))
@@ -1106,6 +1211,20 @@ void mapTool::palette_Rect_Update()
 				SetRect(&_weaponTile[i * ITEMTILEX + j].rcTile,
 					_palette.weaponTile.left + j * TILESIZE, _palette.weaponTile.bottom + i * TILESIZE,
 					_palette.weaponTile.left + j * TILESIZE + TILESIZE, _palette.weaponTile.bottom + i * TILESIZE + TILESIZE);
+			}
+		}
+	}
+	if (_crtSelect == CTRL_CHARACTER)
+	{
+		palette_Move();
+
+		for (int i = 0; i < CHARACTERTILEY; ++i)
+		{
+			for (int j = 0; j < CHARACTERTILEX; ++j)
+			{
+				SetRect(&_weaponTile[i * CHARACTERTILEX + j].rcTile,
+					_palette.characterTile.left + j * TILESIZE, _palette.characterTile.bottom + i * TILESIZE,
+					_palette.characterTile.left + j * TILESIZE + TILESIZE, _palette.characterTile.bottom + i * TILESIZE + TILESIZE);
 			}
 		}
 	}
@@ -1304,6 +1423,44 @@ void mapTool::palette_Move()
 				_palette.weaponTile.bottom += moveY;
 			}
 			break;
+		case CTRL_CHARACTER:
+			//무기
+			// 만약 양수가 나온다면 이동 지점이 왼쪽이 되어야 한다.
+			if (_palette.pos_Start.x - _palette.pos_End.x > 0)
+			{
+				moveX = _palette.pos_Start.x - _palette.pos_End.x;
+
+				_palette.characterTile.left -= moveX;
+				_palette.characterTile.right -= moveX;
+			}
+
+			// 만약 양수가 나온다면 이동 지점이 위쪽이 되어야 한다.
+			if (_palette.pos_Start.y - _palette.pos_End.y > 0)
+			{
+				moveY = _palette.pos_Start.y - _palette.pos_End.y;
+
+				_palette.characterTile.top -= moveY;
+				_palette.characterTile.bottom -= moveY;
+			}
+
+			// 만약 음수가 나온다면 이동 지점이 오른쪽이 되어야 한다.
+			if (_palette.pos_Start.x - _palette.pos_End.x < 0)
+			{
+				moveX = _palette.pos_End.x - _palette.pos_Start.x;
+
+				_palette.characterTile.left += moveX;
+				_palette.characterTile.right += moveX;
+			}
+
+			// 만약 음수가 나온다면 이동 지점이 아래쪽이 되어야 한다.
+			if (_palette.pos_Start.y - _palette.pos_End.y < 0)
+			{
+				moveY = _palette.pos_End.y - _palette.pos_Start.y;
+
+				_palette.characterTile.top += moveY;
+				_palette.characterTile.bottom += moveY;
+			}
+			break;
 		case CTRL_TRAP:
 
 			// 만약 양수가 나온다면 이동 지점이 왼쪽이 되어야 한다.
@@ -1405,6 +1562,7 @@ void mapTool::menu_Choice()
 		if (PtInRect(&_wallButton.rc, _ptMouse)) { _crtSelect = CTRL_WALLDRAW; _isMapButtonClick = false; }
 	}
 	if (PtInRect(&_eraseButton.rc, _ptMouse)) { _crtSelect = CTRL_ERASER; }
+	if (PtInRect(&_characterButton.rc, _ptMouse)) { _crtSelect = CTRL_CHARACTER; }
 	if (PtInRect(&_saveButton.rc, _ptMouse))
 	{
 		_crtSelect = CTRL_SAVE;
@@ -1512,6 +1670,16 @@ bool mapTool::using_Palette()
 		for (int i = 0; i < ITEMTILEX * ITEMTILEY; i++)
 		{
 			if (PtInRect(&_weaponTile[i].rcTile, _ptMouse))
+			{
+				return true;
+			}
+		}
+	}
+	if (_crtSelect == CTRL_CHARACTER)
+	{
+		for (int i = 0; i < CHARACTERTILEX * CHARACTERTILEY; i++)
+		{
+			if (PtInRect(&_characterTile[i].rcTile, _ptMouse))
 			{
 				return true;
 			}

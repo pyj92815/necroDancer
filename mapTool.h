@@ -6,15 +6,7 @@ class mapTool: public gameNode
 {
 
 private:
-	//HWND _btnPlay;				//플레이 버튼
-	//HWND _btnSave;				//저장 버튼
-	//HWND _btnLoad;				//불러오기 버튼
-	//HWND _btnTerrainDraw;		//지형 그리기 버튼
-	//HWND _btnWallDraw;			//벽 그리기 버튼
-	//HWND _btnObjectDraw;		//오브젝트 그리기 버튼
-	//HWND _btnTrap;				//함정 버튼
-	//HWND _btnEraser;			//지우개 버튼
-
+	
 	tagCurrentTile _currentTile;
 	tagSetTile _terrainTile[TERRAINTILEX * TERRAINTILEY];
 	tagSetTile _wallTile[WALLTILEX * WALLTILEY];
@@ -22,19 +14,19 @@ private:
 	tagSetTile _armorTile[ITEMTILEX * ITEMTILEY];
 	tagSetTile _weaponTile[ITEMTILEX * ITEMTILEY];
 	tagSetTile _stuffTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile _characterTile[CHARACTERTILEX * CHARACTERTILEY];
 	tagTile		 _tiles[TILEX * TILEY];
 
 	float _WINSIZEX, _WINSIZEY;
 	int _pos[2];
 
-	//락훈 맵툴 수정 
 	tagButton _map[9];
 	int _mapDirection;
 	mousePointRect _mouseEffect;
 private:
 	tagButton _saveButton;		//저장
 	tagButton _loadButton;		//로드
-	tagButton _mapButton;	//지형
+	tagButton _mapButton;		//전체 맵 지형
 	tagButton _terrainButton;	//지형
 	tagButton _wallButton;		//벽
 	tagButton _trapButton;		//함정
@@ -42,6 +34,7 @@ private:
 	tagButton _armorButton;		//방어구
 	tagButton _weaponButton;	//무기
 	tagButton _stuffButton;		//소지품
+	tagButton _characterButton;	//캐릭터
 	tagButton _eraseButton;		//지우개
 	tagButton _exitButton;		//나가기
 private:
@@ -79,6 +72,8 @@ public:
 	STUFF stuffSelect(int frameX, int frameY);
 	ARMOR armorSelect(int frameX, int frameY);
 	WEAPON weaponSelect(int frameX, int frameY);
+	//어떤 캐릭터을 선택했는가?
+	CHARACTER characterSelect(int frameX, int frameY);
 
 	void setS(int num) { _crtSelect = num; }
 	void tile_Click();

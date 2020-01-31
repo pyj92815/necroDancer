@@ -49,6 +49,10 @@
 #define ITEMTILEX 4
 #define ITEMTILEY 5
 
+//아이템 타일 셋 범위(타일을 찍어올 팔레트 같은 역할)
+#define CHARACTERTILEX 4
+#define CHARACTERTILEY 4
+
 #define ROBYSIZE 40 * 40
 #define STAGESIZE 100 * 100
 #define BOSSSTAGESIZE 40 * 80
@@ -134,8 +138,13 @@ enum OBJECT
 
 enum CHARACTER
 {
-	CHAR_ENEMY,										//적
 	CHAR_PLAYER,									//플레이어
+	CHAR_BAT, 
+	CHAR_SLIME_BLUE, CHAR_SLIME_ORANGE, 
+	CHAR_GHOST, CHAR_WRAITH,
+	CHAR_SKELETON, CHAR_SKELETON_YELLOW, CHAR_ZOMBIE,
+	CHAR_MINO, CHAR_DRAGON, CHAR_BOSS,
+	CHAR_NONE,
 };
 
 //position
@@ -151,7 +160,6 @@ enum TYPE
 	TYPE_TRAP,
 	TYPE_ITEM_ARMOR, TYPE_ITEM_WEAPON, TYPE_ITEM_STUFF,
 	TYPE_OBJECT,
-	TYPE_ENEMY,
 	TYPE_CHARACTER,
 	TYPE_NONE
 };
@@ -184,6 +192,8 @@ struct tagTile
 	int weaponFrameY;			//아이템 번호
 	int stuffFrameX;			//아이템 번호
 	int stuffFrameY;			//아이템 번호
+	int characterFrameX;
+	int characterFrameY;
 	int trapFrameX;			//함정 번호
 	int trapFrameY;			//함정 번호
 	

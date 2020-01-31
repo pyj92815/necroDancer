@@ -38,7 +38,7 @@ public:
 
 	// 카메라의 좌표 
 	void set_CameraXY(int x, int y);
-	void set_CameraXY(float x, float y);
+	void set_CameraXY(float x, float y, bool fast = FALSE);
 	void set_CameraXY(POINT xy);
 	void set_CameraXY(RECT rc);
 

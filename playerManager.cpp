@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "playerManager.h"
 #include "bossStageScene.h"
-HRESULT playerManager::init()
+HRESULT playerManager::init(int idx,int idy)
 {
 	_player = new player;
-	_player->init(10,10,TESTTILESIZE, TESTTILESIZE);
+	_player->init(idx,idy,TESTTILESIZE, TESTTILESIZE);
 	BEATMANAGER->setPlayerAddressLink(_player);
 	return S_OK;
 }

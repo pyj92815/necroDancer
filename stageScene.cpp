@@ -6,12 +6,18 @@ HRESULT stageScene::init()
 {
 	stageMapLoad();
 
+	if (_playerIdx <0 || _playerIdy <0 ||_playerIdx > TILEX || _playerIdy> TILEY)
+	{
+		_playerIdx = 10;
+		_playerIdy = 10;
+	}
 	_pm = new playerManager;
-	_pm->init();
+	_pm->init(_playerIdx,_playerIdy);
+	CAMERAMANAGER->set_CameraXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y, true);
 	
-
+	
 	_em = new EnemyManager;
-	_em->init();
+	_em->init(_mEnemyPoint);
 
 	_em->AddressLink(_pm->getPlayerInfo());
 	_pm->getPlayerInfo()->collisionSettingBoss();
@@ -40,6 +46,7 @@ void stageScene::release()
 
 void stageScene::update()
 {
+	//if(OPTION->CheckOptionOpen)
 	_pm->update();
 	_em->update();
 	BEATMANAGER->update();
@@ -273,7 +280,7 @@ void stageScene::stageMapLoad()
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -283,6 +290,46 @@ void stageScene::stageMapLoad()
 	int i = 0;
 	while (i < TILEX * TILEY)
 	{
+		if (_tiles[i].type == TYPE_CHARACTER)
+		{
+			switch (_tiles[i].character)
+			{
+			case CHAR_PLAYER:
+				_playerIdx = _tiles[i].idX;
+				_playerIdy = _tiles[i].idY;
+				break;
+			case  CHAR_BAT:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_BAT, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_SLIME_BLUE:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_SLIME_BLUE, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_SLIME_ORANGE:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_SLIME_ORANGE, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_GHOST:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_GHOST, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case  CHAR_WRAITH:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_WRAITH, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_SKELETON:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_SKELETON, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_SKELETON_YELLOW:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_SKELETON_YELLOW, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_ZOMBIE:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_ZOMBIE, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_MINO:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_MINO, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_DRAGON:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_DRAGON, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			}
+		}
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
 		{

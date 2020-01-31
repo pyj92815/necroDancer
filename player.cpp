@@ -41,6 +41,10 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_shadow = _player.y;
 	_player.isArmor = false;
 	_player.isWeapon = false;
+	_player.torch = false;
+	_player.potion = false;
+	_player.hp = 3;
+	_player.maxHp = 10;
 	_reversMove = false;
 	_distance = tileSizeY;			//  타일 중점 거리
 	_time = 0.15;					//  MOVE 시간 
@@ -81,11 +85,7 @@ void player::update()
 		char str[256];
 		sprintf(str, "지금 스테이지 : %d", (int)_nowStage);
 		cout << str << endl;
-		for (_miPlayerSlaveTile = _mPlayerSlaveTile.begin(); _miPlayerSlaveTile != _mPlayerSlaveTile.end(); ++_miPlayerSlaveTile)
-		{
-			if (0 > _mPlayerSlaveTile.size()) break;
-			cout << _miPlayerSlaveTile->second->get_Slave()->pos.rc.bottom <<endl;
-		}
+		cout << " 지금 체력 : " << _player.hp << endl;
 	}
 }
 
@@ -308,17 +308,34 @@ void player::keyControl()
 {
 	if (!_isKeyDown)
 	{
-		/*	if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
+
+		if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_UP))
+		{
+
+			if (BEATMANAGER->getInterval())
 			{
 				_isKeyDown = true;
-				cout << "이건 체력 키 " << endl;
+				itemUse();
 			}
-			else if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_DOWN))
+			else
+			{
+				playerEffect_Miss();
+			}
+
+		}
+		else if (KEYMANAGER->isOncekeytwoDown(VK_LEFT, VK_DOWN))
+		{
+			if (BEATMANAGER->getInterval())
 			{
 				_isKeyDown = true;
-				cout << "이건 폭탄 키 " << endl;
-			}*/
-		if (KEYMANAGER->isOnceKeyDown(VK_UP))
+
+			}
+			else
+			{
+				playerEffect_Miss();
+			}
+		}
+		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
 			_player.direction = PLAYERDIRECTION_UP;
 			_isKeyDown = true;
@@ -435,6 +452,26 @@ void player::tileCheck()
 	}
 	else // 보스방 구조체가 두개라서 공격 두개 할수도 있음 
 	{
+		bool Metal = false;
+		for (_miPlayerdeathMetalTile = _mPlayerdeathMetalTile.begin(); _miPlayerdeathMetalTile != _mPlayerdeathMetalTile.end(); ++_miPlayerdeathMetalTile)
+		{
+			if (_miPlayerdeathMetalTile->first == _player.direction)
+			{
+				if (_player.weapon == PLAYERWAEPON_NONE)
+				{
+					_reversMove = true;
+					StateMove();
+				}
+				else
+				{
+					playerEffect_Attack();
+					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
+				}
+				action = true;
+				break;
+			}
+		}
+		if (action) return;
 		for (_miPlayerSlaveTile = _mPlayerSlaveTile.begin(); _miPlayerSlaveTile != _mPlayerSlaveTile.end(); ++_miPlayerSlaveTile)
 		{
 			if (0 > _mPlayerSlaveTile.size()) break;
@@ -453,24 +490,8 @@ void player::tileCheck()
 				break;
 			}
 		}
-		if (action) return;
-		for (_miPlayerdeathMetalTile = _mPlayerdeathMetalTile.begin(); _miPlayerdeathMetalTile != _mPlayerdeathMetalTile.end(); ++_miPlayerdeathMetalTile)
-		{
-			if (_miPlayerdeathMetalTile->first == _player.direction)
-			{
-				if (_player.weapon == PLAYERWAEPON_NONE)
-				{
-					_reversMove = true;
-					StateMove();
-				}
-				else
-				{
-					playerEffect_Attack();
-				}
-				action = true;
-				break;
-			}
-		}
+
+
 	}
 	if (!action) StateMove();
 }
@@ -485,17 +506,11 @@ void player::wallCheck()
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->terrainFrameX = 1;
-		_miPlayerTile->second->terrainFrameY = 1;
 		break;
 	case W_ITEM_WALL:
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
-		_miPlayerTile->second->terrain = TR_NONE;
-		_miPlayerTile->second->terrainFrameX = 1;
-		_miPlayerTile->second->terrainFrameY = 1;
 		if (RND->getInt(10) % 2 == 0)
 		{
 			_miPlayerTile->second->type = TYPE_ITEM_ARMOR;
@@ -517,16 +532,10 @@ void player::wallCheck()
 	case W_DOOR:
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->terrainFrameX = 1;
-		_miPlayerTile->second->terrainFrameY = 1;
 		break;
 	default:
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->terrainFrameX = 1;
-		_miPlayerTile->second->terrainFrameY = 1;
 		break;
 	}
 }
@@ -605,11 +614,22 @@ void player::itempCheck()
 			|| (_miPlayerTile->second->armor == A_ARMOR_4)))
 		{
 			_miPlayerTile->second->type = TYPE_ITEM_ARMOR;
-			_miPlayerTile->second->armor = currentArmor->armor;
-			_miPlayerTile->second->weapon = currentArmor->weapon;
-			_miPlayerTile->second->stuff = currentArmor->stuff;
-			_miPlayerTile->second->armorFrameX = currentArmor->frameX;	  // 땅의 속성을 
-			_miPlayerTile->second->armorFrameY = currentArmor->frameY;
+			_miPlayerTile->second->armor = currentItem->armor;
+			_miPlayerTile->second->weapon = currentItem->weapon;
+			_miPlayerTile->second->stuff = currentItem->stuff;
+			_miPlayerTile->second->armorFrameX = currentItem->frameX;	  // 땅의 속성을 
+			_miPlayerTile->second->armorFrameY = currentItem->frameY;
+		}
+		else if (_player.torch && (_miPlayerTile->second->armor == A_TORCH_1
+			|| _miPlayerTile->second->armor == A_TORCH_2
+			|| _miPlayerTile->second->armor == A_TORCH_3))
+		{
+			_miPlayerTile->second->type = TYPE_ITEM_ARMOR;
+			_miPlayerTile->second->armor = currentItem->armor;
+			_miPlayerTile->second->weapon = currentItem->weapon;
+			_miPlayerTile->second->stuff = currentItem->stuff;
+			_miPlayerTile->second->armorFrameX = currentItem->frameX;	  // 땅의 속성을 
+			_miPlayerTile->second->armorFrameY = currentItem->frameY;
 		}
 		else
 		{
@@ -617,9 +637,6 @@ void player::itempCheck()
 			_miPlayerTile->second->armor = A_NONE;
 			_miPlayerTile->second->weapon = WP_NONE;
 			_miPlayerTile->second->stuff = ST_NONE;
-			_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-			_miPlayerTile->second->terrainFrameX = 1;	  // 땅의 속성을 
-			_miPlayerTile->second->terrainFrameY = 1;
 		}
 	}
 	if (_miPlayerTile->second->type == TYPE_ITEM_WEAPON)
@@ -672,11 +689,11 @@ void player::itempCheck()
 		if (_player.isWeapon)
 		{
 			_miPlayerTile->second->type = TYPE_ITEM_WEAPON;
-			_miPlayerTile->second->armor = currentWeapon->armor;
-			_miPlayerTile->second->weapon = currentWeapon->weapon;
-			_miPlayerTile->second->stuff = currentWeapon->stuff;
-			_miPlayerTile->second->weaponFrameX = currentWeapon->frameX;	  // 땅의 속성을 
-			_miPlayerTile->second->weaponFrameY = currentWeapon->frameY;
+			_miPlayerTile->second->armor = currentItem->armor;
+			_miPlayerTile->second->weapon = currentItem->weapon;
+			_miPlayerTile->second->stuff = currentItem->stuff;
+			_miPlayerTile->second->weaponFrameX = currentItem->frameX;	  // 땅의 속성을 
+			_miPlayerTile->second->weaponFrameY = currentItem->frameY;
 		}
 		else
 		{
@@ -684,9 +701,6 @@ void player::itempCheck()
 			_miPlayerTile->second->armor = A_NONE;
 			_miPlayerTile->second->weapon = WP_NONE;
 			_miPlayerTile->second->stuff = ST_NONE;
-			_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-			_miPlayerTile->second->terrainFrameX = 1;	  // 땅의 속성을 
-			_miPlayerTile->second->terrainFrameY = 1;
 		}
 	}
 	if (_miPlayerTile->second->type == TYPE_ITEM_STUFF)
@@ -694,7 +708,7 @@ void player::itempCheck()
 		switch (_miPlayerTile->second->stuff)
 		{
 		case ST_DIAMOND:
-			_player.damage++;
+			_player.diamond++;
 			break;
 		case ST_ONE_COIN:
 			// 코인 
@@ -715,19 +729,29 @@ void player::itempCheck()
 			makeItem(WP_NONE, A_NONE, ST_CHEESE, 1, 3, 0, 0, 0, 2);
 			break;
 		case ST_MEAT:
-			makeItem(WP_NONE, A_NONE, ST_CHEESE, 2, 3, 0, 0, 0, 3);
+			makeItem(WP_NONE, A_NONE, ST_MEAT, 2, 3, 0, 0, 0, 3);
 			break;
 		case ST_NONE:
 			return;
 			break;
 		}
-		_miPlayerTile->second->type = TYPE_TERRAIN;
-		_miPlayerTile->second->armor = A_NONE;
-		_miPlayerTile->second->weapon = WP_NONE;
-		_miPlayerTile->second->stuff = ST_NONE;
-		_miPlayerTile->second->terrain = TR_BASIC_STAGE_TILE;
-		_miPlayerTile->second->terrainFrameX = 1;	  // 땅의 속성을 
-		_miPlayerTile->second->terrainFrameY = 1;
+		if (_player.potion && (_miPlayerTile->second->stuff == ST_APPLE
+			|| _miPlayerTile->second->stuff == ST_CHEESE || _miPlayerTile->second->stuff == ST_MEAT))
+		{
+			_miPlayerTile->second->type = TYPE_ITEM_STUFF;
+			_miPlayerTile->second->armor = currentItem->armor;
+			_miPlayerTile->second->weapon = currentItem->weapon;
+			_miPlayerTile->second->stuff = currentItem->stuff;
+			_miPlayerTile->second->stuffFrameX = currentItem->frameX;	  // 땅의 속성을 
+			_miPlayerTile->second->stuffFrameY = currentItem->frameY;
+		}
+		else
+		{
+			_miPlayerTile->second->type = TYPE_TERRAIN;
+			_miPlayerTile->second->armor = A_NONE;
+			_miPlayerTile->second->weapon = WP_NONE;
+			_miPlayerTile->second->stuff = ST_NONE;
+		}
 	}
 }
 
@@ -745,7 +769,7 @@ void player::makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int f
 				|| _vInven[i]->armor == A_ARMOR_3
 				|| _vInven[i]->armor == A_ARMOR_4)
 			{
-				currentArmor = _vInven[i];
+				currentItem = _vInven[i];
 				_player.isArmor = true;
 				this->itemRemove(i);
 				break;
@@ -762,8 +786,40 @@ void player::makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int f
 				|| _vInven[i]->weapon == WP_BROAD_SWORD
 				|| _vInven[i]->weapon == WP_LONG_SWORD)
 			{
-				currentWeapon = _vInven[i];
+				currentItem = _vInven[i];
 				_player.isWeapon = true;
+				this->itemRemove(i);
+				break;
+			}
+		}
+	}
+	else if (armor == A_TORCH_1
+		|| armor == A_TORCH_2
+		|| armor == A_TORCH_3)
+	{
+		for (int i = 0; i < _vInven.size(); ++i)
+		{
+			if (_vInven[i]->armor == A_TORCH_1
+				|| _vInven[i]->armor == A_TORCH_2
+				|| _vInven[i]->armor == A_TORCH_3)
+			{
+				currentItem = _vInven[i];
+				_player.torch = true;
+				this->itemRemove(i);
+				break;
+			}
+		}
+	}
+	else if (stuff == ST_APPLE || stuff == ST_CHEESE || stuff == ST_MEAT)
+	{
+		for (int i = 0; i < _vInven.size(); ++i)
+		{
+			if (_vInven[i]->stuff == ST_APPLE
+				|| _vInven[i]->stuff == ST_CHEESE
+				|| _vInven[i]->stuff == ST_MEAT)
+			{
+				currentItem = _vInven[i];
+				_player.potion = true;
 				this->itemRemove(i);
 				break;
 			}
@@ -838,6 +894,51 @@ void player::StateMove()
 		_jump->jumping(&_player.x, &_player.y, 7, 1.5);	//점프 
 		break;
 	}
+}
+
+void player::itemUse()
+{
+	for (int i = 0; i < _vInven.size(); ++i)
+	{
+		if (_vInven[i]->stuff == ST_APPLE
+			|| _vInven[i]->stuff == ST_CHEESE
+			|| _vInven[i]->stuff == ST_MEAT)
+		{
+			_player.hp = _player.hp + _vInven[i]->hp;
+			if (_player.hp > _player.maxHp)
+			{
+				_player.hp = _player.maxHp;
+			}
+			_player.potion = false;
+
+			this->itemRemove(i);
+			break;
+		}
+	}
+
+	for (int i = 0; i < _vInven.size(); ++i)
+	{
+		if (_vInven[i]->stuff == ST_APPLE
+			|| _vInven[i]->stuff == ST_CHEESE
+			|| _vInven[i]->stuff == ST_MEAT)
+		{
+			_player.potion = true;
+			break;
+		}
+	}
+
+	//int countNum = 0;
+	//for (int i = 0; i < _vInven.size(); ++i)
+	//{
+	//	if (_vInven[i]->stuff == ST_APPLE
+	//		|| _vInven[i]->stuff == ST_CHEESE
+	//		|| _vInven[i]->stuff == ST_MEAT)
+	//	{
+	//		countNum++;
+	//	}
+	//}
+	//if (countNum > 0) _player.potion = false;
+
 }
 
 
