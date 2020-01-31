@@ -20,14 +20,11 @@ HRESULT bossStageScene::init()
 	_addSlaveImage->add_SlaveImage();
 	_addSlaveImage->add_SlaveAnimation();
 
-	bossStageMap_Load();													// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
-
-	_deathMetal = new deathMetal;
-	_deathMetal->init("데스메탈", 13, 15, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
-
 	_player = _stageScene->getPlayerAddress();								// 플레이어 링크
 	_player->collisionSettingStage();
 	_ui = _stageScene->getUiAddress();										// ui 링크
+
+	bossStageMap_Load();													// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
 
 	playerPos_Setting();													// 보스 스테이지에 입장 한 플레이어의 위치를 생성 위치를 잡아준다.
 
@@ -47,7 +44,6 @@ HRESULT bossStageScene::init()
 	// 보스 등장 씬에 관련 변수 초기화
 	bossSceneSetting();
 
-
 	_player->setBossStage(); // 보스스테이지 락훈 추가 
 	BEATMANAGER->init();
 
@@ -63,7 +59,7 @@ void bossStageScene::update()
 
 
 	// 플레이어 인덱스 출력
-	//cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
+	cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
 
 	// 보스 등장 씬이 끝나면 플레이가 가능하다.
 	bossSceneStart();
@@ -78,24 +74,24 @@ void bossStageScene::update()
 		// 플레이어가 보스방문을 열고 안으로 들어오면 이 값이 true로 바뀐다.
 		if (_scene_Starter.isDoorOpen)
 		{
-			_deathMetal->update();
-			boss_PhaseMove();	// 보스 페이즈 연산
+			if(!_deathMetal->getBoss_Dead()) _deathMetal->update();
+			if (!_deathMetal->getBoss_Dead())  boss_PhaseMove();	// 보스 페이즈 연산
 			_ui->update();
 			_sm->update();
 
 			// 플레이어가 보스 근처에 있는지 없는지를 찾아준다. (쉐도우 벗기)
-			closePlayer(_player, _deathMetal);
+			if (!_deathMetal->getBoss_Dead())  closePlayer(_player, _deathMetal);
 
 			// 플레이어가 슬레이브 근처에 있는지 없는지를 찾아준다.	(쉐도우 벗기)
 			searchSlave(_sm->get_SlaveList(), _player);
 
 			// 보스 움직임 연산
-			boss_Move_Player();
+			if (!_deathMetal->getBoss_Dead())  boss_Move_Player();
 
 			// 슬레이브 움직임 연산
 			slave_Move_Player();
 
-			cout << _deathMetal->getBoss_Index().x << ": y:" << _deathMetal->getBoss_Index().y << endl;
+			//cout << _deathMetal->getBoss_Index().x << ": y:" << _deathMetal->getBoss_Index().y << endl;
 		
 			// 슬레이브 테스트용 소환
 			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
@@ -122,6 +118,62 @@ void bossStageScene::update()
 				_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
 			}
 
+			//if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+			//{
+			//	// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
+			//	int tempX, tempY;
+			//	tempX = tempY = 0;
+			//	int rndX, rndY;
+			//	rndX = rndY = 0;
+			//
+			//	// 2마리를 소환해야 하기 때문에 2번을 돈다.
+			//	for (int i = 0; i < 2; ++i)
+			//	{
+			//		rndX = RND->getInt(9) + 8;
+			//		rndY = RND->getInt(8) + 10;
+			//		// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
+			//		for (int j = 0; j < _vTotalList.size(); ++j)
+			//		{
+			//			// 보스방 범위에서만 소환이 가능해야 한다.
+			//			if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
+			//				_vTotalList[j]->idY >= 10 && _vTotalList[j]->idY <= 18)
+			//			{
+			//				// 보스가 있는 위치에는 나오면 안돼
+			//				if (_deathMetal->getBoss_Index().x != rndX &&
+			//					_deathMetal->getBoss_Index().y != rndY)
+			//				{
+			//					tempX = rndX;
+			//					tempY = rndY;
+			//				}
+			//
+			//				// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+			//				for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
+			//				{
+			//					if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
+			//						_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+			//					{
+			//						tempX = rndX;
+			//						tempY = rndY;
+			//					}
+			//				}
+			//
+			//				// 플레이어 위치에는 나오면 안돼
+			//				if (_player->getPlayer().idx != rndX &&
+			//					_player->getPlayer().idy != rndY)
+			//				{
+			//					tempX = rndX;
+			//					tempY = rndY;
+			//				}
+			//			}
+			//
+			//			if (tempX && tempY) break;
+			//		}
+			//
+			//		// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
+			//		if(tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
+			//	}
+			//}
+
 			if (KEYMANAGER->isOnceKeyDown('O'))
 			{
 				_deathMetal->setBoss_HP_Hit();
@@ -133,6 +185,8 @@ void bossStageScene::update()
 		if (_deathMetal->getBoss_HP() <= 0)
 		{
 			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
+			_deathMetal->setBoss_Index(0, 0);
+			_deathMetal->settingBossPos(0, 0, TILESIZE, TILESIZE);
 		}
 
 	
@@ -158,13 +212,11 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList)->type != TYPE_NONE)
 			{
-
-					// 타일의 속성에 따라 이미지를 뿌린다.
+				// 타일의 속성에 따라 이미지를 뿌린다.
 				if((*_viTotalList)->alphaValue <= 0) findTileImage();
 
 				// 타일의 속성에 따라 이미지를 뿌린다.
 				findTileImage();
-	
 			}
 	
 		}
@@ -179,7 +231,7 @@ void bossStageScene::render()
 	_player->effectRender();
 
 	// 보스가 근접 공격을 했을때 이펙트를 그려준다. (size가 0 이상이라면)
-	if (_vEffect.size() > 0)	boss_Base_Attack_Render();
+	if (_vEffect.size() > 0 && !_deathMetal->getBoss_Dead())	boss_Base_Attack_Render();
 
 	// 월드이미지를 뿌려준다.
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
@@ -219,6 +271,19 @@ void bossStageScene::bossStageMap_Load()
 		if (_tiles[i].type != TYPE_NONE)
 		{
 			_tiles[i].alphaValue = 255;
+
+			if (_tiles[i].character == CHAR_BOSS)
+			{
+				_deathMetal = new deathMetal;
+				_deathMetal->init("데스메탈", _tiles[i].idX, _tiles[i].idY, TESTTILESIZE, TESTTILESIZE);		// 임시로 데스메탈을 해당 위치에 배치했다.
+			}
+
+			if (_tiles[i].character == CHAR_PLAYER)
+			{
+				_player->PlayerAddress()->idx = _tiles[i].idX;
+				_player->PlayerAddress()->idy = _tiles[i].idY;
+			}
+
 			_vTotalList.push_back(&_tiles[i]);
 		}
 
@@ -296,8 +361,6 @@ void bossStageScene::z_Order_Player_Boss()
 
 void bossStageScene::playerPos_Setting()
 {
-	_player->PlayerAddress()->idx = 13;
-	_player->PlayerAddress()->idy = 26;
 	_player->PlayerAddress()->x = _player->PlayerAddress()->idx * TESTTILESIZE + (TESTTILESIZE / 2);
 	_player->PlayerAddress()->y = _player->PlayerAddress()->idy * TESTTILESIZE + (TESTTILESIZE / 3);
 	_player->PlayerAddress()->rc = RectMakeCenter(_player->PlayerAddress()->x, _player->PlayerAddress()->y,
@@ -558,6 +621,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 					// 플레이어가 앞에 있다면 근접 공격을 해준다.
 					ui->set_HP();
 					_player->playerHit(deathMetal->getBoss_Atk());
+					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
 
 				// 플레이어에게 근접 공격 이펙트를 그려준다.
@@ -610,6 +674,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 					// 플레이어가 앞에 있다면 근접 공격을 해준다.
 					ui->set_HP();
 					_player->playerHit(deathMetal->getBoss_Atk());
+					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
 
 				// 플레이어에게 근접 공격 이펙트를 그려준다.
@@ -667,6 +732,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 					// 플레이어가 앞에 있다면 근접 공격을 해준다.
 					ui->set_HP();
 					_player->playerHit(deathMetal->getBoss_Atk());
+					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
 
 				// 플레이어에게 근접 공격 이펙트를 그려준다.
@@ -719,6 +785,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 					// 플레이어가 앞에 있다면 근접 공격을 해준다.
 					ui->set_HP();
 					_player->playerHit(deathMetal->getBoss_Atk());
+					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
 
 				// 플레이어에게 근접 공격 이펙트를 그려준다.
@@ -967,12 +1034,14 @@ void bossStageScene::slave_Move_Player()
 				_sm->get_SlaveList()[i]->get_Slave()->status.direction = findPlayer(_player, _sm->get_SlaveList()[i]->get_Slave());
 
 				// 플레이어가 근처에 있는지 찾는다. 만약 있다면 공격
-				if(_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()))
+				if(_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+					!_sm->get_SlaveList()[i]->get_Slave()->b_Value.ghostJonYha)
 				{
 					_player->playerHit(_sm->get_SlaveList()[i]->get_Slave()->status.attack);
 					_ui->set_HP();
 					// 플레이어에게 근접 공격 이펙트를 그려준다.
 					boss_Base_Attack_Render("base_Attack", _player);
+					CAMERAMANAGER->Camera_WorldDC_Shake();
 				}
 
 				// 데스메탈이 근처에 있는지 찾는다. 만약 있다면 이동 안함
@@ -1003,12 +1072,16 @@ void bossStageScene::slave_Move_Player()
 						{
 							// 움직이면 안돼
 							// 고스트는 투명해져야한다.
+							// 고스트가 투명할땐 공격이 통하지 않는다.
 							_sm->get_SlaveList()[i]->get_Slave()->b_Value.ghostMoveStop = true;
+							_sm->get_SlaveList()[i]->get_Slave()->b_Value.ghostJonYha = true;
 						}
 						else
 						{
 							// 고스트가 다시 색이 돌아오고 이동이 가능하다.
+							// 다시 공격 가능 상태로 변한다.
 							_sm->get_SlaveList()[i]->get_Slave()->b_Value.ghostMoveStop = false;
+							_sm->get_SlaveList()[i]->get_Slave()->b_Value.ghostJonYha = false;
 							_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
 						}
 					}
@@ -1246,6 +1319,8 @@ void bossStageScene::bossSceneRender()
 
 void bossStageScene::bossSceneDoorOpen()
 {
+
+
 	// 플레이어가 문에 있는 위치에 도착하면 문이 사라진다.
 	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 20 ||
 		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 20 ||
@@ -1255,10 +1330,11 @@ void bossStageScene::bossSceneDoorOpen()
 		for (int i = 0; i < _vTotalList.size(); ++i)
 		{
 			// 인덱스와 같은 타일을 찾는다.
-			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 20 ||
-				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 20 ||
-				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 20)
+			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 19 ||
+				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 19 ||
+				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 19)
 			{
+				//_vTotalList[i]->type = TYPE_NONE;
 				_vTotalList[i]->wall = W_NONE;
 			}
 		}
@@ -1266,18 +1342,19 @@ void bossStageScene::bossSceneDoorOpen()
 
 
 		// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
-	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 19 ||
-		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 19 ||
-		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 19)
+	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 18 ||
+		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 18 ||
+		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 18)
 	{
 		// 문이였던 지역을 벽으로 바꿔준다.
 		for (int i = 0; i < _vTotalList.size(); ++i)
 		{
 			// 인덱스과 같은 타일에 벽을 세워준다.
-			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 20 ||
-				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 20 ||
-				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 20)
+			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 19 ||
+				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 19 ||
+				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 19)
 			{
+				_vTotalList[i]->type = TYPE_WALL;
 				_vTotalList[i]->wall = W_BOSS_WALL;
 				_vTotalList[i]->wallFrameX = 3;
 				_vTotalList[i]->wallFrameY = 2;
@@ -1296,13 +1373,21 @@ void bossStageScene::bossClear()
 	for (int i = 0; i < _vTotalList.size(); ++i)
 	{
 		// 벽이 사라져야 하는 인덱스 이타일을 찾는다.
-		if (_vTotalList[i]->idX == 11 && _vTotalList[i]->idY == 10 ||
-			_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 10 ||
-			_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 10 ||
-			_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 10 ||
-			_vTotalList[i]->idX == 15 && _vTotalList[i]->idY == 10)
+		if (_vTotalList[i]->idX == 11 && _vTotalList[i]->idY == 9 ||
+			_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 9 ||
+			_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 9 ||
+			_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 9 ||
+			_vTotalList[i]->idX == 15 && _vTotalList[i]->idY == 9)
 		{
 			_vTotalList[i]->wall = W_NONE;
+		}
+
+		// 출구 이미지가 바뀐다.
+		if (_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 7)
+		{
+			_vTotalList[i]->terrain = TR_END;
+			_vTotalList[i]->terrainFrameX = 0;
+			_vTotalList[i]->terrainFrameY = 5;
 		}
 	}
 }
@@ -1358,7 +1443,59 @@ void bossStageScene::boss_PhaseMove()
 
 				break;
 			}
-			// 보스 주변으로 랜덤으로 박쥐 소환
+			// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
+			int tempX, tempY;
+			tempX = tempY = 0;
+			int rndX, rndY;
+			rndX = rndY = 0;
+
+			// 2마리를 소환해야 하기 때문에 2번을 돈다.
+			for (int i = 0; i < 2; ++i)
+			{
+				rndX = RND->getInt(19)+ 8;
+				rndY = RND->getInt(19)+ 10;
+				// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
+				for (int j = 0; j < _vTotalList.size(); ++j)
+				{
+					// 보스방 범위에서만 소환이 가능해야 한다.
+					if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
+						_vTotalList[j]->idY >= 10 && _vTotalList[j]->idY <= 18)
+					{
+						// 보스가 있는 위치에는 나오면 안돼
+						if (_deathMetal->getBoss_Index().x != rndX &&
+							_deathMetal->getBoss_Index().y != rndY)
+						{
+							tempX = rndX;
+							tempY = rndY;
+						}
+
+						// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+						for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
+						{
+							if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
+								_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+							}
+						}
+
+						// 플레이어 위치에는 나오면 안돼
+						if (_player->getPlayer().idx != rndX &&
+							_player->getPlayer().idy != rndY)
+						{
+							tempX = rndX;
+							tempY = rndY;
+						}
+					}
+
+					if (tempX && tempY) break;
+				}
+
+				// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
+				_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
+			}
+
 
 			// 연산이 끝나면 피격을 false로 수정한다.
 			_deathMetal->setBoss_isShield_Hit(false);

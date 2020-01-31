@@ -95,6 +95,8 @@ public:
 	BOSS_PHASESTATE getBoss_Phase() { return phase;	}																// 보스 페이즈 받아오기.
 	bool getBoss_isShield_Hit() { return isShield_Hit; }															// 실드 피격 상태 받아오기.
 
+	bool getBoss_Dead() { return boss_Bool.boss_Die; }																// 보스 죽었는지 여부
+
 	// 보스 정보 셋터 함수
 	void setBoss_HP(int _hp) { hp = _hp; if (hp > 9) hp = 9; if (hp < 0) hp = 0; }									// 보스의 HP를 수정한다. (hp가 최대치 최소치를 넘어가지 않게 예외처리)
 	void setBoss_HP_Hit() { hp--; if (hp < 0) hp = 0; }																// 보스의 체력이 1 감소한다. (hp가 최소치를 넘어가지 않게 예외처리)

@@ -36,9 +36,39 @@ void slave::render()
 
 	if (_slave.b_Value.ghostMoveStop)
 	{
-		//_slave.image.img->setAlpha(50);
-		_slave.image.img->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _slave.pos.center.x, _slave.pos.center.y -
-			(_slave.image.img->getFrameHeight() / 4), 200);
+		if (!_slave.b_Value.ghostImgDirection)
+		{
+			if (_slave.b_Value.isClosePlayer)
+			{
+				// 왼쪽 논쉐도우 알파 출력
+				_slave.image.img->alphaFrameRender(CAMERAMANAGER->getWorldDC(),
+					_slave.pos.rc.left, _slave.pos.rc.top - (_slave.image.img->getFrameHeight() / 4), 0, 0, 200);
+			}
+
+			else
+			{
+				// 왼쪽 쉐도우 출력
+				_slave.image.img->frameRender(CAMERAMANAGER->getWorldDC(),
+					_slave.pos.rc.left, _slave.pos.rc.top - (_slave.image.img->getFrameHeight() / 4), 2, 0);
+			}
+		}
+
+		if (_slave.b_Value.ghostImgDirection)
+		{
+			if (_slave.b_Value.isClosePlayer)
+			{
+				// 오른쪽 논쉐도우 알파 출력
+				_slave.image.img->alphaFrameRender(CAMERAMANAGER->getWorldDC(),
+					_slave.pos.rc.left, _slave.pos.rc.top - (_slave.image.img->getFrameHeight() / 4), 2, 1, 200);
+			}
+
+			else
+			{
+				// 오른쪽 쉐도우 출력
+				_slave.image.img->frameRender(CAMERAMANAGER->getWorldDC(),
+					_slave.pos.rc.left, _slave.pos.rc.top - (_slave.image.img->getFrameHeight() / 4), 0, 1);
+			}
+		}
 	}
 }
 

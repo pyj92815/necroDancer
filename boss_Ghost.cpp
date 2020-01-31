@@ -90,6 +90,10 @@ void boss_Ghost::boss_Ghost_ChangeAnimation()
 
 				// 고스트가 해당 방향을 보고 있을때 각도를 초기화해준다.
 				slave::_slave.operation.angle = PI;
+
+				// 0이라면 왼쪽
+				slave::_slave.b_Value.ghostImgDirection = 0;
+
 				break;
 
 			case SLAVE_DIRECTION::SD_RIGHT:
@@ -108,6 +112,9 @@ void boss_Ghost::boss_Ghost_ChangeAnimation()
 
 				// 고스트가 해당 방향을 보고 있을때 각도를 초기화해준다.
 				slave::_slave.operation.angle = 0;
+
+				// 1이라면 오른쪽
+				slave::_slave.b_Value.ghostImgDirection = 1;
 				break;
 
 			case SLAVE_DIRECTION::SD_UP: case SLAVE_DIRECTION::SD_DOWN:

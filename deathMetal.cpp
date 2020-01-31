@@ -515,6 +515,12 @@ void deathMetal::deathMetal_ChangePhase()
 	// 만약 보스 페이즈가 2로 바뀌었고, 실드를 아직 던지지 않았다면 실행한다. (실드 던지는 애니메이션 함수)
 	if (boss::phase != BP_PHASE_1 && !boss::isThrowShield)	deathMetal_ThrowShield();
 
+	// 보스가 죽었다. 움직이면 안돼 보스가 죽었다면 안보이게 만든다.
+	if (boss::hp <= 0)	boss::boss_Bool.boss_Die = true;
+	if (boss::boss_Bool.boss_Die)
+	{
+
+	}
 }
 
 void deathMetal::deathMetal_ShieldPosUpdate()

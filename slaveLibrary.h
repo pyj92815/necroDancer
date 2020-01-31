@@ -66,6 +66,8 @@ struct SLAVE_BOOL
 	bool				distanceCheck;				// 플레이어와 거리 체크 
 	
 	bool				ghostMoveStop;				// 고스트 움직임 정지
+	bool				ghostImgDirection;			// 고스트 이미지 방향
+	bool				ghostJonYha;				// 고스트가 투명일땐 무적이다.
 
 	bool				isMove;						// 무브 여부
 
@@ -148,6 +150,8 @@ public:
 		slave->b_Value.isMove = false;
 		slave->b_Value.isAttack = false;
 		slave->b_Value.ghostMoveStop = false;
+		slave->b_Value.ghostImgDirection = false;
+		slave->b_Value.ghostJonYha = false;
 
 		// 이미지, 애니메이션 할당
 		slave->image.img = new image;
