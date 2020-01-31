@@ -1034,10 +1034,9 @@ TERRAIN mapTool::terrainSelect(int frameX, int frameY)
 		if (frameX == i && frameY == 4) return TR_BOSS_STAGE_TILE;
 		if (frameX == i + 3 && frameY == 4) return TR_BOSS_COMBO_TILE;
 	}
-	for (int i = 0; i < 2; i++)
-	{
-		if (frameX == i && frameY == 5) return TR_STAIR;
-	}
+	if (frameX == 0 && frameY == 5) return TR_STAIR;
+	if (frameX == 1 && frameY == 5) return TR_BOSS_STAIR;
+	
 	if (frameX == 2 && frameY == 5) return TR_SHOP;
 	if (frameX == 3 && frameY == 5) return TR_SHOP;
 	if (frameX == 4 && frameY == 5) return TR_SHOP;

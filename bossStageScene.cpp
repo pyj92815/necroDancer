@@ -14,6 +14,7 @@ bossStageScene::~bossStageScene()
 
 HRESULT bossStageScene::init()
 {
+	_stageScene->release();
 	_addBossImage->add_BossImage();
 	_addBossImage->add_BossAnimation();
 
