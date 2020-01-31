@@ -90,6 +90,7 @@ void Beat::HitNoteEffect(float x, float y)
     _vEffect.push_back(noteHitEffect);
 }
 
+
 void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
 {
     SOUNDMANAGER->addSound("BGM_LOBBY", "Music/lobby.ogg", false, true);
@@ -112,10 +113,11 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     _currentStage = STAGE_LOBBY;
 
     _noteFileName = _currentSongName = _oldSongName = ""; // 불러올 파일 이름, 현재 곡 이름, 이전 곡 이름 초기화
-    noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating 
+    noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating
         = _countNote = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = 0;
 
-    musicID_Temp = musicID = 1;
+    test = musicID = 0;
+    musicID_Temp = -1;
 
     test_ShopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
     test_ShopKeeper = RectMakeCenter(test_ShopKeeperPos.x, test_ShopKeeperPos.y, 50, 50);
@@ -158,23 +160,13 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
     SOUNDMANAGER->getSongPosition(_currentSongName, _songPos); // 현재 진행 중인 곡의 진행 시간을 받아 옴(ms)
     _songLeftTime = GetSongVariousTime(_songPos, _songLength); // 현재 곡이 얼만큼 남았는지 알려줌
 
-    // 프로그램 최초 실행 시 temp랑 값이 같을때
-    if (_currentSongName != "" && _oldSongName == "")
-    {
-        _oldSongName = _currentSongName;
-    }
-    if (_currentShopkeeper != "" && _oldShopKeeper == "")
-    {
-        _oldShopKeeper = _currentShopkeeper;
-    }
-
     // 현재 스테이지가 기존 스테이지와 다를 때 초기화해주는 것들(노트 속도, 남은 시간, 벡터들, 재생 곡 교체, 현재 곡 정보를 담을 키 값들 교체, 델타 타임 다시 받기, 초기 노트 생성)
     if (_currentStageID != _oldStageID)
     {
+        musicID_Temp = musicID;
         _songLeftTime = 0;
         _vNoteLeft.clear();
         _vNoteRight.clear();
-        SOUNDMANAGER->stop(_oldSongName), SOUNDMANAGER->stop(_oldShopKeeper);
         SOUNDMANAGER->play(_currentSongName), SOUNDMANAGER->play(_currentShopkeeper);
         _oldSongName = _currentSongName;
         _oldShopKeeper = _currentShopkeeper;
@@ -296,23 +288,19 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
         TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
 
         char display_songPos[256];
-        sprintf_s(display_songPos, sizeof(display_songPos), "%f", TIMEMANAGER->getElapsedTime() / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f) * (NOTE_INTERVAL)*SOUNDMANAGER->getPitch(_currentSongName, _pitch));
+        sprintf_s(display_songPos, sizeof(display_songPos), "%d", test);
         TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
 
         char display_endVec[256];
         sprintf_s(display_endVec, sizeof(display_endVec), "%f", inputIntervalCount);
         TextOut(getMemDC, 100, 140, display_endVec, strlen(display_endVec));
 
-        char display_noteInfoLength[256];
-        sprintf_s(display_noteInfoLength, sizeof(display_noteInfoLength), "%f", _vNoteLeft[0].speed);
-        TextOut(getMemDC, 100, 160, display_noteInfoLength, strlen(display_noteInfoLength));
-
         char display_songLength[256];
-        sprintf_s(display_songLength, sizeof(display_songLength), "%d", _currentStageID);
+        sprintf_s(display_songLength, sizeof(display_songLength), "%d", _oldStageID);
         TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
 
         char display_checkInfo[256];
-        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _oldStageID);
+        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _currentStageID);
         TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
 
         char display_checkAverSpeed[256];

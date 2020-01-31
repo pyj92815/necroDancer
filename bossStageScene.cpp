@@ -46,8 +46,10 @@ HRESULT bossStageScene::init()
 	bossSceneSetting();
 
 
-	_player->setBossStage(); // 보스스테이지 락훈 추가 
-	BEATMANAGER->init();
+	_player->setBossStage(); // 보스스테이지 락훈 추가
+
+	//BEATMANAGER->init();
+	SOUNDMANAGER->stop("BGM_LOBBY");
 
 	return S_OK;
 }
@@ -72,6 +74,7 @@ void bossStageScene::update()
 
 		// 플레이어가 문을 지났는지 연산
 		bossSceneDoorOpen();
+		BEATMANAGER->SetMusicID(5);
 
 		// 플레이어가 보스방문을 열고 안으로 들어오면 이 값이 true로 바뀐다.
 		if (_scene_Starter.isDoorOpen)
@@ -1101,6 +1104,9 @@ void bossStageScene::bossSceneStart()
 			}
 		}
 	}
+
+	// 보스 스테이지 볼륨 조절, 문이 열리는 여부에 따라 소리 조절함
+	setVolumeBossStage();
 }
 
 void bossStageScene::bossSceneRender()
@@ -1171,5 +1177,17 @@ void bossStageScene::bossClear()
 		{
 			_vTotalList[i]->wall = W_NONE;
 		}
+	}
+}
+
+void bossStageScene::setVolumeBossStage()
+{
+	if (_scene_Starter.isDoorOpen)
+	{
+		SOUNDMANAGER->setVolume("BGM_BOSS", 1.0f);
+	}
+	else
+	{
+		SOUNDMANAGER->setVolume("BGM_BOSS", 0.1f);
 	}
 }

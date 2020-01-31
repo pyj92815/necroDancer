@@ -78,6 +78,7 @@ private:
 
 	int musicID; // 음악의 인덱스를 정해주는 변수
 	int musicID_Temp;
+	int test;
 
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
