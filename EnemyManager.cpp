@@ -3,6 +3,7 @@
 #include "player.h"
 HRESULT EnemyManager::init(map<CHARACTER, POINT> menemPoint)
 {
+	_mEnemyPoint = menemPoint;
 	imageAdd();	//이미지 추가 함수
 	AnimationAdd(); //애니메이션 추가 함수
 	EnemyCreate();
