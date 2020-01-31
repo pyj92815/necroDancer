@@ -26,6 +26,7 @@ HRESULT timer::init()
 	_FPSFrameCount = 0;
 	_FPSTimeElapsed = 0;
 	_worldTime = 0;
+	_daehunWorldTime = 0;
 	_countTime = 0;
 
 	_countTimeResetSwitch = _countTimeSwitch = false;
@@ -58,6 +59,11 @@ void timer::tick(float lockFPS)
 	_FPSFrameCount++;
 	_FPSTimeElapsed += _timeElapsed;
 	_worldTime += _timeElapsed;
+	_daehunWorldTime += _timeElapsed*1000;
+	if (_daehunWorldTime >=1000)
+	{
+		_daehunWorldTime = 0;
+	}
 
 	if (_FPSTimeElapsed > 1.0f)
 	{
@@ -85,4 +91,9 @@ unsigned long timer::getFrameRate(char * str) const
 	}
 
 	return _frameRate;
+}
+
+bool timer::daehunCustom()
+{
+	return false;
 }

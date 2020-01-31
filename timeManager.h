@@ -16,6 +16,9 @@ public:
 	void update(float lockFPS = 0.0f);
 	void render(HDC hdc);
 
+	// FPS
+	inline int getFrameRate() { return _timer->getFrameRate(); }
+
 	//DeltaÅ¸ÀÓ
 	inline float getElapsedTime() const { return _timer->getElapsedTime(); }
 
@@ -28,5 +31,7 @@ public:
 	
 	inline void setCountTimeResetSwitch(bool resetSwitch) { *(_timer->getCountTimeResetSwitchPt()) = resetSwitch; }
 	inline void setCountTimeSwitch(bool ONOff_Switch) { *(_timer->getCountTimeSwitchPt()) = ONOff_Switch; }
+
+	inline float getDaeHunWorldTime() const { return _timer->getDaeHunWorldTime();}
 };
 

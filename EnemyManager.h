@@ -51,6 +51,7 @@ public:
 	void update();
 	void render();
 
+	void Attack();
 	void EnemyRemove();
 
 	void EnemyInspection();	

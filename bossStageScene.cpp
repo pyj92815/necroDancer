@@ -14,6 +14,7 @@ bossStageScene::~bossStageScene()
 
 HRESULT bossStageScene::init()
 {
+	_stageScene->release();
 	_addBossImage->add_BossImage();
 	_addBossImage->add_BossAnimation();
 
@@ -47,6 +48,8 @@ HRESULT bossStageScene::init()
 	_player->setBossStage(); // 보스스테이지 락훈 추가 
 	BEATMANAGER->init();
 
+	//BEATMANAGER->init();
+	SOUNDMANAGER->stop("BGM_LOBBY");
 	return S_OK;
 }
 
@@ -70,6 +73,7 @@ void bossStageScene::update()
 
 		// 플레이어가 문을 지났는지 연산
 		bossSceneDoorOpen();
+		BEATMANAGER->SetMusicID(5);
 
 		// 플레이어가 보스방문을 열고 안으로 들어오면 이 값이 true로 바뀐다.
 		if (_scene_Starter.isDoorOpen)
@@ -212,11 +216,13 @@ void bossStageScene::render()
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList)->type != TYPE_NONE)
 			{
-				// 타일의 속성에 따라 이미지를 뿌린다.
-				if((*_viTotalList)->alphaValue <= 0) findTileImage();
+				// 타일의 속성에 따라 이미지를 뿌린다.		
+				RECT temp;
+				if (IntersectRect(&temp, &CAMERAMANAGER->getCamera_Rect(), &(*_viTotalList)->rc))
+				{
+					if((*_viTotalList)->alphaValue <= 0) findTileImage();
 
-				// 타일의 속성에 따라 이미지를 뿌린다.
-				findTileImage();
+				}
 			}
 	
 		}
@@ -1305,6 +1311,9 @@ void bossStageScene::bossSceneStart()
 			}
 		}
 	}
+
+	// 보스 스테이지 볼륨 조절, 문이 열리는 여부에 따라 소리 조절함
+	setVolumeBossStage();
 }
 
 void bossStageScene::bossSceneRender()
@@ -1322,17 +1331,17 @@ void bossStageScene::bossSceneDoorOpen()
 
 
 	// 플레이어가 문에 있는 위치에 도착하면 문이 사라진다.
-	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 20 ||
-		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 20 ||
-		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 20)
+	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 21 ||
+		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 21 ||
+		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 21)
 	{
 		// 문이였던 지역이 땅으로 바뀐다.
 		for (int i = 0; i < _vTotalList.size(); ++i)
 		{
 			// 인덱스와 같은 타일을 찾는다.
-			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 19 ||
-				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 19 ||
-				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 19)
+			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 20 ||
+				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 20 ||
+				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 20)
 			{
 				//_vTotalList[i]->type = TYPE_NONE;
 				_vTotalList[i]->wall = W_NONE;
@@ -1342,17 +1351,17 @@ void bossStageScene::bossSceneDoorOpen()
 
 
 		// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
-	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 18 ||
-		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 18 ||
-		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 18)
+	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 19 ||
+		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 19 ||
+		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 19)
 	{
 		// 문이였던 지역을 벽으로 바꿔준다.
 		for (int i = 0; i < _vTotalList.size(); ++i)
 		{
 			// 인덱스과 같은 타일에 벽을 세워준다.
-			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 19 ||
-				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 19 ||
-				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 19)
+			if (_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 20 ||
+				_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 20 ||
+				_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 20)
 			{
 				_vTotalList[i]->type = TYPE_WALL;
 				_vTotalList[i]->wall = W_BOSS_WALL;
@@ -1373,21 +1382,13 @@ void bossStageScene::bossClear()
 	for (int i = 0; i < _vTotalList.size(); ++i)
 	{
 		// 벽이 사라져야 하는 인덱스 이타일을 찾는다.
-		if (_vTotalList[i]->idX == 11 && _vTotalList[i]->idY == 9 ||
-			_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 9 ||
-			_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 9 ||
-			_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 9 ||
-			_vTotalList[i]->idX == 15 && _vTotalList[i]->idY == 9)
+		if (_vTotalList[i]->idX == 11 && _vTotalList[i]->idY == 10 ||
+			_vTotalList[i]->idX == 12 && _vTotalList[i]->idY == 10 ||
+			_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 10 ||
+			_vTotalList[i]->idX == 14 && _vTotalList[i]->idY == 10 ||
+			_vTotalList[i]->idX == 15 && _vTotalList[i]->idY == 10)
 		{
 			_vTotalList[i]->wall = W_NONE;
-		}
-
-		// 출구 이미지가 바뀐다.
-		if (_vTotalList[i]->idX == 13 && _vTotalList[i]->idY == 7)
-		{
-			_vTotalList[i]->terrain = TR_END;
-			_vTotalList[i]->terrainFrameX = 0;
-			_vTotalList[i]->terrainFrameY = 5;
 		}
 	}
 }
@@ -1518,5 +1519,17 @@ void bossStageScene::boss_PhaseMove()
 		// 한박자로 왼쪽 오른쪽 벽에 붙고, 벽에 붙었으면 네 박자마다 파이어볼 발사
 
 		break;
+	}
+}
+
+void bossStageScene::setVolumeBossStage()
+{
+	if (_scene_Starter.isDoorOpen)
+	{
+		SOUNDMANAGER->setVolume("BGM_BOSS", 1.0f);
+	}
+	else
+	{
+		SOUNDMANAGER->setVolume("BGM_BOSS", 0.1f);
 	}
 }

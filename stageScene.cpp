@@ -24,10 +24,12 @@ HRESULT stageScene::init()
 
 	_ui = new UImanager;
 	_ui->init();
-
+	
 	_minimap = new miniMap;
 	_minimap->init();
-
+	
+	_minimap->getEnemyPoint(_em);
+	
 	_zOrder = new zOrder;
 	_zOrder->init();
 
@@ -36,12 +38,16 @@ HRESULT stageScene::init()
 
 
 	_pm->getPlayerInfo()->setStage();
+	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
+
 	//ZorderSetup();
+	BEATMANAGER->SetMusicID(1);
 	return S_OK;
 }
 
 void stageScene::release()
 {
+	_vTotalList.clear();
 }
 
 void stageScene::update()
@@ -57,8 +63,14 @@ void stageScene::update()
 	//_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
 	//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
-	_minimap->getStageMap(_vTotalList);
+
 	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
+	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
+	//_minimap->getStageMap(_vTotalList);
+	_minimap->getPlayerPoint(_pm);
+	_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	nextPage();
+	
 }
 
 void stageScene::render()
@@ -275,12 +287,25 @@ void stageScene::setVision(POINT index, int sight)
 	// 2. 알파블렌더가 렉에 원인인데 어떻게 할지
 }
 
+void stageScene::nextPage()
+{
+	if (_bossIdx == _pm->getPlayerInfo()->getPlayer().idx && _bossIdy == _pm->getPlayerInfo()->getPlayer().idy)
+	{
+		SCENEMANAGER->changeScene("Boss");
+	}
+	if (_stageIdx == _pm->getPlayerInfo()->getPlayer().idx && _stageIdy == _pm->getPlayerInfo()->getPlayer().idy)
+	{
+		SCENEMANAGER->changeScene("Stage");
+	}
+
+}
+
 void stageScene::stageMapLoad()
 {
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -330,6 +355,16 @@ void stageScene::stageMapLoad()
 				break;
 			}
 		}
+		if (_tiles[i].terrain == TR_BOSS_STAIR)
+		{
+			_bossIdx = _tiles[i].idX;
+			_bossIdy = _tiles[i].idY;
+		}
+		if (_tiles[i].terrain == TR_STAIR)
+		{
+			_stageIdx = _tiles[i].idX;
+			_stageIdy = _tiles[i].idY;
+		}
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
 		{
@@ -339,7 +374,4 @@ void stageScene::stageMapLoad()
 		i++;
 	}
 }
-
-
-
 
