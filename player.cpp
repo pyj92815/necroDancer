@@ -435,6 +435,26 @@ void player::tileCheck()
 	}
 	else // 보스방 구조체가 두개라서 공격 두개 할수도 있음 
 	{
+		bool Metal = false;
+		for (_miPlayerdeathMetalTile = _mPlayerdeathMetalTile.begin(); _miPlayerdeathMetalTile != _mPlayerdeathMetalTile.end(); ++_miPlayerdeathMetalTile)
+		{
+			if (_miPlayerdeathMetalTile->first == _player.direction)
+			{
+				if (_player.weapon == PLAYERWAEPON_NONE)
+				{
+					_reversMove = true;
+					StateMove();
+				}
+				else
+				{
+					playerEffect_Attack();
+					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
+				}
+				action = true;
+				break;
+			}
+		}
+		if (action) return;
 		for (_miPlayerSlaveTile = _mPlayerSlaveTile.begin(); _miPlayerSlaveTile != _mPlayerSlaveTile.end(); ++_miPlayerSlaveTile)
 		{
 			if (0 > _mPlayerSlaveTile.size()) break;
@@ -453,24 +473,8 @@ void player::tileCheck()
 				break;
 			}
 		}
-		if (action) return;
-		for (_miPlayerdeathMetalTile = _mPlayerdeathMetalTile.begin(); _miPlayerdeathMetalTile != _mPlayerdeathMetalTile.end(); ++_miPlayerdeathMetalTile)
-		{
-			if (_miPlayerdeathMetalTile->first == _player.direction)
-			{
-				if (_player.weapon == PLAYERWAEPON_NONE)
-				{
-					_reversMove = true;
-					StateMove();
-				}
-				else
-				{
-					playerEffect_Attack();
-				}
-				action = true;
-				break;
-			}
-		}
+		
+	
 	}
 	if (!action) StateMove();
 }
