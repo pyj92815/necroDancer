@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "stageScene.h"
 #include "bossStageScene.h"
-
+#include"EnemyManager.h"
 HRESULT stageScene::init()
 {
 	stageMapLoad();

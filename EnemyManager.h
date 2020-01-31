@@ -10,6 +10,8 @@
 #include"Enemy_Slime_Orange.h"
 #include"Enemy_Warith.h"
 #include"Enemy_Zombie.h"
+#include"tileNode.h"
+#include"Collision.h"
 #include<vector>
 
 class player;
@@ -25,7 +27,10 @@ private:
 	vector<Enemy*> _vEnemy;
 	vector<Enemy*>::iterator _viEnemy;
 
+	tagTile* _tile;
+
 	EnemyType _enemyType;
+
 
 	player* _player;
 
@@ -37,7 +42,8 @@ public:
 	void release();
 	void update();
 	void render();
-
+	
+	void WallInspection();
 	void Attack();
 	void EnemyRemove();
 

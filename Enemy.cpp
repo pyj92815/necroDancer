@@ -5,8 +5,6 @@ HRESULT Enemy::init()
 {
 	ZeroMemory(&_playerInfo, sizeof(_playerInfo));
 	_playerInfo = new playerInfo;
-	_jump = new jump;
-	_jump->init();
 	_enemyInfo->Beat = true;
 	_enemyInfo->aniChange = true;
 	_enemyInfo->Light = true;
@@ -52,9 +50,9 @@ void Enemy::update()
 void Enemy::render()
 {
 	_enemyInfo->Image->aniRender(CAMERAMANAGER->getWorldDC(), _enemyInfo->x, _enemyInfo->y - (_enemyInfo->Image->getFrameHeight() / 4), _enemyInfo->Animation);
-	Rectangle(CAMERAMANAGER->getWorldDC(), _enemyInfo->rc);
+	//Rectangle(CAMERAMANAGER->getWorldDC(), _enemyInfo->rc);
 	if(_enemyInfo->Attack)
-	_enemyInfo->attackImage->aniRender(CAMERAMANAGER->getWorldDC(), _enemyInfo->x, _enemyInfo->y, _enemyInfo->attackAnimation);
+	_enemyInfo->attackImage->aniRender(CAMERAMANAGER->getWorldDC(), _playerInfo->x, _playerInfo->y, _enemyInfo->attackAnimation);
 }
 
 void Enemy::AniStart()
@@ -288,10 +286,6 @@ void Enemy::AniChange()
 
 void Enemy::Attack()
 {
-	
-	
-	
-	
 	switch (_enemyInfo->AttackDirection)
 	{
 	case Direction::LEFT:

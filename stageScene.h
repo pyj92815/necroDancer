@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
 #include "playerManager.h"
-#include "EnemyManager.h"
 #include "UImanager.h"
 #include "Collision.h"
 #include "miniMap.h"
@@ -9,7 +8,7 @@
 #include "visionFloodFill.h"
 
 class bossStageScene;
-
+class EnemyManager;
 class stageScene: public gameNode
 {
 private: // ¸Ê Ãæµ¹  

@@ -7,6 +7,7 @@ HRESULT EnemyManager::init()
 	AnimationAdd(); //애니메이션 추가 함수
 	임시enemy생성();
 	_player = new player;
+	_tile = new tagTile;
 
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
@@ -31,7 +32,7 @@ void EnemyManager::update()
 	}
 	EnemyRemove();
 	EnemyInspection();
-
+	Attack();
 }
 
 void EnemyManager::render()
@@ -39,28 +40,26 @@ void EnemyManager::render()
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->render();
-		
 	}
 
+}
+
+void EnemyManager::WallInspection()
+{
+	
 }
 
 void EnemyManager::Attack()
 {
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
-		
-		switch ((*_viEnemy)->getEnemyInfo()->AttackDirection)
+		if ((*_viEnemy)->getEnemyInfo()->Attack)
 		{
-		case Direction::LEFT:
-			break;
-		case Direction::RIGHT:
-			break;
-		case Direction::UP:
-			break;
-		case Direction::DOWN:
-			break;
+			if ((*_viEnemy)->getEnemyInfo()->Beat)
+			{
+				_player->playerHit((*_viEnemy)->getEnemyInfo()->damage);
+			}
 		}
-
 	}
 }
 
@@ -202,10 +201,10 @@ void EnemyManager::imageAdd()
 	IMAGEMANAGER->addFrameImage("Enemy_slime_orange", "image/Enemy/slime_orange.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_wraith", "image/Enemy/wraith.bmp", 288, 96, 6, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_zombie", "image/Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_Left", "image/particles/swipe_enemy_LEFT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_Right", "image/particles/swipe_enemy_RIGHT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_Up", "image/particles/swipe_enemy_UP.bmp", 120, 27, 5, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_Down", "image/particles/swipe_enemy_DOWN.bmp", 120, 27, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Left", "image/particles/swipe_enemy_LEFT.bmp", 135*2, 24*2, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Right", "image/particles/swipe_enemy_RIGHT.bmp", 135 * 2, 24 * 2, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Up", "image/particles/swipe_enemy_UP.bmp", 120 * 2, 27 * 2, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Down", "image/particles/swipe_enemy_DOWN.bmp", 120 * 2, 27 * 2, 5, 1, true, RGB(255, 0, 255));
 }
 void EnemyManager::Enemy_Bat_Create(float x, float y)
 {
