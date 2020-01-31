@@ -723,4 +723,6 @@ void UImanager::render()
 		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 60, _diaTest % 10, 0);
 	}
 
+
+
 }
