@@ -124,62 +124,63 @@ void bossStageScene::update()
 
 			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
 			{
-				// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
-				int tempX, tempY;
-				tempX = tempY = 0;
-				int rndX, rndY;
-				rndX = rndY = 0;
-			
-				// 2마리를 소환해야 하기 때문에 2번을 돈다.
-				for (int i = 0; i < 2; ++i)
-				{
-					rndX = RND->getInt(9) + 8;
-					rndY = RND->getInt(8) + 10;
-					// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
-					for (int j = 0; j < _vTotalList.size(); ++j)
-					{
-						// 보스방 범위에서만 소환이 가능해야 한다.
-						if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
-							_vTotalList[j]->idY >= 10 && _vTotalList[j]->idY <= 18)
-						{
-							// 보스가 있는 위치에는 나오면 안돼
-							if (_deathMetal->getBoss_Index().x != rndX &&
-								_deathMetal->getBoss_Index().y != rndY)
-							{
-								tempX = rndX;
-								tempY = rndY;
-
-								break;
-							}
-			
-							// 기존에 슬레이브가 있는 위치에는 나오면 안돼
-							for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
-							{
-								if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
-									_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
-								{
-									tempX = rndX;
-									tempY = rndY;
-									break;
-								}
-							}
-			
-							// 플레이어 위치에는 나오면 안돼
-							if (_player->getPlayer().idx != rndX &&
-								_player->getPlayer().idy != rndY)
-							{
-								tempX = rndX;
-								tempY = rndY;
-								break;
-							}
-						}
-			
-						if (tempX && tempY) break;
-					}
-			
-					// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
-					if(tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
-				}
+				_deathMetal->setBoss_Shield_Hit_True();
+				//// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
+				//int tempX, tempY;
+				//tempX = tempY = 0;
+				//int rndX, rndY;
+				//rndX = rndY = 0;
+				//
+				//// 2마리를 소환해야 하기 때문에 2번을 돈다.
+				//for (int i = 0; i < 2; ++i)
+				//{
+				//	rndX = RND->getInt(9) + 8;
+				//	rndY = RND->getInt(7) + 11;
+				//	// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
+				//	for (int j = 0; j < _vTotalList.size(); ++j)
+				//	{
+				//		// 보스방 범위에서만 소환이 가능해야 한다.
+				//		if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
+				//			_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
+				//		{
+				//			// 보스가 있는 위치에는 나오면 안돼
+				//			if (_deathMetal->getBoss_Index().x != rndX &&
+				//				_deathMetal->getBoss_Index().y != rndY)
+				//			{
+				//				tempX = rndX;
+				//				tempY = rndY;
+				//
+				//				break;
+				//			}
+				//
+				//			// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+				//			for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
+				//			{
+				//				if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
+				//					_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+				//				{
+				//					tempX = rndX;
+				//					tempY = rndY;
+				//					break;
+				//				}
+				//			}
+				//
+				//			// 플레이어 위치에는 나오면 안돼
+				//			if (_player->getPlayer().idx != rndX &&
+				//				_player->getPlayer().idy != rndY)
+				//			{
+				//				tempX = rndX;
+				//				tempY = rndY;
+				//				break;
+				//			}
+				//		}
+				//
+				//		if (tempX && tempY) break;
+				//	}
+				//
+				//	// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
+				//	if(tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
+				//}
 			}
 
 			if (KEYMANAGER->isOnceKeyDown('O'))
@@ -1095,8 +1096,80 @@ void bossStageScene::slave_Move_Player()
 							_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
 						}
 					}
-
 					else _sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+				}
+
+				// 만약 박쥐라면 벽을 제외한 방향을 
+				if(_sm->get_SlaveList()[i]->get_Slave()->status.type == SLAVE_TYPE::SLAVE_BAT)
+				{
+					for (; ; )
+					{
+						// 랜덤으로 값을 받고, 그 방향에 에너미, 보스, 벽이 없다면 그 방향으로 이동하ㅔ 한다.
+						int rndNum = RND->getInt(4);
+						bool exit_For = false;
+
+						switch (rndNum)
+						{
+							// 왼쪽
+						case 0:
+							_sm->get_SlaveList()[i]->get_Slave()->status.direction = SLAVE_DIRECTION::SD_LEFT;
+							// 이동 가능한 방향을 찾으면 박쥐 무브에 방향을 보내준다.
+							if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+							{
+								_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								exit_For = true;
+							}
+							break;
+
+							// 위
+						case 1:
+							_sm->get_SlaveList()[i]->get_Slave()->status.direction = SLAVE_DIRECTION::SD_UP;
+							// 이동 가능한 방향을 찾으면 박쥐 무브에 방향을 보내준다.
+							if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+							{
+								_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								exit_For = true;
+							}
+							break;
+
+							// 오른쪽
+						case 2:
+							_sm->get_SlaveList()[i]->get_Slave()->status.direction = SLAVE_DIRECTION::SD_RIGHT;
+							// 이동 가능한 방향을 찾으면 박쥐 무브에 방향을 보내준다.
+							if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+							{
+								_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								exit_For = true;
+							}
+							break;
+
+							// 아래
+						case 3:
+							_sm->get_SlaveList()[i]->get_Slave()->status.direction = SLAVE_DIRECTION::SD_DOWN;
+							// 이동 가능한 방향을 찾으면 박쥐 무브에 방향을 보내준다.
+							if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+							{
+								_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								exit_For = true;
+							}
+							break;
+						}
+
+						// 방향을 찾았다면 나간다.
+						if (exit_For) break;
+					}
 				}
 
 				// 플레이어나 데스메탈이 근처에 있다면 이동 하지 않는다. (이동 불가능 true 이동가능 false)
@@ -1448,6 +1521,7 @@ void bossStageScene::boss_PhaseMove()
 
 				break;
 			}
+
 			// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
 			int tempX, tempY;
 			tempX = tempY = 0;
@@ -1457,14 +1531,14 @@ void bossStageScene::boss_PhaseMove()
 			// 2마리를 소환해야 하기 때문에 2번을 돈다.
 			for (int i = 0; i < 2; ++i)
 			{
-				rndX = RND->getInt(19)+ 8;
-				rndY = RND->getInt(19)+ 10;
+				rndX = RND->getInt(9) + 8;
+				rndY = RND->getInt(7) + 11;
 				// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
 				for (int j = 0; j < _vTotalList.size(); ++j)
 				{
 					// 보스방 범위에서만 소환이 가능해야 한다.
 					if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
-						_vTotalList[j]->idY >= 10 && _vTotalList[j]->idY <= 18)
+						_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
 					{
 						// 보스가 있는 위치에는 나오면 안돼
 						if (_deathMetal->getBoss_Index().x != rndX &&
@@ -1472,6 +1546,8 @@ void bossStageScene::boss_PhaseMove()
 						{
 							tempX = rndX;
 							tempY = rndY;
+
+							break;
 						}
 
 						// 기존에 슬레이브가 있는 위치에는 나오면 안돼
@@ -1482,6 +1558,7 @@ void bossStageScene::boss_PhaseMove()
 							{
 								tempX = rndX;
 								tempY = rndY;
+								break;
 							}
 						}
 
@@ -1491,6 +1568,7 @@ void bossStageScene::boss_PhaseMove()
 						{
 							tempX = rndX;
 							tempY = rndY;
+							break;
 						}
 					}
 
@@ -1498,7 +1576,9 @@ void bossStageScene::boss_PhaseMove()
 				}
 
 				// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
-				_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
+				if (tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
+			
+		
 			}
 
 
