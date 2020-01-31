@@ -6,9 +6,8 @@
 #include "miniMap.h"
 #include "zOrder.h"
 #include "visionFloodFill.h"
-
+#include"EnemyManager.h"
 class bossStageScene;
-class EnemyManager;
 class stageScene: public gameNode
 {
 private: // ¸Ê Ãæµ¹  

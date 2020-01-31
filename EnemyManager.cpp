@@ -7,7 +7,6 @@ HRESULT EnemyManager::init()
 	AnimationAdd(); //애니메이션 추가 함수
 	임시enemy생성();
 	_player = new player;
-	_tile = new tagTile;
 
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
@@ -33,6 +32,7 @@ void EnemyManager::update()
 	EnemyRemove();
 	EnemyInspection();
 	Attack();
+	
 }
 
 void EnemyManager::render()
@@ -44,9 +44,15 @@ void EnemyManager::render()
 
 }
 
-void EnemyManager::WallInspection()
+void EnemyManager::WallInspection(vector<tagTile>* vtile)
 {
-	
+	for (int i = 0;i < vtile->size();++i)
+	{
+		for (int j = 0;j < _vEnemy.size();++j)
+		{
+
+		}
+	}
 }
 
 void EnemyManager::Attack()
@@ -128,14 +134,10 @@ void EnemyManager::EnemyInspection()
 
 void EnemyManager::임시enemy생성()
 {
-	_enemyType = EnemyType::BAT;
-	EnemyCreate(10, 8, _enemyType);
 	_enemyType = EnemyType::DRAGON;
 	EnemyCreate(12, 8, _enemyType);
 	_enemyType = EnemyType::GHOST;
 	EnemyCreate(14, 8, _enemyType);
-	_enemyType = EnemyType::MINOTAUR;
-	EnemyCreate(16, 8, _enemyType);
 	_enemyType = EnemyType::SKELETON;
 	EnemyCreate(11, 10, _enemyType);
 	_enemyType = EnemyType::SKELETON_YELLOW;
@@ -146,25 +148,17 @@ void EnemyManager::임시enemy생성()
 	EnemyCreate(16, 10, _enemyType);
 	_enemyType = EnemyType::WRAITH;
 	EnemyCreate(10, 12, _enemyType);
-	_enemyType = EnemyType::ZOMBIE;
-	EnemyCreate(12, 12, _enemyType);
 }
 
 void EnemyManager::EnemyCreate(float x, float y, EnemyType enemyType)
 {
 	switch (_enemyType)
 	{
-	case EnemyType::BAT:
-		Enemy_Bat_Create(x, y);
-		break;
 	case EnemyType::DRAGON:
 		Enemy_Dragon_Create(x, y);
 		break;
 	case EnemyType::GHOST:
 		Enemy_Ghost_Create(x, y);
-		break;
-	case EnemyType::MINOTAUR:
-		Enemy_Minotaur_Create(x, y);
 		break;
 	case EnemyType::SKELETON:
 		Enemy_Skeleton_Create(x, y);
@@ -180,9 +174,6 @@ void EnemyManager::EnemyCreate(float x, float y, EnemyType enemyType)
 		break;
 	case EnemyType::WRAITH:
 		Enemy_Wraith_Create(x, y);
-		break;
-	case EnemyType::ZOMBIE:
-		Enemy_Zombie_Create(x, y);
 		break;
 	default:
 		break;
@@ -206,13 +197,6 @@ void EnemyManager::imageAdd()
 	IMAGEMANAGER->addFrameImage("Enemy_Attack_Up", "image/particles/swipe_enemy_UP.bmp", 120 * 2, 27 * 2, 5, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_Attack_Down", "image/particles/swipe_enemy_DOWN.bmp", 120 * 2, 27 * 2, 5, 1, true, RGB(255, 0, 255));
 }
-void EnemyManager::Enemy_Bat_Create(float x, float y)
-{
-	Enemy* Bat;
-	Bat = new Enemy_Bat;
-	Bat->EnemyCreate(x, y, 1.0f, 0.5f, "Enemy_bat", "Bat_L_IDLE_Ani");
-	_vEnemy.push_back(Bat);
-}
 void EnemyManager::Enemy_Dragon_Create(float x, float y)
 {
 	Enemy* Dragon;
@@ -226,13 +210,6 @@ void EnemyManager::Enemy_Ghost_Create(float x, float y)
 	Ghost = new Enemy_Ghost;
 	Ghost->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_ghost", "Ghost_L_IDLE_Ani");
 	_vEnemy.push_back(Ghost);
-}
-void EnemyManager::Enemy_Minotaur_Create(float x, float y)
-{
-	Enemy* Minotaur;
-	Minotaur = new Enemy_Minotaur;
-	Minotaur->EnemyCreate(x, y, 3.0f, 2.0f, "Enemy_minotaur", "Minotaur_L_IDLE_Ani");
-	_vEnemy.push_back(Minotaur);
 }
 void EnemyManager::Enemy_Skeleton_Create(float x, float y)
 {
@@ -268,22 +245,6 @@ void EnemyManager::Enemy_Wraith_Create(float x, float y)
 	Wraith = new Enemy_Warith;
 	Wraith->EnemyCreate(x, y, 1.0f, 0.5f, "Enemy_wraith", "Enemy_wraith_L_IDLE_Ani");
 	_vEnemy.push_back(Wraith);
-}
-void EnemyManager::Enemy_Zombie_Create(float x, float y)
-{
-	Enemy* Zombie;
-	Zombie = new Enemy_Zombie;
-
-	if (RND->getInt(2) == 0)
-	{
-		Zombie->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_zombie", "Enemy_zombie_LEFT_Ani", Direction::LEFT);
-	}
-	else
-	{
-		Zombie->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_zombie", "Enemy_zombie_UP_Ani", Direction::UP);
-	}
-
-	_vEnemy.push_back(Zombie);
 }
 
 void EnemyManager::AnimationAdd()
@@ -418,4 +379,3 @@ void EnemyManager::AnimationAdd()
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_UP_Ani", "Enemy_Attack_Up", Enemy_Attack_UP,5,10,true);
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_DOWN_Ani","Enemy_Attack_Down", Enemy_Attack_DOWN,5,10,true);
 }
-
