@@ -118,7 +118,7 @@ void EnemyManager::임시enemy생성()
 	_enemyType = EnemyType::MINOTAUR;
 	EnemyCreate(16, 8, _enemyType);
 	_enemyType = EnemyType::SKELETON;
-	EnemyCreate(10, 10, _enemyType);
+	EnemyCreate(11, 10, _enemyType);
 	_enemyType = EnemyType::SKELETON_YELLOW;
 	EnemyCreate(12, 10, _enemyType);
 	_enemyType = EnemyType::SLIME_BLUE;
