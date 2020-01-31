@@ -135,16 +135,6 @@ void UImanager::release()
 
 void UImanager::update()
 {
-
-	// 
-
-
-
-	for (_miInven = _mInven.begin(); _miInven != _mInven.end(); ++_miInven)
-	{
-
-
-	}
 	//=========테스트용 조작 키====================
 	if (KEYMANAGER->isOnceKeyDown('Z'))
 	{
@@ -832,7 +822,7 @@ void UImanager::render()
 			else if (_vInven[i]->armor == A_SHOVEL)
 			{
 				_shovelInven.open = true;
-				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _shovelInven.x * i / i + 5, _shovelInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), (_shovelInven.x * i) / (i + 5), _shovelInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
 			}
 			else if (_vInven[i]->armor == A_TORCH_1|| _vInven[i]->armor == A_TORCH_2|| _vInven[i]->armor == A_TORCH_3)
 			{
@@ -888,6 +878,7 @@ void UImanager::render()
 	//				}*/
 	//	}
 	//	else continue;
+	//}
 
 
 	//}
