@@ -39,7 +39,7 @@ private:
 	float _distance;		// 타일 중점 거리 
 	float _time;			// 시간 
 	float _angle;			// 각도 
-	float _shadow;
+	float _shadow;			// 그림자
 
 	int _previousIdx;	    // 이전 idx,idy
 	int _previousIdy;
@@ -47,15 +47,15 @@ private:
 	bool _isMoving;			// BOOL 선형보간이동
 	bool _isKeyPress;		// KEY 입력 중 노트 판단 
 	bool _isKeyDown;		// KEY 입력 판단
-	bool _reversMove;
+	bool _reversMove;		// 무기가 없을 때
 
 	array<int,4> bodyRight; // 장비 바꾸기 위한 배열 
 	array<int,4> bodyLeft;	// 
 
-	tagItem* currentArmor;
-	tagItem* currentWeapon;
-
-
+	tagItem* currentItem;
+	//tagItem* currentWeapon;
+	//tagItem* currentPotion;
+	//tagItem* currenttorch;
 
 public:
 	player();
@@ -66,9 +66,8 @@ public:
 	void update();
 	void render();
 	void effectRender();
+
 	// 세팅 함수 
-
-
 	void keyControl();	 // 사용키
 	void playerMove();	 // 이동 
 
@@ -79,6 +78,7 @@ public:
 	void playerEffect_Attack(const char* imageName, float x, float y, int frameY);
 	void playerEffect_Attack(const char* imageName, int x, int y, int frameY);
 	void playerEffect_Attack();
+
 	// 타일검출
 	void tileCheck();	
 	void wallCheck();	 // 벽판단
@@ -110,6 +110,8 @@ public:
 	
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	//void setEnemyAddressLink(EnemyManager* enemyManager) { }
+	void itemUse();
+	vector<tagItem*> getVInven() { return _vInven; }
 
 	//이미지 세팅
 	void imageSetting()

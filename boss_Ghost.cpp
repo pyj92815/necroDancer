@@ -16,12 +16,37 @@ HRESULT boss_Ghost::init()
 
 void boss_Ghost::update()
 {
+	move();
 	boss_Ghost_ChangeAnimation();
-	slave::slave_Pos_Setting();
+	slave_Pos_Setting();
 }
 
 void boss_Ghost::move()
 {
+	// 슬레이브의 무브가 true로 변하면
+	if (slave::_slave.b_Value.isMove)
+	{
+		switch (slave::_slave.status.direction)
+		{
+		case SLAVE_DIRECTION::SD_LEFT:
+			slave::_slave.pos.index.x--;
+			break;
+
+		case SLAVE_DIRECTION::SD_UP:
+			slave::_slave.pos.index.y--;
+			break;
+
+		case SLAVE_DIRECTION::SD_RIGHT:
+			slave::_slave.pos.index.x++;
+			break;
+
+		case SLAVE_DIRECTION::SD_DOWN:
+			slave::_slave.pos.index.y++;
+			break;
+		}
+
+		slave::_slave.b_Value.isMove = false;
+	}
 }
 
 void boss_Ghost::boss_Ghost_ChangeAnimation()
@@ -65,6 +90,10 @@ void boss_Ghost::boss_Ghost_ChangeAnimation()
 
 				// 고스트가 해당 방향을 보고 있을때 각도를 초기화해준다.
 				slave::_slave.operation.angle = PI;
+
+				// 0이라면 왼쪽
+				slave::_slave.b_Value.ghostImgDirection = 0;
+
 				break;
 
 			case SLAVE_DIRECTION::SD_RIGHT:
@@ -83,6 +112,9 @@ void boss_Ghost::boss_Ghost_ChangeAnimation()
 
 				// 고스트가 해당 방향을 보고 있을때 각도를 초기화해준다.
 				slave::_slave.operation.angle = 0;
+
+				// 1이라면 오른쪽
+				slave::_slave.b_Value.ghostImgDirection = 1;
 				break;
 
 			case SLAVE_DIRECTION::SD_UP: case SLAVE_DIRECTION::SD_DOWN:
@@ -131,5 +163,7 @@ void boss_Ghost::boss_Ghost_ChangeAnimation()
 		slave::_slave.image.animation->start();
 	}
 }
+
+
 
 

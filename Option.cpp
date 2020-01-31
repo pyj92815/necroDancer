@@ -64,6 +64,19 @@ void Option::render()
 {
 	if (isOpen)
 	{
+		if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		{
+
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+		{
+
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+		{
+
+		}
+
 		IMAGEMANAGER->findImage("overlay_BG")->render(_backBuffer->getMemDC(), 0, 0);
 		IMAGEMANAGER->findImage("options_pause")->render(_backBuffer->getMemDC(), WINSIZEX_HALF - 124, 50);
 		IMAGEMANAGER->findImage("options_button_back")->render(_backBuffer->getMemDC(), WINSIZEX_HALF - 46, 200);

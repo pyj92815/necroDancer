@@ -7,15 +7,15 @@ class mapTool: public gameNode
 
 private:
 	
-	tagCurrentTile _currentTile;
-	tagSetTile _terrainTile[TERRAINTILEX * TERRAINTILEY];
-	tagSetTile _wallTile[WALLTILEX * WALLTILEY];
-	tagSetTile _trapTile[TRAPTILEX * TRAPTILEY];
-	tagSetTile _armorTile[ITEMTILEX * ITEMTILEY];
-	tagSetTile _weaponTile[ITEMTILEX * ITEMTILEY];
-	tagSetTile _stuffTile[ITEMTILEX * ITEMTILEY];
-	tagSetTile _characterTile[CHARACTERTILEX * CHARACTERTILEY];
-	tagTile		 _tiles[TILEX * TILEY];
+	tagCurrentTile  _currentTile;
+	tagSetTile		_terrainTile[TERRAINTILEX * TERRAINTILEY];
+	tagSetTile		_wallTile[WALLTILEX * WALLTILEY];
+	tagSetTile		_trapTile[TRAPTILEX * TRAPTILEY];
+	tagSetTile		_armorTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile		_weaponTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile		_stuffTile[ITEMTILEX * ITEMTILEY];
+	tagSetTile		_characterTile[CHARACTERTILEX * CHARACTERTILEY];
+	tagTile			_tiles[TILEX * TILEY];
 
 	float _WINSIZEX, _WINSIZEY;
 	int _pos[2];
@@ -24,22 +24,34 @@ private:
 	int _mapDirection;
 	mousePointRect _mouseEffect;
 private:
-	tagButton _saveButton;		//저장
-	tagButton _loadButton;		//로드
-	tagButton _mapButton;		//전체 맵 지형
-	tagButton _terrainButton;	//지형
-	tagButton _wallButton;		//벽
-	tagButton _trapButton;		//함정
-	tagButton _itemButton;		//아이템
-	tagButton _armorButton;		//방어구
-	tagButton _weaponButton;	//무기
-	tagButton _stuffButton;		//소지품
-	tagButton _characterButton;	//캐릭터
-	tagButton _eraseButton;		//지우개
-	tagButton _exitButton;		//나가기
+	tagButton _saveButton;				//저장
+	tagButton _loadButton;				//로드
+	tagButton _mapButton;				//전체 맵 지형
+	tagButton _mapEraseButton;			//전체 맵 지우개
+	tagButton _terrainButton;			//지형
+	tagButton _wallButton;				//벽
+	tagButton _wallEraseButton;			//벽 지우개
+	tagButton _trapButton;				//함정
+	tagButton _trapEraseButton;			//함정 지우개
+	tagButton _itemButton;				//아이템
+	tagButton _itemEraseButton;			//아이템 지우개
+	tagButton _armorButton;				//방어구
+	tagButton _armorEraseButton;		//방어구 지우개
+	tagButton _weaponButton;			//무기
+	tagButton _weaponEraseButton;		//무기 지우개
+	tagButton _stuffButton;				//소지품
+	tagButton _characterButton;			//캐릭터
+	tagButton _characterEraseButton;	//캐릭터 지우개
+	tagButton _eraseButton;				//지우개
+	tagButton _lobyButton;				//로비
+	tagButton _stageButton;				//스테이지
+	tagButton _bossButton;				//보스
+
+	tagButton _exitButton;				//나가기
 private:
 	tagMouse _RectCreate;
 	bool _isClick, _isItemButtonClick, _isMapButtonClick;
+	bool _isLobyButtonClick, _isStageButtonClick, _isBossButtonClick;
 	int _startL, _startT, _endR, _endB;
 	RECT _left, _top, _right, _bottom;
 	MovePalette _palette;	// 창 이동으로 사용할 렉트
@@ -52,13 +64,14 @@ public:
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update();
+	virtual void save();
+	virtual void load();
+	virtual void clickButton();
 	virtual void render();
 
 	void setup();
 
 	virtual void setMap();
-	virtual void save();
-	virtual void load();
 
 	//virtual void clickLeft();
 

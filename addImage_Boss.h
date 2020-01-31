@@ -94,7 +94,7 @@ public:
 	{
 		// 슬레이브의 이미지를 추가한다.
 		IMAGEMANAGER->addFrameImage("boss_Bat", "./image/Enemy/boss/slave/bat/boss_Bat.bmp", 192, 192, 4, 4, true, RGB(255, 0, 255));
-		IMAGEMANAGER->addFrameImage("boss_Ghost", "./image/Enemy/boss/slave/ghost/boss_Ghost.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255));
+		IMAGEMANAGER->addFrameImage("boss_Ghost", "./image/Enemy/boss/slave/ghost/boss_Ghost.bmp", 192, 96, 4, 2, true, RGB(255, 0, 255), true);
 		IMAGEMANAGER->addFrameImage("boss_Skeleton", "./image/Enemy/boss/slave/skel/boss_Skeleton.bmp", 432, 200, 9, 4, true, RGB(255, 0, 255));
 		IMAGEMANAGER->addImage("boss_Skeleton_Head", "./image/Enemy/boss/slave/skel/boss_Skeleton_Yellow.bmp", 36, 18, true, RGB(255, 0, 255));
 		IMAGEMANAGER->addFrameImage("boss_Skeleton_Yellow", "./image/Enemy/boss/slave/skel/boss_Skeleton_Yellow.bmp", 432, 200, 9, 4, true, RGB(255, 0, 255));

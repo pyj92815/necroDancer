@@ -32,7 +32,7 @@ public:
 
 	bitset<KEYMAX> getKeyUp() { return _keyUp; }
 	bitset<KEYMAX> getKeyDown() { return _keyDown; }
-
+	
 	void setKeyDown(int key, bool state) { _keyDown.set(key, state); }
 	void setKeyTwoDown(int one,int two, bool state) 
 	{ 

@@ -10,6 +10,13 @@ inline POINT PointMake(int x, int y)
 
 	return pt;
 }
+inline POINTFLOAT PointMakeFloat(float x, float y)
+{
+	POINTFLOAT pt = { x, y };
+
+	return pt;
+}
+
 
 //          ¼±±ß±â  »Ñ·ÁÁÙDC, ½ÃÀÛÁÂÇ¥X, ½ÃÀÛÁÂÇ¥Y, ³¡ÁÂÇ¥X, ³¡ÁÂÇ¥Y
 inline void LineMake(HDC hdc, int startX, int startY, int endX, int endY)
