@@ -12,6 +12,7 @@ struct MovePalette
 	RECT armorTile;
 	RECT weaponTile;
 	RECT stuffTile;
+	RECT characterTile;
 	POINT pos_Start;	// 마우스로 클릭한 지점 좌표를 담아둔다.
 	POINT pos_End;		// 마우스의 현재 위치 좌표를 담아둔다.
 	bool isClick;		// 마우스를 눌렀는지 안 눌렀는지
