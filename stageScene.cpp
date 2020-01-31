@@ -66,8 +66,9 @@ void stageScene::update()
 	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 	_minimap->getStageMap(_vTotalList);
-	_minimap->getPlayerPoint(_pm);
-	//_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().rc.left, _pm->getPlayerInfo()->getPlayer().rc.top);
+	_minimap->setEnemyXY(_em->getVEnemy());
+	_ui->setInven(_pm->getPlayerInfo()->getVInven());
 	nextPage();
 	
 }

@@ -54,9 +54,9 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_isKeyDown = false;      // KEY 입력 판단
 
 	// 초기 세팅 장비 값 
-	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
-	_player.weapon = PLAYERWAEPON_DAGGER;
-	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
+	//makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
+	//_player.weapon = PLAYERWAEPON_DAGGER;
+	//makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
 
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
@@ -105,6 +105,8 @@ void player::effectRender()
 
 void player::playerMove()
 {
+	_player.rc = RectMakeCenter(_player.x, _player.y, _player.bodyImage->getFrameWidth(), _player.headImage->getFrameHeight());
+
 	if (!_isMoving) return;
 
 	float elapsedTime = TIMEMANAGER->getElapsedTime();

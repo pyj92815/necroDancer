@@ -840,7 +840,7 @@ void UImanager::render()
 				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _ringInven.x * i / i + 5, _ringInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
 			}
 
-		if (_vInven[i]->weapon != WP_NONE &&_vInven[i]->weapon != WP_DAGGER_1 && _vInven[i]->weapon != WP_DAGGER_2)
+		if (!(_vInven[i]->weapon == WP_NONE  ||_vInven[i]->weapon == WP_DAGGER_1 || _vInven[i]->weapon == WP_DAGGER_2))
 		{
 			_attackInven.open = true;
 			_throwInven.open = false;
@@ -854,6 +854,7 @@ void UImanager::render()
 			if (_throwInven.open)_throwInven.image->render(getMemDC(), 20, _throwInven.y), _upDown.image->render(getMemDC(), 30, _throwInven.y + 60);
 			IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _throwInven.x * i / i + 5, _throwInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
 		}
+
 		if (_vInven[i]->stuff != ST_NONE)
 		{
 			_itemInven.open = true;
