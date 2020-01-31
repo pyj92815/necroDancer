@@ -71,7 +71,7 @@ enum TERRAIN
 {
 	TR_BASIC_STAGE_TILE, TR_BASIC_COMBO_TILE,
 	TR_BOSS_STAGE_TILE, TR_BOSS_COMBO_TILE,
-	TR_STAIR, TR_SHOP,
+	TR_STAIR, TR_BOSS_STAIR, TR_SHOP,
 	TR_NONE,
 	TR_END,
 	TR_CEMENT, TR_DESERT, TR_GRASS, TR_WATER
@@ -138,7 +138,7 @@ enum OBJECT
 
 enum CHARACTER
 {
-	CHAR_PLAYER,									//플레이어
+	CHAR_PLAYER, CHAR_SHOPKEEPER,						
 	CHAR_BAT, 
 	CHAR_SLIME_BLUE, CHAR_SLIME_ORANGE, 
 	CHAR_GHOST, CHAR_WRAITH,
@@ -176,26 +176,15 @@ struct tagTile
 	CHARACTER character;	//캐릭터
 	STUFF stuff;			//소지품
 	RECT rc;				//렉트
-	int terrainFrameX;		//터레인 번호
-	int terrainFrameY;		//터레인 번호
-	int wallFrameX;			//벽 번호
-	int wallFrameY;			//벽 번호
-	int charFrameX;			//캐릭터 번호
-	int charFrameY;			//캐릭터 번호
-	int enemyFrameX;		//적 번호
-	int enemyFrameY;		//적 번호
-	int	floorObjFrameX;		//바닦 오브젝트 번호
-	int floorObjFrameY;		//바닦 오브젝트 번호
-	int armorFrameX;			//아이템 번호
-	int armorFrameY;			//아이템 번호
-	int weaponFrameX;			//아이템 번호
-	int weaponFrameY;			//아이템 번호
-	int stuffFrameX;			//아이템 번호
-	int stuffFrameY;			//아이템 번호
-	int characterFrameX;
-	int characterFrameY;
-	int trapFrameX;			//함정 번호
-	int trapFrameY;			//함정 번호
+	int terrainFrameX, terrainFrameY;		//터레인 번호
+	int wallFrameX, wallFrameY;				//벽 번호
+	int charFrameX, charFrameY;				//캐릭터 번호
+	int	floorObjFrameX, floorObjFrameY;		//바닦 오브젝트 번호
+	int armorFrameX, armorFrameY;			//아이템(방어구) 번호
+	int weaponFrameX, weaponFrameY;			//아이템(무기) 번호
+	int stuffFrameX, stuffFrameY;			//아이템(소지품) 번호
+	int characterFrameX, characterFrameY;	//캐릭터 번호
+	int trapFrameX, trapFrameY;				//함정 번호
 	
 	int alphaValue;			//시야 값 정하기 위한 알파 블랜더 변수
 	bool alphaEyesight;		//플레이어 시야

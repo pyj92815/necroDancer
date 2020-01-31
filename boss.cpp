@@ -104,6 +104,8 @@ void boss::settingBossVariable()
 	boss_Bool.PHASE_BOOL.PHASE_3_Set = false;
 	boss_Bool.PHASE_BOOL.PHASE_4_Set = false;
 
+	boss_Bool.boss_Die = false;
+
 	move_Count = 0;
 
 }

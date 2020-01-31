@@ -14,18 +14,22 @@ HRESULT stageScene::init()
 	_pm = new playerManager;
 	_pm->init(_playerIdx,_playerIdy);
 	CAMERAMANAGER->set_CameraXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y, true);
+	
+	
 	_em = new EnemyManager;
-	_em->init();
+	_em->init(_mEnemyPoint);
 
 	_em->AddressLink(_pm->getPlayerInfo());
 	_pm->getPlayerInfo()->collisionSettingBoss();
 
 	_ui = new UImanager;
 	_ui->init();
-
+	
 	_minimap = new miniMap;
 	_minimap->init();
-
+	
+	_minimap->getEnemyPoint(_em);
+	
 	_zOrder = new zOrder;
 	_zOrder->init();
 
@@ -34,12 +38,16 @@ HRESULT stageScene::init()
 
 
 	_pm->getPlayerInfo()->setStage();
+	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
+
 	//ZorderSetup();
+	BEATMANAGER->SetMusicID(1);
 	return S_OK;
 }
 
 void stageScene::release()
 {
+	_vTotalList.clear();
 }
 
 void stageScene::update()
@@ -57,8 +65,14 @@ void stageScene::update()
 	//_zOrderVector = ZorderUpdate(_zOrderVector);
 	stageCollision();
 	//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
-	_minimap->getStageMap(_vTotalList);
+
 	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
+	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
+	//_minimap->getStageMap(_vTotalList);
+	_minimap->getPlayerPoint(_pm);
+	_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	nextPage();
+	
 }
 
 void stageScene::render()
@@ -275,12 +289,25 @@ void stageScene::setVision(POINT index, int sight)
 	// 2. 알파블렌더가 렉에 원인인데 어떻게 할지
 }
 
+void stageScene::nextPage()
+{
+	if (_bossIdx == _pm->getPlayerInfo()->getPlayer().idx && _bossIdy == _pm->getPlayerInfo()->getPlayer().idy)
+	{
+		SCENEMANAGER->changeScene("Boss");
+	}
+	if (_stageIdx == _pm->getPlayerInfo()->getPlayer().idx && _stageIdy == _pm->getPlayerInfo()->getPlayer().idy)
+	{
+		SCENEMANAGER->changeScene("Stage");
+	}
+
+}
+
 void stageScene::stageMapLoad()
 {
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile("SaveFile.map", GENERIC_READ, 0, NULL,
+	file = CreateFile("Loby_SaveFile.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -297,11 +324,48 @@ void stageScene::stageMapLoad()
 			case CHAR_PLAYER:
 				_playerIdx = _tiles[i].idX;
 				_playerIdy = _tiles[i].idY;
-
 				break;
-			default:
+			case  CHAR_BAT:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_BAT, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_SLIME_BLUE:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_SLIME_BLUE, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_SLIME_ORANGE:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_SLIME_ORANGE, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_GHOST:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_GHOST, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case  CHAR_WRAITH:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_WRAITH, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_SKELETON:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_SKELETON, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_SKELETON_YELLOW:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_SKELETON_YELLOW, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_ZOMBIE:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_ZOMBIE, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_MINO:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_MINO, PointMake(_tiles[i].idX, _tiles[i].idY)));
+				break;
+			case CHAR_DRAGON:
+				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_DRAGON, PointMake(_tiles[i].idX, _tiles[i].idY)));
 				break;
 			}
+		}
+		if (_tiles[i].terrain == TR_BOSS_STAIR)
+		{
+			_bossIdx = _tiles[i].idX;
+			_bossIdy = _tiles[i].idY;
+		}
+		if (_tiles[i].terrain == TR_STAIR)
+		{
+			_stageIdx = _tiles[i].idX;
+			_stageIdy = _tiles[i].idY;
 		}
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
@@ -312,7 +376,4 @@ void stageScene::stageMapLoad()
 		i++;
 	}
 }
-
-
-
 

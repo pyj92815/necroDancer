@@ -50,6 +50,8 @@ struct tagPlayer				//플레이어의 정보
 	int diamond;				// 다이아 
 	bool isWeapon;
 	bool isArmor;
+	bool potion;
+	bool torch;
 };
 
 struct tagItem

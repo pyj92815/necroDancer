@@ -14,6 +14,14 @@ class player;
 enum class EnemyType
 {
 	BAT,DRAGON,GHOST,MINOTAUR,SKELETON,SKELETON_YELLOW,SLIME_BLUE,SLIME_ORANGE,WRAITH,ZOMBIE
+
+	//
+	/*CHAR_BAT,
+	CHAR_SLIME_BLUE, CHAR_SLIME_ORANGE,
+	CHAR_GHOST, CHAR_WRAITH,
+	CHAR_SKELETON, CHAR_SKELETON_YELLOW, CHAR_ZOMBIE,
+	CHAR_MINO, CHAR_DRAGON, CHAR_BOSS,
+	CHAR_NONE,*/
 };
 
 class EnemyManager :public gameNode
@@ -28,11 +36,16 @@ private:
 
 	player* _player;
 
+	// 몬스터 위치 생성 
+	map<CHARACTER, POINT>		   	_mEnemyPoint;
+	map<CHARACTER, POINT>::iterator _miEnemyPoint;
+
+
 public:
 	EnemyManager() {};
 	~EnemyManager() {};
 
-	HRESULT init();
+	HRESULT init(map<CHARACTER, POINT> mEnemyPount);
 	void release();
 	void update();
 	void render();
@@ -41,10 +54,8 @@ public:
 	void Attack();
 	void EnemyRemove();
 
-	void EnemyInspection();
-	void 임시enemy생성();
-	
-	void EnemyCreate(float x, float y, EnemyType enemyType);
+	void EnemyInspection();	
+	void EnemyCreate();
 
 	void Enemy_Dragon_Create(float x, float y);
 	void Enemy_Ghost_Create(float x, float y);
@@ -61,9 +72,13 @@ public:
 
 	void AddressLink(player* pl) { _player = pl; }
 
+
 	vector<Enemy*> getVEnemy() { return _vEnemy; }
 	vector<Enemy*>::iterator getViEnemy() { return _viEnemy; }
 
 	void setVtile(vector<tagTile*> tile);
+
+	virtual vector<Enemy*> getVEnemy() { return _vEnemy; }
+	virtual vector<Enemy*>::iterator getViEnemy() { return _viEnemy; }
 
 };

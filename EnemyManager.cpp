@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "EnemyManager.h"
 #include "player.h"
-HRESULT EnemyManager::init()
+HRESULT EnemyManager::init(map<CHARACTER, POINT> mEnemyPount)
 {
+	_mEnemyPoint = mEnemyPount;	  // 애너미 위치 정보
+	EnemyInspection();			  // 애너미 순서 
 	imageAdd();	//이미지 추가 함수
 	AnimationAdd(); //애니메이션 추가 함수
-	임시enemy생성();
+
 	_player = new player;
+	EnemyCreate();
 
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
@@ -198,9 +201,9 @@ void EnemyManager::임시enemy생성()
 	EnemyCreate(10, 12, _enemyType);
 }
 
-void EnemyManager::EnemyCreate(float x, float y, EnemyType enemyType)
+void EnemyManager::EnemyCreate()
 {
-	switch (_enemyType)
+	for (_miEnemyPoint = _mEnemyPoint.begin(); _miEnemyPoint != _mEnemyPoint.end(); ++_miEnemyPoint)
 	{
 	case EnemyType::DRAGON:
 		Enemy_Dragon_Create(x, y);
@@ -225,7 +228,49 @@ void EnemyManager::EnemyCreate(float x, float y, EnemyType enemyType)
 		break;
 	default:
 		break;
+		switch (_miEnemyPoint->first)
+		{
+		case CHAR_PLAYER:
+			break;
+		case CHAR_BAT:
+			Enemy_Bat_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SLIME_BLUE:
+			Enemy_Slime_Blue_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SLIME_ORANGE:
+			Enemy_Slime_Orange_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_GHOST:
+			Enemy_Ghost_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_WRAITH:
+			Enemy_Wraith_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SKELETON:
+			Enemy_Skeleton_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SKELETON_YELLOW:
+			Enemy_Skeleton_Yellow_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_ZOMBIE:
+			Enemy_Zombie_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_MINO:
+			Enemy_Minotaur_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_DRAGON:
+			Enemy_Dragon_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_BOSS:
+			break;
+		case CHAR_NONE:
+			break;
+		default:
+			break;
+		}
 	}
+
 }
 
 void EnemyManager::imageAdd()
