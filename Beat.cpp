@@ -110,11 +110,12 @@ void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
 void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 전용 함수
 {
     _currentStage = STAGE_LOBBY;
+
     _noteFileName = _currentSongName = _oldSongName = ""; // 불러올 파일 이름, 현재 곡 이름, 이전 곡 이름 초기화
-    noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating = _deltaTime
+    noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating 
         = _countNote = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = 0;
 
-    musicID = 1;
+    musicID_Temp = musicID = 1;
 
     test_ShopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
     test_ShopKeeper = RectMakeCenter(test_ShopKeeperPos.x, test_ShopKeeperPos.y, 50, 50);
@@ -131,7 +132,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     heartImg = IMAGEMANAGER->findImage("Heart");
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
-    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 70, heartImg->getFrameHeight());
+    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth(), heartImg->getFrameHeight());
 }
 
 void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
@@ -157,7 +158,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
     SOUNDMANAGER->getSongPosition(_currentSongName, _songPos); // 현재 진행 중인 곡의 진행 시간을 받아 옴(ms)
     _songLeftTime = GetSongVariousTime(_songPos, _songLength); // 현재 곡이 얼만큼 남았는지 알려줌
 
-    // 프로그램 최초 실행 후 재생한 곡이 아직 아무것도 없는 경우에 키를 입력한 경우
+    // 프로그램 최초 실행 시 temp랑 값이 같을때
     if (_currentSongName != "" && _oldSongName == "")
     {
         _oldSongName = _currentSongName;
@@ -178,7 +179,7 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
         _oldSongName = _currentSongName;
         _oldShopKeeper = _currentShopkeeper;
         _oldStageID = _currentStageID;
-        _deltaTime = TIMEMANAGER->getElapsedTime();
+        //_deltaTime = TIMEMANAGER->getElapsedTime();
 
         TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
         TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
@@ -295,7 +296,7 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
         TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
 
         char display_songPos[256];
-        sprintf_s(display_songPos, sizeof(display_songPos), "%f", _deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f) * (NOTE_INTERVAL)*SOUNDMANAGER->getPitch(_currentSongName, _pitch));
+        sprintf_s(display_songPos, sizeof(display_songPos), "%f", TIMEMANAGER->getElapsedTime() / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f) * (NOTE_INTERVAL)*SOUNDMANAGER->getPitch(_currentSongName, _pitch));
         TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
 
         char display_endVec[256];
@@ -307,11 +308,11 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
         TextOut(getMemDC, 100, 160, display_noteInfoLength, strlen(display_noteInfoLength));
 
         char display_songLength[256];
-        sprintf_s(display_songLength, sizeof(display_songLength), "%f", noteTimeIntervalCount);
+        sprintf_s(display_songLength, sizeof(display_songLength), "%d", _currentStageID);
         TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
 
         char display_checkInfo[256];
-        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _countNote);
+        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _oldStageID);
         TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
 
         char display_checkAverSpeed[256];
@@ -372,12 +373,12 @@ void Beat::CreateNewNote(bool dirRight) // 노트 생성, 곡 시작 직전에 (오른쪽으로
         if (dirRight) // 방향이 오른쪽인 경우
         {
             setNote.pos = { (float)WINSIZEX_HALF + (NOTE_INTERVAL * (i + 1)), (float)(heartRC.top + heartRC.bottom) / 2 };
-            setNote.speed = lerp(setNote.pos.x, setNote.pos.x - NOTE_INTERVAL, (_deltaTime / ((tempMS + bpm) / 1000.0f)));
+            setNote.speed = lerp(setNote.pos.x, setNote.pos.x - NOTE_INTERVAL, (TIMEMANAGER->getElapsedTime() / ((tempMS + bpm) / 1000.0f)));
         }
         else // 방향이 왼쪽인 경우
         {
             setNote.pos = { (float)WINSIZEX_HALF - (NOTE_INTERVAL * (i + 1)), (float)(heartRC.top + heartRC.bottom) / 2 };
-            setNote.speed = lerp(setNote.pos.x, setNote.pos.x + NOTE_INTERVAL, (_deltaTime / ((tempMS + bpm) / 1000.0f)));
+            setNote.speed = lerp(setNote.pos.x, setNote.pos.x + NOTE_INTERVAL, (TIMEMANAGER->getElapsedTime() / ((tempMS + bpm) / 1000.0f)));
         }
 
         setNote.img = new image;
@@ -409,10 +410,8 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // 노트 생성, 곡 시작 중 (오른�
     else // 방향이 왼쪽인 경우
     {
         newNote.pos = { 0, (float)(heartRC.top + heartRC.bottom) / 2 };
-        //newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2) , (_deltaTime / ((_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f)));
-        newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF - (heartImg->getFrameWidth() / 2), (_deltaTime / (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) * 1000.0f) / 4.0f);
     }
-    newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF, (_deltaTime / ((tempMS + bpm) / 1000.0f)) / 3);
+    newNote.speed = lerp(newNote.pos.x, WINSIZEX_HALF, (TIMEMANAGER->getElapsedTime() / ((tempMS + bpm) / 1000.0f)) / 3);
 
     if (_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote"); // 반복 곡인 경우에는 계속 초록색 노트 이미지를 지정해준다.
     else if (_songLeftTime > (float)(_songLength / 1000) * 0.15f && !_loopSong) newNote.img = IMAGEMANAGER->findImage("GreenNote"); // 현재 남은 곡의 전체 곡 길이의 15%보다 큰 경우 초록색 노트 이미지 지정 
@@ -446,7 +445,7 @@ void Beat::Move()
         _vNoteLeft[i].pos.x += _vNoteLeft[i].speed * SOUNDMANAGER->getPitch(_currentSongName, _pitch);
 
         RECT temp;
-        if (IntersectRect(&temp, &_vNoteLeft[i].rc, &heartRC) && _vNoteLeft[i].isRender) // 노트가 심장이랑 충돌 시 
+        if (IntersectRect(&temp, &_vNoteLeft[i].rc, &heartRC)) // 노트가 심장이랑 충돌 시 
         {
             if (!_vNoteLeft[i].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
             _vNoteLeft[i].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
@@ -456,17 +455,24 @@ void Beat::Move()
             if (_player->getPlayerKey() && Interval)
             {
                 _player->setPlayerKey();
-                HitNoteEffect(_vNoteLeft[i].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteLeft[i].rc.bottom - _vNoteLeft[i].rc.top) / 2));
-                _vNoteLeft[i].isRender = false;
-                _effect = true;
+                if (_vNoteLeft[i].pos.x < WINSIZEX_HALF)
+                {
+                    HitNoteEffect(_vNoteLeft[i].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteLeft[i].rc.bottom - _vNoteLeft[i].rc.top) / 2));
+                    _vNoteLeft[i].isRender = false;
+                    _effect = true;
 
-                HitNoteEffect(_vNoteRight[i].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteRight[i].rc.bottom - _vNoteRight[i].rc.top) / 2));
-                _vNoteRight[0].isRender = false;
-                _effect = true;
+                    HitNoteEffect(_vNoteRight[i].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteRight[i].rc.bottom - _vNoteRight[i].rc.top) / 2));
+                    _vNoteRight[i].isRender = false;
+                    _effect = true;
+                }
                 inputIntervalCount = 0;
             }
         }
-
+        if (_vNoteLeft[i].pos.x > WINSIZEX_HALF)
+        {
+            _vNoteLeft[i].isRender = false;
+            _vNoteRight[i].isRender = false;
+        }
         if (_vNoteLeft[i].pos.x - (heartImg->getFrameWidth() / 2) > WINSIZEX_HALF)
         {
             _player->setPlayerKey();

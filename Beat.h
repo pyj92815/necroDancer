@@ -51,7 +51,7 @@ private:
 	vector<tagNote> _vNoteLeft; // 왼쪽에서 나오는 노트
 	vector<tagNote> _vNoteRight; // 오른쪽에서 나오는 노트
 	int _countNote; // 현재까지 노트를 몇개 생성한 건지 세는 변수
-	float _deltaTime; // TIMEMANAGER에서 getElapsedTime()은 매번 값이 바뀌고 자주 호출하기 힘들기 때문에 곡이 시작되기 전, 한 번만 getElapsedTime()호출하고 그 값을 저장하는 용도의 변수 
+	//float _deltaTime; // TIMEMANAGER에서 getElapsedTime()은 매번 값이 바뀌고 자주 호출하기 힘들기 때문에 곡이 시작되기 전, 한 번만 getElapsedTime()호출하고 그 값을 저장하는 용도의 변수 
 
 	int _oldStageID, _currentStageID; // 현재 스테이지와 이전 스테이지 값
 	unsigned int _songPos; // 현재 곡의 진행시간(ms) 
@@ -77,6 +77,7 @@ private:
 	bool _effect;
 
 	int musicID; // 음악의 인덱스를 정해주는 변수
+	int musicID_Temp;
 
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가

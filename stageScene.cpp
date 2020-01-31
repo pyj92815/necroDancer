@@ -40,6 +40,7 @@ void stageScene::release()
 
 void stageScene::update()
 {
+	//if(OPTION->CheckOptionOpen)
 	_pm->update();
 	_em->update();
 	BEATMANAGER->update();
