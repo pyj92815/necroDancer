@@ -68,7 +68,7 @@ void stageScene::update()
 	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 	_minimap->getStageMap(_vTotalList);
 	_minimap->getPlayerPoint(_pm);
-	_ui->setInven(_pm->getPlayerInfo()->getVInven());
+	//_ui->setInven(_pm->getPlayerInfo()->getVInven());
 	nextPage();
 	
 }
