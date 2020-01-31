@@ -23,6 +23,7 @@ HRESULT stageScene::init()
 	_pm->getPlayerInfo()->collisionSettingBoss();
 
 	_ui = new UImanager;
+	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 	_ui->init();
 	
 	_minimap = new miniMap;
@@ -38,7 +39,6 @@ HRESULT stageScene::init()
 
 
 	_pm->getPlayerInfo()->setStage();
-	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 
 	//ZorderSetup();
 	return S_OK;

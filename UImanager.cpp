@@ -3,6 +3,7 @@
 
 HRESULT UImanager::init()
 {
+	
 	//왼쪽 인벤토리
 	_attackInven.image = IMAGEMANAGER->addImage("attack_Inven", "./image/UI/hud_slot_2.bmp", 60, 66, true, RGB(255, 0, 255));
 	_shovelInven.image = IMAGEMANAGER->addImage("shovel_Inven", "./image/UI/hud_slot_1.bmp", 60, 66, true, RGB(255, 0, 255));
@@ -57,14 +58,14 @@ HRESULT UImanager::init()
 	}
 	//============================================
 
-	hp = 6;
+	hp = _player->hp;
 
-	_coinTest = 233;								//코인 테스트
-	_diaTest = 2369;								//다이아 테스트
+	_coinTest = _player->coin;								//코인 테스트
+	_diaTest = _player->diamond;								//다이아 테스트
 
 	_heartBeatCnt = 0;								//하트비트 카운트
 
-	interval = 0;
+	interval = false;
 	//인벤토리 해제 불값=============================
 
 	_attackInven.open = false;
@@ -136,9 +137,8 @@ void UImanager::release()
 void UImanager::update()
 {
 
-	// 
-
-
+	_coinTest = _player->coin;
+	_diaTest = _player->diamond;
 
 	for (_miInven = _mInven.begin(); _miInven != _mInven.end(); ++_miInven)
 	{
@@ -165,21 +165,16 @@ void UImanager::update()
 	}*/
 
 
-	if (BEATMANAGER->getInterval())
+	if (BEATMANAGER->getBeating() && interval)
 	{
-		interval++;
-		if (interval > 10) //노트가 10개 이므로
+		_heartBeatCnt++;
+		interval = false;
+		if (_heartBeatCnt > 2)
 		{
-			_heartBeatCnt++;
-
-			if (_heartBeatCnt > 2)
-			{
-				_heartBeatCnt = 0;
-			}
-			interval = 0;
+			_heartBeatCnt = 0;
 		}
-
 	}
+	if (!BEATMANAGER->getBeating()) interval = true;
 
 
 	if (KEYMANAGER->isToggleKey('L'))
@@ -791,27 +786,27 @@ void UImanager::render()
 	}
 
 	//다이아 스코어 프레임
-	if (_coinTest >= 1000)
+	if (_diaTest >= 1000)
 	{
 		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diaTest / 1000 % 10, 0);
 		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diaTest / 100 % 10, 0);
 		_daiaNum->frameRender(getMemDC(), WINSIZEX - 40, 80, _diaTest / 10 % 10, 0);
 		_daiaNum->frameRender(getMemDC(), WINSIZEX - 30, 80, _diaTest % 10, 0);
 	}
-	if (_coinTest >= 100 && _coinTest < 1000)
+	if (_diaTest >= 100 && _diaTest < 1000)
 	{
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 60, _diaTest / 100 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 60, _diaTest / 10 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 40, 60, _diaTest % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diaTest / 100 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diaTest / 10 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 40, 80, _diaTest % 10, 0);
 	}
-	if (_coinTest >= 10 && _coinTest < 100)
+	if (_diaTest >= 10 && _diaTest < 100)
 	{
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 60, _diaTest / 10 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 60, _diaTest % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diaTest / 10 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diaTest % 10, 0);
 	}
-	if (_coinTest < 10)
+	if (_diaTest < 10)
 	{
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 60, _diaTest % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diaTest % 10, 0);
 	}
 
 	//인벤토리에 넣을 아이템

@@ -43,8 +43,8 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.isWeapon = false;
 	_player.torch = false;
 	_player.potion = false;
-	_player.hp = 3;
-	_player.maxHp = 10;
+	_player.hp = 6;
+	_player.maxHp = 6;
 	_reversMove = false;
 	_distance = tileSizeY;			//  타일 중점 거리
 	_time = 0.15;					//  MOVE 시간 

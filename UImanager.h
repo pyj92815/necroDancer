@@ -99,7 +99,7 @@ private:
 	int _frameCount;
 
 	float tx;
-	int interval;
+	bool interval;
 
 	//슬롯 고정할 위치 좌표
 	float _x1Slot , _y1Slot;
