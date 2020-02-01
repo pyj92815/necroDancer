@@ -81,7 +81,7 @@ void Beat::render()
         (*_viEffect)->render(_backBuffer->getMemDC());
     }
     IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
-    render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
+   // render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
 
 void Beat::HitNoteEffect(float x, float y)
