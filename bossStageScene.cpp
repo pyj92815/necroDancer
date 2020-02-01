@@ -1526,7 +1526,6 @@ void bossStageScene::boss_PhaseMove()
 			// 2마리를 소환해야 하기 때문에 2번을 돈다.
 			for (int i = 0; i < 2; ++i)
 			{
-
 				rndX = RND->getInt(9) + 8;
 				rndY = RND->getInt(7) + 11;
 
@@ -1537,44 +1536,38 @@ void bossStageScene::boss_PhaseMove()
 					if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
 						_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
 					{
-						// 보스가 있는 위치에는 나오면 안돼
-						if (_deathMetal->getBoss_Index().x != rndX &&
-							_deathMetal->getBoss_Index().y != rndY)
+						// rndX,Y와 같은 타일을 찾는다.
+						if (_vTotalList[j]->idX == rndX && _vTotalList[j]->idY == rndY)
 						{
-							tempX = rndX;
-							tempY = rndY;
-
-							break;
-						}
-
-						// 기존에 슬레이브가 있는 위치에는 나오면 안돼
-						for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
-						{
-							if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
-								_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+							if (_player->getPlayer().idx == rndX &&
+								_player->getPlayer().idy == rndY ||
+								_deathMetal->getBoss_Index().x == rndX &&
+								_deathMetal->getBoss_Index().y == rndY)
+							{
+								// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+								for (int k = 0; k < _sm->get_SlaveList().size(); ++k)
+								{
+									if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x == rndX &&
+										_sm->get_SlaveList()[k]->get_Slave()->pos.index.y == rndY)
+									{
+										rndX = RND->getInt(9) + 8;
+										rndY = RND->getInt(7) + 11;
+										j = -1;
+										continue;
+									}
+								}
+							}
+							else
 							{
 								tempX = rndX;
 								tempY = rndY;
-								break;
 							}
 						}
-
-						// 플레이어 위치에는 나오면 안돼
-						if (_player->getPlayer().idx != rndX &&
-							_player->getPlayer().idy != rndY)
-						{
-							tempX = rndX;
-							tempY = rndY;
-							break;
-						}
 					}
-
-					if (tempX && tempY) break;
 				}
 
 				// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
 				if (tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
-
 
 			}
 
@@ -1645,38 +1638,34 @@ void bossStageScene::boss_PhaseMove()
 						if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
 							_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
 						{
-							// 보스가 있는 위치에는 나오면 안돼
-							if (_deathMetal->getBoss_Index().x != rndX &&
-								_deathMetal->getBoss_Index().y != rndY)
+							// rndX,Y와 같은 타일을 찾는다.
+							if (_vTotalList[j]->idX == rndX && _vTotalList[j]->idY == rndY)
 							{
-								tempX = rndX;
-								tempY = rndY;
-
-							}
-
-							// 기존에 슬레이브가 있는 위치에는 나오면 안돼
-							for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
-							{
-								if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
-									_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+								if (_player->getPlayer().idx == rndX &&
+									_player->getPlayer().idy == rndY ||
+									_deathMetal->getBoss_Index().x == rndX &&
+									_deathMetal->getBoss_Index().y == rndY)
+								{
+									// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+									for (int k = 0; k < _sm->get_SlaveList().size(); ++k)
+									{
+										if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x == rndX &&
+											_sm->get_SlaveList()[k]->get_Slave()->pos.index.y == rndY)
+										{
+											rndX = RND->getInt(9) + 8;
+											rndY = RND->getInt(7) + 11;
+											j = -1;
+											continue;
+										}
+									}
+								}
+								else
 								{
 									tempX = rndX;
 									tempY = rndY;
-
 								}
 							}
-
-							// 플레이어 위치에는 나오면 안돼
-							if (_player->getPlayer().idx != rndX &&
-								_player->getPlayer().idy != rndY)
-							{
-								tempX = rndX;
-								tempY = rndY;
-
-							}
 						}
-
-						if (tempX && tempY) break;
 					}
 
 					// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
@@ -1727,7 +1716,7 @@ void bossStageScene::boss_PhaseMove()
 				_deathMetal->setBoss_isCasting(false);
 
 				// 해골을 소환한다.
-				int rndSummons = RND->getInt(3) + 1;	// 1 ~ 3까지의 값이 나오게 한다.
+				int rndSummons = RND->getInt(2) + 1;	// 1 ~ 2
 
 				// 보스 주변으로 랜덤으로 해골 소환 (1 ~ 3마리)
 				int tempX, tempY;
@@ -1748,23 +1737,32 @@ void bossStageScene::boss_PhaseMove()
 						if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
 							_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
 						{
-							// 보스가 있는 위치에는 나오면 안돼
-							if (_deathMetal->getBoss_Index().x != rndX &&
-								_deathMetal->getBoss_Index().y != rndY)
+							// rndX,Y와 같은 타일을 찾는다.
+							if (_vTotalList[j]->idX == rndX && _vTotalList[j]->idY == rndY)
 							{
-								tempX = rndX;
-								tempY = rndY;
-
-							}
-
-							// 기존에 슬레이브가 있는 위치에는 나오면 안돼
-							for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
-							{
-								if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
-									_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+								if (_player->getPlayer().idx == rndX &&
+									_player->getPlayer().idy == rndY ||
+									_deathMetal->getBoss_Index().x == rndX &&
+									_deathMetal->getBoss_Index().y == rndY)
+								{
+									// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+									for (int k = 0; k < _sm->get_SlaveList().size(); ++k)
+									{
+										if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x == rndX &&
+											_sm->get_SlaveList()[k]->get_Slave()->pos.index.y == rndY)
+										{
+											rndX = RND->getInt(9) + 8;
+											rndY = RND->getInt(7) + 11;
+											j = -1;
+											continue;
+										}
+									}
+								}
+								else
 								{
 									tempX = rndX;
 									tempY = rndY;
+
 
 								}
 							}
@@ -1777,9 +1775,8 @@ void bossStageScene::boss_PhaseMove()
 								tempY = rndY;
 
 							}
-						}
 
-						if (tempX && tempY) break;
+						}
 					}
 
 					// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
