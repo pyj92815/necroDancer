@@ -1,15 +1,13 @@
 #pragma once
 #include "gameNode.h"
 #include "playerManager.h"
-#include "EnemyManager.h"
 #include "UImanager.h"
 #include "Collision.h"
 #include "miniMap.h"
 #include "zOrder.h"
 #include "visionFloodFill.h"
-
+#include"EnemyManager.h"
 class bossStageScene;
-
 class stageScene: public gameNode
 {
 private: // ¸Ê Ãæµ¹  
@@ -32,9 +30,11 @@ private: // ÇÏÀ§ °èÃþ
 	visionFloodFill* _floodFill;
 
 	int _playerIdx, _playerIdy;
-
+	int _bossIdx, _bossIdy;
+	int _stageIdx, _stageIdy;
+	const char* fileName;
 public:
-	stageScene() {}
+	stageScene() { fileName = "Loby_SaveFile.map"; }
 	~stageScene() {}
 
 	virtual HRESULT init();
@@ -51,9 +51,11 @@ public:
 	UImanager* getUiAddress() { return _ui; }
 	playerManager* getPlayerManager() { return _pm; }
 	// ¸Ê 
-	void stageMapLoad();
+	void stageMapLoad(const char* fileName);
 	void stageCollision();
 	void bossStageSceneAddressLink(bossStageScene* bossStageScene) { _bossStageScene = bossStageScene; }
 
 	void setVision(POINT index, int sight);
+	void nextPage();
+	
 };

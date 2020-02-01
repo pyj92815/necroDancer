@@ -14,12 +14,17 @@ private:
 	vector<tagTile*>					_vStageMap;
 	vector<tagTile*>::iterator			_viStageMap;
 
+	vector<Enemy*>   _vEnemyTile;
+
 	EnemyManager* _em;
 	playerManager* _pm;
 
 	int _r;
 	int _g;
 	int _b;
+
+	float _playerX;
+	float _playerY;
 
 public:
 	miniMap();
@@ -32,6 +37,11 @@ public:
 
 	void getStageMap(vector<tagTile*> stageMap) { _vStageMap = stageMap; }
 	void getEnemyPoint(EnemyManager* em) { _em = em; }
-	void getPlayerPoint(playerManager* pm) { _pm = pm; }
+	void setEnemyXY(vector<Enemy*> vEnemy) { _vEnemyTile = vEnemy;	}
+	void setPlayerXY(float x, float y) 
+	{
+		_playerX = x; 
+		_playerY = y;
+	}
 };
 

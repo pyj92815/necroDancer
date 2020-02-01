@@ -32,7 +32,17 @@ HRESULT playGround::init()
 	IMAGEMANAGER->addImage("terrain", "./image/mapTool/icon/i_terrain.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("trap", "./image/mapTool/icon/i_trap.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("wall", "./image/mapTool/icon/i_wall.bmp", 52, 52, true, RGB(255, 0, 255));
+	
 	IMAGEMANAGER->addImage("eraser", "./image/mapTool/icon/i_eraser.bmp", 52, 52, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("tr_eraser", "./image/mapTool/icon/i_terrain_E.bmp", 38, 43, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("trap_eraser", "./image/mapTool/icon/i_trap_E.bmp", 38, 43, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("w_eraser", "./image/mapTool/icon/i_wall_E.bmp", 38, 43, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("s_eraser", "./image/mapTool/icon/i_stuff_E.bmp", 38, 43, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("a_eraser", "./image/mapTool/icon/i_armor_E.bmp", 38, 43, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("wp_eraser", "./image/mapTool/icon/i_weapon_E.bmp", 38, 43, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("char_eraser", "./image/mapTool/icon/i_char_E.bmp", 38, 43, true, RGB(255, 0, 255));
+	
+
 	IMAGEMANAGER->addImage("exit", "./image/mapTool/icon/i_exit.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("stuff", "./image/mapTool/icon/i_stuff.bmp", 52, 52, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("map", "./image/mapTool/icon/i_map.bmp", 72, 72, true, RGB(255, 0, 255));
@@ -44,12 +54,12 @@ HRESULT playGround::init()
 
 
 	//팔레트에 사용될 이미지들
-	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("wallTiles", "./image/mapTool/wall/wall.bmp", 832, 416, WALLTILEX, WALLTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("trapTiles", "./image/mapTool/trap/trap.bmp", 312, 364, TRAPTILEX, TRAPTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("armorTiles", "./image/mapTool/item/passive.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("weaponTiles", "./image/mapTool/item/weapon.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("stuffTiles", "./image/mapTool/item/stuff.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("terrainTiles", "./image/mapTool/terrain/tile.bmp", 312, 312, TERRAINTILEX, TERRAINTILEY, true, RGB(255, 0, 255),true);
+	IMAGEMANAGER->addFrameImage("wallTiles", "./image/mapTool/wall/wall.bmp", 832, 416, WALLTILEX, WALLTILEY, true, RGB(255, 0, 255), true);
+	IMAGEMANAGER->addFrameImage("trapTiles", "./image/mapTool/trap/trap.bmp", 312, 364, TRAPTILEX, TRAPTILEY, true, RGB(255, 0, 255), true);
+	IMAGEMANAGER->addFrameImage("armorTiles", "./image/mapTool/item/passive.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255), true);
+	IMAGEMANAGER->addFrameImage("weaponTiles", "./image/mapTool/item/weapon.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255), true);
+	IMAGEMANAGER->addFrameImage("stuffTiles", "./image/mapTool/item/stuff.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255), true);
 	IMAGEMANAGER->addFrameImage("characterTiles", "./image/mapTool/char/character.bmp", 208, 260, ITEMTILEX, ITEMTILEY, true, RGB(255, 0, 255));
 
 	_sm = new scene_Manager;

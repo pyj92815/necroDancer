@@ -34,7 +34,7 @@ private:
 	vector<tagTile*>::iterator					_viTotalList;
 
 	//vector<tagTile*>							_vTotalList;					// 보스 스테이지의 타일 정보 벡터로 저장해서 사용한다.
-	//vector<tagTile*>::iterator					_viTotalList;
+	//vector<tagTile*>::iterator				_viTotalList;
 
 	vector<BOSS_STAGE_EFFECT_VECTOR*>			_vEffect;						// 이펙트 벡터
 	vector<BOSS_STAGE_EFFECT_VECTOR*>::iterator _viEffect;						// 이펙트 이터에이터
@@ -44,10 +44,13 @@ private:
 	player*										_player;						// 플레이어	
 	deathMetal*									_deathMetal;					// 데스메탈
 	slaveManager*								_sm;							// 슬레이브 매니저
-	zOrder* _zOrder;
-	visionFloodFill* _floodFill;
+	zOrder*										_zOrder;
+	visionFloodFill*							_floodFill;
 private:
 	bool distanceCheck;															// 거리를 체크한다. (범위에 들어오거나 들어오지 않을때 값이 바뀐다.)
+
+	int _endX;   // 엔딩씬으로 가기 위한 좌표 값 
+	int _endY;
 public:
 	bossStageScene();
 	~bossStageScene();
@@ -86,6 +89,8 @@ public:
 	void boss_Base_Attack_Render();
 	void boss_Base_Attack_Render(string skillName, player* player);				// 보스의 근접 공격 애니메이션을 그려준다.
 
+	void start_Slave_Create();												
+
 	// 스테이지 씬과의 링크
 	void stageSceneAddressLink(stageScene* stageScene) { _stageScene = stageScene; }
 
@@ -96,6 +101,9 @@ public:
 	void bossClear();															// 보스 클리어 시 벽이 열리는것
 
 
+	void boss_PhaseMove();														// 보스 페이즈 연산
 	void setVolumeBossStage();
+
+	void endScene();
 };
 

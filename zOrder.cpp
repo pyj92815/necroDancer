@@ -36,13 +36,15 @@ void zOrder::render()
 	{
 		if (_zOrderVector[i]->Object->tile != NULL)
 		{
-			//if (_zOrderVector[i]->Object->tile->alphaValue <= 0)
-			//{
+			
 				if (_zOrderVector[i]->Object->tile->wall != W_NONE)
 				{
-					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 30, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY);
-				}
-			//}
+					if (_zOrderVector[i]->Object->tile->alphaValue <= 0)
+					{
+						//IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 30, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY);
+						IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top - 30, _zOrderVector[i]->Object->tile->wallFrameX, _zOrderVector[i]->Object->tile->wallFrameY, _zOrderVector[i]->Object->tile->alphaValue);
+					}
+				}	
 			continue;
 		}
 		//플레이어 
@@ -67,7 +69,7 @@ void zOrder::render()
 		{
 			_zOrderVector[i]->Object->slaveEnemy->render();
 		}
-		if (_zOrderVector[i]->Object->deathMetalboss != NULL)
+		if (_zOrderVector[i]->Object->deathMetalboss != NULL && !_zOrderVector[i]->Object->deathMetalboss->getBoss_Dead())
 		{
 			_zOrderVector[i]->Object->deathMetalboss->render();
 		}

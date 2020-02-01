@@ -28,7 +28,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.bodyAni->start();
 	_player.direction = PLAYERDIRECTION_RIGHT;				// 방향 오른쪽	RIGHT
 	_player.weapon = PLAYERWAEPON_NONE;						// 무기			NONE
-	_player.sight = 5;										// 시야 값		7
+	_player.sight = 6;										// 시야 값		7
 	_player.damage = 1;										// 데미지        1
 	_player.idx = idx;										// 인덱스 X
 	_player.idy = idy;										// 인덱스 Y
@@ -43,12 +43,11 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.isWeapon = false;
 	_player.torch = false;
 	_player.potion = false;
-	_player.hp = 3;
-	_player.maxHp = 10;
+	_player.hp = 6;
+	_player.maxHp = 6;
 	_reversMove = false;
 	_distance = tileSizeY;			//  타일 중점 거리
 	_time = 0.15;					//  MOVE 시간 
-
 	_isMoving = false;		 // MOVE 판단
 	_isKeyPress = false;     // 노트 판단 
 	_isKeyDown = false;      // KEY 입력 판단
@@ -86,6 +85,7 @@ void player::update()
 		sprintf(str, "지금 스테이지 : %d", (int)_nowStage);
 		cout << str << endl;
 		cout << " 지금 체력 : " << _player.hp << endl;
+		_player.hp--;
 	}
 }
 
@@ -105,12 +105,15 @@ void player::effectRender()
 
 void player::playerMove()
 {
+	_player.rc = RectMakeCenter(_player.x, _player.y, _player.bodyImage->getFrameWidth(), _player.headImage->getFrameHeight());
+
 	if (!_isMoving) return;
 
 	float elapsedTime = TIMEMANAGER->getElapsedTime();
 
 	//200정도의 거리를 2초에 걸쳐서 도달해야한다면 속도값을 구해줌
 	float moveSpeed = (elapsedTime / _time) * _distance;
+
 
 	if (_reversMove)
 	{
@@ -450,6 +453,11 @@ void player::tileCheck()
 				{
 					playerEffect_Attack();
 					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
+					if ((int)_miPlayerdeathMetalTile->second->getBoss_Direction() ==
+						(int)_player.direction)
+					{
+						_miPlayerdeathMetalTile->second->setBoss_Shield_Hit_True();
+					}
 				}
 				action = true;
 				break;
@@ -469,6 +477,7 @@ void player::tileCheck()
 				else
 				{
 					playerEffect_Attack();
+					_miPlayerSlaveTile->second->slave_Hit(_player.damage);
 				}
 				action = true;
 				break;

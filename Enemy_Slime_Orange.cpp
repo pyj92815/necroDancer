@@ -86,6 +86,10 @@ void Enemy_Slime_Orange::Move()
 	}
 }
 
+void Enemy_Slime_Orange::moveAction()
+{
+}
+
 void Enemy_Slime_Orange::Attack()
 {
 	//공격을 한 후

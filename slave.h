@@ -22,6 +22,8 @@ public:
 
 	SLAVE_INFO* get_Slave() { return &_slave; }					// 슬레이브의 정보 주소를 받아온다.
 	void slave_Pos_Setting();									// 슬레이브 좌표 변수 갱신
+
+	void slave_Hit(int damage) { _slave.status.hp -= damage; if (_slave.status.hp < 0) _slave.status.hp = 0; }
 };
 
 // 슬레이브 기본 클래스 

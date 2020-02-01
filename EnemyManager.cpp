@@ -1,22 +1,71 @@
 #include "stdafx.h"
 #include "EnemyManager.h"
 #include "player.h"
-HRESULT EnemyManager::init(map<CHARACTER, POINT> mEnemyPount)
+HRESULT EnemyManager::init(map<CHARACTER, POINT> menemPoint)
 {
-	_mEnemyPoint = mEnemyPount;	  // 애너미 위치 정보
-	EnemyInspection();			  // 애너미 순서 
+	_mEnemyPoint = menemPoint;
 	imageAdd();	//이미지 추가 함수
 	AnimationAdd(); //애니메이션 추가 함수
-
-	_player = new player;
 	EnemyCreate();
+	_player = new player;
 
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->init();
 	}
 
+	_timer = 0;
+
 	return S_OK;
+}
+
+void EnemyManager::EnemyCreate()
+{
+	for (_miEnemyPoint = _mEnemyPoint.begin(); _miEnemyPoint != _mEnemyPoint.end(); ++_miEnemyPoint)
+	{
+		switch (_miEnemyPoint->first)
+		{
+		case CHAR_PLAYER:
+			break;
+		case CHAR_BAT:
+			//Enemy_Bat_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SLIME_BLUE:
+			Enemy_Slime_Blue_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SLIME_ORANGE:
+			Enemy_Slime_Orange_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_GHOST:
+			Enemy_Ghost_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_WRAITH:
+			Enemy_Wraith_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SKELETON:
+			Enemy_Skeleton_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_SKELETON_YELLOW:
+			Enemy_Skeleton_Yellow_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_ZOMBIE:
+			//Enemy_Zombie_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_MINO:
+			//Enemy_Minotaur_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_DRAGON:
+			Enemy_Dragon_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
+			break;
+		case CHAR_BOSS:
+			break;
+		case CHAR_NONE:
+			break;
+		default:
+			break;
+		}
+	}
+
 }
 
 void EnemyManager::release()
@@ -25,6 +74,7 @@ void EnemyManager::release()
 
 void EnemyManager::update()
 {
+	_timer += TIMEMANAGER->getElapsedTime();
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->update();
@@ -34,7 +84,13 @@ void EnemyManager::update()
 	}
 	EnemyRemove();
 	EnemyInspection();
-
+	if (_timer > 1)
+	{
+		Attack();
+		_timer = 0;
+	}
+	
+	WallInspection();
 }
 
 void EnemyManager::render()
@@ -42,28 +98,81 @@ void EnemyManager::render()
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->render();
-		
 	}
 
 }
 
+void EnemyManager::WallInspection()
+{
+	
+	for (int i = 0;i < _vTile.size();++i)
+	{
+		for (int j = 0;j < _vEnemy.size();++j)
+		{
+			//cout << _vEnemy[j]->getEnemyInfo()->right << endl;
+			switch (_vEnemy[j]->getEnemyInfo()->direction)
+			{
+			case Direction::LEFT:
+				if (_vTile[i]->type == TYPE_WALL)
+				{
+					if (_vEnemy[j]->getEnemyInfo()->idx - 1 == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy == _vTile[i]->idY)
+					{
+						_vEnemy[j]->getEnemyInfo()->left = true;
+						//cout << "ASDSADA" << endl;
+					}
+				}
+				break;
+			case Direction::RIGHT:
+				if (_vTile[i]->type == TYPE_WALL)
+				{
+					if (_vEnemy[j]->getEnemyInfo()->idx + 1 == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy == _vTile[i]->idY)
+					{
+						_vEnemy[j]->getEnemyInfo()->right = true;
+						
+						//cout << "ASDSADA" << endl;
+					}
+				}
+					
+				break;
+			case Direction::UP:
+				if (_vTile[i]->type == TYPE_WALL)
+				{
+					if (_vEnemy[j]->getEnemyInfo()->idx == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy - 1 == _vTile[i]->idY)
+					{
+						_vEnemy[j]->getEnemyInfo()->up = true;
+						//cout << "ASDSADA" << endl;
+					}
+				}
+					
+				break;
+			case Direction::DOWN:
+				if (_vTile[i]->type == TYPE_WALL)
+				{
+					if (_vEnemy[j]->getEnemyInfo()->idx == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy + 1 == _vTile[i]->idY)
+					{
+						_vEnemy[j]->getEnemyInfo()->down = true;
+						//cout << "ASDSADA" << endl;
+					}
+				}
+					
+				break;
+			}
+		}
+	}
+}
+
 void EnemyManager::Attack()
 {
+	
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
-		
-		switch ((*_viEnemy)->getEnemyInfo()->AttackDirection)
+		if ((*_viEnemy)->getEnemyInfo()->Attack)
 		{
-		case Direction::LEFT:
-			break;
-		case Direction::RIGHT:
-			break;
-		case Direction::UP:
-			break;
-		case Direction::DOWN:
-			break;
+			if ((*_viEnemy)->getEnemyInfo()->Beat)
+			{
+				_player->playerHit((*_viEnemy)->getEnemyInfo()->damage);
+			}
 		}
-
 	}
 }
 
@@ -86,98 +195,78 @@ void EnemyManager::EnemyRemove()
 //for문을 도느라 bool값이 true false 반복하며 바뀜 else문을 바꿔야 할거 같음
 void EnemyManager::EnemyInspection()
 {
-	for (int i = 0;i < _vEnemy.size();++i)
-	{
-		for (int j = 0;j < _vEnemy.size();++j)
-		{
-			//오른쪽에 에너미가 있으면
-			if (_vEnemy[i]->getEnemyInfo()->idx + 1 == _vEnemy[j]->getEnemyInfo()->idx && _vEnemy[i]->getEnemyInfo()->idy == _vEnemy[j]->getEnemyInfo()->idy)
-			{
-				_vEnemy[i]->getEnemyInfo()->right = true;
-			}
-			else
-			{
-				_vEnemy[i]->getEnemyInfo()->right = false;
-			}
-			//왼쪽에 에너미가 있으면
-			if (_vEnemy[i]->getEnemyInfo()->idx - 1 == _vEnemy[j]->getEnemyInfo()->idx && _vEnemy[i]->getEnemyInfo()->idy == _vEnemy[j]->getEnemyInfo()->idy)
-			{
-				_vEnemy[i]->getEnemyInfo()->left = true;
-			}
-			else
-			{
-				_vEnemy[i]->getEnemyInfo()->left = false;
-			}
-			//위쪽에 에너미가 있으면
-			if (_vEnemy[i]->getEnemyInfo()->idx == _vEnemy[j]->getEnemyInfo()->idx && _vEnemy[i]->getEnemyInfo()->idy-1 == _vEnemy[j]->getEnemyInfo()->idy)
-			{
-				_vEnemy[i]->getEnemyInfo()->up = true;
-			}
-			else
-			{
-				_vEnemy[i]->getEnemyInfo()->up = false;
-			}
-			//아래쪽에 에너미가 있으면
-			if (_vEnemy[i]->getEnemyInfo()->idx == _vEnemy[j]->getEnemyInfo()->idx && _vEnemy[i]->getEnemyInfo()->idy+1 == _vEnemy[j]->getEnemyInfo()->idy)
-			{
-				_vEnemy[i]->getEnemyInfo()->down = true;
-			}
-			else
-			{
-				_vEnemy[i]->getEnemyInfo()->down = false;
-			}
-		}
-	}
+	//for (int i = 0;i < _vEnemy.size();++i)
+	//{
+	//	for (int j = 0;j < _vEnemy.size();++j)
+	//	{
+	//		//오른쪽에 에너미가 있으면
+	//		if (_vEnemy[i]->getEnemyInfo()->idx + 1 == _vEnemy[j]->getEnemyInfo()->idx && _vEnemy[i]->getEnemyInfo()->idy == _vEnemy[j]->getEnemyInfo()->idy)
+	//		{
+	//			_vEnemy[i]->getEnemyInfo()->right = true;
+	//		}
+	//		else
+	//		{
+	//			_vEnemy[i]->getEnemyInfo()->right = false;
+	//		}
+	//		//왼쪽에 에너미가 있으면
+	//		if (_vEnemy[i]->getEnemyInfo()->idx - 1 == _vEnemy[j]->getEnemyInfo()->idx && _vEnemy[i]->getEnemyInfo()->idy == _vEnemy[j]->getEnemyInfo()->idy)
+	//		{
+	//			_vEnemy[i]->getEnemyInfo()->left = true;
+	//		}
+	//		else
+	//		{
+	//			_vEnemy[i]->getEnemyInfo()->left = false;
+	//		}
+	//		//위쪽에 에너미가 있으면
+	//		if (_vEnemy[i]->getEnemyInfo()->idx == _vEnemy[j]->getEnemyInfo()->idx && _vEnemy[i]->getEnemyInfo()->idy-1 == _vEnemy[j]->getEnemyInfo()->idy)
+	//		{
+	//			_vEnemy[i]->getEnemyInfo()->up = true;
+	//		}
+	//		else
+	//		{
+	//			_vEnemy[i]->getEnemyInfo()->up = false;
+	//		}
+	//		//아래쪽에 에너미가 있으면
+	//		if (_vEnemy[i]->getEnemyInfo()->idx == _vEnemy[j]->getEnemyInfo()->idx && _vEnemy[i]->getEnemyInfo()->idy+1 == _vEnemy[j]->getEnemyInfo()->idy)
+	//		{
+	//			_vEnemy[i]->getEnemyInfo()->down = true;
+	//		}
+	//		else
+	//		{
+	//			_vEnemy[i]->getEnemyInfo()->down = false;
+	//		}
+	//	}
+	//}
 }
 
-
-void EnemyManager::EnemyCreate()
+void EnemyManager::EnemyCreate(float x, float y, EnemyType enemyType)
 {
-	for (_miEnemyPoint = _mEnemyPoint.begin(); _miEnemyPoint != _mEnemyPoint.end(); ++_miEnemyPoint)
+	switch (_enemyType)
 	{
-		switch (_miEnemyPoint->first)
-		{
-		case CHAR_PLAYER:
-			break;
-		case CHAR_BAT:
-			Enemy_Bat_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_SLIME_BLUE:
-			Enemy_Slime_Blue_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_SLIME_ORANGE:
-			Enemy_Slime_Orange_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_GHOST:
-			Enemy_Ghost_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_WRAITH:
-			Enemy_Wraith_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_SKELETON:
-			Enemy_Skeleton_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_SKELETON_YELLOW:
-			Enemy_Skeleton_Yellow_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_ZOMBIE:
-			Enemy_Zombie_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_MINO:
-			Enemy_Minotaur_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_DRAGON:
-			Enemy_Dragon_Create(_miEnemyPoint->second.x, _miEnemyPoint->second.y);
-			break;
-		case CHAR_BOSS:
-			break;
-		case CHAR_NONE:
-			break;
-		default:
-			break;
-		}
+	case EnemyType::DRAGON:
+		Enemy_Dragon_Create(x, y);
+		break;
+	case EnemyType::GHOST:
+		Enemy_Ghost_Create(x, y);
+		break;
+	case EnemyType::SKELETON:
+		Enemy_Skeleton_Create(x, y);
+		break;
+	case EnemyType::SKELETON_YELLOW:
+		Enemy_Skeleton_Yellow_Create(x, y);
+		break;
+	case EnemyType::SLIME_BLUE:
+		Enemy_Slime_Blue_Create(x, y);
+		break;
+	case EnemyType::SLIME_ORANGE:
+		Enemy_Slime_Orange_Create(x, y);
+		break;
+	case EnemyType::WRAITH:
+		Enemy_Wraith_Create(x, y);
+		break;
+	default:
+		break;
 	}
-
 }
 
 void EnemyManager::imageAdd()
@@ -192,89 +281,59 @@ void EnemyManager::imageAdd()
 	IMAGEMANAGER->addFrameImage("Enemy_slime_orange", "image/Enemy/slime_orange.bmp", 208, 104, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_wraith", "image/Enemy/wraith.bmp", 288, 96, 6, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("Enemy_zombie", "image/Enemy/zombie.bmp", 1536, 100, 32, 2, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_Left", "image/particles/swipe_enemy_LEFT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_Right", "image/particles/swipe_enemy_RIGHT.bmp", 135, 24, 5, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_Up", "image/particles/swipe_enemy_UP.bmp", 120, 27, 5, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("Enemy_Attack_Down", "image/particles/swipe_enemy_DOWN.bmp", 120, 27, 5, 1, true, RGB(255, 0, 255));
-}
-void EnemyManager::Enemy_Bat_Create(float x, float y)
-{
-	Enemy* Bat;
-	Bat = new Enemy_Bat;
-	Bat->EnemyCreate(x, y, 1.0f, 0.5f, "Enemy_bat", "Bat_L_IDLE_Ani");
-	_vEnemy.push_back(Bat);
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Left", "image/particles/swipe_enemy_LEFT.bmp", 135*2, 24*2, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Right", "image/particles/swipe_enemy_RIGHT.bmp", 135 * 2, 24 * 2, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Up", "image/particles/swipe_enemy_UP.bmp", 120 * 2, 27 * 2, 5, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("Enemy_Attack_Down", "image/particles/swipe_enemy_DOWN.bmp", 120 * 2, 27 * 2, 5, 1, true, RGB(255, 0, 255));
 }
 void EnemyManager::Enemy_Dragon_Create(float x, float y)
 {
 	Enemy* Dragon;
 	Dragon = new Enemy_Dragon;
-	Dragon->EnemyCreate(x, y, 4.0f, 2.0f, "Enemy_dragon", "Dragon_L_IDLE_Ani");
+	Dragon->EnemyCreate(x, y, 4.0f, 4.0f, "Enemy_dragon", "Dragon_L_IDLE_Ani");
 	_vEnemy.push_back(Dragon);
 }
 void EnemyManager::Enemy_Ghost_Create(float x, float y)
 {
 	Enemy* Ghost;
 	Ghost = new Enemy_Ghost;
-	Ghost->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_ghost", "Ghost_L_IDLE_Ani");
+	Ghost->EnemyCreate(x, y, 1.0f, 2.0f, "Enemy_ghost", "Ghost_L_IDLE_Ani");
 	_vEnemy.push_back(Ghost);
-}
-void EnemyManager::Enemy_Minotaur_Create(float x, float y)
-{
-	Enemy* Minotaur;
-	Minotaur = new Enemy_Minotaur;
-	Minotaur->EnemyCreate(x, y, 3.0f, 2.0f, "Enemy_minotaur", "Minotaur_L_IDLE_Ani");
-	_vEnemy.push_back(Minotaur);
 }
 void EnemyManager::Enemy_Skeleton_Create(float x, float y)
 {
 	Enemy* Skeleton;
 	Skeleton = new Enemy_Skeleton;
-	Skeleton->EnemyCreate(x, y, 1.0f, 0.5f, "Enemy_skeleton", "skeleton_L_IDLE_Ani");
+	Skeleton->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_skeleton", "skeleton_L_IDLE_Ani");
 	_vEnemy.push_back(Skeleton);
 }
 void EnemyManager::Enemy_Skeleton_Yellow_Create(float x, float y)
 {
 	Enemy* Skeleton_Yellow;
 	Skeleton_Yellow = new Enemy_Skeleton_Yellow;
-	Skeleton_Yellow->EnemyCreate(x, y, 2.0f, 1.5f, "Enemy_skeleton_yellow", "skeleton_yellow_L_IDLE_Ani");
+	Skeleton_Yellow->EnemyCreate(x, y, 2.0f, 3.0f, "Enemy_skeleton_yellow", "skeleton_yellow_L_IDLE_Ani");
 	_vEnemy.push_back(Skeleton_Yellow);
 }
 void EnemyManager::Enemy_Slime_Blue_Create(float x, float y)
 {
 	Enemy* Slime_Blue;
 	Slime_Blue = new Enemy_Slime_Blue;
-	Slime_Blue->EnemyCreate(x, y, 2.0f, 1.0f, "Enemy_slime_blue", "Enemy_slime_blue_IDLE_Ani", Direction::UP);
+	Slime_Blue->EnemyCreate(x, y, 2.0f, 2.0f, "Enemy_slime_blue", "Enemy_slime_blue_IDLE_Ani", Direction::UP);
 	_vEnemy.push_back(Slime_Blue);
 }
 void EnemyManager::Enemy_Slime_Orange_Create(float x, float y)
 {
 	Enemy* Slime_Orange;
 	Slime_Orange = new Enemy_Slime_Orange;
-	Slime_Orange->EnemyCreate(x, y, 1.0f, 0.5f, "Enemy_slime_orange", "Enemy_slime_orange_IDLE_Ani", Direction::RIGHT);
+	Slime_Orange->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_slime_orange", "Enemy_slime_orange_IDLE_Ani", Direction::RIGHT);
 	_vEnemy.push_back(Slime_Orange);
 }
 void EnemyManager::Enemy_Wraith_Create(float x, float y)
 {
 	Enemy* Wraith;
 	Wraith = new Enemy_Warith;
-	Wraith->EnemyCreate(x, y, 1.0f, 0.5f, "Enemy_wraith", "Enemy_wraith_L_IDLE_Ani");
+	Wraith->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_wraith", "Enemy_wraith_L_IDLE_Ani");
 	_vEnemy.push_back(Wraith);
-}
-void EnemyManager::Enemy_Zombie_Create(float x, float y)
-{
-	Enemy* Zombie;
-	Zombie = new Enemy_Zombie;
-
-	if (RND->getInt(2) == 0)
-	{
-		Zombie->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_zombie", "Enemy_zombie_LEFT_Ani", Direction::LEFT);
-	}
-	else
-	{
-		Zombie->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_zombie", "Enemy_zombie_UP_Ani", Direction::UP);
-	}
-
-	_vEnemy.push_back(Zombie);
 }
 
 void EnemyManager::AnimationAdd()
@@ -410,3 +469,8 @@ void EnemyManager::AnimationAdd()
 	KEYANIMANAGER->addArrayFrameAnimation("Enemy_Attack_DOWN_Ani","Enemy_Attack_Down", Enemy_Attack_DOWN,5,10,true);
 }
 
+void EnemyManager::setVtile(vector<tagTile*> tile)
+{
+	_vTile = tile;
+	
+}

@@ -51,58 +51,7 @@ void mapTool::update()
 	if(!_isClick) palette_Click();			// 팔렛트 클릭 함수
 	if(!_palette.isClick) tile_Click();		// 마우스 왼쪽 클릭 연산
 
-	// 만약 이동 렉트에 마우스가 있다면, 카메라 좌표를 해당 속도만큼 이동 시켜준다. 
-	if (PtInRect(&_left, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX() - SCREENMOVESPEED, CAMERAMANAGER->get_CameraY()); }
-	if (PtInRect(&_top, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() - SCREENMOVESPEED); }
-	if (PtInRect(&_right, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX() + SCREENMOVESPEED, CAMERAMANAGER->get_CameraY()); }
-	if (PtInRect(&_bottom, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() + SCREENMOVESPEED); }
-	CAMERAMANAGER->CameraMapTool_Correction();
-
-	if (_crtSelect == CTRL_ITEM) { _isItemButtonClick = true; }
-	if (_crtSelect == CTRL_MAP) { _isMapButtonClick = true; }
-	_itemButton.rc = RectMake(25, 25, 72, 72);
-	if (_isItemButtonClick == true)
-	{
-		_stuffButton.rc = RectMake(100, 50, 52, 52);
-		_armorButton.rc = RectMake(150, 50, 52, 52);
-		_weaponButton.rc = RectMake(200, 50, 52, 52);
-	}
-	else if (!_isItemButtonClick)
-	{
-		_stuffButton.rc = RectMake(25, 50, 52, 52);
-		_armorButton.rc = RectMake(25, 50, 52, 52);
-		_weaponButton.rc = RectMake(25, 50, 52, 52);
-	}
-	_mapButton.rc = RectMake(25, 97, 72, 72);
-	if (_isMapButtonClick == true)
-	{
-
-		_terrainButton.rc = RectMake(100, 122, 52, 52);
-		_wallButton.rc = RectMake(150, 122, 52, 52);
-		_trapButton.rc = RectMake(200, 122, 52, 52);
-	}
-	else if (_isMapButtonClick == false)
-	{
-
-		_terrainButton.rc = RectMake(25, 122, 52, 52);
-		_wallButton.rc = RectMake(25, 122, 52, 52);
-		_trapButton.rc = RectMake(25, 122, 52, 52);
-	}
-	_characterButton.rc = RectMake(25, 169, 72, 72);
-
-	if (_crtSelect == CTRL_LOBY) { _isLobyButtonClick = true; }
-	else if (_crtSelect == CTRL_STAGE) { _isStageButtonClick = true; }
-	else if (_crtSelect == CTRL_BOSS_STAGE) { _isBossButtonClick = true; }
-	
-	_lobyButton.rc = RectMake(740, 25, 100, 27);
-	_stageButton.rc = RectMake(850, 25, 100, 27);  
-	_bossButton.rc = RectMake(960, 25, 100, 27);
-	_eraseButton.rc = RectMake(1430, 825, 52, 52);
-
-	_saveButton.rc = RectMake(1525, 825, 52, 52);
-	_loadButton.rc = RectMake(1600, 825, 52, 52);
-
-	_exitButton.rc = RectMake(1700, 830, 52, 52);
+	clickButton();
 
 	// 마우스 위치의 타일의 렉트를 가져온다.
 	mouseRectUpdate();
@@ -115,10 +64,7 @@ void mapTool::save()
 	{
 		HANDLE file;
 		DWORD write;
-		//"Loby_SaveFile.mpa"
-		//"SaveFile.map"
-		//"Boss_SaveFile.map"
-		//"Stage_SaveFile.map"
+		
 		file = CreateFile("Loby_SaveFile.map", GENERIC_WRITE, 0, NULL,
 			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -131,10 +77,7 @@ void mapTool::save()
 	{
 		HANDLE file;
 		DWORD write;
-		//"Loby_SaveFile.mpa"
-		//"SaveFile.map"
-		//"Boss_SaveFile.map"
-		//"Stage_SaveFile.map"
+	
 		file = CreateFile("Stage_SaveFile.map", GENERIC_WRITE, 0, NULL,
 			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -147,10 +90,7 @@ void mapTool::save()
 	{
 		HANDLE file;
 		DWORD write;
-		//"Loby_SaveFile.mpa"
-		//"SaveFile.map"
-		//"Boss_SaveFile.map"
-		//"Stage_SaveFile.map"
+		
 		file = CreateFile("Boss_SaveFile.map", GENERIC_WRITE, 0, NULL,
 			CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -205,6 +145,70 @@ void mapTool::load()
 	}
 }
 
+void mapTool::clickButton()
+{
+	// 만약 이동 렉트에 마우스가 있다면, 카메라 좌표를 해당 속도만큼 이동 시켜준다. 
+	if (PtInRect(&_left, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX() - SCREENMOVESPEED, CAMERAMANAGER->get_CameraY()); }
+	if (PtInRect(&_top, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() - SCREENMOVESPEED); }
+	if (PtInRect(&_right, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX() + SCREENMOVESPEED, CAMERAMANAGER->get_CameraY()); }
+	if (PtInRect(&_bottom, _ptMouse)) { CAMERAMANAGER->set_CameraPos_Update(CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY() + SCREENMOVESPEED); }
+	CAMERAMANAGER->CameraMapTool_Correction();
+
+	if (_crtSelect == CTRL_ITEM) { _isItemButtonClick = true; }
+	if (_crtSelect == CTRL_MAP) { _isMapButtonClick = true; }
+	_itemButton.rc = RectMake(25, 25, 72, 72);
+	if (_isItemButtonClick == true)
+	{
+		_stuffButton.rc = RectMake(100, 50, 52, 52);
+		_armorButton.rc = RectMake(150, 50, 52, 52);
+		_weaponButton.rc = RectMake(200, 50, 52, 52);
+	}
+	else if (!_isItemButtonClick)
+	{
+		_stuffButton.rc = RectMake(0, 0, 52, 52);
+		_armorButton.rc = RectMake(0, 0, 52, 52);
+		_weaponButton.rc = RectMake(0, 0, 52, 52);
+	}
+	_itemEraseButton.rc = RectMake(25, 100, 38, 43);
+	_armorEraseButton.rc = RectMake(73, 100, 38, 43);
+	_weaponEraseButton.rc = RectMake(121, 100, 38, 43);
+	_mapButton.rc = RectMake(25, 169, 72, 72);
+	if (_isMapButtonClick == true)
+	{
+
+		_terrainButton.rc = RectMake(100, 194, 52, 52);
+		_wallButton.rc = RectMake(150, 194, 52, 52);
+		_trapButton.rc = RectMake(200, 194, 52, 52);
+	}
+	else if (_isMapButtonClick == false)
+	{
+
+		_terrainButton.rc = RectMake(0, 0, 52, 52);
+		_wallButton.rc = RectMake(0, 0, 52, 52);
+		_trapButton.rc = RectMake(0, 0, 52, 52);
+		_mapEraseButton.rc = RectMake(30, 234, 52, 52);
+	}
+	_mapEraseButton.rc = RectMake(25, 244, 52, 52);
+	_wallEraseButton.rc = RectMake(73, 244, 38, 43);
+	_trapEraseButton.rc = RectMake(121, 244, 38, 43);
+	_characterButton.rc = RectMake(25, 313, 72, 72);
+	_characterEraseButton.rc = RectMake(25, 388, 72, 72);
+
+	if (_crtSelect == CTRL_LOBY) { _isLobyButtonClick = true; }
+	else if (_crtSelect == CTRL_STAGE) { _isStageButtonClick = true; }
+	else if (_crtSelect == CTRL_BOSS_STAGE) { _isBossButtonClick = true; }
+
+	_lobyButton.rc = RectMake(740, 25, 100, 27);
+	_stageButton.rc = RectMake(850, 25, 100, 27);
+	_bossButton.rc = RectMake(960, 25, 100, 27);
+	_eraseButton.rc = RectMake(1430, 825, 52, 52);
+
+	_saveButton.rc = RectMake(1525, 825, 52, 52);
+	_loadButton.rc = RectMake(1600, 825, 52, 52);
+
+	_exitButton.rc = RectMake(1700, 830, 52, 52);
+}
+
 
 void mapTool::render()
 {
@@ -213,7 +217,6 @@ void mapTool::render()
 	//지형
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		//Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
 		if (_tiles[i].terrain== TR_NONE) continue;
 		if (_tiles[i].isRender == true)
 		{
@@ -328,12 +331,19 @@ void mapTool::render()
 		IMAGEMANAGER->findImage("wall")->render(getMemDC(), _wallButton.rc.left, _wallButton.rc.top);
 		IMAGEMANAGER->findImage("trap")->render(getMemDC(), _trapButton.rc.left, _trapButton.rc.top);
 	}
+	IMAGEMANAGER->findImage("tr_eraser")->render(getMemDC(), _mapEraseButton.rc.left, _mapEraseButton.rc.top);
+	IMAGEMANAGER->findImage("trap_eraser")->render(getMemDC(), _trapEraseButton.rc.left, _trapEraseButton.rc.top);
+	IMAGEMANAGER->findImage("w_eraser")->render(getMemDC(), _wallEraseButton.rc.left, _wallEraseButton.rc.top);
 	if (_crtSelect == CTRL_ITEM)
 	{
 		IMAGEMANAGER->findImage("stuff")->render(getMemDC(), _stuffButton.rc.left, _stuffButton.rc.top);
 		IMAGEMANAGER->findImage("armor")->render(getMemDC(), _armorButton.rc.left, _armorButton.rc.top);
 		IMAGEMANAGER->findImage("weapon")->render(getMemDC(), _weaponButton.rc.left, _weaponButton.rc.top);
 	}
+	IMAGEMANAGER->findImage("s_eraser")->render(getMemDC(), _itemEraseButton.rc.left, _itemEraseButton.rc.top);
+	IMAGEMANAGER->findImage("a_eraser")->render(getMemDC(), _armorEraseButton.rc.left, _armorEraseButton.rc.top);
+	IMAGEMANAGER->findImage("wp_eraser")->render(getMemDC(), _weaponEraseButton.rc.left, _weaponEraseButton.rc.top);
+	IMAGEMANAGER->findImage("char_eraser")->render(getMemDC(), _characterEraseButton.rc.left, _characterEraseButton.rc.top);
 	IMAGEMANAGER->findImage("character")->render(getMemDC(), _characterButton.rc.left, _characterButton.rc.top);
 	IMAGEMANAGER->findImage("item")->render(getMemDC(), _itemButton.rc.left, _itemButton.rc.top);
 	IMAGEMANAGER->findImage("eraser")->render(getMemDC(), _eraseButton.rc.left, _eraseButton.rc.top);
@@ -938,8 +948,8 @@ void mapTool::setMap()
 				}
 				else if (_crtSelect == CTRL_ERASER)
 				{
-					_tiles[i].terrainFrameX = 5;
-					_tiles[i].terrainFrameY = 5;
+					_tiles[i].terrainFrameX = NULL;
+					_tiles[i].terrainFrameY = NULL;
 					_tiles[i].terrain = TR_NONE;
 					_tiles[i].trapFrameX = NULL;
 					_tiles[i].trapFrameY = NULL;
@@ -956,6 +966,48 @@ void mapTool::setMap()
 					_tiles[i].wallFrameX = NULL;
 					_tiles[i].wallFrameY = NULL;
 					_tiles[i].wall = W_NONE;
+					_tiles[i].characterFrameX = NULL;
+					_tiles[i].characterFrameY = NULL;
+					_tiles[i].character = CHAR_NONE;
+				}
+				else if(_crtSelect == CTRL_MAP_ERASER)
+				{
+					_tiles[i].terrainFrameX = NULL;
+					_tiles[i].terrainFrameY = NULL;
+					_tiles[i].terrain = TR_NONE;
+				}
+				else if (_crtSelect == CTRL_WALL_ERASER)
+				{
+					_tiles[i].wallFrameX = NULL;
+					_tiles[i].wallFrameY = NULL;
+					_tiles[i].wall = W_NONE;
+				}
+				else if (_crtSelect == CTRL_TRAP_ERASER)
+				{
+					_tiles[i].trapFrameX = NULL;
+					_tiles[i].trapFrameY = NULL;
+					_tiles[i].trap = TRAP_NONE;
+				}
+				else if (_crtSelect == CTRL_ITEM_ERASER)
+				{
+					_tiles[i].stuffFrameX = NULL;
+					_tiles[i].stuffFrameY = NULL;
+					_tiles[i].stuff = ST_NONE;
+				}
+				else if (_crtSelect == CTRL_ARMOR_ERASER)
+				{
+					_tiles[i].armorFrameX = NULL;
+					_tiles[i].armorFrameY = NULL;
+					_tiles[i].armor = A_NONE;
+					}
+				else if (_crtSelect == CTRL_WEAPON_ERASER)
+				{
+					_tiles[i].weaponFrameX = NULL;
+					_tiles[i].weaponFrameY = NULL;
+					_tiles[i].weapon = WP_NONE;
+				}
+				else if (_crtSelect == CTRL_CHAR_ERASER)
+				{
 					_tiles[i].characterFrameX = NULL;
 					_tiles[i].characterFrameY = NULL;
 					_tiles[i].character = CHAR_NONE;
@@ -982,11 +1034,12 @@ TERRAIN mapTool::terrainSelect(int frameX, int frameY)
 		if (frameX == i && frameY == 4) return TR_BOSS_STAGE_TILE;
 		if (frameX == i + 3 && frameY == 4) return TR_BOSS_COMBO_TILE;
 	}
-	for (int i = 0; i < 2; i++)
-	{
-		if (frameX == i && frameY == 5) return TR_STAIR;
-	}
+	if (frameX == 0 && frameY == 5) return TR_STAIR;
+	if (frameX == 1 && frameY == 5) return TR_BOSS_STAIR;
+	
+	if (frameX == 2 && frameY == 5) return TR_SHOP;
 	if (frameX == 3 && frameY == 5) return TR_SHOP;
+	if (frameX == 4 && frameY == 5) return TR_SHOP;
 	if (frameX == 5 && frameY == 5) return TR_NONE;
 
 	return TR_NONE;
@@ -1695,24 +1748,34 @@ void mapTool::menu_Choice()
 		if (PtInRect(&_wallButton.rc, _ptMouse)) { _crtSelect = CTRL_WALLDRAW; _isMapButtonClick = false; }
 	}
 	if (PtInRect(&_eraseButton.rc, _ptMouse)) { _crtSelect = CTRL_ERASER; }
+	if (PtInRect(&_mapEraseButton.rc, _ptMouse)) { _crtSelect = CTRL_MAP_ERASER; }
+	if (PtInRect(&_wallEraseButton.rc, _ptMouse)) { _crtSelect = CTRL_WALL_ERASER; }
+	if (PtInRect(&_trapEraseButton.rc, _ptMouse)) { _crtSelect = CTRL_TRAP_ERASER; }
+	if (PtInRect(&_itemEraseButton.rc, _ptMouse)) { _crtSelect = CTRL_ITEM_ERASER; }
+	if (PtInRect(&_armorEraseButton.rc, _ptMouse)) { _crtSelect = CTRL_ARMOR_ERASER; }
+	if (PtInRect(&_weaponEraseButton.rc, _ptMouse)) { _crtSelect = CTRL_WEAPON_ERASER; }
+	if (PtInRect(&_characterEraseButton.rc, _ptMouse)) { _crtSelect = CTRL_CHAR_ERASER; }
 	if (PtInRect(&_characterButton.rc, _ptMouse)) { _crtSelect = CTRL_CHARACTER; }
 	if (PtInRect(&_lobyButton.rc, _ptMouse)) 
 	{ 
 		_crtSelect = CTRL_LOBY; 
 		_isStageButtonClick = false;
 		_isBossButtonClick = false;
+		init();
 	}
 	if (PtInRect(&_stageButton.rc, _ptMouse)) 
 	{ 
 		_crtSelect = CTRL_STAGE; 
 		_isLobyButtonClick = false;
 		_isBossButtonClick = false;
+		init();
 	}
 	if (PtInRect(&_bossButton.rc, _ptMouse)) 
 	{ 
 		_crtSelect = CTRL_BOSS_STAGE; 
 		_isLobyButtonClick = false;
 		_isStageButtonClick = false;
+		init();
 	}
 	if (PtInRect(&_saveButton.rc, _ptMouse))
 	{
