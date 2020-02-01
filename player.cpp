@@ -28,7 +28,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.bodyAni->start();
 	_player.direction = PLAYERDIRECTION_RIGHT;				// 방향 오른쪽	RIGHT
 	_player.weapon = PLAYERWAEPON_NONE;						// 무기			NONE
-	_player.sight = 6;										// 시야 값		7
+	_player.sight = 4;										// 시야 값		4
 	_player.damage = 1;										// 데미지        1
 	_player.idx = idx;										// 인덱스 X
 	_player.idy = idy;										// 인덱스 Y
@@ -599,15 +599,15 @@ void player::itempCheck()
 			break;
 		case A_TORCH_1:
 			makeItem(WP_NONE, A_TORCH_1, ST_NONE, 0, 4, 1, 0, 0, 0);
-			_player.sight = 6;
+			_player.sight = 5;
 			break;
 		case A_TORCH_2:
 			makeItem(WP_NONE, A_TORCH_2, ST_NONE, 1, 4, 2, 0, 0, 0);
-			_player.sight = 7;
+			_player.sight = 6;
 			break;
 		case A_TORCH_3:
 			makeItem(WP_NONE, A_TORCH_3, ST_NONE, 2, 4, 3, 0, 0, 0);
-			_player.sight = 8;
+			_player.sight = 7;
 			break;
 		case A_NONE:
 			return;

@@ -42,7 +42,7 @@ void visionFloodFill::setVision(tagTile* tile, int idx, int idy, int sight)
 	if (recursionContinue)
 	{
 		// 예외처리 
-		if (tile[idy * TILEX + idx].alphaEyesight)
+	/*	if (tile[idy * TILEX + idx].alphaEyesight)
 		{
 			if (!tile[idy * TILEX + idx + 1].alphaEyesight)
 			{
@@ -60,7 +60,7 @@ void visionFloodFill::setVision(tagTile* tile, int idx, int idy, int sight)
 			{
 				setVision(tile, idx, idy - 1, sight - 1);
 			}
-		}
+		}*/
 		tile[idy * TILEX + idx].alphaEyesight = true;
 		tile[idy * TILEX + idx].alphaValue = 0;
 		setVision(tile, idx, idy - 1, sight - 1);
