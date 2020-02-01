@@ -466,9 +466,9 @@ void deathMetal::deathMetal_ChangeAnimation()
 
 void deathMetal::deathMetal_ChangePhase()
 {
-	if (boss::hp > 7)		boss::phase = BP_PHASE_1;
-	else if (boss::hp > 5)	boss::phase = BP_PHASE_2;
-	else if (boss::hp > 3)	boss::phase = BP_PHASE_3;
+	if (boss::hp >= 7)		boss::phase = BP_PHASE_1;
+	else if (boss::hp >= 5)	boss::phase = BP_PHASE_2;
+	else if (boss::hp >= 3)	boss::phase = BP_PHASE_3;
 	else if (boss::hp > 0)	boss::phase = BP_PHASE_4; 
 
 	// 데스메탈 페이즈
@@ -495,6 +495,9 @@ void deathMetal::deathMetal_ChangePhase()
 		boss::move.set_BossMoveCount(2);	// 2페이즈에서는 2박자 마다 이동을 한다.
 		boss::move_Count = boss::move.get_BossMoveCount();	// 이동에 필요한 박자를 저장한다.
 		boss::boss_Bool.PHASE_BOOL.PHASE_2_Set = true;	// 셋팅이 끝났으면 ture의 값을 주고 다시 이곳에 들어오지 않도록 한다.
+
+		boss::slave_Summon.cTime = 4;					// 스킬 쿨타임
+		boss::slave_Summon.cTime_M = 4;					// 콘스트 스킬 쿨타임 
 	}
 
 	// 보스 페이즈가 3이고, 보스 페이즈 셋팅을 하지 않았다면 이곳으로 들어간다.

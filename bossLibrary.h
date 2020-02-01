@@ -67,3 +67,12 @@ struct BOSS_BOOL
 	bool						get_Beat;		// 박자를 받았으면 true로 변한다.
 	bool						boss_Die;		// 보스가 죽었다면 true의 값을 가진다.
 };
+
+struct BOSS_SUMMONS_SKILL
+{
+	bool						isCasting;		// 스킬 캐스팅
+	int							cTime;			// 쿨타임
+	int							cTime_M;		// 콘스트 쿨타임
+
+	int							rnd;			// 랜덤 값
+};

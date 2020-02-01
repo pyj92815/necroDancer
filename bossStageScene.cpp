@@ -986,21 +986,17 @@ SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 
 void bossStageScene::boss_Move_Player()
 {
-	//// 데스메탈의 무브 카운트를 1 감소 시켜준다. (데스메탈이 비트를 받지 않았다면 이곳에 들어간다.)
-	//if (BEATMANAGER->getInterval() && !_deathMetal->getBoss_Beat())
-	//{
-	//	_deathMetal->setBoss_Beat(true);		// 비트를 받았다면 true로 바꿔준다. (여러번 들어오는것을 방지)
-	//	_deathMetal->setBoss_Move_Count();		// 무브 카운트를 1 감소한다.
-	//}
-	//
-	//// 비트의 값이 0이 됐을때 false의 값으로 바꿔준다.
-	//if (!BEATMANAGER->getInterval()) _deathMetal->setBoss_Beat(false);
-
 	// 데스메탈의 무브 카운트를 1 감소 시켜준다. (데스메탈이 비트를 받지 않았다면 이곳에 들어간다.)
 	if (BEATMANAGER->getBeating() && !_deathMetal->getBoss_Beat())
 	{
 		_deathMetal->setBoss_Beat(true);		// 비트를 받았다면 true로 바꿔준다. (여러번 들어오는것을 방지)
 		_deathMetal->setBoss_Move_Count();		// 무브 카운트를 1 감소한다.
+
+		// 만약 소환 캐스팅 중이라면
+		if (_deathMetal->boss_SummonSkill()->isCasting)
+		{
+			_deathMetal->boss_SummonSkill()->cTime--;
+		}
 	}
 
 	// 비트의 값이 0이 됐을때 false의 값으로 바꿔준다.
@@ -1565,21 +1561,112 @@ void bossStageScene::boss_PhaseMove()
 
 		// 방패 맞았을때는 보스 체력이 달면 안돼
 
+
 		break;
 
 	case BP_PHASE_2:
 		// 손을 들어올리고 4 박자 동안 공격을 받지 않으면 해골 1 ~ 3마리 소환
 		// 공격 받으면 반대편으로 순간이동
+		// 현재 체력을 저장해두고 체력 변화가 있을때는
+		// 순간이동을 하고 카운트를 다시 올려준다. (최대 카운트 + 1을 해줘서 한 박자를 쉬고 다음 손을 들게 하자)
 
-		// 무브 카운트가 처음이라면 데스메탈은 손을 든다.
-		if (_deathMetal->getBoss_Move_Count() == _deathMetal->getBoss_Move_Count_Value())
+		// 확률로 손을 들고 스킬 시전
+		// 시전 시 4 박자 동안 공격 받지 않으면 해골 소환
+
+		// 랜덤으로 숫자를 받는다. 0 ~ 2
+		_deathMetal->setBoss_SummonSkill(RND->getInt(3));
+
+		// 숫자가 2라면 해골 소환 스킬을 시작한다.
+		if (_deathMetal->getBoss_SummonSkill().rnd == 2)	_deathMetal->boss_SummonSkill()->isCasting = true;
+
+		// 2가 나왔다면 소환
+		if (_deathMetal->boss_SummonSkill()->isCasting)
 		{
+			// 무브 카운트가 처음이라면 데스메탈은 손을 든다.
+			if (_deathMetal->boss_SummonSkill()->cTime == _deathMetal->boss_SummonSkill()->cTime_M)
+			{
+				// 플레이어가 가까울때
+				if (_deathMetal->getBoss_ClosePlayer())	_deathMetal->setBoss_Animation("deathMetal_Attack");
 
+				// 플레이어가 멀때
+				if (!_deathMetal->getBoss_ClosePlayer()) _deathMetal->setBoss_Animation("deathMetal_SAttack");
+			}
+
+			// 무브 카운트가 0이라면 해골 소환 1 ~ 3
+			if (_deathMetal->boss_SummonSkill() < 0)
+			{
+				// 플레이어가 가까울때
+				if (_deathMetal->getBoss_ClosePlayer())	_deathMetal->setBoss_Animation("deathMetal_Idle");
+
+				// 플레이어가 멀때
+				if (!_deathMetal->getBoss_ClosePlayer()) _deathMetal->setBoss_Animation("deathMetal_SIdl");
+
+				// 해골을 소환한다.
+				int rndSummons = RND->getInt(3) + 1;	// 1 ~ 3까지의 값이 나오게 한다.
+
+				// 보스 주변으로 랜덤으로 해골 소환 (1 ~ 3마리)
+				int tempX, tempY;
+				tempX = tempY = 0;
+				int rndX, rndY;
+				rndX = rndY = 0;
+
+				for (int i = 0; i < rndSummons; ++i)
+				{
+					// 나올 수 있는 범위를 정해준다.
+					rndX = RND->getInt(9) + 8;
+					rndY = RND->getInt(7) + 11;
+
+					// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
+					for (int j = 0; j < _vTotalList.size(); ++j)
+					{
+						// 보스방 범위에서만 소환이 가능해야 한다.
+						if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
+							_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
+						{
+							// 보스가 있는 위치에는 나오면 안돼
+							if (_deathMetal->getBoss_Index().x != rndX &&
+								_deathMetal->getBoss_Index().y != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+
+								break;
+							}
+
+							// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+							for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
+							{
+								if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
+									_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+								{
+									tempX = rndX;
+									tempY = rndY;
+									break;
+								}
+							}
+
+							// 플레이어 위치에는 나오면 안돼
+							if (_player->getPlayer().idx != rndX &&
+								_player->getPlayer().idy != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+								break;
+							}
+						}
+
+						if (tempX && tempY) break;
+					}
+
+					// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
+					if (tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, tempX, tempY);
+				}
+
+				// 다음 연산을 위해 초기화
+				_deathMetal->boss_SummonSkill()->isCasting = false;
+				_deathMetal->boss_SummonSkill()->cTime = _deathMetal->boss_SummonSkill()->cTime_M;
+			}
 		}
-
-		// 무브 카운트가 0이라면 해골 소환 1 ~ 3
-		if(_deathMetal->getBoss_Move_Count() == 0)
-
 		break;
 
 	case BP_PHASE_3:
