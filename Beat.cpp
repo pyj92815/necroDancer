@@ -91,6 +91,7 @@ void Beat::HitNoteEffect(float x, float y)
 }
 
 
+
 void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
 {
     //SOUNDMANAGER->addSound("BGM_LOBBY", "Music/lobby.ogg", false, true);
@@ -184,7 +185,6 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
         {
             _deltaTime = 0.016f;
         }
-
         CreateNewNote(true);
         CreateNewNote(false);
     }
@@ -481,4 +481,19 @@ void Beat::Move()
             }
         }
     }
+}
+
+void Beat::AllStopMusic()
+{
+    // Music
+    SOUNDMANAGER->stop("BGM_LOBBY");
+    SOUNDMANAGER->stop("BGM_STAGE_1_1");
+    SOUNDMANAGER->stop("BGM_STAGE_1_2");
+    SOUNDMANAGER->stop("BGM_STAGE_1_3");
+    SOUNDMANAGER->stop("BGM_BOSS");
+
+    // Shop Keeper
+    SOUNDMANAGER->stop("NPC_Stage_1_1_shopkeeper");
+    SOUNDMANAGER->stop("NPC_Stage_1_2_shopkeeper");
+    SOUNDMANAGER->stop("NPC_Stage_1_3_shopkeeper");
 }

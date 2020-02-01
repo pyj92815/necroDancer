@@ -47,9 +47,7 @@ HRESULT bossStageScene::init()
 
 	_player->setBossStage(); // 보스스테이지 락훈 추가 
 	BEATMANAGER->init();
-
-	//BEATMANAGER->init();
-	SOUNDMANAGER->stop("BGM_LOBBY");
+	BEATMANAGER->AllStopMusic();
 	return S_OK;
 }
 
@@ -1579,6 +1577,7 @@ void bossStageScene::endScene()
 {
 	if (_player->getPlayer().idx == _endX && _player->getPlayer().idy == _endY)
 	{
+		BEATMANAGER->AllStopMusic();
 		SCENEMANAGER->changeScene("End");
 	}
 }
