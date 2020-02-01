@@ -39,8 +39,9 @@ HRESULT stageScene::init()
 
 
 	_pm->getPlayerInfo()->setStage();
-
+	BEATMANAGER->AllStopMusic();
 	BEATMANAGER->SetMusicID(1);
+
 	return S_OK;
 }
 
@@ -65,13 +66,14 @@ void stageScene::update()
 		stageCollision();
 
 		_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
-		//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 		//_minimap->getStageMap(_vTotalList);
-		//_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().rc.left, _pm->getPlayerInfo()->getPlayer().rc.top);
-		//_minimap->setEnemyXY(_em->getVEnemy());
+		//_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y);
+		//_minimap->getEnemyPoint(_em);
 		_ui->setInven(_pm->getPlayerInfo()->getVInven());
 		nextPage();
+		tileOnOff();
 	}
+
 }
 
 void stageScene::render()
@@ -323,8 +325,7 @@ void stageScene::nextPage()
 {
 	if (_bossIdx == _pm->getPlayerInfo()->getPlayer().idx && _bossIdy == _pm->getPlayerInfo()->getPlayer().idy)
 	{
-		_pm->getPlayerInfo()->PlayerAddress()->idx = 13;
-		_pm->getPlayerInfo()->PlayerAddress()->idy = 26;
+		_pm->getPlayerInfo()->setJump();
 		SCENEMANAGER->changeScene("Boss");
 	}
 	if (_stageIdx == _pm->getPlayerInfo()->getPlayer().idx && _stageIdy == _pm->getPlayerInfo()->getPlayer().idy)
@@ -333,7 +334,96 @@ void stageScene::nextPage()
 		_mEnemyPoint.clear();
 		fileName = "Stage_SaveFile.map";
 		this->init();
-		BEATMANAGER->SetMusicID(1);
+
+		BEATMANAGER->AllStopMusic();
+		BEATMANAGER->SetMusicID(3);
+	}
+
+}
+
+void stageScene::tileOnOff()
+{
+	// 01 11 타일 그리고   42 52
+	if (_pm->getPlayerInfo()->getCombo())
+	{
+		if (BEATMANAGER->getTurnOnOff())
+		{
+			_tileFirstX = 4;
+			_tileFirstY = 2;
+
+			_tileSecondX = 5;
+			_tileSecondY = 2;
+		}
+		else
+		{
+			_tileFirstX = 5;
+			_tileFirstY = 2;
+
+			_tileSecondX = 4;
+			_tileSecondY = 2;
+
+		}
+
+	}
+	else
+	{
+		if (BEATMANAGER->getTurnOnOff())
+		{
+			_tileFirstX = 0;
+			_tileFirstY = 1;
+
+			_tileSecondX = 1;
+			_tileSecondY = 1;
+		}
+		else
+		{
+			_tileFirstX = 1;
+			_tileFirstY = 1;
+
+			_tileSecondX = 0;
+			_tileSecondY = 1;
+		}
+
+	}
+
+	for (int i = 0; i < TILEY; ++i)
+	{
+		for (int j = 0;j < TILEX; ++j)
+		{
+			if (_tiles[i * TILEX + j].type == TYPE_NONE) continue;
+			if (_tiles[i * TILEX + j].terrain != TR_BASIC_STAGE_TILE &&
+				_tiles[i * TILEX + j].terrain != TR_BASIC_COMBO_TILE) continue;
+
+			if (j % 2 == 0)
+			{
+				if (i % 2 == 1)
+				{
+					_tiles[i * TILEX + j].terrainFrameX = _tileFirstX;
+					_tiles[i * TILEX + j].terrainFrameY = _tileFirstY;
+				}
+				else
+				{
+					_tiles[i * TILEX + j].terrainFrameX = _tileSecondX;
+					_tiles[i * TILEX + j].terrainFrameY = _tileSecondY;
+				}
+			}
+			else
+			{
+				if (i % 2 == 1)
+				{
+					_tiles[i * TILEX + j].terrainFrameX = _tileSecondX;
+					_tiles[i * TILEX + j].terrainFrameY = _tileSecondY;
+				}
+				else
+				{
+					_tiles[i * TILEX + j].terrainFrameX = _tileFirstX;
+					_tiles[i * TILEX + j].terrainFrameY = _tileFirstY;
+				}
+			}
+
+
+
+		}
 	}
 
 }

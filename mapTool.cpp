@@ -213,7 +213,23 @@ void mapTool::clickButton()
 void mapTool::render()
 {
 	PatBlt(CAMERAMANAGER->getWorldDC(), CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), _WINSIZEX, _WINSIZEY, BLACKNESS);
-	//TextOut(getMemDC(), 700, 700, str,strlen(str)); 
+	
+	if (KEYMANAGER->isToggleKey('0'))
+	{
+		for (int i = 0; i < TILEX * TILEY; ++i)
+		{
+			HBRUSH Tbrush = CreateSolidBrush(RGB(0, 0, 0));
+			HBRUSH oldTbrush = (HBRUSH)SelectObject(CAMERAMANAGER->getWorldDC(), Tbrush);
+			HPEN Tpen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
+			HPEN oldTpen = (HPEN)SelectObject(CAMERAMANAGER->getWorldDC(), Tpen);
+			Rectangle(CAMERAMANAGER->getWorldDC(), _tiles[i].rc);
+			SelectObject(CAMERAMANAGER->getWorldDC(), oldTpen);
+			DeleteObject(Tpen);
+			SelectObject(CAMERAMANAGER->getWorldDC(), oldTbrush);
+			DeleteObject(Tbrush);
+		}
+	}
+
 	//ÁöÇü
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{

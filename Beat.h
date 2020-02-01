@@ -34,6 +34,7 @@ struct tagNote // 노트 구조체
 	image* img;
 	bool isCol; // 심장 박동 애니메이션 중복 방지를 위한 bool
 	bool isRender;
+	bool colision;// 락훈 추가 
 	int alpha;
 };
 
@@ -79,6 +80,7 @@ private:
 
 	int musicID; // 음악의 인덱스를 정해주는 변수
 	int musicID_Temp;
+	bool _tileOnOff; // 타일을 
 
 private:
 	void init_AddSoundAndImg(); // 사운드 & 이미지 추가
@@ -118,4 +120,8 @@ public:
 
 	void SetMusicID(int _musicID) { musicID = _musicID; } // 음악 인덱스를 새로 지정해주는 setter! (id --> <1 = 로비>,  <2 = 스테이지 1_1>,  <3 = 스테이지 1_2>, <4 = 스테이지 1_3>, <5 = 보스>) 
 	int GetMusicID() { return musicID; } // 음악 인덱스를 가져오는 getter
+
+	bool getTurnOnOff() { return _tileOnOff; }
+	void AllStopMusic();
+
 };

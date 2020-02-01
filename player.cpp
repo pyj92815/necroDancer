@@ -28,7 +28,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.bodyAni->start();
 	_player.direction = PLAYERDIRECTION_RIGHT;				// 방향 오른쪽	RIGHT
 	_player.weapon = PLAYERWAEPON_NONE;						// 무기			NONE
-	_player.sight = 6;										// 시야 값		7
+	_player.sight = 5;										// 시야 값		4
 	_player.damage = 1;										// 데미지        1
 	_player.idx = idx;										// 인덱스 X
 	_player.idy = idy;										// 인덱스 Y
@@ -51,12 +51,15 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_isMoving = false;		 // MOVE 판단
 	_isKeyPress = false;     // 노트 판단 
 	_isKeyDown = false;      // KEY 입력 판단
-
+	_comboCountTime = 0;
 	// 초기 세팅 장비 값 
 	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
 	_player.weapon = PLAYERWAEPON_DAGGER;
 	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
 
+	// 콤보
+
+	_combo = 0;
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
 }
@@ -86,6 +89,9 @@ void player::update()
 		cout << str << endl;
 		cout << " 지금 체력 : " << _player.hp << endl;
 		_player.hp--;
+		_comboCountTime = TIMEMANAGER->getWorldTime();
+		_combo = true;
+		cout << _combo << endl;
 	}
 	playerDie();
 }
@@ -140,7 +146,7 @@ void player::playerMove()
 			_player.y = _player.idy * _distance + (_distance / 3);
 
 			_isMoving = false;	    // 선형 보간 
-			_isKeyDown = false;
+			//_isKeyDown = false;
 			//_isKeyPress = false;  // key 입력 초기화 
 			_reversMove = false;
 			return;
@@ -162,7 +168,7 @@ void player::playerMove()
 			_player.y = _player.idy * _distance + (_distance / 3);
 
 			_isMoving = false;	    // 선형 보간 
-			_isKeyDown = false;
+			//_isKeyDown = false;
 			//_isKeyPress = false;  // key 입력 초기화 
 			return;
 		}
@@ -175,6 +181,7 @@ void player::playerEffect_Miss()
 	effect = new alphaImageEffect;
 	effect->init("player_effect_missed", CAMERAMANAGER->get_CameraX() + BEATMANAGER->getHeartMiddle() - 30, CAMERAMANAGER->get_CameraY() + (WINSIZEY - 200), 10, SLOW);
 	_vEffect.push_back(effect);
+	_combo = false;
 }
 
 void player::playerEffect_Shovel(tagTile* tile)
@@ -221,7 +228,6 @@ void player::playerEffect_Attack()
 	int frame;
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
-
 	if (_player.direction == PLAYERDIRECTION_UP)
 	{
 		x = _player.x;
@@ -430,6 +436,7 @@ void player::tileCheck()
 				}
 				else
 				{
+					_combo = true;
 					playerEffect_Attack();
 					_miPlayerEnemyTile->second->Hit(_player.damage);
 				}
@@ -452,13 +459,16 @@ void player::tileCheck()
 				}
 				else
 				{
+					_combo = true;
 					playerEffect_Attack();
-					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
 					if ((int)_miPlayerdeathMetalTile->second->getBoss_Direction() ==
-						(int)_player.direction)
+						(int)_player.direction && _miPlayerdeathMetalTile->second->getBoss_Phase() == BP_PHASE_1)
 					{
 						_miPlayerdeathMetalTile->second->setBoss_Shield_Hit_True();
+						action = true;
+						break;
 					}
+					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
 				}
 				action = true;
 				break;
@@ -477,6 +487,7 @@ void player::tileCheck()
 				}
 				else
 				{
+					_combo = true;
 					playerEffect_Attack();
 					_miPlayerSlaveTile->second->slave_Hit(_player.damage);
 				}
@@ -496,12 +507,16 @@ void player::wallCheck()
 	switch (_miPlayerTile->second->wall)
 	{
 	case W_WALL:
-	case W_WALL2:
+	case W_WALL2: // 부숴지는 벽
+		SOUNDMANAGER->play("vo_cad_dig_01");
+		SOUNDMANAGER->play("mov_dig_dirt", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
 		break;
-	case W_ITEM_WALL:
+	case W_ITEM_WALL: // 부숴지는 벽
+		SOUNDMANAGER->play("vo_cad_dig_01");
+		SOUNDMANAGER->play("mov_dig_dirt", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
@@ -520,10 +535,13 @@ void player::wallCheck()
 		break;
 	case  W_END_WALL:
 	case  W_BOSS_WALL:
-	case  W_SHOP_WALL:
+	case  W_SHOP_WALL: // 부숴지지 않는 벽
+		SOUNDMANAGER->play("vo_cad_dig_01");
+		SOUNDMANAGER->play("mov_dig_fail", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
 		break;
-	case W_DOOR:
+	case W_DOOR: // 문 열기
+		SOUNDMANAGER->play("obj_door_open", 1.5f);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
 		break;
@@ -588,15 +606,15 @@ void player::itempCheck()
 			break;
 		case A_TORCH_1:
 			makeItem(WP_NONE, A_TORCH_1, ST_NONE, 0, 4, 1, 0, 0, 0);
-			_player.sight = 6;
+			_player.sight = 5;
 			break;
 		case A_TORCH_2:
 			makeItem(WP_NONE, A_TORCH_2, ST_NONE, 1, 4, 2, 0, 0, 0);
-			_player.sight = 7;
+			_player.sight = 6;
 			break;
 		case A_TORCH_3:
 			makeItem(WP_NONE, A_TORCH_3, ST_NONE, 2, 4, 3, 0, 0, 0);
-			_player.sight = 8;
+			_player.sight = 7;
 			break;
 		case A_NONE:
 			return;

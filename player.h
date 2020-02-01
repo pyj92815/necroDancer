@@ -53,11 +53,15 @@ private:
 	array<int,4> bodyLeft;	// 
 
 	tagItem* currentItem;
+
+	bool _combo;
+	float _comboCountTime;
 	//tagItem* currentWeapon;
 	//tagItem* currentPotion;
 	//tagItem* currenttorch;
 
 public:
+	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 콤보 설정 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	player();
 	~player();
 
@@ -70,7 +74,7 @@ public:
 	// 세팅 함수 
 	void keyControl();	 // 사용키
 	void playerMove();	 // 이동 
-
+	void setJump() { _jump->setJumping(); }
 	// 이펙트 관련 함수 
 	void playerEffect_Miss();					
 	void playerEffect_Shovel(tagTile* tile);
@@ -79,6 +83,8 @@ public:
 	void playerEffect_Attack(const char* imageName, int x, int y, int frameY);
 	void playerEffect_Attack();
 
+	bool getCombo() {return _combo;}
+	void setCombo() { _combo = false; }
 	// 타일검출
 	void tileCheck();	
 	void wallCheck();	 // 벽판단

@@ -48,9 +48,15 @@ private:
 	visionFloodFill*							_floodFill;
 private:
 	bool distanceCheck;															// 거리를 체크한다. (범위에 들어오거나 들어오지 않을때 값이 바뀐다.)
+	bool introSound;
+	bool boss_Dead;
 
 	int _endX;   // 엔딩씬으로 가기 위한 좌표 값 
 	int _endY;
+
+
+	int _tileFirstX, _tileSecondX; // 타일 깜박이는 숫자 
+	int _tileFirstY, _tileSecondY; // 타일 깜박이는 숫자 
 public:
 	bossStageScene();
 	~bossStageScene();
@@ -105,5 +111,7 @@ public:
 	void setVolumeBossStage();
 
 	void endScene();
+
+	void tileOnOff();
 };
 
