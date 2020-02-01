@@ -16,7 +16,12 @@ void Enemy_Warith::Action()
 		break;
 	case enemyState::STATE_ATTACK:
 		
+		if (_enemyInfo->beatCount >= 2)
+		{
 			Attack();
+			_enemyInfo->beatCount = 0;
+		}
+
 		
 		
 		break;
