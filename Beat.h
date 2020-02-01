@@ -118,4 +118,6 @@ public:
 
 	void SetMusicID(int _musicID) { musicID = _musicID; } // 음악 인덱스를 새로 지정해주는 setter! (id --> <1 = 로비>,  <2 = 스테이지 1_1>,  <3 = 스테이지 1_2>, <4 = 스테이지 1_3>, <5 = 보스>) 
 	int GetMusicID() { return musicID; } // 음악 인덱스를 가져오는 getter
+
+	void AllStopMusic();
 };

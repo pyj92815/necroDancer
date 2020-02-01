@@ -31,6 +31,7 @@ HRESULT bossStageScene::init()
 
 	distanceCheck = false;
 	introSound = false;
+	boss_Dead = false;
 
 	_sm = new slaveManager;
 	_sm->init();
@@ -48,9 +49,7 @@ HRESULT bossStageScene::init()
 
 	_player->setBossStage(); // 보스스테이지 락훈 추가 
 	BEATMANAGER->init();
-
-	//BEATMANAGER->init();
-	SOUNDMANAGER->stop("BGM_LOBBY");
+	BEATMANAGER->AllStopMusic();
 	return S_OK;
 }
 
@@ -139,6 +138,14 @@ void bossStageScene::update()
 
 		if (_deathMetal->getBoss_HP() <= 0)
 		{
+
+			if (!boss_Dead)
+			{
+				// 보스 죽는 사운드를 켜준다.
+				SOUNDMANAGER->play("deathmetal_death");
+				SOUNDMANAGER->play("vo_cad_yeah_02", 1.5f);
+				boss_Dead = true;
+			}
 
 			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 			_deathMetal->setBoss_Index(0, 0);
@@ -1268,8 +1275,7 @@ void bossStageScene::bossSceneStart()
 		if (!introSound)
 		{
 			// 여기에서 사운드 한번 실행
-
-
+			SOUNDMANAGER->play("deathmetal_intro");
 			introSound = true;
 		}
 
@@ -1311,7 +1317,6 @@ void bossStageScene::bossSceneStart()
 					_scene_Starter.startMoveImg = true;
 				}
 			}
-
 			else if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 			{
 				_scene_Starter.image_Speed = 16;
@@ -1351,7 +1356,6 @@ void bossStageScene::bossSceneStart()
 			}
 		}
 	}
-
 	// 보스 스테이지 볼륨 조절, 문이 열리는 여부에 따라 소리 조절함
 	setVolumeBossStage();
 }
@@ -1399,8 +1403,7 @@ void bossStageScene::bossSceneDoorOpen()
 		if (introSound)
 		{
 			// 웰컴 사운드
-
-
+			SOUNDMANAGER->play("deathmetal_welcome");
 			introSound = false;
 		}
 
@@ -1784,11 +1787,11 @@ void bossStageScene::setVolumeBossStage()
 {
 	if (_scene_Starter.isDoorOpen)
 	{
-		SOUNDMANAGER->setVolume("BGM_BOSS", 1.0f);
+		SOUNDMANAGER->setVolume("BGM_BOSS", 1.5f);
 	}
 	else
 	{
-		SOUNDMANAGER->setVolume("BGM_BOSS", 0.1f);
+		SOUNDMANAGER->setVolume("BGM_BOSS", 0.35f);
 	}
 }
 
@@ -1796,6 +1799,7 @@ void bossStageScene::endScene()
 {
 	if (_player->getPlayer().idx == _endX && _player->getPlayer().idy == _endY)
 	{
+		BEATMANAGER->AllStopMusic();
 		SCENEMANAGER->changeScene("End");
 	}
 }

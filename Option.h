@@ -1,8 +1,6 @@
 #pragma once
 #include "singletonBase.h"
 
-class gameNode; // 게임 노드와 전방 선언
-
 /*
 enum OPTION_STATE
 {

@@ -91,19 +91,60 @@ void Beat::HitNoteEffect(float x, float y)
 }
 
 
+
 void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
 {
+    // 배경음 관련 (배경음, 상점주인)
     //SOUNDMANAGER->addSound("BGM_LOBBY", "Music/lobby.ogg", false, true);
-    SOUNDMANAGER->addSound("BGM_LOBBY", "Music/lobby.ogg", true, false);
-    SOUNDMANAGER->addSound("BGM_STAGE_1_1", "Music/zone1_1.ogg", true, false);
-    SOUNDMANAGER->addSound("BGM_STAGE_1_2", "Music/zone1_2.ogg", true, false);
-    SOUNDMANAGER->addSound("BGM_STAGE_1_3", "Music/zone1_3.ogg", true, false);
-    SOUNDMANAGER->addSound("BGM_BOSS", "Music/boss_2.ogg", false, true);
+    SOUNDMANAGER->addSound("BGM_LOBBY", "sound/Music/lobby.ogg", true, false);
+    SOUNDMANAGER->addSound("BGM_STAGE_1_1", "sound/Music/zone1_1.ogg", true, false);
+    SOUNDMANAGER->addSound("BGM_STAGE_1_2", "sound/Music/zone1_2.ogg", true, false);
+    SOUNDMANAGER->addSound("BGM_STAGE_1_3", "sound/Music/zone1_3.ogg", true, false);
+    SOUNDMANAGER->addSound("BGM_BOSS", "sound/Music/boss_2.ogg", false, true);
 
-    SOUNDMANAGER->addSound("NPC_Stage_1_1_shopkeeper", "Music/zone1_1_shopkeeper.ogg", true, false);
-    SOUNDMANAGER->addSound("NPC_Stage_1_2_shopkeeper", "Music/zone1_2_shopkeeper.ogg", true, false);
-    SOUNDMANAGER->addSound("NPC_Stage_1_3_shopkeeper", "Music/zone1_3_shopkeeper.ogg", true, false);
+    SOUNDMANAGER->addSound("NPC_Stage_1_1_shopkeeper", "sound/Music/zone1_1_shopkeeper.ogg", true, false);
+    SOUNDMANAGER->addSound("NPC_Stage_1_2_shopkeeper", "sound/Music/zone1_2_shopkeeper.ogg", true, false);
+    SOUNDMANAGER->addSound("NPC_Stage_1_3_shopkeeper", "sound/Music/zone1_3_shopkeeper.ogg", true, false);
 
+    // 오브젝트 사운드 추가
+    SOUNDMANAGER->addSound("obj_door_metal_open", "sound/ETC/Obj/obj_door_metal_open.ogg", false, false);
+    SOUNDMANAGER->addSound("obj_door_metal_close", "sound/ETC/Obj/obj_door_metal_close.ogg", false, false);
+    SOUNDMANAGER->addSound("obj_door_open", "sound/ETC/Obj/obj_door_open.ogg", false, false);
+    SOUNDMANAGER->addSound("obj_trap_bounce", "sound/ETC/Obj/obj_trap_bounce.ogg", false, false);
+    SOUNDMANAGER->addSound("obj_trap_trapdoor_fall", "sound/ETC/Obj/obj_trap_trapdoor_fall.ogg", false, false);
+    SOUNDMANAGER->addSound("obj_trap_trapdoor_open", "sound/ETC/Obj/obj_trap_trapdoor_open.ogg", false, false);
+
+    // 플레이어 벽 상호작용 사운드
+    SOUNDMANAGER->addSound("mov_dig_brick", "sound/player/move/mov_dig_brick.ogg", false, false);
+    SOUNDMANAGER->addSound("mov_dig_dirt", "sound/player/move/mov_dig_dirt.ogg", false, false);
+    SOUNDMANAGER->addSound("mov_dig_fail", "sound/player/move/mov_dig_fail.ogg", false, false);
+    SOUNDMANAGER->addSound("mov_dig_stone", "sound/player/move/mov_dig_stone.ogg", false, false);
+
+    // 플레이어 음성
+    SOUNDMANAGER->addSound("vo_cad_death_01", "sound/player/voice/vo_cad_death_01.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_dig_01", "sound/player/voice/vo_cad_dig_01.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_heal_02", "sound/player/voice/vo_cad_heal_02.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_hello_05", "sound/player/voice/vo_cad_hello_05.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_hurt_04", "sound/player/voice/vo_cad_hurt_04.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_melee_1", "sound/player/voice/vo_cad_melee_1.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_melee_2", "sound/player/voice/vo_cad_melee_2.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_melee_3", "sound/player/voice/vo_cad_melee_3.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_melee_4", "sound/player/voice/vo_cad_melee_4.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_trapdoor_01", "sound/player/voice/vo_cad_trapdoor_01.ogg", false, false);
+    SOUNDMANAGER->addSound("vo_cad_yeah_02", "sound/player/voice/vo_cad_yeah_02.ogg", false, false);
+    
+    // 데스메탈 사운드 추가
+    SOUNDMANAGER->addSound("deathmetal_intro", "sound/Enemy/boss_Sound/deathmetal_intro.ogg", false, false);
+    SOUNDMANAGER->addSound("deathmetal_welcome", "sound/Enemy/boss_Sound/deathmetal_welcome.ogg", false, false);
+    SOUNDMANAGER->addSound("deathmetal_death", "sound/Enemy/boss_Sound/deathmetal_death.ogg", false, false);
+
+    // 인트로 사운드 추가
+    SOUNDMANAGER->addSound("Intro", "sound/ETC/Intro/Intro.ogg", false, false);
+
+    // 크레딧 사운드 추가
+    SOUNDMANAGER->addSound("credit_music", "sound/ETC/credit/credit_music.mp3", false, false);
+
+    // 이미지 추가
     IMAGEMANAGER->addImage("GreenNote", "image/player/TEMP_beat_marker.bmp", 12, 64, true, RGB(255, 0, 255), true);
     IMAGEMANAGER->addImage("RedNote", "image/player/TEMP_beat_marker_red.bmp", 12, 64, true, RGB(255, 0, 255), true);
     IMAGEMANAGER->addFrameImage("Heart", "image/player/TEMP_beat_heart.bmp", 220, 138, 2, 1, true, RGB(255, 0, 255));
@@ -140,11 +181,11 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
 
 void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
 {
-    if (musicID == 1) _currentStage = STAGE_LOBBY, _currentStageID = (int)_currentStage, _currentSongName = "BGM_LOBBY", _currentShopkeeper = "", _noteFileName = "Music/lobby.txt", _loopSong = false;
-    else if (musicID == 2) _currentStage = STAGE_1_1, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_1", _currentShopkeeper = "NPC_Stage_1_1_shopkeeper", _noteFileName = "Music/zone1_1.txt", _loopSong = false;
-    else if (musicID == 3) _currentStage = STAGE_1_2, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_2", _currentShopkeeper = "NPC_Stage_1_2_shopkeeper", _noteFileName = "Music/zone1_2.txt", _loopSong = false;
-    else if (musicID == 4) _currentStage = STAGE_1_3, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_3", _currentShopkeeper = "NPC_Stage_1_3_shopkeeper", _noteFileName = "Music/zone1_3.txt", _loopSong = false;
-    else if (musicID == 5) _currentStage = BOSS, _currentStageID = (int)_currentStage, _currentSongName = "BGM_BOSS", _currentShopkeeper = "", _noteFileName = "Music/boss_2.txt", _loopSong = true;
+    if (musicID == 1) _currentStage = STAGE_LOBBY, _currentStageID = (int)_currentStage, _currentSongName = "BGM_LOBBY", _currentShopkeeper = "", _noteFileName = "sound/Music/lobby.txt", _loopSong = false;
+    else if (musicID == 2) _currentStage = STAGE_1_1, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_1", _currentShopkeeper = "NPC_Stage_1_1_shopkeeper", _noteFileName = "sound/Music/zone1_1.txt", _loopSong = false;
+    else if (musicID == 3) _currentStage = STAGE_1_2, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_2", _currentShopkeeper = "NPC_Stage_1_2_shopkeeper", _noteFileName = "sound/Music/zone1_2.txt", _loopSong = false;
+    else if (musicID == 4) _currentStage = STAGE_1_3, _currentStageID = (int)_currentStage, _currentSongName = "BGM_STAGE_1_3", _currentShopkeeper = "NPC_Stage_1_3_shopkeeper", _noteFileName = "sound/Music/zone1_3.txt", _loopSong = false;
+    else if (musicID == 5) _currentStage = BOSS, _currentStageID = (int)_currentStage, _currentSongName = "BGM_BOSS", _currentShopkeeper = "", _noteFileName = "sound/Music/boss_2.txt", _loopSong = true;
 }
 
 void Beat::update_PlayerMoveTest() // 테스트용 플레이어
@@ -176,35 +217,23 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
         TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
         TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
 
+        if (TIMEMANAGER->getFrameRate() > 10)
+        {
+            _deltaTime = TIMEMANAGER->getElapsedTime();
+        }
+        else
+        {
+            _deltaTime = 0.016f;
+        }
         CreateNewNote(true);
         CreateNewNote(false);
     }
 
     if (_songPos > 0) // 곡이 시작되었을때
     {
-
-        if (TIMEMANAGER->getFrameRate() > 10)
-        {
-            _deltaTime = TIMEMANAGER->getElapsedTime();
-        }
-        //else
-        //{
-        //    _deltaTime = 0.016f;
-        //}
-
         for (int i = 0; i < _vNoteLeft.size(); i++)
         {
             noteTimeIntervalCount = TIMEMANAGER->getCountTime();
-            //if (_vNoteLeft.size() <= 0) break;
-            //if (_vNoteLeft[i].pos.x >= WINSIZEX_HALF) // 왼쪽 노트가 중점 x좌표 값 이상인 경우
-            //{
-            //    _player->setPlayerKeyDown();
-            //    inputIntervalCount = 0;
-            //    _vNoteRight.erase(_vNoteRight.begin() + i);
-            //    _vNoteLeft.erase(_vNoteLeft.begin() + i);
-            //    
-            //    break;
-            //}
             if (_vNoteLeft.size() < 0)
                 break;
 
@@ -492,4 +521,25 @@ void Beat::Move()
             }
         }
     }
+}
+
+void Beat::AllStopMusic()
+{
+    // Music
+    SOUNDMANAGER->stop("BGM_LOBBY");
+    SOUNDMANAGER->stop("BGM_STAGE_1_1");
+    SOUNDMANAGER->stop("BGM_STAGE_1_2");
+    SOUNDMANAGER->stop("BGM_STAGE_1_3");
+    SOUNDMANAGER->stop("BGM_BOSS");
+
+    // Shop Keeper
+    SOUNDMANAGER->stop("NPC_Stage_1_1_shopkeeper");
+    SOUNDMANAGER->stop("NPC_Stage_1_2_shopkeeper");
+    SOUNDMANAGER->stop("NPC_Stage_1_3_shopkeeper");
+
+    // Intro
+    SOUNDMANAGER->stop("Intro");
+
+    // Credit
+    SOUNDMANAGER->stop("credit_music");
 }

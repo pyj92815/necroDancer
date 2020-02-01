@@ -38,7 +38,7 @@ HRESULT stageScene::init()
 
 
 	_pm->getPlayerInfo()->setStage();
-
+	BEATMANAGER->AllStopMusic();
 	BEATMANAGER->SetMusicID(1);
 	return S_OK;
 }
@@ -330,7 +330,9 @@ void stageScene::nextPage()
 		_mEnemyPoint.clear();
 		fileName = "Stage_SaveFile.map";
 		this->init();
-		BEATMANAGER->SetMusicID(1);
+
+		BEATMANAGER->AllStopMusic();
+		BEATMANAGER->SetMusicID(3);
 	}
 
 }

@@ -49,6 +49,7 @@ private:
 private:
 	bool distanceCheck;															// 거리를 체크한다. (범위에 들어오거나 들어오지 않을때 값이 바뀐다.)
 	bool introSound;
+	bool boss_Dead;
 
 	int _endX;   // 엔딩씬으로 가기 위한 좌표 값 
 	int _endY;

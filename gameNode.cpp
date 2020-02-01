@@ -78,7 +78,10 @@ void gameNode::release()
 		INIDATAMANAGER->releaseSingleton();
 		CAMERAMANAGER->release();
 		CAMERAMANAGER->releaseSingleton();
-
+		BEATMANAGER->release();
+		BEATMANAGER->releaseSingleton();
+		OPTION->release();
+		OPTION->releaseSingleton();
 	}
 
 	ReleaseDC(_hWnd, _hdc);
