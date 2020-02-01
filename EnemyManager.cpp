@@ -196,7 +196,7 @@ void EnemyManager::Attack()
 		{
 			if ((*_viEnemy)->getEnemyInfo()->Beat)
 			{
-				if (_timer > 1.5)
+				if (_timer > 0.5)
 				{
 					_player->playerHit((*_viEnemy)->getEnemyInfo()->damage);
 					_timer = 0;
