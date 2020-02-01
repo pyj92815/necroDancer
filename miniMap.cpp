@@ -22,6 +22,9 @@ HRESULT miniMap::init()
 	IMAGEMANAGER->addImage("min_stair", "./image/UI/min_rect_stair.bmp", 6, 6, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("min_trap", "./image/UI/min_rect_trap.bmp", 6, 6, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("min_wall2", "./image/UI/min_rect_wall2.bmp", 6, 6, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("min_wall3", "./image/UI/min_rect_wall3.bmp", 6, 6, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("min_shoping_rc", "./image/UI/min_rect_shopingRect.bmp", 6, 6, true, RGB(255, 0, 255));
+
 	_playerX = 0;
 	_playerY = 0;
 	return S_OK;
@@ -51,7 +54,7 @@ void miniMap::render()
 			}
 			else if ((*_viStageMap)->terrain == TR_SHOP )
 			{
-				_imageName = "min_shop";
+				_imageName = "min_shoping_rc";
 			}
 			else if ((*_viStageMap)->terrain == TR_END)
 			{
@@ -65,7 +68,7 @@ void miniMap::render()
 		case TYPE_WALL:
 			if ((*_viStageMap)->wall == W_ITEM_WALL || (*_viStageMap)->wall == W_SHOP_WALL)
 			{
-				_imageName = "min_shop";
+				_imageName = "min_wall3";
 			}
 			else if ((*_viStageMap)->wall == W_WALL2 || (*_viStageMap)->wall == W_BOSS_WALL)
 			{
