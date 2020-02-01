@@ -166,6 +166,8 @@ public:
 
 	void setBoss_SummonSkill(int num) { slave_Summon.rnd = num; }													// 랜덤값을 저장한다.
 
+	void setBoss_isCasting(bool value) { isCasting = value; }														// 캐스팅 유무 설정
+
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수
 	void boss_Move();																								// 보스 이동 연산 함수

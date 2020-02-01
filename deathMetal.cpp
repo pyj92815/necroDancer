@@ -183,9 +183,50 @@ void deathMetal::deathMetal_ChangeAnimation()
 	// 데스메탈의 체력에 변화가 있다면 애니메이션을 바꿔준다.
 	if (boss::save_HP != boss::hp)
 	{
-		// 만약 3페이즈라면 순간이동을 실행한다.
+		// 만약 1페이즈가 아니라면 순간이동을 실행한다.
+		if (boss::phase != BP_PHASE_1)
+		{
+			// 보스의 위치가 10시 였다면
+			if (boss::index.x >= 8 && boss::index.x <= 13 &&
+				boss::index.y >= 10 && boss::index.y <= 14)
+			{
+				boss::index.x = 17;
+				boss::index.y = 17;
+				boss::direction = BD_LEFT;
+			}
+
+			// 보스의 위치가 2시 였다면
+			if (boss::index.x >= 13 && boss::index.x <= 18 &&
+				boss::index.y >= 10 && boss::index.y <= 14)
+			{
+				boss::index.x = 9;
+				boss::index.y = 17;
+				boss::direction = BD_RIGHT;
+			}
+
+			// 보스의 위치가 7시 였다면
+			if (boss::index.x >= 8 && boss::index.x <= 13 &&
+				boss::index.y >= 14 && boss::index.y <= 18)
+			{
+				boss::index.x = 17;
+				boss::index.y = 11;
+				boss::direction = BD_LEFT;
+			}
+
+			// 보스의 위치가 5시 였다면
+			if (boss::index.x >= 13 && boss::index.x <= 18 &&
+				boss::index.y >= 14 && boss::index.y <= 18)
+			{
+				boss::index.x = 9;
+				boss::index.y = 11;
+				boss::direction = BD_RIGHT;
+			}
+
+		}
 
 		// 마법 또는 슬레이브 소환 캐스팅 도중에 맞으면 끊김
+		boss::slave_Summon.cTime = boss::slave_Summon.cTime_M;
+		boss::slave_Summon.isCasting = false;
 
 		boss::save_HP = boss::hp;
 		boss::isChangeAni = true;
@@ -492,12 +533,12 @@ void deathMetal::deathMetal_ChangePhase()
 	// 보스 페이즈가 2이고, 보스 페이즈 셋팅을 하지 않았다면 이곳으로 들어간다.
 	if (boss::phase == BP_PHASE_2 && !boss::boss_Bool.PHASE_BOOL.PHASE_2_Set)
 	{
-		boss::move.set_BossMoveCount(2);	// 2페이즈에서는 2박자 마다 이동을 한다.
+		boss::move.set_BossMoveCount(2);					// 2페이즈에서는 2박자 마다 이동을 한다.
 		boss::move_Count = boss::move.get_BossMoveCount();	// 이동에 필요한 박자를 저장한다.
-		boss::boss_Bool.PHASE_BOOL.PHASE_2_Set = true;	// 셋팅이 끝났으면 ture의 값을 주고 다시 이곳에 들어오지 않도록 한다.
+		boss::boss_Bool.PHASE_BOOL.PHASE_2_Set = true;		// 셋팅이 끝났으면 ture의 값을 주고 다시 이곳에 들어오지 않도록 한다.
 
-		boss::slave_Summon.cTime = 4;					// 스킬 쿨타임
-		boss::slave_Summon.cTime_M = 4;					// 콘스트 스킬 쿨타임 
+		boss::slave_Summon.cTime = 4;						// 스킬 쿨타임
+		boss::slave_Summon.cTime_M = 4;						// 콘스트 스킬 쿨타임 
 	}
 
 	// 보스 페이즈가 3이고, 보스 페이즈 셋팅을 하지 않았다면 이곳으로 들어간다.
@@ -505,6 +546,8 @@ void deathMetal::deathMetal_ChangePhase()
 	{
 		boss::move_Count = boss::move.get_BossMoveCount();	// 이동에 필요한 박자를 저장한다.
 		boss::boss_Bool.PHASE_BOOL.PHASE_3_Set = true;	// 셋팅이 끝났으면 ture의 값을 주고 다시 이곳에 들어오지 않도록 한다.
+
+		boss::isCasting = false;
 	}
 
 	// 보스 페이즈가 4이고, 보스 페이즈 셋팅을 하지 않았다면 이곳으로 들어간다.
