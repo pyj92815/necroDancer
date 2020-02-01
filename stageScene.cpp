@@ -1,20 +1,21 @@
 #include "stdafx.h"
 #include "stageScene.h"
 #include "bossStageScene.h"
-#include"EnemyManager.h"
+#include "EnemyManager.h"
+
 HRESULT stageScene::init()
 {
 	stageMapLoad(fileName);
-	if (_playerIdx <0 || _playerIdy <0 ||_playerIdx > TILEX || _playerIdy> TILEY)
+	if (_playerIdx <0 || _playerIdy <0 || _playerIdx > TILEX || _playerIdy> TILEY)
 	{
 		_playerIdx = 10;
 		_playerIdy = 10;
 	}
 	_pm = new playerManager;
-	_pm->init(_playerIdx,_playerIdy);
+	_pm->init(_playerIdx, _playerIdy);
 	CAMERAMANAGER->set_CameraXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y, true);
-	
-	
+
+
 	_em = new EnemyManager;
 	_em->init(_mEnemyPoint);
 
@@ -24,12 +25,12 @@ HRESULT stageScene::init()
 	_ui = new UImanager;
 	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 	_ui->init();
-	
+
 	_minimap = new miniMap;
 	_minimap->init();
-	
+
 	_minimap->getEnemyPoint(_em);
-	
+
 	_zOrder = new zOrder;
 	_zOrder->init();
 
@@ -50,25 +51,27 @@ void stageScene::release()
 
 void stageScene::update()
 {
-	//if(OPTION->CheckOptionOpen)
-	_pm->update();
-	_em->setVtile(_vTotalList);
-	_em->update();
-	
-	BEATMANAGER->update();
-	_ui->update();
-	_zOrder->zOrderSetup(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _tiles, _pm, _em);
-	_zOrder->update();
-	stageCollision();
-	
-	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
-	//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
-	//_minimap->getStageMap(_vTotalList);
-	//_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().rc.left, _pm->getPlayerInfo()->getPlayer().rc.top);
-	//_minimap->setEnemyXY(_em->getVEnemy());
-	_ui->setInven(_pm->getPlayerInfo()->getVInven());
-	nextPage();
-	
+
+	if (!OPTION->getplayerDie())
+	{
+		_pm->update();
+		_em->setVtile(_vTotalList);
+		_em->update();
+
+		BEATMANAGER->update();
+		_ui->update();
+		_zOrder->zOrderSetup(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _tiles, _pm, _em);
+		_zOrder->update();
+		stageCollision();
+
+		_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
+		//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
+		//_minimap->getStageMap(_vTotalList);
+		//_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().rc.left, _pm->getPlayerInfo()->getPlayer().rc.top);
+		//_minimap->setEnemyXY(_em->getVEnemy());
+		_ui->setInven(_pm->getPlayerInfo()->getVInven());
+		nextPage();
+	}
 }
 
 void stageScene::render()
@@ -135,7 +138,7 @@ void stageScene::render()
 					continue;
 				}
 			}
-			
+
 
 		}
 		else continue;
@@ -189,6 +192,7 @@ void stageScene::render()
 	BEATMANAGER->render();
 	_ui->render();
 	_minimap->render();
+	OPTION->render(getMemDC());
 }
 //
 //// 제트오더 사이즈 설정하기 
