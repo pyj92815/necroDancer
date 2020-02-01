@@ -26,6 +26,13 @@ enum tagStage // 테스트용으로 선언한 Scene상태
 	BOSS
 };
 
+struct tagPlayOnceSound // 반복 실행되는 문 안에 있는 경우에 사용
+{
+	string soundKeyName;
+	float volume;
+	bool isPlayAgain;
+};
+
 struct tagNote // 노트 구조체
 {
 	RECT rc;
@@ -52,13 +59,12 @@ private:
 	vector<tagNote> _vNoteLeft; // 왼쪽에서 나오는 노트
 	vector<tagNote> _vNoteRight; // 오른쪽에서 나오는 노트
 	int _countNote; // 현재까지 노트를 몇개 생성한 건지 세는 변수
-	//float _deltaTime; // TIMEMANAGER에서 getElapsedTime()은 매번 값이 바뀌고 자주 호출하기 힘들기 때문에 곡이 시작되기 전, 한 번만 getElapsedTime()호출하고 그 값을 저장하는 용도의 변수 
 
 	int _oldStageID, _currentStageID; // 현재 스테이지와 이전 스테이지 값
 	unsigned int _songPos; // 현재 곡의 진행시간(ms) 
 	unsigned int _songLength;  // FMOD::SOUND에 getLength()함수가 망가져서 만들었음 ㅠㅠ... getLength() 함수를 대신하여 곡의 길이를 받을 수 있게 만든 변수
 
-	float _deltaTime;
+	float _deltaTime;	// TIMEMANAGER에서 getElapsedTime()은 매번 값이 바뀌고 자주 호출하기 힘들기 때문에 곡이 시작되기 전, 한 번만 getElapsedTime()호출하고 그 값을 저장하는 용도의 변수
 	float _songLeftTime; // 현재 곡의 남은 시간
 	float _pitch; // 현재 곡의 pitch값 (1이 기본 값, 1미만 시 곡이 느려짐, 1이상 시 빨라짐)
 
@@ -69,14 +75,15 @@ private:
 	int heartFrameCount; // 현재 심장 프레임
 	bool _isBeating; // 심장 박동을 주어진 시간 간격마다 한번 씩만 두근거리기 위한 bool
 
-	vector<image*> _vHitNoteImg; // 알파 블렌더로 서서히 지울 노트 이미지를 저장할 이미지 전용 벡터
 	float noteTimeInterval;
 	float noteTimeIntervalCount;
-	float inputInterval;
 	float inputIntervalCount;
 	bool Interval;
 	player* _player;
 	bool _effect;
+
+	vector<tagPlayOnceSound> _vPlayOnceSound; // 한 번만 실행할 사운드
+	int checkLoop;
 
 	int musicID; // 음악의 인덱스를 정해주는 변수
 	int musicID_Temp;
@@ -124,4 +131,8 @@ public:
 	bool getTurnOnOff() { return _tileOnOff; }
 	void AllStopMusic();
 
+	void ControlPlayOnceSound();
+
+	void AddPlay_vPlayOnceSound_INLOOP(const char* _soundKeyName, bool _isPlayAgain, float _volume);
+	void CheckLooping() { checkLoop++; }
 };
