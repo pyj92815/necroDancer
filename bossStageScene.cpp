@@ -30,6 +30,7 @@ HRESULT bossStageScene::init()
 	playerPos_Setting();													// 보스 스테이지에 입장 한 플레이어의 위치를 생성 위치를 잡아준다.
 
 	distanceCheck = false;
+	introSound = false;
 
 	_sm = new slaveManager;
 	_sm->init();
@@ -1261,8 +1262,20 @@ void bossStageScene::bossSceneSetting()
 
 void bossStageScene::bossSceneStart()
 {
+	
+
+
 	if (!_scene_Starter.isOpen)
 	{
+		// 데스메탈 사운드가 들린다.
+		if (!introSound)
+		{
+			// 여기에서 사운드 한번 실행
+
+
+			introSound = true;
+		}
+
 		// 처음 보스 등장 씬이 날아온다. 정해진 위치까지 도착하면, 엔터를 누르면 더 빠르게 위치로 날아간다.
 		// 그리고 엔터를 다시 누르면 등장 씬은 다시 왔던길로 되돌아가고 다 돌아갔으면 게임이 시작된다.
 		if (!_scene_Starter.startMoveImg)
@@ -1379,12 +1392,21 @@ void bossStageScene::bossSceneDoorOpen()
 		}
 	}
 
-
+	// 문을 지나가면 보스가 월컴을 외친다.
 	// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
 	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 19 ||
 		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 19 ||
 		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 19)
 	{
+		// 웰컴을 한번 외친다.
+		if (introSound)
+		{
+			// 웰컴 사운드
+
+
+			introSound = false;
+		}
+
 		// 문이였던 지역을 벽으로 바꿔준다.
 		for (int i = 0; i < _vTotalList.size(); ++i)
 		{
@@ -1548,6 +1570,15 @@ void bossStageScene::boss_PhaseMove()
 	case BP_PHASE_2:
 		// 손을 들어올리고 4 박자 동안 공격을 받지 않으면 해골 1 ~ 3마리 소환
 		// 공격 받으면 반대편으로 순간이동
+
+		// 무브 카운트가 처음이라면 데스메탈은 손을 든다.
+		if (_deathMetal->getBoss_Move_Count() == _deathMetal->getBoss_Move_Count_Value())
+		{
+
+		}
+
+		// 무브 카운트가 0이라면 해골 소환 1 ~ 3
+		if(_deathMetal->getBoss_Move_Count() == 0)
 
 		break;
 

@@ -517,9 +517,10 @@ void deathMetal::deathMetal_ChangePhase()
 
 	// 보스가 죽었다. 움직이면 안돼 보스가 죽었다면 안보이게 만든다.
 	if (boss::hp <= 0)	boss::boss_Bool.boss_Die = true;
+
 	if (boss::boss_Bool.boss_Die)
 	{
-
+		// 뭔데 이거 왜 만듬?
 	}
 }
 
