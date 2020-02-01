@@ -178,6 +178,8 @@ public:
 
 	void setStage() { _nowStage = NOWSTAGE_STAGE; }
 	void setBossStage() { _nowStage = NOWSTAGE_BOSS; }
+	void playerDie();
+	void setPlayerHP(int hp) { _player.hp = hp; }
 };
 
 

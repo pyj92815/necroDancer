@@ -46,7 +46,6 @@ public:
 
 	void EnemyInspection();
 
-	
 	void EnemyCreate(float x, float y, EnemyType enemyType);
 
 	void Enemy_Dragon_Create(float x, float y);
@@ -56,7 +55,6 @@ public:
 	void Enemy_Slime_Blue_Create(float x, float y);
 	void Enemy_Slime_Orange_Create(float x, float y);
 	void Enemy_Wraith_Create(float x, float y);
-
 
 	//이미지 추가 함수
 	void imageAdd();

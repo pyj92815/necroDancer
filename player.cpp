@@ -93,6 +93,7 @@ void player::update()
 		_combo = true;
 		cout << _combo << endl;
 	}
+	playerDie();
 }
 
 void player::render()
@@ -461,7 +462,7 @@ void player::tileCheck()
 					_combo = true;
 					playerEffect_Attack();
 					if ((int)_miPlayerdeathMetalTile->second->getBoss_Direction() ==
-						(int)_player.direction)
+						(int)_player.direction && _miPlayerdeathMetalTile->second->getBoss_Phase() == BP_PHASE_1)
 					{
 						_miPlayerdeathMetalTile->second->setBoss_Shield_Hit_True();
 						action = true;
@@ -943,6 +944,14 @@ void player::itemUse()
 	//}
 	//if (countNum > 0) _player.potion = false;
 
+}
+
+void player::playerDie()
+{
+	if (_player.hp <= 0)
+	{
+		OPTION->setPlayerDie(true);
+	}
 }
 
 

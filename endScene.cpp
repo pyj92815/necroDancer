@@ -12,8 +12,7 @@ endScene::~endScene()
 HRESULT endScene::init()
 {
 	_video = new video;
-	_video->init("credits_1.ogv",true);
-
+	_video->init("ending-credit.ogv",true);
 	return S_OK;
 }
 

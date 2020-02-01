@@ -178,35 +178,24 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
         TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
         TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
 
+        if (TIMEMANAGER->getFrameRate() > 10)
+        {
+            _deltaTime = TIMEMANAGER->getElapsedTime();
+        }
+        else
+        {
+            _deltaTime = 0.016f;
+        }
+
         CreateNewNote(true);
         CreateNewNote(false);
     }
 
     if (_songPos > 0) // 곡이 시작되었을때
     {
-
-        if (TIMEMANAGER->getFrameRate() > 10)
-        {
-            _deltaTime = TIMEMANAGER->getElapsedTime();
-        }
-        //else
-        //{
-        //    _deltaTime = 0.016f;
-        //}
-
         for (int i = 0; i < _vNoteLeft.size(); i++)
         {
             noteTimeIntervalCount = TIMEMANAGER->getCountTime();
-            //if (_vNoteLeft.size() <= 0) break;
-            //if (_vNoteLeft[i].pos.x >= WINSIZEX_HALF) // 왼쪽 노트가 중점 x좌표 값 이상인 경우
-            //{
-            //    _player->setPlayerKeyDown();
-            //    inputIntervalCount = 0;
-            //    _vNoteRight.erase(_vNoteRight.begin() + i);
-            //    _vNoteLeft.erase(_vNoteLeft.begin() + i);
-            //    
-            //    break;
-            //}
             if (_vNoteLeft.size() < 0)
                 break;
 
