@@ -51,12 +51,15 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_isMoving = false;		 // MOVE 판단
 	_isKeyPress = false;     // 노트 판단 
 	_isKeyDown = false;      // KEY 입력 판단
-
+	_comboCountTime = 0;
 	// 초기 세팅 장비 값 
 	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
 	_player.weapon = PLAYERWAEPON_DAGGER;
 	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
 
+	// 콤보
+
+	_combo = 0;
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
 }
@@ -86,6 +89,9 @@ void player::update()
 		cout << str << endl;
 		cout << " 지금 체력 : " << _player.hp << endl;
 		_player.hp--;
+		_comboCountTime = TIMEMANAGER->getWorldTime();
+		_combo = true;
+		cout << _combo << endl;
 	}
 }
 
@@ -174,6 +180,7 @@ void player::playerEffect_Miss()
 	effect = new alphaImageEffect;
 	effect->init("player_effect_missed", CAMERAMANAGER->get_CameraX() + BEATMANAGER->getHeartMiddle() - 30, CAMERAMANAGER->get_CameraY() + (WINSIZEY - 200), 10, SLOW);
 	_vEffect.push_back(effect);
+	_combo = false;
 }
 
 void player::playerEffect_Shovel(tagTile* tile)
@@ -220,7 +227,6 @@ void player::playerEffect_Attack()
 	int frame;
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
-
 	if (_player.direction == PLAYERDIRECTION_UP)
 	{
 		x = _player.x;
@@ -429,6 +435,7 @@ void player::tileCheck()
 				}
 				else
 				{
+					_combo = true;
 					playerEffect_Attack();
 					_miPlayerEnemyTile->second->Hit(_player.damage);
 				}
@@ -451,13 +458,16 @@ void player::tileCheck()
 				}
 				else
 				{
+					_combo = true;
 					playerEffect_Attack();
-					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
 					if ((int)_miPlayerdeathMetalTile->second->getBoss_Direction() ==
 						(int)_player.direction)
 					{
 						_miPlayerdeathMetalTile->second->setBoss_Shield_Hit_True();
+						action = true;
+						break;
 					}
+					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
 				}
 				action = true;
 				break;
@@ -476,6 +486,7 @@ void player::tileCheck()
 				}
 				else
 				{
+					_combo = true;
 					playerEffect_Attack();
 					_miPlayerSlaveTile->second->slave_Hit(_player.damage);
 				}

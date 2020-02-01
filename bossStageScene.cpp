@@ -149,7 +149,7 @@ void bossStageScene::update()
 	_player->setDeathMetal(_collision.collision_player_Metal_tile(_deathMetal, _player));
 	_player->setSlaveTile(_collision.collision_player_slave_tile(&_sm->get_SlaveList(), _player));
 
-
+	tileOnOff();
 	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player, _sm, _deathMetal);
 	_zOrder->update();
 	_floodFill->setVision(_tiles, _player->getPlayer().idx, _player->getPlayer().idy, _player->getPlayer().sight);
@@ -1580,5 +1580,91 @@ void bossStageScene::endScene()
 	if (_player->getPlayer().idx == _endX && _player->getPlayer().idy == _endY)
 	{
 		SCENEMANAGER->changeScene("End");
+	}
+}
+
+void bossStageScene::tileOnOff()
+{
+	// 01 11 타일 그리고   42 52
+	if (_player->getCombo())
+	{
+		if (BEATMANAGER->getTurnOnOff())
+		{
+			_tileFirstX = 4;
+			_tileFirstY = 2;
+
+			_tileSecondX = 5;
+			_tileSecondY = 2;
+		}
+		else
+		{
+			_tileFirstX = 5;
+			_tileFirstY = 2;
+
+			_tileSecondX = 4;
+			_tileSecondY = 2;
+
+		}
+
+	}
+	else
+	{
+		if (BEATMANAGER->getTurnOnOff())
+		{
+			_tileFirstX = 0;
+			_tileFirstY = 1;
+
+			_tileSecondX = 1;
+			_tileSecondY = 1;
+		}
+		else
+		{
+			_tileFirstX = 1;
+			_tileFirstY = 1;
+
+			_tileSecondX = 0;
+			_tileSecondY = 1;
+		}
+
+	}
+
+	for (int i = 0; i < TILEY; ++i)
+	{
+		for (int j = 0;j < TILEX; ++j)
+		{
+			if (_tiles[i * TILEX + j].type == TYPE_NONE) continue;
+			if (_tiles[i * TILEX + j].terrain != TR_BASIC_STAGE_TILE &&
+				_tiles[i * TILEX + j].terrain != TR_BASIC_COMBO_TILE) continue;
+
+			if (j % 2 == 0)
+			{
+				if (i % 2 == 1)
+				{
+					_tiles[i * TILEX + j].terrainFrameX = _tileFirstX;
+					_tiles[i * TILEX + j].terrainFrameY = _tileFirstY;
+				}
+				else
+				{
+					_tiles[i * TILEX + j].terrainFrameX = _tileSecondX;
+					_tiles[i * TILEX + j].terrainFrameY = _tileSecondY;
+				}
+			}
+			else
+			{
+				if (i % 2 == 1)
+				{
+					_tiles[i * TILEX + j].terrainFrameX = _tileSecondX;
+					_tiles[i * TILEX + j].terrainFrameY = _tileSecondY;
+				}
+				else
+				{
+					_tiles[i * TILEX + j].terrainFrameX = _tileFirstX;
+					_tiles[i * TILEX + j].terrainFrameY = _tileFirstY;
+				}
+			}
+
+
+
+		}
 	}
 }

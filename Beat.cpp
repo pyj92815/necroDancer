@@ -16,6 +16,8 @@ HRESULT Beat::init()
 
     // 오브젝트들 초기화
     init_SetObjs();
+
+	_tileOnOff = false;
     return S_OK;
 }
 
@@ -394,6 +396,7 @@ void Beat::CreateNewNote(bool dirRight) // 노트 생성, 곡 시작 직전에 (오른쪽으로
         setNote.rc = RectMakeCenter(setNote.pos.x, setNote.pos.y, setNote.img->getWidth(), setNote.img->getHeight());
         setNote.isCol = false;
         setNote.isRender = true;
+		setNote.colision = false;
         setNote.alpha = 127;
 
         noteTimeInterval = (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f;
@@ -428,6 +431,7 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // 노트 생성, 곡 시작 중 (오른�
     newNote.rc = RectMakeCenter(newNote.pos.x, newNote.pos.y, newNote.img->getWidth(), newNote.img->getHeight());
     newNote.isCol = false;
     newNote.isRender = true;
+	newNote.colision = false;
     newNote.alpha = 127;
 
     noteTimeInterval = (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f;
@@ -455,6 +459,7 @@ void Beat::Move()
             RECT temp;
             if (IntersectRect(&temp, &_vNoteLeft[i].rc, &heartRC)) // 노트가 심장이랑 충돌 시 
             {
+				// Tile 색깔 턴오프
                 if (!_vNoteLeft[i].isCol) _isBeating = true; // 심장 이미지 변경을 위해 true로 변경
                 _vNoteLeft[i].isCol = true; // 인터벌이 다 지나고 두 번 심장이 두근거리는 것을 방지하기 위해 true로 변경
                 inputIntervalCount += _deltaTime; // 입력할 수 있는 시간 구함
@@ -463,6 +468,7 @@ void Beat::Move()
                 if (_player->getPlayerKey() && Interval)
                 {
                     _player->setPlayerKey();
+					_vNoteLeft[i].colision = true;
                     if (_vNoteLeft[i].pos.x < WINSIZEX_HALF)
                     {
                         HitNoteEffect(_vNoteLeft[i].pos.x - NOTE_RADIUS_X, ((heartRC.bottom + heartRC.top) / 2) - ((_vNoteLeft[i].rc.bottom - _vNoteLeft[i].rc.top) / 2));
@@ -485,9 +491,15 @@ void Beat::Move()
             {
                 _player->setPlayerKey();
                 _player->setPlayerKeyDown();
+				_tileOnOff ? _tileOnOff = false : _tileOnOff = true;// 락훈 추가 
                 inputIntervalCount = 0;
+				if (!_vNoteLeft[i].colision)
+				{
+					_player->setCombo();
+				}
                 _vNoteRight.erase(_vNoteRight.begin() + i);
                 _vNoteLeft.erase(_vNoteLeft.begin() + i);
+
                 break;
             }
         }

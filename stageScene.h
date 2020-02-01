@@ -33,6 +33,11 @@ private: // 하위 계층
 	int _bossIdx, _bossIdy;
 	int _stageIdx, _stageIdy;
 	const char* fileName;
+
+
+	int _tileFirstX, _tileSecondX; // 타일 깜박이는 숫자 
+	int _tileFirstY, _tileSecondY; // 타일 깜박이는 숫자 
+
 public:
 	stageScene() { fileName = "Loby_SaveFile.map"; }
 	~stageScene() {}
@@ -43,7 +48,6 @@ public:
 	virtual void render();
 
 	player* getPlayerAddress() { return _pm->getPlayerInfo(); }
-
 	// 제트오더 관련
 	void ZorderSetup();
 	vector<zOrder*>ZorderUpdate(vector<zOrder*>  num);
@@ -57,5 +61,6 @@ public:
 
 	void setVision(POINT index, int sight);
 	void nextPage();
+	void tileOnOff();
 	
 };
