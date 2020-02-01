@@ -179,6 +179,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
     heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 60, heartImg->getFrameHeight());
+
 }
 
 void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
@@ -201,98 +202,85 @@ void Beat::update_PlayerMoveTest() // 테스트용 플레이어
 
 void Beat::update_SongAndNoteControl() // 곡과 노트 제어
 {
-    SOUNDMANAGER->getSongPosition(_currentSongName, _songPos); // 현재 진행 중인 곡의 진행 시간을 받아 옴(ms)
-    _songLeftTime = GetSongVariousTime(_songPos, _songLength); // 현재 곡이 얼만큼 남았는지 알려줌
-
-    // 현재 스테이지가 기존 스테이지와 다를 때 초기화해주는 것들(노트 속도, 남은 시간, 벡터들, 재생 곡 교체, 현재 곡 정보를 담을 키 값들 교체, 델타 타임 다시 받기, 초기 노트 생성)
-    if (_currentStageID != _oldStageID)
+    if (TIMEMANAGER->getCountLoadingTime() > 0.5f) // StageScene인 경우에는 로딩이 필요하므로 0.5f의 인터벌을 줌. 혹시 비트 속도가 빨라질 경우 오른쪽 항에 있는 시한 값을 더 늘려야됨.
     {
-        Load();
-        musicID_Temp = musicID;
-        _songLeftTime = 0;
-        _vNoteLeft.clear();
-        _vNoteRight.clear();
-        SOUNDMANAGER->play(_currentSongName), SOUNDMANAGER->play(_currentShopkeeper);
-        _oldSongName = _currentSongName;
-        _oldShopKeeper = _currentShopkeeper;
-        _oldStageID = _currentStageID;
-        TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
-        TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
+        SOUNDMANAGER->getSongPosition(_currentSongName, _songPos); // 현재 진행 중인 곡의 진행 시간을 받아 옴(ms)
+        _songLeftTime = GetSongVariousTime(_songPos, _songLength); // 현재 곡이 얼만큼 남았는지 알려줌
 
-        if (TIMEMANAGER->getFrameRate() > 10)
+        // 현재 스테이지가 기존 스테이지와 다를 때 초기화해주는 것들(노트 속도, 남은 시간, 벡터들, 재생 곡 교체, 현재 곡 정보를 담을 키 값들 교체, 델타 타임 다시 받기, 초기 노트 생성)
+        if (_currentStageID != _oldStageID)
         {
+            Load();
+            musicID_Temp = musicID;
+            _songLeftTime = 0;
+            _vNoteLeft.clear();
+            _vNoteRight.clear();
+            SOUNDMANAGER->play(_currentSongName), SOUNDMANAGER->play(_currentShopkeeper);
+            _oldSongName = _currentSongName;
+            _oldShopKeeper = _currentShopkeeper;
+            _oldStageID = _currentStageID;
+            TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
+            TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
+
+
             _deltaTime = TIMEMANAGER->getElapsedTime();
+            CreateNewNote(true);
+            CreateNewNote(false);
         }
-        else
-        {
-            _deltaTime = 0.016f;
-        }
-        CreateNewNote(true);
-        CreateNewNote(false);
+        TIMEMANAGER->setCountLoadingTimeSwitch(false);
     }
 
-    if (_songPos > 0) // 곡이 시작되었을때
+    for (int i = 0; i < _vNoteLeft.size(); i++)
     {
-        for (int i = 0; i < _vNoteLeft.size(); i++)
+        noteTimeIntervalCount = TIMEMANAGER->getCountTime();
+        if (_vNoteLeft.size() < 0)
+            break;
+
+        if (noteTimeIntervalCount >= noteTimeInterval)
         {
-            noteTimeIntervalCount = TIMEMANAGER->getCountTime();
-            if (_vNoteLeft.size() < 0)
-                break;
+            TIMEMANAGER->setCountTime(0);
+            noteTimeIntervalCount = 0;
 
-            if (noteTimeIntervalCount >= noteTimeInterval)
+            if (_countNote < _vMsTimeInfo.size() - 4) // 노트 생성 수가 노트 정보 길이 - 3보다 작은 경우(노트 개수 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌))
             {
-                TIMEMANAGER->setCountTime(0);
-                noteTimeIntervalCount = 0;
-
-                if (_countNote < _vMsTimeInfo.size() - 4) // 노트 생성 수가 노트 정보 길이 - 3보다 작은 경우(노트 개수 오차 보정(맨 처음 노트 스킵한 거 1개, 텍스트에 불러온 끝의 쓰레기 정보 2개만큼 뺌))
+                CreateNewNoteWhilePlay(true); // 노트 생성
+                CreateNewNoteWhilePlay(false); // 노트 생성
+            }
+            else // 노트 생성 수가 기존 노트 정보 길이를 넘어갈 때
+            {
+                if (_loopSong) // 곡이 반복 곡일때
                 {
+                    _countNote = 0; // 노트를 다시 세기 위해 초기화
                     CreateNewNoteWhilePlay(true); // 노트 생성
                     CreateNewNoteWhilePlay(false); // 노트 생성
                 }
-                else // 노트 생성 수가 기존 노트 정보 길이를 넘어갈 때
-                {
-                    if (_loopSong) // 곡이 반복 곡일때
-                    {
-                        _countNote = 0; // 노트를 다시 세기 위해 초기화
-                        CreateNewNoteWhilePlay(true); // 노트 생성
-                        CreateNewNoteWhilePlay(false); // 노트 생성
-                    }
-                }
-            }
-            _vNoteRight[i].img->setX(_vNoteRight[i].pos.x - _vNoteRight[i].img->getWidth() / 2); // 이미지 위치 세팅
-            _vNoteRight[i].img->setY(_vNoteRight[i].pos.y - _vNoteRight[i].img->getHeight() / 2); // 이미지 위치 세팅
-            _vNoteRight[i].rc = RectMakeCenter(_vNoteRight[i].pos.x, _vNoteRight[i].pos.y, _vNoteRight[i].img->getWidth(), _vNoteRight[i].img->getHeight()); // 노트의 렉트 위치 잡기
-
-            _vNoteLeft[i].img->setX(_vNoteLeft[i].pos.x - _vNoteLeft[i].img->getWidth() / 2);
-            _vNoteLeft[i].img->setY(_vNoteLeft[i].pos.y - _vNoteLeft[i].img->getHeight() / 2);
-            _vNoteLeft[i].rc = RectMakeCenter(_vNoteLeft[i].pos.x, _vNoteLeft[i].pos.y, _vNoteLeft[i].img->getWidth(), _vNoteLeft[i].img->getHeight());
-
-            if (inputIntervalCount > 0.000f)
-            {
-                Interval = true;
-            }
-            else Interval = false;
-
-            if (i != 3 && _vNoteLeft[i].alpha < 255)    // 노트 등장시 서서히 알파값 증가 시키기
-            {
-                _vNoteLeft[i].alpha += 3;
-                _vNoteRight[i].alpha += 3;
             }
         }
+        _vNoteRight[i].img->setX(_vNoteRight[i].pos.x - _vNoteRight[i].img->getWidth() / 2); // 이미지 위치 세팅
+        _vNoteRight[i].img->setY(_vNoteRight[i].pos.y - _vNoteRight[i].img->getHeight() / 2); // 이미지 위치 세팅
+        _vNoteRight[i].rc = RectMakeCenter(_vNoteRight[i].pos.x, _vNoteRight[i].pos.y, _vNoteRight[i].img->getWidth(), _vNoteRight[i].img->getHeight()); // 노트의 렉트 위치 잡기
 
-        // 이펙트, 곡이 끝난 후에 노트 이펙트가 남아 있는 경우를 대비함.
-        for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+        _vNoteLeft[i].img->setX(_vNoteLeft[i].pos.x - _vNoteLeft[i].img->getWidth() / 2);
+        _vNoteLeft[i].img->setY(_vNoteLeft[i].pos.y - _vNoteLeft[i].img->getHeight() / 2);
+        _vNoteLeft[i].rc = RectMakeCenter(_vNoteLeft[i].pos.x, _vNoteLeft[i].pos.y, _vNoteLeft[i].img->getWidth(), _vNoteLeft[i].img->getHeight());
+
+        if (inputIntervalCount > 0.000f)
         {
-            (*_viEffect)->update();
+            Interval = true;
+        }
+        else Interval = false;
+
+        if (i != 3 && _vNoteLeft[i].alpha < 255)    // 노트 등장시 서서히 알파값 증가 시키기
+        {
+            _vNoteLeft[i].alpha += 3;
+            _vNoteRight[i].alpha += 3;
         }
     }
 
-    if(_vNoteLeft.size() == 1)
-    {
+    // 이펙트, 곡이 끝난 후에 노트 이펙트가 남아 있는 경우를 대비함.
     for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
     {
         (*_viEffect)->update();
-    }
     }
 }
 
@@ -330,32 +318,35 @@ void Beat::update_PitchControl() // 곡 속도 제어
 
 void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
 {
-    if (_currentSongName != "")
-    {
-        char display_Pitch[128];
-        sprintf_s(display_Pitch, sizeof(display_Pitch), "%f", SOUNDMANAGER->getPitch(_currentSongName, _pitch));
-        TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
-
-        char display_songPos[256];
-        sprintf_s(display_songPos, sizeof(display_songPos), "%d", _countNote);
-        TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
-
-        char display_endVec[256];
-        sprintf_s(display_endVec, sizeof(display_endVec), "%f", inputIntervalCount);
-        TextOut(getMemDC, 100, 140, display_endVec, strlen(display_endVec));
-
-        char display_songLength[256];
-        sprintf_s(display_songLength, sizeof(display_songLength), "%d", _oldStageID);
-        TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
-
-        char display_checkInfo[256];
-        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _currentStageID);
-        TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
-
-        char display_checkAverSpeed[256];
-        sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "(_vMsTimeInfo[i + 1] - _vMsTimeInfo[i]) / 1000.0f : %f", (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f);
-        TextOut(getMemDC, 100, 220, display_checkAverSpeed, strlen(display_checkAverSpeed));
-    }
+    char display_songPos[256];
+    sprintf_s(display_songPos, sizeof(display_songPos), "%f", TIMEMANAGER->getCountLoadingTime());
+    TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
+    //if (_currentSongName != "")
+    //{
+    //    char display_Pitch[128];
+    //    sprintf_s(display_Pitch, sizeof(display_Pitch), "%f", SOUNDMANAGER->getPitch(_currentSongName, _pitch));
+    //    TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
+    //
+    //    char display_songPos[256];
+    //    sprintf_s(display_songPos, sizeof(display_songPos), "%d", _countNote);
+    //    TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
+    //
+    //    char display_endVec[256];
+    //    sprintf_s(display_endVec, sizeof(display_endVec), "%f", inputIntervalCount);
+    //    TextOut(getMemDC, 100, 140, display_endVec, strlen(display_endVec));
+    //
+    //    char display_songLength[256];
+    //    sprintf_s(display_songLength, sizeof(display_songLength), "%d", _oldStageID);
+    //    TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
+    //
+    //    char display_checkInfo[256];
+    //    sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _currentStageID);
+    //    TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
+    //
+    //    char display_checkAverSpeed[256];
+    //    sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "(_vMsTimeInfo[i + 1] - _vMsTimeInfo[i]) / 1000.0f : %f", (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f);
+    //    TextOut(getMemDC, 100, 220, display_checkAverSpeed, strlen(display_checkAverSpeed));
+    //}
 }
 
 void Beat::Load() // 노트 파일 로드

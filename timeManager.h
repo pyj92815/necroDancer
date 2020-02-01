@@ -33,5 +33,10 @@ public:
 	inline void setCountTimeSwitch(bool ONOff_Switch) { *(_timer->getCountTimeSwitchPt()) = ONOff_Switch; }
 
 	inline float getDaeHunWorldTime() const { return _timer->getDaeHunWorldTime();}
+
+	inline float getCountLoadingTime() { return _timer->getCountLoadingTime(); }
+	inline void setCountLoadingTime(float countLoadingTime) { *(_timer->getCountLoadingTimePt()) = countLoadingTime; }
+
+	inline void setCountLoadingTimeSwitch(bool LoadingTimeSwitch) { *(_timer->getCountLoadingTimeSwitchPt()) = LoadingTimeSwitch; }
 };
 

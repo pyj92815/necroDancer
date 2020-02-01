@@ -37,7 +37,7 @@ HRESULT stageScene::init()
 	_floodFill = new visionFloodFill;
 	_floodFill->init();
 
-
+	TIMEMANAGER->setCountLoadingTimeSwitch(true);
 	_pm->getPlayerInfo()->setStage();
 	BEATMANAGER->AllStopMusic();
 	BEATMANAGER->SetMusicID(1);
