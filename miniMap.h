@@ -17,9 +17,11 @@ private:
 	EnemyManager* _em;
 	playerManager* _pm;
 
+
 	int _r;
 	int _g;
 	int _b;
+	const char* _imageName;
 
 public:
 	miniMap();

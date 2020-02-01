@@ -1,36 +1,32 @@
 #pragma once
 #include "gameNode.h"
-#include <map>
 #include "player.h"
 
-
-
-enum HEARTSTATE
+enum HEARTSTATE							//하트 HP상태
 {
 	HEARTSTATE_FULL,
 	HEARTSTATE_HALF,
 	HEARTSTATE_NULL
 };
-enum INVENSTATE
-{
-	INVENSTATE_FULL,
-	INVENSTATE_NULL
-};
-enum HEARTTURN
+enum HEARTTURN							//하트 움직임 상태
 {
 	TURN_ON,
 	TURN_OFF
 };
+enum INVENSTATE							//인벤토리 상태
+{
+	INVENSTATE_FULL,
+	INVENSTATE_NULL
+};
 
-struct heartTag
+struct heartTag							//하트 구조체
 {
 	image* image;
 	HEARTSTATE state;
 	HEARTTURN turn;
 	animation* anime;
 };
-
-struct invenTag
+struct invenTag							//인벤토리 구조체
 {
 	image* image;
 	RECT rc;
@@ -45,16 +41,15 @@ class UImanager : public gameNode
 {
 
 private:
-	map<tagItem*, POINTFLOAT>		  	_mInven;
-	map<tagItem*, POINTFLOAT>::iterator _miInven;
 
 private:
-	vector<tagItem*>					_vInven;
-	vector<tagItem*>::iterator			_viInven;
-	player* _pm;
-	tagPlayer* _player;
+	vector<tagItem*>					_vInven;		//인벤토리 벡터
+	vector<tagItem*>::iterator			_viInven;		//인벤토리 이터레이터
+	player* _pm;										//플레이어 포인터
+	tagPlayer* _player;									//플레이어 구조체 포인터
 
-	invenTag _attackInven;
+	//인벤토리 구조체
+	invenTag _attackInven;								
 	invenTag _shovelInven;
 	invenTag _itemInven;
 	invenTag _bombInven;
@@ -64,7 +59,6 @@ private:
 	invenTag _feetInven;
 	invenTag _torchInven;
 	invenTag _ringInven;
-	
 	invenTag _coinInven;
 	invenTag _daiaInven;
 
@@ -76,30 +70,23 @@ private:
 	//하트
 	heartTag _heart[3];
 
-	float _currentFrameX;
-	float _currentFrameY;
-
 	animation* _FrameWork;
-
 	image* _scoreNum;
 	image* _scoreX;
 	image* _daiaNum;
 
-	int _coinTest;				//나중에 플레이어가 코인 충돌시 숫자로 받아오는 함수로 바꿔주면 될듯
-	int _diaTest;
+	int _coinvalue;				//나중에 플레이어가 코인 충돌시 숫자로 받아오는 함수로 바꿔주면 될듯
+	int _diavalue;
 
-	int hp;
-	
-	float* _hp;
+	int _hp;
 
+	bool _heartinterval;
 	int _heartBeatCnt;
-	bool _heatBeatStop;
-	bool _heatBeatStop2;
+	
 	int _currentFrameSpeed;
 	int _frameCount;
 
 	float tx;
-	bool interval;
 
 	//슬롯 고정할 위치 좌표
 	float _x1Slot , _y1Slot;
@@ -117,7 +104,7 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
-	void set_HP() { hp--; }
+	void set_HP() { _hp--; }
 
 	void setInven(vector<tagItem*> inven) { _vInven = inven; }
 	void setPlayerInfo(tagPlayer* player) { _player  = player; }

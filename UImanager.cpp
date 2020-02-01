@@ -3,8 +3,7 @@
 
 HRESULT UImanager::init()
 {
-	
-	//왼쪽 인벤토리
+	//왼쪽 인벤토리 이미지
 	_attackInven.image = IMAGEMANAGER->addImage("attack_Inven", "./image/UI/hud_slot_2.bmp", 60, 66, true, RGB(255, 0, 255));
 	_shovelInven.image = IMAGEMANAGER->addImage("shovel_Inven", "./image/UI/hud_slot_1.bmp", 60, 66, true, RGB(255, 0, 255));
 	_itemInven.image = IMAGEMANAGER->addImage("item_Inven", "./image/UI/hud_slot_action1.bmp", 60, 84, true, RGB(255, 0, 255));
@@ -16,7 +15,7 @@ HRESULT UImanager::init()
 	_torchInven.image = IMAGEMANAGER->addImage("torch_Inven", "./image/UI/hud_slot_6.bmp", 60, 66, true, RGB(255, 0, 255));
 	_ringInven.image = IMAGEMANAGER->addImage("ring_Inven", "./image/UI/hud_slot_7.bmp", 60, 66, true, RGB(255, 0, 255));
 
-	//오른쪽 인벤토리
+	//오른쪽 인벤토리 이미지
 	_coinInven.image = IMAGEMANAGER->addImage("coin_Inven", "./image/UI/hud_coins.bmp", 48, 48, true, RGB(255, 0, 255));
 	_daiaInven.image = IMAGEMANAGER->addImage("daia_Inven", "./image/UI/diamond.bmp", 50, 48, true, RGB(255, 0, 255));
 
@@ -24,12 +23,12 @@ HRESULT UImanager::init()
 	_scoreX = IMAGEMANAGER->addImage("numberX", "./image/UI/x.bmp", 8, 8, true, RGB(255, 0, 255));
 	_daiaNum = IMAGEMANAGER->addFrameImage("number", "./image/UI/number.bmp", 80, 20, 10, 1, true, RGB(255, 0, 255));
 
-	//글자들
+	//인벤토리 텍스트 이미지
 	_downLeft.image = IMAGEMANAGER->addImage("down_Left", "./image/UI/down_left_x2.bmp", 46, 48, true, RGB(255, 0, 255));
 	_upDown.image = IMAGEMANAGER->addImage("up_Down", "./image/UI/up_down_x2.bmp", 46, 48, true, RGB(255, 0, 255));
 	_upLeft.image = IMAGEMANAGER->addImage("up_Left", "./image/UI/up_left_x2.bmp", 46, 48, true, RGB(255, 0, 255));
 
-	//하트
+	//하트 이미지
 	IMAGEMANAGER->addFrameImage("heart_full", "./image/UI/heart_full.bmp", 109, 50, 2, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("heart_half", "./image/UI/heart_half.bmp", 109, 50, 2, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("heart_null", "./image/UI/heart_null.bmp", 96, 44, 2, 1, true, RGB(255, 0, 255));
@@ -49,25 +48,18 @@ HRESULT UImanager::init()
 
 	for (int i = 0; i < 3; i++)
 	{
-		_heart[i].anime = KEYANIMANAGER->findAnimation("heart_full_ani_move");				//애니메이션 첫번째 키값 초기화
-	/*	_heart[1].anime = KEYANIMANAGER->findAnimation("heart_full_ani");
-		_heart[2].anime = KEYANIMANAGER->findAnimation("heart_full_ani");*/
-		//위의 [1],[2]처럼 애니메이션 각자 정해놓으면 배열 땜에 터질 수도 있다
-		//어차피 밑에 업데이트에서 상태 정의해놓으면 되므로 그냥 _heart[i].anime로 해야 되더라..
+		_heart[i].anime = KEYANIMANAGER->findAnimation("heart_full_ani_move");				//애니메이션 키값 초기화
 		_heart[i].anime->start();															//에니메이션 스타트
 	}
 	//============================================
 
-	hp = _player->hp;
+	_hp = _player->hp;										//HP 플레이어 연동
+	_coinvalue = _player->coin;								//코인 테스트
+	_diavalue = _player->diamond;							//다이아 테스트
+	_heartBeatCnt = 0;										//하트비트 카운트
 
-	_coinTest = _player->coin;								//코인 테스트
-	_diaTest = _player->diamond;								//다이아 테스트
-
-	_heartBeatCnt = 0;								//하트비트 카운트
-
-	interval = false;
+	_heartinterval = false;
 	//인벤토리 해제 불값=============================
-
 	_attackInven.open = false;
 	_shovelInven.open = false;
 	_itemInven.open = false;
@@ -78,8 +70,6 @@ HRESULT UImanager::init()
 	_feetInven.open = false;
 	_torchInven.open = false;
 	_ringInven.open = false;
-	_heatBeatStop = false;
-	_heatBeatStop2 = true;
 
 	//인벤토리 고정할 위치
 	_x1Slot = 20, _y1Slot = 5;
@@ -91,41 +81,44 @@ HRESULT UImanager::init()
 	_x7Slot = 440;
 
 	//인벤토리 이미지 좌표 셋팅
+	_itemInven.x = 20;
 	_itemInven.image->setX(_itemInven.x);
 	_itemInven.image->setY(_itemInven.y);
-	_itemInven.x = 20;
 
+	_attackInven.y = 5;
 	_attackInven.image->setX(_attackInven.x);
 	_attackInven.image->setY(_attackInven.y);
-	_attackInven.y = 5;
 
+	_throwInven.x = 20;
 	_throwInven.image->setY(_throwInven.x);
 	_throwInven.image->setY(_throwInven.y);
-	_throwInven.x = 20;
 
+	_bodyInven.y = 5;
 	_bodyInven.image->setX(_bodyInven.x);
 	_bodyInven.image->setY(_bodyInven.y);
-	_bodyInven.y = 5;
 
+	_bombInven.x = 20;
 	_bombInven.image->setX(_bombInven.x);
 	_bombInven.image->setY(_bombInven.y);
-	_bombInven.x = 20;
 
+	_headInven.y = 5;
 	_headInven.image->setX(_headInven.x);
 	_headInven.image->setY(_headInven.y);
-	_headInven.y = 5;
 
+	_feetInven.y = 5;
 	_feetInven.image->setX(_feetInven.x);
 	_feetInven.image->setY(_feetInven.y);
-	_feetInven.y = 5;
 
+	_torchInven.y = 5;
 	_torchInven.image->setX(_torchInven.x);
 	_torchInven.image->setY(_torchInven.y);
-	_torchInven.y = 5;
 
+	_ringInven.y = 5;
 	_ringInven.image->setX(_ringInven.x);
 	_ringInven.image->setY(_ringInven.y);
-	_ringInven.y = 5;
+
+	_shovelInven.x = 20;
+	_shovelInven.image->setX(_shovelInven.x);
 	return S_OK;
 }
 
@@ -137,71 +130,46 @@ void UImanager::release()
 void UImanager::update()
 {
 
-	_coinTest = _player->coin;
-	_diaTest = _player->diamond;
-
-	for (_miInven = _mInven.begin(); _miInven != _mInven.end(); ++_miInven)
-	{
-
-
-	}
+	_coinvalue = _player->coin;
+	_diavalue = _player->diamond;
 	//=========테스트용 조작 키====================
 	if (KEYMANAGER->isOnceKeyDown('Z'))
 	{
-		hp--;
+		_hp--;
 	}
 	if (KEYMANAGER->isOnceKeyDown('X'))
 	{
-		hp++;
+		_hp++;
 	}
-
-	/*if (KEYMANAGER->isOnceKeyDown('A'))
+	//심장이 비트를 받았을 때 하트가 움직이도록
+	if (BEATMANAGER->getBeating() && _heartinterval)
 	{
 		_heartBeatCnt++;
-	}
-	if (KEYMANAGER->isOnceKeyDown('S'))
-	{
-		_heartBeatCnt--;
-	}*/
-
-
-	if (BEATMANAGER->getBeating() && interval)
-	{
-		_heartBeatCnt++;
-		interval = false;
+		_heartinterval = false;
 		if (_heartBeatCnt > 2)
 		{
 			_heartBeatCnt = 0;
 		}
 	}
-	if (!BEATMANAGER->getBeating()) interval = true;
-
+	//심장에 비트가 안 들어왔을 땐 하트가 멈추도록
+	if (!BEATMANAGER->getBeating())  _heartinterval = true;
 
 	if (KEYMANAGER->isToggleKey('L'))
 	{
-		_bombInven.open = true;
 		_bodyInven.open = true;
-		_feetInven.open = true;
-
 		_torchInven.open = true;
-		_ringInven.open = true;
 
 	}
 	if (KEYMANAGER->isToggleKey('K'))
 	{
 		_shovelInven.open = true;
-
 		_attackInven.open = true;
 		_itemInven.open = true;
-		_headInven.open = true;
-		/*_throwInven.open = true;*/
-
-
 	}
 	//=======================================
 
 	//HP에 따른 하트의 상태 설정
-	switch (hp)
+	switch (_hp)
 	{
 	case 6:
 		_heart[0].state = HEARTSTATE_FULL;
@@ -271,7 +239,7 @@ void UImanager::update()
 		_heart[0].turn = TURN_OFF;
 		_heart[1].turn = TURN_ON;
 		_heart[2].turn = TURN_OFF;
-		if (hp < 3)
+		if (_hp < 3)
 		{
 			_heartBeatCnt = 0;		//살아있는 하트만 첫번째 하트부터 애니메이션 되도록 예외처리
 		}
@@ -280,7 +248,7 @@ void UImanager::update()
 		_heart[0].turn = TURN_OFF;
 		_heart[1].turn = TURN_OFF;
 		_heart[2].turn = TURN_ON;
-		if (hp < 5)
+		if (_hp < 5)
 		{
 			_heartBeatCnt = 0;
 		}
@@ -299,28 +267,6 @@ void UImanager::update()
 		}
 
 	}
-
-
-
-	////인벤토리 고정할 위치
-	//_x1Slot = 20, _y1Slot = 5;
-	//_x2Slot = 90, _y2Slot = 81;
-	//_x3Slot = 160, _y3Slot = 195;
-	//_x4Slot = 230, _y4Slot = 299;
-	//_x5Slot = 300;
-	//_x6Slot = 370;
-
-	////인벤토리 이미지 좌표 셋팅
-	//_itemInven.image->setX(_itemInven.x);
-	//_attackInven.image->setX(_attackInven.x);
-	//_itemInven.image->setY(_itemInven.y);
-	//_throwInven.image->setY(_throwInven.y);
-	//_bombInven.image->setY(_bodyInven.y);
-	//_bodyInven.image->setX(_bodyInven.x);
-	//_headInven.image->setX(_headInven.x);
-	//_feetInven.image->setX(_feetInven.x);
-	//_torchInven.image->setX(_torchInven.x);
-	//_ringInven.image->setX(_ringInven.x);
 
 	//인벤토리 이동 예외처리========================
 //x축 기준
@@ -347,6 +293,7 @@ void UImanager::update()
 	}
 	if (_shovelInven.open)
 	{
+		_shovelInven.x = _x1Slot;
 		if (_x2Slot >= _attackInven.x)_attackInven.x++;
 		if (_x2Slot >= _bodyInven.x)_bodyInven.x++;
 		if (_x2Slot >= _headInven.x)_headInven.x++;
@@ -657,7 +604,7 @@ void UImanager::update()
 		}
 	}
 
-	if (_itemInven.open)
+	else if (_itemInven.open)
 	{
 		if (_y3Slot >= _throwInven.y)_throwInven.y++;
 		if (_y3Slot >= _bombInven.y)_bombInven.y++;
@@ -675,64 +622,102 @@ void UImanager::update()
 	{
 		if (_y3Slot >= _bombInven.y)_bombInven.y++;
 	}
+	//===================================
 
-
-
-	//====================================================================
 	for (int i = 0; i < _vInven.size(); i++)
 	{
+		switch (_vInven[i]->stuff)
+		{
+		case ST_APPLE:
+			_itemInven.open = true;
+			break;
+		case ST_MEAT:
+			_itemInven.open = true;
+			break;
+		case ST_CHEESE:
+			_itemInven.open = true;
+			break;
 
-		if (_vInven[i]->armor == A_ARMOR_1 || _vInven[i]->armor == A_ARMOR_2 || _vInven[i]->armor == A_ARMOR_3 || _vInven[i]->armor == A_ARMOR_4)
-		{
-			_bodyInven.open = true;
-			//IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _bodyInven.x * i / i + 5, _bodyInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
 		}
-		else if (_vInven[i]->armor == A_HELMET)
+		if (_vInven[i]->stuff == ST_MEAT ||
+			_vInven[i]->stuff == ST_CHEESE ||
+			_vInven[i]->stuff == ST_APPLE)
 		{
-			_headInven.open = true;
-			//IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _headInven.x * i / i + 5, _headInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+			break;
+
 		}
-		else if (_vInven[i]->armor == A_SHOVEL)
+		else 
 		{
-			_shovelInven.open = true;
-			//IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _shovelInven.x * i / i + 5, _shovelInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-		}
-		else if (_vInven[i]->armor == A_TORCH_1 || _vInven[i]->armor == A_TORCH_2 || _vInven[i]->armor == A_TORCH_3)
-		{
-			_torchInven.open = true;
-			//IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _torchInven.x * i / i + 5, _torchInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-		}
-		else if (_vInven[i]->armor == A_RING)
-		{
-			_ringInven.open = true;
-			//IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _ringInven.x * i / i + 5, _ringInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+			_itemInven.open = false;
 		}
 
-		if (_vInven[i]->weapon != WP_NONE && _vInven[i]->weapon != WP_DAGGER_1 && _vInven[i]->weapon != WP_DAGGER_2)
+		switch (_vInven[i]->weapon)
 		{
+		case  WP_RAPIER:
 			_attackInven.open = true;
 			_throwInven.open = false;
-			//IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x * i / i + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-		}
-		else if (_vInven[i]->weapon == WP_DAGGER_1 || _vInven[i]->weapon == WP_DAGGER_2)
-		{
+			break;
+		case  WP_LONG_SWORD:
+			_attackInven.open = true;
+			_throwInven.open = false;
+			break;
+		case  WP_BROAD_SWORD:
+			_attackInven.open = true;
+			_throwInven.open = false;
+			break;
+		case  WP_SPEAR:
+			_attackInven.open = true;
+			_throwInven.open = false;
+			break;
+		case  WP_DAGGER_1:
 			_attackInven.open = true;
 			_throwInven.open = true;
-			//IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x * i / i + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-			if (_throwInven.open)_throwInven.image->render(getMemDC(), 20, _throwInven.y), _upDown.image->render(getMemDC(), 30, _throwInven.y + 60);
-			//IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _throwInven.x * i / i + 5, _throwInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+			break;
+		case  WP_DAGGER_2:
+			_attackInven.open = true;
+			_throwInven.open = true;
+			break;
 		}
-		//if (_vInven[i]->stuff != ST_NONE && _vInven[i]->stuff == ST_DIAMOND)
-		//{
-		//	
-		//	_itemInven.open = true;
-		//	//IMAGEMANAGER->findImage("stuffTiles")->frameRender(getMemDC(), _itemInven.x * i / i + 5, _itemInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-		//}
-		if (_vInven[i]->stuff == ST_ONE_COIN)
+
+		switch (_vInven[i]->armor)
 		{
-			_coinTest++;
+		case A_TORCH_1:
+			_torchInven.open = true;
+			break;
+		case A_TORCH_2:
+			_torchInven.open = true;
+			break;
+		case A_TORCH_3:
+			_torchInven.open = true;
+			break;
+		case A_ARMOR_1:
+			_bodyInven.open = true;
+			break;
+		case A_ARMOR_2:
+			_bodyInven.open = true;
+			break;
+		case A_ARMOR_3:
+			_bodyInven.open = true;
+			break;
+		case A_ARMOR_4:
+			_bodyInven.open = true;
+			break;
+		case A_SHOVEL:
+			_shovelInven.open = true;
+			break;
 		}
+		
+
 	}
+	/*for (_viInven = _vInven.begin(); _viInven != _vInven.end(); _viInven++)
+	{
+		if (_viInven->stuff == ST_MEAT ||
+			_viInven->stuff == ST_CHEESE ||
+			_viInven->stuff == ST_APPLE)
+
+			break;
+		if (_vInven.end)_itemInven.open = false;
+	}*/
 }
 
 void UImanager::render()
@@ -747,7 +732,7 @@ void UImanager::render()
 	if(_feetInven.open)_feetInven.image->render(getMemDC(), _feetInven.x, 5);
 	if(_torchInven.open)_torchInven.image->render(getMemDC(), _torchInven.x, 5);
 	if(_ringInven.open)_ringInven.image->render(getMemDC(), _ringInven.x, 5);
-
+	if(_throwInven.open)_throwInven.image->render(getMemDC(), 20, _throwInven.y), _upDown.image->render(getMemDC(), 30, _throwInven.y + 60);
 	//오른쪽 인벤토리
 	_coinInven.image->render(getMemDC(), WINSIZEX - 125, 5);
 	_daiaInven.image->render(getMemDC(), WINSIZEX - 125, 65);
@@ -762,137 +747,192 @@ void UImanager::render()
 	}
 
 	//코인 스코어 프레임
-	if (_coinTest >= 1000)
+	if (_coinvalue >= 1000)
 	{
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinTest / 1000 % 10, 0);
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinTest / 100 % 10, 0);
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 40, 20, _coinTest / 10 % 10, 0);
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 30, 20, _coinTest % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinvalue / 1000 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinvalue / 100 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 40, 20, _coinvalue / 10 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 30, 20, _coinvalue % 10, 0);
 	}
-	if (_coinTest >= 100 && _coinTest < 1000)
+	if (_coinvalue >= 100 && _coinvalue < 1000)
 	{
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinTest / 100 % 10, 0);
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinTest / 10 % 10, 0);
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 40, 20, _coinTest % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinvalue / 100 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinvalue / 10 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 40, 20, _coinvalue % 10, 0);
 	}
-	if (_coinTest >= 10 && _coinTest < 100)
+	if (_coinvalue >= 10 && _coinvalue < 100)
 	{
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinTest / 10 % 10, 0);
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinTest % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinvalue / 10 % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 50, 20, _coinvalue % 10, 0);
 	}
-	if (_coinTest < 10)
+	if (_coinvalue < 10)
 	{
-		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinTest % 10, 0);
+		_scoreNum->frameRender(getMemDC(), WINSIZEX - 60, 20, _coinvalue % 10, 0);
 	}
-
+	
 	//다이아 스코어 프레임
-	if (_diaTest >= 1000)
+	if (_diavalue >= 1000)
 	{
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diaTest / 1000 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diaTest / 100 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 40, 80, _diaTest / 10 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 30, 80, _diaTest % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diavalue / 1000 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diavalue / 100 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 40, 80, _diavalue / 10 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 30, 80, _diavalue % 10, 0);
 	}
-	if (_diaTest >= 100 && _diaTest < 1000)
+	if (_diavalue >= 100 && _diavalue < 1000)
 	{
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diaTest / 100 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diaTest / 10 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 40, 80, _diaTest % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diavalue / 100 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diavalue / 10 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 40, 80, _diavalue % 10, 0);
 	}
-	if (_diaTest >= 10 && _diaTest < 100)
+	if (_diavalue >= 10 && _diavalue < 100)
 	{
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diaTest / 10 % 10, 0);
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diaTest % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diavalue / 10 % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 50, 80, _diavalue % 10, 0);
 	}
-	if (_diaTest < 10)
+	if (_diavalue < 10)
 	{
-		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diaTest % 10, 0);
+		_daiaNum->frameRender(getMemDC(), WINSIZEX - 60, 80, _diavalue % 10, 0);
 	}
 
 	//인벤토리에 넣을 아이템
-
-	for (int i = 0; i < _vInven.size(); i++)
+	/*for (int i = 0; i < _vInven.size(); i++)
 	{
-
-			if (_vInven[i]->armor == A_ARMOR_1|| _vInven[i]->armor == A_ARMOR_2|| _vInven[i]->armor == A_ARMOR_3|| _vInven[i]->armor == A_ARMOR_4)
-			{
-				_bodyInven.open = true;
-				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _bodyInven.x * i / i + 5, _bodyInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-			}
-			else if (_vInven[i]->armor == A_HELMET)
-			{
-				_headInven.open = true;
-				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _headInven.x * i / i + 5, _headInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-			}
-			else if (_vInven[i]->armor == A_SHOVEL)
-			{
-				_shovelInven.open = true;
-				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _shovelInven.x * i / i + 5, _shovelInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-			}
-			else if (_vInven[i]->armor == A_TORCH_1|| _vInven[i]->armor == A_TORCH_2|| _vInven[i]->armor == A_TORCH_3)
-			{
-				_torchInven.open = true;
-				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _torchInven.x * i / i + 5, _torchInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-			}
-			else if (_vInven[i]->armor == A_RING)
-			{
-				_ringInven.open = true;
-				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _ringInven.x * i / i + 5, _ringInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-			}
-
-		if (_vInven[i]->weapon != WP_NONE &&_vInven[i]->weapon != WP_DAGGER_1 && _vInven[i]->weapon != WP_DAGGER_2)
+		/*if (_vInven[i]->armor == A_ARMOR_1|| _vInven[i]->armor == A_ARMOR_2|| _vInven[i]->armor == A_ARMOR_3|| _vInven[i]->armor == A_ARMOR_4)
 		{
-			_attackInven.open = true;
-			_throwInven.open = false;
-			IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x * i / i+5, _attackInven.y +10, _vInven[i]->frameX, _vInven[i]->frameY);
+			_bodyInven.open = true;
+			IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _bodyInven.x * i / i + 5, _bodyInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
 		}
-		else if (_vInven[i]->weapon == WP_DAGGER_1 || _vInven[i]->weapon == WP_DAGGER_2 )
+		if (_vInven[i]->armor == A_HELMET)
+		{
+			_headInven.open = true;
+			IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _headInven.x * i / i + 5, _headInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+		}
+		if (_vInven[i]->armor == A_SHOVEL)
+		{
+			_shovelInven.open = true;
+			IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), 20+i*5, 5 + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+		}
+		if (_vInven[i]->armor == A_TORCH_1|| _vInven[i]->armor == A_TORCH_2|| _vInven[i]->armor == A_TORCH_3)
+		{
+			_torchInven.open = true;
+			IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _torchInven.x * i / i + 5, _torchInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+		}
+		if (_vInven[i]->armor == A_RING)
+		{
+			_ringInven.open = true;
+			IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _ringInven.x * i / i + 5, _ringInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+		}
+		if (_vInven[i]->weapon == WP_DAGGER_1 || _vInven[i]->weapon == WP_DAGGER_2 )
 		{
 			_attackInven.open = true;
 			_throwInven.open = true;
-			IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x * i / i + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
-			if (_throwInven.open)_throwInven.image->render(getMemDC(), 20, _throwInven.y), _upDown.image->render(getMemDC(), 30, _throwInven.y + 60);
-			IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _throwInven.x * i / i + 5, _throwInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+			if (_vInven[i]->stuff != ST_NONE)
+			{
+				_itemInven.open = true;
+			}
+			else if (_vInven[i]->stuff == ST_NONE)
+			{
+				_itemInven.open = false;
+			}
+			IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x +5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+			IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _throwInven.x +5, _throwInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+
 		}
-		if (_vInven[i]->stuff != ST_NONE)
+		if (_vInven[i]->weapon == WP_RAPIER || _vInven[i]->weapon == WP_SPEAR ||
+			 _vInven[i]->weapon == WP_LONG_SWORD || _vInven[i]->weapon == WP_BROAD_SWORD)
+		{
+			 _attackInven.open = true;
+			 _throwInven.open = false;
+			 if (_vInven[i]->stuff != ST_NONE)
+			 {
+				 _itemInven.open = true;
+			 }
+			 else if (_vInven[i]->stuff == ST_NONE)
+			 {
+				 _itemInven.open = false;
+			 }
+			 IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+		}
+		if (_vInven[i]->stuff == ST_APPLE || _vInven[i]->stuff == ST_CHEESE || _vInven[i]->stuff == ST_MEAT)
 		{
 			_itemInven.open = true;
 			IMAGEMANAGER->findImage("stuffTiles")->frameRender(getMemDC(), _itemInven.x * i / i + 5, _itemInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
 		}
-	}
+		else if (_vInven[i]->stuff == ST_NONE)
+		{
+			_itemInven.open = false;
+		}
+	}*/
 
+		for (int i = 0; i < _vInven.size(); i++)
+		{
+			switch (_vInven[i]->stuff)
+			{
+			case ST_APPLE:
+				IMAGEMANAGER->findImage("stuffTiles")->frameRender(getMemDC(), _itemInven.x * i / i + 5, _itemInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case ST_MEAT:
+				IMAGEMANAGER->findImage("stuffTiles")->frameRender(getMemDC(), _itemInven.x * i / i + 5, _itemInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case ST_CHEESE:
+				IMAGEMANAGER->findImage("stuffTiles")->frameRender(getMemDC(), _itemInven.x * i / i + 5, _itemInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case ST_NONE:
+				break;
+			}
 
-	//for (int i = 0; i < _vInven.size(); ++i)
-	//{
-	//	if (_vInven[i]->armor != A_NONE)
-	//	{
-	//		IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), 20 + i * 70, 5, _vInven[i]->frameX, _vInven[i]->frameY);
+			switch (_vInven[i]->weapon)
+			{
+			case  WP_RAPIER:
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+			case  WP_LONG_SWORD:
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case  WP_BROAD_SWORD:
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case  WP_SPEAR:
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case  WP_DAGGER_1:
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _throwInven.x + 5, _throwInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case  WP_DAGGER_2:
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _attackInven.x + 5, _attackInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), _throwInven.x + 5, _throwInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			}
 
-	//		/*		if (_vInven[i]->armor == A_SHOVEL)
-	//				{
-	//					IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(),20 + i * 70, 5, _vInven[i]->frameX, _vInven[i]->frameY);
-	//				}*/
-	//	}
-	//	else if (_vInven[i]->weapon != W_NONE)
-	//	{
-	//		IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), 20 + i * 70, 5, _vInven[i]->frameX, _vInven[i]->frameY);
+			switch (_vInven[i]->armor)
+			{
+			case A_TORCH_1:
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _torchInven.x * i / i + 5, _torchInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case A_TORCH_2:
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _torchInven.x * i / i + 5, _torchInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case A_TORCH_3:
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _torchInven.x * i / i + 5, _torchInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case A_ARMOR_1:
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _bodyInven.x * i / i + 5, _bodyInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case A_ARMOR_2:
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _bodyInven.x * i / i + 5, _bodyInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case A_ARMOR_3:
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _bodyInven.x * i / i + 5, _bodyInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case A_ARMOR_4:
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), _bodyInven.x * i / i + 5, _bodyInven.y + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			case A_SHOVEL:
+				IMAGEMANAGER->findImage("armorTiles")->frameRender(getMemDC(), 20 + i * 5, 5 + 10, _vInven[i]->frameX, _vInven[i]->frameY);
+				break;
+			}
 
-	//		/*		if (_vInven[i]->weapon == WP_DAGGER_1)
-	//				{
-	//					IMAGEMANAGER->findImage("weaponTiles")->frameRender(getMemDC(), 20 + i * 70, 5, _vInven[i]->frameX, _vInven[i]->frameY);
-	//				}*/
-	//	}
-	//	else continue;
+		}
+	
 
-
-	//}
-
-	//for (int i = 0; i < _vInven.size(); ++i)
-	//{
-	//	if (_vInven[i]->stuff != ST_NONE)
-	//	{
-	//		IMAGEMANAGER->findImage("stuffTiles")->frameRender(getMemDC(), 20, 5 + i * 50, _vInven[i]->frameX, _vInven[i]->frameY);
-
-	//	}
-	//}
 }

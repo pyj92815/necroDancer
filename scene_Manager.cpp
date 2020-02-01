@@ -20,7 +20,7 @@ HRESULT scene_Manager::init()
 	SCENEMANAGER->addScene("Boss", _boss = new bossStageScene);
 	SCENEMANAGER->addScene("MAPTOOL", new mapTool);
 
-	SCENEMANAGER->changeScene("Intro");
+	SCENEMANAGER->changeScene("Stage");
 
 	// 서로 링크 시켜준다.
 	_stage->bossStageSceneAddressLink(_boss);
