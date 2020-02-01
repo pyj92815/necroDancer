@@ -70,7 +70,9 @@ void video::render()
 				// 인트로 이면 
 				if (_aviName == "intro.avi")
 				{
-					// 로딩씬으로 가기 
+					// 로딩씬으로 가기
+					//BEATMANAGER->AllStopMusic();
+					//SOUNDMANAGER->play("Intro");
 					SCENEMANAGER->changeScene("Loading");
 				}
 				else // endScene이면 스테이지로  
@@ -90,7 +92,9 @@ void video::render()
 				destroyAllWindows();			// opencv 창해제 
 				if (_aviName == "intro.avi")
 				{
-					//로딩씬으로 
+					//로딩씬으로
+					//BEATMANAGER->AllStopMusic();
+					//SOUNDMANAGER->play("Intro");
 					SCENEMANAGER->changeScene("Loading");
 				}
 				else // endScene이면 스테이지로  

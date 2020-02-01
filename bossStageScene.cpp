@@ -31,6 +31,7 @@ HRESULT bossStageScene::init()
 
 	distanceCheck = false;
 	introSound = false;
+	boss_Dead = false;
 
 	_sm = new slaveManager;
 	_sm->init();
@@ -137,6 +138,14 @@ void bossStageScene::update()
 
 		if (_deathMetal->getBoss_HP() <= 0)
 		{
+			if (!boss_Dead)
+			{
+				// 보스 죽는 사운드를 켜준다.
+				SOUNDMANAGER->play("deathmetal_death");
+				SOUNDMANAGER->play("vo_cad_yeah_02", 1.5f);
+				boss_Dead = true;
+			}
+
 			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 			_deathMetal->setBoss_Index(0, 0);
 			_deathMetal->settingBossPos(0, 0, TILESIZE, TILESIZE);
