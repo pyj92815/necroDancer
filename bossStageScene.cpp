@@ -1269,8 +1269,7 @@ void bossStageScene::bossSceneStart()
 		if (!introSound)
 		{
 			// 여기에서 사운드 한번 실행
-
-
+			SOUNDMANAGER->play("deathmetal_intro");
 			introSound = true;
 		}
 
@@ -1312,7 +1311,6 @@ void bossStageScene::bossSceneStart()
 					_scene_Starter.startMoveImg = true;
 				}
 			}
-
 			else if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 			{
 				_scene_Starter.image_Speed = 16;
@@ -1352,7 +1350,6 @@ void bossStageScene::bossSceneStart()
 			}
 		}
 	}
-
 	// 보스 스테이지 볼륨 조절, 문이 열리는 여부에 따라 소리 조절함
 	setVolumeBossStage();
 }
@@ -1400,8 +1397,7 @@ void bossStageScene::bossSceneDoorOpen()
 		if (introSound)
 		{
 			// 웰컴 사운드
-
-
+			SOUNDMANAGER->play("deathmetal_welcome");
 			introSound = false;
 		}
 
@@ -1596,11 +1592,11 @@ void bossStageScene::setVolumeBossStage()
 {
 	if (_scene_Starter.isDoorOpen)
 	{
-		SOUNDMANAGER->setVolume("BGM_BOSS", 1.0f);
+		SOUNDMANAGER->setVolume("BGM_BOSS", 1.5f);
 	}
 	else
 	{
-		SOUNDMANAGER->setVolume("BGM_BOSS", 0.1f);
+		SOUNDMANAGER->setVolume("BGM_BOSS", 0.35f);
 	}
 }
 
