@@ -62,7 +62,7 @@ void stageScene::update()
 	stageCollision();
 	
 	_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
-	setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
+	//setVision(PointMake(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy), _pm->getPlayerInfo()->getPlayer().sight);
 	//_minimap->getStageMap(_vTotalList);
 	//_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().rc.left, _pm->getPlayerInfo()->getPlayer().rc.top);
 	//_minimap->setEnemyXY(_em->getVEnemy());
@@ -149,7 +149,6 @@ void stageScene::render()
 			RECT temp;
 			if (IntersectRect(&temp, &CAMERAMANAGER->getCamera_Rect(), &(*_viTotalList)->rc))
 			{
-
 				if ((*_viTotalList)->alphaValue <= 0)
 				{
 
