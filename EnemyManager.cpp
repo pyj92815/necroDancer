@@ -74,22 +74,22 @@ void EnemyManager::release()
 
 void EnemyManager::update()
 {
-	_timer += TIMEMANAGER->getElapsedTime();
+	//enemyInfo->attack = true라면 카운트 시작
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		(*_viEnemy)->update();
 		//플레이어의 좌표값을 전달
 		(*_viEnemy)->setPlayerInfo(_player->getPlayer().x, _player->getPlayer().y, _player->getPlayer().idx, _player->getPlayer().idy);
-
-	}
-	EnemyRemove();
-	EnemyInspection();
-	if (_timer > 1)
-	{
-		Attack();
-		_timer = 0;
+		if ((*_viEnemy)->getEnemyInfo()->Attack)
+		{
+			_timer += TIMEMANAGER->getElapsedTime();
+		}
 	}
 	
+	Attack();
+
+	EnemyRemove();
+	EnemyInspection();
 	WallInspection();
 }
 
@@ -106,10 +106,23 @@ void EnemyManager::WallInspection()
 {
 	
 	for (int i = 0;i < _vTile.size();++i)
-	{
+	{ 
 		for (int j = 0;j < _vEnemy.size();++j)
 		{
-			//cout << _vEnemy[j]->getEnemyInfo()->right << endl;
+			if (_vTile[i]->alphaEyesight)
+			{
+				if (_vEnemy[j]->getEnemyInfo()->idx == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy == _vTile[i]->idY)
+				{
+					_vEnemy[j]->getEnemyInfo()->Light = false;
+				}
+			}
+			else if(!_vTile[i]->alphaEyesight)
+			{
+				if (_vEnemy[j]->getEnemyInfo()->idx == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy == _vTile[i]->idY)
+				{
+					_vEnemy[j]->getEnemyInfo()->Light = true;
+				}
+			}
 			switch (_vEnemy[j]->getEnemyInfo()->direction)
 			{
 			case Direction::LEFT:
@@ -118,9 +131,14 @@ void EnemyManager::WallInspection()
 					if (_vEnemy[j]->getEnemyInfo()->idx - 1 == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy == _vTile[i]->idY)
 					{
 						_vEnemy[j]->getEnemyInfo()->left = true;
-						//cout << "ASDSADA" << endl;
+						_vEnemy[j]->getEnemyInfo()->Move = false;
+					}
+					else
+					{
+						//_vEnemy[j]->getEnemyInfo()->left = false;
 					}
 				}
+				
 				break;
 			case Direction::RIGHT:
 				if (_vTile[i]->type == TYPE_WALL)
@@ -128,11 +146,14 @@ void EnemyManager::WallInspection()
 					if (_vEnemy[j]->getEnemyInfo()->idx + 1 == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy == _vTile[i]->idY)
 					{
 						_vEnemy[j]->getEnemyInfo()->right = true;
-						
-						//cout << "ASDSADA" << endl;
+						_vEnemy[j]->getEnemyInfo()->Move = false;
+					}
+					else
+					{
+						//_vEnemy[j]->getEnemyInfo()->right = false;
 					}
 				}
-					
+				
 				break;
 			case Direction::UP:
 				if (_vTile[i]->type == TYPE_WALL)
@@ -140,10 +161,14 @@ void EnemyManager::WallInspection()
 					if (_vEnemy[j]->getEnemyInfo()->idx == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy - 1 == _vTile[i]->idY)
 					{
 						_vEnemy[j]->getEnemyInfo()->up = true;
-						//cout << "ASDSADA" << endl;
+						_vEnemy[j]->getEnemyInfo()->Move = false;
+					}
+					else
+					{
+						//_vEnemy[j]->getEnemyInfo()->up = false;
 					}
 				}
-					
+				
 				break;
 			case Direction::DOWN:
 				if (_vTile[i]->type == TYPE_WALL)
@@ -151,10 +176,13 @@ void EnemyManager::WallInspection()
 					if (_vEnemy[j]->getEnemyInfo()->idx == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy + 1 == _vTile[i]->idY)
 					{
 						_vEnemy[j]->getEnemyInfo()->down = true;
-						//cout << "ASDSADA" << endl;
+						_vEnemy[j]->getEnemyInfo()->Move = false;
+					}
+					else
+					{
+						//_vEnemy[j]->getEnemyInfo()->down = false;
 					}
 				}
-					
 				break;
 			}
 		}
@@ -170,7 +198,12 @@ void EnemyManager::Attack()
 		{
 			if ((*_viEnemy)->getEnemyInfo()->Beat)
 			{
-				_player->playerHit((*_viEnemy)->getEnemyInfo()->damage);
+				if (_timer > 0.5)
+				{
+					_player->playerHit((*_viEnemy)->getEnemyInfo()->damage);
+					_timer = 0;
+				}
+				
 			}
 		}
 	}
@@ -410,8 +443,8 @@ void EnemyManager::AnimationAdd()
 	int skeleton_yellow_R_IDLE[] = { 15,14,13,12,11,10,9,8 };
 	KEYANIMANAGER->addArrayFrameAnimation("skeleton_yellow_L_IDLE_Ani", "Enemy_skeleton_yellow", skeleton_yellow_L_IDLE, 8, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("skeleton_yellow_R_IDLE_Ani", "Enemy_skeleton_yellow", skeleton_yellow_R_IDLE, 8, 10, true);
-	int skeleton_yellow_L_Shadow_IDLE[] = { 16,17,18,19,20,21,22,23 };
-	int skeleton_yellow_R_Shadow_IDLE[] = { 31,30,29,28,27,26,25,24 };
+	int skeleton_yellow_L_Shadow_IDLE[] = { 17,18,19,20,21,22,23,24 };
+	int skeleton_yellow_R_Shadow_IDLE[] = { 32,31,30,29,28,27,26,25 };
 	KEYANIMANAGER->addArrayFrameAnimation("skeleton_yellow_L_Shadow_IDLE_Ani", "Enemy_skeleton_yellow", skeleton_yellow_L_Shadow_IDLE, 8, 10, true);
 	KEYANIMANAGER->addArrayFrameAnimation("skeleton_yellow_R_Shadow_IDLE_Ani", "Enemy_skeleton_yellow", skeleton_yellow_R_Shadow_IDLE, 8, 10, true);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////

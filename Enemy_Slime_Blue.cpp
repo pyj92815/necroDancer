@@ -4,6 +4,10 @@
 
 void Enemy_Slime_Blue::Action()
 {
+	/*_enemyInfo->left = false;
+	_enemyInfo->right = false;
+	_enemyInfo->up = false;
+	_enemyInfo->down = false;*/
 	switch (_enemyInfo->state)
 	{
 	case enemyState::STATE_IDLE:
@@ -36,79 +40,54 @@ void Enemy_Slime_Blue::Move()
 		if (_enemyInfo->idy - 1 == _playerInfo->idy && _enemyInfo->idx == _playerInfo->idx)
 		{
 			_enemyInfo->state = enemyState::STATE_ATTACK;
+			_enemyInfo->AttackDirection = Direction::UP;
 			break;
 		}
 		//위로 이동
 		_enemyInfo->idy -= 1;
-		//_enemyInfo->direction = Direction::DOWN;
+		
 		enemyAngle();
+		_enemyInfo->direction = Direction::DOWN;
 		break;
 	case Direction::DOWN:
 		if (_enemyInfo->idy + 1 == _playerInfo->idy && _enemyInfo->idx == _playerInfo->idx)
 		{
 			_enemyInfo->state = enemyState::STATE_ATTACK;
+			_enemyInfo->AttackDirection = Direction::DOWN;
 			break;
 		}
 		//아래로 이동
 		_enemyInfo->idy += 1;
-		//_enemyInfo->direction = Direction::UP;
 		enemyAngle();
+		_enemyInfo->direction = Direction::UP;
+
 		break;
 	}
 	_enemyInfo->Move = true;
 }
 
-void Enemy_Slime_Blue::moveAction()
-{
-}
 
-void Enemy_Slime_Blue::enemyAngle()
-{
-	switch (_enemyInfo->direction)
-	{
-	case Direction::LEFT:
-
-		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x -= 52, _enemyInfo->y);
-		break;
-	case Direction::RIGHT:
-		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x + 52, _enemyInfo->y);
-
-		break;
-	case Direction::UP:
-
-		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x, _enemyInfo->y - 52);
-		_enemyInfo->direction = Direction::DOWN;
-
-		break;
-	case Direction::DOWN:
-
-		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x, _enemyInfo->y + 52);
-		_enemyInfo->direction = Direction::UP;
-		break;
-	}
-}
-
-void Enemy_Slime_Blue::Attack()
-{
-	switch (_enemyInfo->direction)
-	{
-	case Direction::UP:
-		_enemyInfo->attackImage = IMAGEMANAGER->findImage("Enemy_Attack_Up");
-		_enemyInfo->attackAnimation = KEYANIMANAGER->findAnimation("Enemy_Attack_UP_Ani");
-		_enemyInfo->Attack = true;
-		break;
-	case Direction::DOWN:
-		_enemyInfo->attackImage = IMAGEMANAGER->findImage("Enemy_Attack_Down");
-		_enemyInfo->attackAnimation = KEYANIMANAGER->findAnimation("Enemy_Attack_DOWN_Ani");
-		_enemyInfo->Attack = true;
-		break;
-	}
-	if (_enemyInfo->Attack)
-	{
-		_enemyInfo->attackAnimation->start();
-	}
-	_enemyInfo->state = enemyState::STATE_MOVE;
-}
+//void Enemy_Slime_Blue::Attack()
+//{
+//	switch (_enemyInfo->direction)
+//	{
+//	case Direction::UP:
+//		_enemyInfo->attackImage = IMAGEMANAGER->findImage("Enemy_Attack_Up");
+//		_enemyInfo->attackAnimation = KEYANIMANAGER->findAnimation("Enemy_Attack_UP_Ani");
+//		_enemyInfo->Attack = true;
+//		break;
+//	case Direction::DOWN:
+//		_enemyInfo->attackImage = IMAGEMANAGER->findImage("Enemy_Attack_Down");
+//		_enemyInfo->attackAnimation = KEYANIMANAGER->findAnimation("Enemy_Attack_DOWN_Ani");
+//		_enemyInfo->Attack = true;
+//		break;
+//	}
+//	if (_enemyInfo->Attack)
+//	{
+//		_enemyInfo->attackAnimation->start();
+//	}
+//	_enemyInfo->state = enemyState::STATE_MOVE;
+//}
 
 void Enemy_Slime_Blue::AniChange()
 {
