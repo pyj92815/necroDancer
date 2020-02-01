@@ -146,7 +146,7 @@ void player::playerMove()
 			_player.y = _player.idy * _distance + (_distance / 3);
 
 			_isMoving = false;	    // 선형 보간 
-			_isKeyDown = false;
+			//_isKeyDown = false;
 			//_isKeyPress = false;  // key 입력 초기화 
 			_reversMove = false;
 			return;
@@ -168,7 +168,7 @@ void player::playerMove()
 			_player.y = _player.idy * _distance + (_distance / 3);
 
 			_isMoving = false;	    // 선형 보간 
-			_isKeyDown = false;
+			//_isKeyDown = false;
 			//_isKeyPress = false;  // key 입력 초기화 
 			return;
 		}

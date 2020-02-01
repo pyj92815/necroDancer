@@ -519,8 +519,15 @@ void Beat::Move()
             if (_vNoteLeft[i].pos.x - (heartImg->getFrameWidth() / 2) > WINSIZEX_HALF)
             {
                 _player->setPlayerKey();
-                _player->setPlayerKeyDown();
-				_tileOnOff ? _tileOnOff = false : _tileOnOff = true;// ¶ôÈÆ Ãß°¡ 
+				_player->setPlayerKeyDown();
+				if (_tileOnOff)
+				{
+					_tileOnOff = false;
+				}
+				else
+				{
+					_tileOnOff = true;
+				}
                 inputIntervalCount = 0;
 				if (!_vNoteLeft[i].colision)
 				{
