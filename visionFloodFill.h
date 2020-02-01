@@ -14,5 +14,6 @@ public:
 	void render();
 
 	void setVision(tagTile* tile, int idx, int idy, int sight);
+
 };
 

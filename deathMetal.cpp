@@ -196,7 +196,7 @@ void deathMetal::deathMetal_ChangeAnimation()
 			}
 
 			// 보스의 위치가 2시 였다면
-			if (boss::index.x >= 13 && boss::index.x <= 18 &&
+			else if (boss::index.x >= 13 && boss::index.x <= 18 &&
 				boss::index.y >= 10 && boss::index.y <= 14)
 			{
 				boss::index.x = 9;
@@ -205,7 +205,7 @@ void deathMetal::deathMetal_ChangeAnimation()
 			}
 
 			// 보스의 위치가 7시 였다면
-			if (boss::index.x >= 8 && boss::index.x <= 13 &&
+			else if (boss::index.x >= 8 && boss::index.x <= 13 &&
 				boss::index.y >= 14 && boss::index.y <= 18)
 			{
 				boss::index.x = 17;
@@ -214,7 +214,7 @@ void deathMetal::deathMetal_ChangeAnimation()
 			}
 
 			// 보스의 위치가 5시 였다면
-			if (boss::index.x >= 13 && boss::index.x <= 18 &&
+			else if (boss::index.x >= 13 && boss::index.x <= 18 &&
 				boss::index.y >= 14 && boss::index.y <= 18)
 			{
 				boss::index.x = 9;

@@ -87,6 +87,7 @@ void player::update()
 		cout << " 지금 체력 : " << _player.hp << endl;
 		_player.hp--;
 	}
+	playerDie();
 }
 
 void player::render()
@@ -939,6 +940,14 @@ void player::itemUse()
 	//}
 	//if (countNum > 0) _player.potion = false;
 
+}
+
+void player::playerDie()
+{
+	if (_player.hp <= 0)
+	{
+		OPTION->setPlayerDie(true);
+	}
 }
 
 
