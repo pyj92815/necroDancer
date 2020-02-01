@@ -28,6 +28,8 @@ void Enemy_Slime_Orange::Action()
 
 void Enemy_Slime_Orange::Move()
 {
+	if (!_enemyInfo->Move)_enemyInfo->worldTimeCount = TIMEMANAGER->getWorldTime();
+	_enemyInfo->Attack = false;
 	//한 박자마다 오른쪽->아래->왼쪽->위 순서를 반복하며 움직인다.
 	switch (_enemyInfo->direction)
 	{
@@ -37,11 +39,14 @@ void Enemy_Slime_Orange::Move()
 		{
 			//오른쪽 공격
 			_enemyInfo->state = enemyState::STATE_ATTACK;
+			_enemyInfo->AttackDirection = Direction::RIGHT;
 			break;
 		}
-		_enemyInfo->x += 52;
+		//_enemyInfo->x += 52;
 		_enemyInfo->idx += 1;
 
+		
+		enemyAngle();
 		_enemyInfo->direction = Direction::DOWN;
 		break;
 	case Direction::DOWN:
@@ -50,11 +55,14 @@ void Enemy_Slime_Orange::Move()
 		{
 			//아래쪽 공격
 			_enemyInfo->state = enemyState::STATE_ATTACK;
+			_enemyInfo->AttackDirection = Direction::DOWN;
 			break;
 		}
-		_enemyInfo->y += 52;
+		//_enemyInfo->y += 52;
 		_enemyInfo->idy += 1;
 
+		
+		enemyAngle();
 		_enemyInfo->direction = Direction::LEFT;
 		break;
 	case Direction::LEFT:
@@ -63,11 +71,14 @@ void Enemy_Slime_Orange::Move()
 		{
 			//왼쪽 공격
 			_enemyInfo->state = enemyState::STATE_ATTACK;
+			_enemyInfo->AttackDirection = Direction::LEFT;
 			break;
 		}
-		_enemyInfo->x -= 52;
+		//_enemyInfo->x -= 52;
 		_enemyInfo->idx -= 1;
 
+		
+		enemyAngle();
 		_enemyInfo->direction = Direction::UP;
 		break;
 	case Direction::UP:
@@ -76,24 +87,16 @@ void Enemy_Slime_Orange::Move()
 		{
 			//위쪽 공격
 			_enemyInfo->state == enemyState::STATE_ATTACK;
+			_enemyInfo->AttackDirection = Direction::UP;
 			break;
 		}
-		_enemyInfo->y -= 52;
+		//_enemyInfo->y -= 52;
 		_enemyInfo->idy -= 1;
-
+		enemyAngle();
 		_enemyInfo->direction = Direction::RIGHT;
 		break;
 	}
-}
-
-void Enemy_Slime_Orange::moveAction()
-{
-}
-
-void Enemy_Slime_Orange::Attack()
-{
-	//공격을 한 후
-	_enemyInfo->state = enemyState::STATE_MOVE;
+	_enemyInfo->Move = true;
 }
 
 void Enemy_Slime_Orange::AniChange()

@@ -7,7 +7,7 @@ HRESULT Enemy::init()
 	_playerInfo = new playerInfo;
 	_enemyInfo->Beat = true;
 	_enemyInfo->aniChange = true;
-	_enemyInfo->Light = true;
+	_enemyInfo->Light = false;
 	_enemyInfo->beatCount = 0;
 	_enemyInfo->Attack = false;
 	_enemyInfo->Move = false;
@@ -54,7 +54,6 @@ void Enemy::update()
 			if (!_enemyInfo->left)
 			{
 				moveAction();
-				_enemyInfo->correction = false;
 			}
 			else
 			{
@@ -66,7 +65,6 @@ void Enemy::update()
 			if (!_enemyInfo->right)
 			{
 				moveAction();
-				_enemyInfo->correction = false;
 			}
 			else
 			{
@@ -78,7 +76,6 @@ void Enemy::update()
 			if (!_enemyInfo->up)
 			{
 				moveAction();
-				_enemyInfo->correction = false;
 			}
 			else
 			{
@@ -90,7 +87,6 @@ void Enemy::update()
 			if (!_enemyInfo->down)
 			{
 				moveAction();
-				_enemyInfo->correction = false;
 			}
 			else
 			{
@@ -109,7 +105,7 @@ void Enemy::update()
 void Enemy::render()
 {
 	_enemyInfo->Image->aniRender(CAMERAMANAGER->getWorldDC(), _enemyInfo->x, _enemyInfo->y - (_enemyInfo->Image->getFrameHeight() / 4), _enemyInfo->Animation);
-	//Rectangle(CAMERAMANAGER->getWorldDC(), _enemyInfo->rc);
+	if(KEYMANAGER->isToggleKey(VK_F9))Rectangle(CAMERAMANAGER->getWorldDC(), _enemyInfo->rc);
 	if(_enemyInfo->Attack)
 	_enemyInfo->attackImage->aniRender(CAMERAMANAGER->getWorldDC(), _playerInfo->x, _playerInfo->y, _enemyInfo->attackAnimation);
 }
@@ -127,6 +123,7 @@ float Enemy::LinearInterpolation(float value1, float value2, float amount)
 {
 	return float(value1 + ((float)(value2 - value1) * amount));
 }
+
 
 void Enemy::Beat()
 {
@@ -315,21 +312,21 @@ void Enemy::enemyAngle()
 	switch (_enemyInfo->direction)
 	{
 	case Direction::LEFT:
-		if (_enemyInfo->left)break;
+		//if (_enemyInfo->left)break;
 		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x - 52, _enemyInfo->y);
 		break;
 	case Direction::RIGHT:
-		if (_enemyInfo->right)break;
+		//if (_enemyInfo->right)break;
 		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x + 52, _enemyInfo->y);
 		
 		break;
 	case Direction::UP:
-		if (_enemyInfo->up)break;
+		//if (_enemyInfo->up)break;
 		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x, _enemyInfo->y-52);
 		
 		break;
 	case Direction::DOWN:
-		if (_enemyInfo->down)break;
+		//if (_enemyInfo->down)break;
 		_enemyInfo->angle = getAngle(_enemyInfo->x, _enemyInfo->y, _enemyInfo->x, _enemyInfo->y+52);
 		
 		break;
