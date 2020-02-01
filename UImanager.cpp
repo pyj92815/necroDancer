@@ -626,6 +626,69 @@ void UImanager::update()
 
 	for (int i = 0; i < _vInven.size(); i++)
 	{
+		
+		
+
+			switch (_vInven[i]->weapon)
+			{
+			case  WP_RAPIER:
+				_attackInven.open = true;
+				_throwInven.open = false;
+				break;
+			case  WP_LONG_SWORD:
+				_attackInven.open = true;
+				_throwInven.open = false;
+				break;
+			case  WP_BROAD_SWORD:
+				_attackInven.open = true;
+				_throwInven.open = false;
+				break;
+			case  WP_SPEAR:
+				_attackInven.open = true;
+				_throwInven.open = false;
+				break;
+			case  WP_DAGGER_1:
+				_attackInven.open = true;
+				_throwInven.open = true;
+				break;
+			case  WP_DAGGER_2:
+				_attackInven.open = true;
+				_throwInven.open = true;
+				break;
+			}
+
+			switch (_vInven[i]->armor)
+			{
+			case A_TORCH_1:
+				_torchInven.open = true;
+				break;
+			case A_TORCH_2:
+				_torchInven.open = true;
+				break;
+			case A_TORCH_3:
+				_torchInven.open = true;
+				break;
+			case A_ARMOR_1:
+				_bodyInven.open = true;
+				break;
+			case A_ARMOR_2:
+				_bodyInven.open = true;
+				break;
+			case A_ARMOR_3:
+				_bodyInven.open = true;
+				break;
+			case A_ARMOR_4:
+				_bodyInven.open = true;
+				break;
+			case A_SHOVEL:
+				_shovelInven.open = true;
+				break;
+			}
+
+		
+	}
+	for (int i = 0; i < _vInven.size(); i++)
+	{
 		switch (_vInven[i]->stuff)
 		{
 		case ST_APPLE:
@@ -646,78 +709,11 @@ void UImanager::update()
 			break;
 
 		}
-		else 
+		else
 		{
 			_itemInven.open = false;
 		}
-
-		switch (_vInven[i]->weapon)
-		{
-		case  WP_RAPIER:
-			_attackInven.open = true;
-			_throwInven.open = false;
-			break;
-		case  WP_LONG_SWORD:
-			_attackInven.open = true;
-			_throwInven.open = false;
-			break;
-		case  WP_BROAD_SWORD:
-			_attackInven.open = true;
-			_throwInven.open = false;
-			break;
-		case  WP_SPEAR:
-			_attackInven.open = true;
-			_throwInven.open = false;
-			break;
-		case  WP_DAGGER_1:
-			_attackInven.open = true;
-			_throwInven.open = true;
-			break;
-		case  WP_DAGGER_2:
-			_attackInven.open = true;
-			_throwInven.open = true;
-			break;
-		}
-
-		switch (_vInven[i]->armor)
-		{
-		case A_TORCH_1:
-			_torchInven.open = true;
-			break;
-		case A_TORCH_2:
-			_torchInven.open = true;
-			break;
-		case A_TORCH_3:
-			_torchInven.open = true;
-			break;
-		case A_ARMOR_1:
-			_bodyInven.open = true;
-			break;
-		case A_ARMOR_2:
-			_bodyInven.open = true;
-			break;
-		case A_ARMOR_3:
-			_bodyInven.open = true;
-			break;
-		case A_ARMOR_4:
-			_bodyInven.open = true;
-			break;
-		case A_SHOVEL:
-			_shovelInven.open = true;
-			break;
-		}
-		
-
 	}
-	/*for (_viInven = _vInven.begin(); _viInven != _vInven.end(); _viInven++)
-	{
-		if (_viInven->stuff == ST_MEAT ||
-			_viInven->stuff == ST_CHEESE ||
-			_viInven->stuff == ST_APPLE)
-
-			break;
-		if (_vInven.end)_itemInven.open = false;
-	}*/
 }
 
 void UImanager::render()
