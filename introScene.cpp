@@ -11,9 +11,12 @@ introScene::~introScene()
 
 HRESULT introScene::init()
 {
+	// Å³¶§
+	BEATMANAGER->AllStopMusic();
+	SOUNDMANAGER->play("Intro");
+
 	_video = new video;
 	_video->init("intro.avi");
-
 	return S_OK;
 }
 

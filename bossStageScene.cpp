@@ -24,12 +24,14 @@ HRESULT bossStageScene::init()
 	_player = _stageScene->getPlayerAddress();								// 플레이어 링크
 	_player->collisionSettingStage();
 	_ui = _stageScene->getUiAddress();										// ui 링크
-
+	
 	bossStageMap_Load();													// 파일에 있는 보스 스테이지 맵을 불러와서 벡터로 저장해준다.
 
 	playerPos_Setting();													// 보스 스테이지에 입장 한 플레이어의 위치를 생성 위치를 잡아준다.
 
 	distanceCheck = false;
+	introSound = false;
+	boss_Dead = false;
 
 	_sm = new slaveManager;
 	_sm->init();
@@ -47,9 +49,7 @@ HRESULT bossStageScene::init()
 
 	_player->setBossStage(); // 보스스테이지 락훈 추가 
 	BEATMANAGER->init();
-
-	//BEATMANAGER->init();
-	SOUNDMANAGER->stop("BGM_LOBBY");
+	BEATMANAGER->AllStopMusic();
 	return S_OK;
 }
 
@@ -68,9 +68,17 @@ void bossStageScene::update()
 		// 보스 등장 씬이 끝나면 플레이가 가능하다.
 		bossSceneStart();
 
+
 		if (_scene_Starter.isOpen)
 		{
 			_player->update();
+
+			// 플레이어 인덱스 출력
+			//cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
+			endScene();
+			// 보스 등장 씬이 끝나면 플레이가 가능하다.
+			bossSceneStart();
+
 
 			// 플레이어가 문을 지났는지 연산
 			bossSceneDoorOpen();
@@ -137,12 +145,7 @@ void bossStageScene::update()
 
 			BEATMANAGER->update();
 
-			if (_deathMetal->getBoss_HP() <= 0)
-			{
-				bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
-				_deathMetal->setBoss_Index(0, 0);
-				_deathMetal->settingBossPos(0, 0, TILESIZE, TILESIZE);
-			}
+
 			// 플레이어 충돌 
 			_player->setDeathMetal(_collision.collision_player_Metal_tile(_deathMetal, _player));
 			_player->setSlaveTile(_collision.collision_player_slave_tile(&_sm->get_SlaveList(), _player));
@@ -153,8 +156,25 @@ void bossStageScene::update()
 			_floodFill->setVision(_tiles, _player->getPlayer().idx, _player->getPlayer().idy, _player->getPlayer().sight);
 			_player->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _player));
 
+
+			if (_deathMetal->getBoss_HP() <= 0)
+			{
+
+				if (!boss_Dead)
+				{
+					// 보스 죽는 사운드를 켜준다.
+					SOUNDMANAGER->play("deathmetal_death");
+					SOUNDMANAGER->play("vo_cad_yeah_02", 1.5f);
+					boss_Dead = true;
+				}
+
+				bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
+				_deathMetal->setBoss_Index(0, 0);
+				_deathMetal->settingBossPos(0, 0, TILESIZE, TILESIZE);
+			}
 		}
 	}
+
 }
 
 void bossStageScene::render()
@@ -296,7 +316,7 @@ void bossStageScene::bossStageMap_Load()
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
 		{
-			if (_tiles[i].type== TYPE_TERRAIN)
+			if (_tiles[i].type == TYPE_TERRAIN)
 			{
 				_tiles[i].wall == W_NONE;
 			}
@@ -385,6 +405,7 @@ void bossStageScene::playerPos_Setting()
 		_player->PlayerAddress()->bodyImage->getFrameWidth(), _player->PlayerAddress()->headImage->getFrameHeight());
 	CAMERAMANAGER->set_CameraXY(_player->PlayerAddress()->idx * TESTTILESIZE + (TESTTILESIZE / 2),
 		_player->PlayerAddress()->idy * TESTTILESIZE + (TESTTILESIZE / 3));
+
 }
 
 void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
@@ -993,21 +1014,17 @@ SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 
 void bossStageScene::boss_Move_Player()
 {
-	//// 데스메탈의 무브 카운트를 1 감소 시켜준다. (데스메탈이 비트를 받지 않았다면 이곳에 들어간다.)
-	//if (BEATMANAGER->getInterval() && !_deathMetal->getBoss_Beat())
-	//{
-	//	_deathMetal->setBoss_Beat(true);		// 비트를 받았다면 true로 바꿔준다. (여러번 들어오는것을 방지)
-	//	_deathMetal->setBoss_Move_Count();		// 무브 카운트를 1 감소한다.
-	//}
-	//
-	//// 비트의 값이 0이 됐을때 false의 값으로 바꿔준다.
-	//if (!BEATMANAGER->getInterval()) _deathMetal->setBoss_Beat(false);
-
 	// 데스메탈의 무브 카운트를 1 감소 시켜준다. (데스메탈이 비트를 받지 않았다면 이곳에 들어간다.)
 	if (BEATMANAGER->getBeating() && !_deathMetal->getBoss_Beat())
 	{
 		_deathMetal->setBoss_Beat(true);		// 비트를 받았다면 true로 바꿔준다. (여러번 들어오는것을 방지)
 		_deathMetal->setBoss_Move_Count();		// 무브 카운트를 1 감소한다.
+
+		// 만약 소환 캐스팅 중이라면
+		if (_deathMetal->boss_SummonSkill()->isCasting)
+		{
+			_deathMetal->boss_SummonSkill()->cTime--;
+		}
 	}
 
 	// 비트의 값이 0이 됐을때 false의 값으로 바꿔준다.
@@ -1269,8 +1286,19 @@ void bossStageScene::bossSceneSetting()
 
 void bossStageScene::bossSceneStart()
 {
+
+
+
 	if (!_scene_Starter.isOpen)
 	{
+		// 데스메탈 사운드가 들린다.
+		if (!introSound)
+		{
+			// 여기에서 사운드 한번 실행
+			SOUNDMANAGER->play("deathmetal_intro");
+			introSound = true;
+		}
+
 		// 처음 보스 등장 씬이 날아온다. 정해진 위치까지 도착하면, 엔터를 누르면 더 빠르게 위치로 날아간다.
 		// 그리고 엔터를 다시 누르면 등장 씬은 다시 왔던길로 되돌아가고 다 돌아갔으면 게임이 시작된다.
 		if (!_scene_Starter.startMoveImg)
@@ -1309,7 +1337,6 @@ void bossStageScene::bossSceneStart()
 					_scene_Starter.startMoveImg = true;
 				}
 			}
-
 			else if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 			{
 				_scene_Starter.image_Speed = 16;
@@ -1349,7 +1376,6 @@ void bossStageScene::bossSceneStart()
 			}
 		}
 	}
-
 	// 보스 스테이지 볼륨 조절, 문이 열리는 여부에 따라 소리 조절함
 	setVolumeBossStage();
 }
@@ -1387,12 +1413,20 @@ void bossStageScene::bossSceneDoorOpen()
 		}
 	}
 
-
+	// 문을 지나가면 보스가 월컴을 외친다.
 	// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
 	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 19 ||
 		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 19 ||
 		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 19)
 	{
+		// 웰컴을 한번 외친다.
+		if (introSound)
+		{
+			// 웰컴 사운드
+			SOUNDMANAGER->play("deathmetal_welcome");
+			introSound = false;
+		}
+
 		// 문이였던 지역을 벽으로 바꿔준다.
 		for (int i = 0; i < _vTotalList.size(); ++i)
 		{
@@ -1551,16 +1585,212 @@ void bossStageScene::boss_PhaseMove()
 
 		// 방패 맞았을때는 보스 체력이 달면 안돼
 
+
 		break;
 
 	case BP_PHASE_2:
 		// 손을 들어올리고 4 박자 동안 공격을 받지 않으면 해골 1 ~ 3마리 소환
 		// 공격 받으면 반대편으로 순간이동
+		// 현재 체력을 저장해두고 체력 변화가 있을때는
+		// 순간이동을 하고 카운트를 다시 올려준다. (최대 카운트 + 1을 해줘서 한 박자를 쉬고 다음 손을 들게 하자)
 
+		// 확률로 손을 들고 스킬 시전
+		// 시전 시 4 박자 동안 공격 받지 않으면 해골 소환
+
+		if (!_deathMetal->boss_SummonSkill()->isCasting && _sm->get_SlaveList().size() < 8)
+		{
+			// 랜덤으로 숫자를 받는다. 0 ~ 2
+			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(150);
+
+			cout << _deathMetal->boss_SummonSkill()->rnd << endl;
+
+			// 숫자가 9라면 해골 소환 스킬을 시작한다.
+			if (_deathMetal->getBoss_SummonSkill().rnd == 10) _deathMetal->boss_SummonSkill()->isCasting = true;
+
+		}
+
+		// 2가 나왔다면 소환
+		if (_deathMetal->boss_SummonSkill()->isCasting)
+		{
+			// 무브 카운트가 처음이라면 데스메탈은 손을 든다.
+			if (_deathMetal->boss_SummonSkill()->cTime == _deathMetal->boss_SummonSkill()->cTime_M)
+			{
+				_deathMetal->setBoss_isCasting(true);
+			}
+
+			// 무브 카운트가 0이라면 해골 소환 1 ~ 3
+			if (_deathMetal->boss_SummonSkill()->cTime < 0)
+			{
+				_deathMetal->setBoss_isCasting(false);
+
+				// 해골을 소환한다.
+				int rndSummons = RND->getInt(2) + 1;	// 1 ~ 2
+
+				// 보스 주변으로 랜덤으로 해골 소환 (1 ~ 3마리)
+				int tempX, tempY;
+				tempX = tempY = 0;
+				int rndX, rndY;
+				rndX = rndY = 0;
+
+				for (int i = 0; i < rndSummons; ++i)
+				{
+					// 나올 수 있는 범위를 정해준다.
+					rndX = RND->getInt(9) + 8;
+					rndY = RND->getInt(7) + 11;
+
+					// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
+					for (int j = 0; j < _vTotalList.size(); ++j)
+					{
+						// 보스방 범위에서만 소환이 가능해야 한다.
+						if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
+							_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
+						{
+							// 보스가 있는 위치에는 나오면 안돼
+							if (_deathMetal->getBoss_Index().x != rndX &&
+								_deathMetal->getBoss_Index().y != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+
+							}
+
+							// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+							for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
+							{
+								if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
+									_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+								{
+									tempX = rndX;
+									tempY = rndY;
+
+								}
+							}
+
+							// 플레이어 위치에는 나오면 안돼
+							if (_player->getPlayer().idx != rndX &&
+								_player->getPlayer().idy != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+
+							}
+						}
+
+						if (tempX && tempY) break;
+					}
+
+					// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
+					if (tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, tempX, tempY);
+				}
+
+				// 다음 연산을 위해 초기화
+				_deathMetal->boss_SummonSkill()->isCasting = false;
+				_deathMetal->boss_SummonSkill()->cTime = _deathMetal->boss_SummonSkill()->cTime_M;
+			}
+		}
 		break;
 
 	case BP_PHASE_3:
 		// 해골이 노란 해골로 교체
+		// 손을 들어올리고 4 박자 동안 공격을 받지 않으면 해골 1 ~ 3마리 소환
+		// 공격 받으면 반대편으로 순간이동
+		// 현재 체력을 저장해두고 체력 변화가 있을때는
+		// 순간이동을 하고 카운트를 다시 올려준다. (최대 카운트 + 1을 해줘서 한 박자를 쉬고 다음 손을 들게 하자)
+
+		// 확률로 손을 들고 스킬 시전
+		// 시전 시 4 박자 동안 공격 받지 않으면 해골 소환
+
+		if (!_deathMetal->boss_SummonSkill()->isCasting && _sm->get_SlaveList().size() < 4)
+		{
+			// 랜덤으로 숫자를 받는다. 0 ~ 2
+			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(150);
+
+			cout << _deathMetal->boss_SummonSkill()->rnd << endl;
+
+			// 숫자가 9라면 해골 소환 스킬을 시작한다.
+			if (_deathMetal->getBoss_SummonSkill().rnd == 10) _deathMetal->boss_SummonSkill()->isCasting = true;
+
+		}
+
+		// 2가 나왔다면 소환
+		if (_deathMetal->boss_SummonSkill()->isCasting)
+		{
+			// 무브 카운트가 처음이라면 데스메탈은 손을 든다.
+			if (_deathMetal->boss_SummonSkill()->cTime == _deathMetal->boss_SummonSkill()->cTime_M)
+			{
+				_deathMetal->setBoss_isCasting(true);
+			}
+
+			// 무브 카운트가 0이라면 해골 소환 1 ~ 3
+			if (_deathMetal->boss_SummonSkill()->cTime < 0)
+			{
+				_deathMetal->setBoss_isCasting(false);
+
+				// 해골을 소환한다.
+				int rndSummons = RND->getInt(3) + 1;	// 1 ~ 3까지의 값이 나오게 한다.
+
+				// 보스 주변으로 랜덤으로 해골 소환 (1 ~ 3마리)
+				int tempX, tempY;
+				tempX = tempY = 0;
+				int rndX, rndY;
+				rndX = rndY = 0;
+
+				for (int i = 0; i < rndSummons; ++i)
+				{
+					// 나올 수 있는 범위를 정해준다.
+					rndX = RND->getInt(9) + 8;
+					rndY = RND->getInt(7) + 11;
+
+					// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
+					for (int j = 0; j < _vTotalList.size(); ++j)
+					{
+						// 보스방 범위에서만 소환이 가능해야 한다.
+						if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
+							_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
+						{
+							// 보스가 있는 위치에는 나오면 안돼
+							if (_deathMetal->getBoss_Index().x != rndX &&
+								_deathMetal->getBoss_Index().y != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+
+							}
+
+							// 기존에 슬레이브가 있는 위치에는 나오면 안돼
+							for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
+							{
+								if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
+									_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
+								{
+									tempX = rndX;
+									tempY = rndY;
+
+								}
+							}
+
+							// 플레이어 위치에는 나오면 안돼
+							if (_player->getPlayer().idx != rndX &&
+								_player->getPlayer().idy != rndY)
+							{
+								tempX = rndX;
+								tempY = rndY;
+
+							}
+						}
+
+						if (tempX && tempY) break;
+					}
+
+					// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
+					if (tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, tempX, tempY);
+				}
+
+				// 다음 연산을 위해 초기화
+				_deathMetal->boss_SummonSkill()->isCasting = false;
+				_deathMetal->boss_SummonSkill()->cTime = _deathMetal->boss_SummonSkill()->cTime_M;
+			}
+		}
 
 		break;
 
@@ -1575,11 +1805,11 @@ void bossStageScene::setVolumeBossStage()
 {
 	if (_scene_Starter.isDoorOpen)
 	{
-		SOUNDMANAGER->setVolume("BGM_BOSS", 1.0f);
+		SOUNDMANAGER->setVolume("BGM_BOSS", 1.5f);
 	}
 	else
 	{
-		SOUNDMANAGER->setVolume("BGM_BOSS", 0.1f);
+		SOUNDMANAGER->setVolume("BGM_BOSS", 0.35f);
 	}
 }
 
@@ -1587,6 +1817,7 @@ void bossStageScene::endScene()
 {
 	if (_player->getPlayer().idx == _endX && _player->getPlayer().idy == _endY)
 	{
+		BEATMANAGER->AllStopMusic();
 		SCENEMANAGER->changeScene("End");
 	}
 }

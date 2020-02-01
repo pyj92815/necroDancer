@@ -74,7 +74,7 @@ public:
 	// 세팅 함수 
 	void keyControl();	 // 사용키
 	void playerMove();	 // 이동 
-
+	void setJump() { _jump->setJumping(); }
 	// 이펙트 관련 함수 
 	void playerEffect_Miss();					
 	void playerEffect_Shovel(tagTile* tile);

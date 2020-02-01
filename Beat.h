@@ -122,4 +122,6 @@ public:
 	int GetMusicID() { return musicID; } // 음악 인덱스를 가져오는 getter
 
 	bool getTurnOnOff() { return _tileOnOff; }
+	void AllStopMusic();
+
 };

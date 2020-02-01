@@ -15,6 +15,8 @@ loadingScene::~loadingScene()
 
 HRESULT loadingScene::init()
 {
+	BEATMANAGER->AllStopMusic();
+	SOUNDMANAGER->play("BGM_STAGE_1_3");
 	_background = IMAGEMANAGER->addImage("로딩배경", "Intro_loading_start.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 255));
 
 	CreateThread(

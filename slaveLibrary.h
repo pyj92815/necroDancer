@@ -191,7 +191,7 @@ public:
 		case SLAVE_TYPE::SLAVE_SKELETON:
 			slave->status.type = SLAVE_TYPE::SLAVE_SKELETON;						// 슬레이브의 타입을 정해준다.
 			slave->status.direction = SLAVE_DIRECTION::SD_DOWN;						// 기본 방향은 아래를 향한다.
-			slave->status.hp = 2;													// 기본 체력을 정해준다.
+			slave->status.hp = 1;													// 기본 체력을 정해준다.
 			slave->image.img = IMAGEMANAGER->findImage("boss_Skeleton");			// 슬레이브의 이미지를 찾아서 넣어준다.
 			slave->image.animation = KEYANIMANAGER->findAnimation("sSkel_Left");		// 슬레이브의 애니메이션을 찾아서 넣어준다.
 			slave->operation.move_Count = 2;										// 슬레이브의 이동 박자

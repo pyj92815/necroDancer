@@ -2,7 +2,7 @@
 #include "gameNode.h"
 #include "video.h"
 
-class introScene:public gameNode
+class introScene : public gameNode
 {
 private:
 	video* _video;

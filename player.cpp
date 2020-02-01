@@ -28,7 +28,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.bodyAni->start();
 	_player.direction = PLAYERDIRECTION_RIGHT;				// 방향 오른쪽	RIGHT
 	_player.weapon = PLAYERWAEPON_NONE;						// 무기			NONE
-	_player.sight = 4;										// 시야 값		4
+	_player.sight = 5;										// 시야 값		4
 	_player.damage = 1;										// 데미지        1
 	_player.idx = idx;										// 인덱스 X
 	_player.idy = idy;										// 인덱스 Y
@@ -507,12 +507,16 @@ void player::wallCheck()
 	switch (_miPlayerTile->second->wall)
 	{
 	case W_WALL:
-	case W_WALL2:
+	case W_WALL2: // 부숴지는 벽
+		SOUNDMANAGER->play("vo_cad_dig_01");
+		SOUNDMANAGER->play("mov_dig_dirt", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
 		break;
-	case W_ITEM_WALL:
+	case W_ITEM_WALL: // 부숴지는 벽
+		SOUNDMANAGER->play("vo_cad_dig_01");
+		SOUNDMANAGER->play("mov_dig_dirt", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
@@ -531,10 +535,13 @@ void player::wallCheck()
 		break;
 	case  W_END_WALL:
 	case  W_BOSS_WALL:
-	case  W_SHOP_WALL:
+	case  W_SHOP_WALL: // 부숴지지 않는 벽
+		SOUNDMANAGER->play("vo_cad_dig_01");
+		SOUNDMANAGER->play("mov_dig_fail", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
 		break;
-	case W_DOOR:
+	case W_DOOR: // 문 열기
+		SOUNDMANAGER->play("obj_door_open", 1.5f);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
 		break;

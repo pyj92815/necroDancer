@@ -108,6 +108,10 @@ void boss::settingBossVariable()
 
 	move_Count = 0;
 
+	slave_Summon.isCasting = false;
+	slave_Summon.cTime = 0;
+	slave_Summon.cTime_M = 0;
+	slave_Summon.rnd = 0;
 }
 
 void boss::showBossHP()
