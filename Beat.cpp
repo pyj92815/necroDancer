@@ -178,7 +178,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     heartImg = IMAGEMANAGER->findImage("Heart");
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
-    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 20, heartImg->getFrameHeight());
+    heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 60, heartImg->getFrameHeight());
 }
 
 void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
