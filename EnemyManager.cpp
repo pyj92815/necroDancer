@@ -104,7 +104,6 @@ void EnemyManager::render()
 
 void EnemyManager::WallInspection()
 {
-	
 	for (int i = 0;i < _vTile.size();++i)
 	{ 
 		for (int j = 0;j < _vEnemy.size();++j)
@@ -113,7 +112,7 @@ void EnemyManager::WallInspection()
 			{
 				if (_vEnemy[j]->getEnemyInfo()->idx == _vTile[i]->idX && _vEnemy[j]->getEnemyInfo()->idy == _vTile[i]->idY)
 				{
-					_vEnemy[j]->getEnemyInfo()->Light = false;
+					_vEnemy[j]->getEnemyInfo()->Light = true;
 				}
 			}
 			else if(!_vTile[i]->alphaEyesight)
@@ -191,19 +190,17 @@ void EnemyManager::WallInspection()
 
 void EnemyManager::Attack()
 {
-	
 	for (_viEnemy = _vEnemy.begin();_viEnemy != _vEnemy.end();++_viEnemy)
 	{
 		if ((*_viEnemy)->getEnemyInfo()->Attack)
 		{
 			if ((*_viEnemy)->getEnemyInfo()->Beat)
 			{
-				if (_timer > 0.5)
+				if (_timer > 1.5)
 				{
 					_player->playerHit((*_viEnemy)->getEnemyInfo()->damage);
 					_timer = 0;
 				}
-				
 			}
 		}
 	}
