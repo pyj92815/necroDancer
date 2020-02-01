@@ -32,9 +32,9 @@ private: // 하위 계층
 	int _playerIdx, _playerIdy;
 	int _bossIdx, _bossIdy;
 	int _stageIdx, _stageIdy;
-
+	const char* fileName;
 public:
-	stageScene() {}
+	stageScene() { fileName = "Loby_SaveFile.map"; }
 	~stageScene() {}
 
 	virtual HRESULT init();
@@ -45,17 +45,17 @@ public:
 	player* getPlayerAddress() { return _pm->getPlayerInfo(); }
 
 	// 제트오더 관련
-	void ZorderSetup();
-	vector<zOrder*>ZorderUpdate(vector<zOrder*>  num);
+	//void ZorderSetup();
+	//vector<zOrder*>ZorderUpdate(vector<zOrder*>  num);
 	vector<tagTile*> getStageTile() { return _vTotalList; }
 	UImanager* getUiAddress() { return _ui; }
 	playerManager* getPlayerManager() { return _pm; }
 	// 맵 
-	void stageMapLoad();
+	void stageMapLoad(const char* fileName);
 	void stageCollision();
 	void bossStageSceneAddressLink(bossStageScene* bossStageScene) { _bossStageScene = bossStageScene; }
 
 	void setVision(POINT index, int sight);
 	void nextPage();
-
+	
 };

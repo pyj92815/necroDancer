@@ -156,6 +156,8 @@ public:
 
 	void setBoss_Shield_Hit_True() { isShield_Hit = true; }																// 실드가 피격 당하면 true
 
+	void setBoss_Angle(float ang) { angle = ang; }
+
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수
 	void boss_Move();																								// 보스 이동 연산 함수

@@ -13,7 +13,7 @@ public:
 	video();
 	~video();
 
-	HRESULT init(const char* videoName);
+	HRESULT init(const char* videoName,bool ending = FALSE);
 	void release();
 	void update();
 	void render();

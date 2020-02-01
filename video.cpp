@@ -9,8 +9,22 @@ video::~video()
 {
 }
 
-HRESULT video::init(const char* videoName)
+HRESULT video::init(const char* videoName, bool ending)
 {
+	if (ending)
+	{
+		cv::namedWindow(WINNAME);
+		HWND cvWnd = (HWND)cvGetWindowHandle(WINNAME);
+		if (!cvWnd) return false;
+		HWND oldParent = ::GetParent(cvWnd);
+		::SetParent(cvWnd, oldParent);
+		//::ShowWindow(oldParent, SW_HIDE);
+		// resizeWindow(WINNAME, WINSIZEX + 100, WINSIZEY+ 50); //동영상 크기라서 안됌 
+		moveWindow(WINNAME, -74, -120);		// 이동시키기 
+		::SetParent(oldParent, _hWnd);
+	}
+	//ShowWindow(_hWnd, NULL);
+
 	SCENEMANAGER->setVideoPlay(true); // 비디오를 플레이 하니까 플레이 true로 
 	_aviName = videoName;
 	cap.open(videoName);		// 비디오 Name을 열어봄 
@@ -57,7 +71,7 @@ void video::render()
 				if (_aviName == "intro.avi")
 				{
 					// 로딩씬으로 가기 
-					SCENEMANAGER->changeScene("Loading");  
+					SCENEMANAGER->changeScene("Loading");
 				}
 				else // endScene이면 스테이지로  
 				{
@@ -77,7 +91,7 @@ void video::render()
 				if (_aviName == "intro.avi")
 				{
 					//로딩씬으로 
-					SCENEMANAGER->changeScene("Loading"); 
+					SCENEMANAGER->changeScene("Loading");
 				}
 				else // endScene이면 스테이지로  
 				{
@@ -88,7 +102,7 @@ void video::render()
 			imshow(WINNAME, frame);  // 윈도우창에 프레임을 띄운다 -> 실제로 동영상을 띄우는 코드 
 		}
 	}
-	
+
 }
 
 // 나중에 혹시나 쓰일수 있으니 복사해둠 

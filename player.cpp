@@ -28,7 +28,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.bodyAni->start();
 	_player.direction = PLAYERDIRECTION_RIGHT;				// 방향 오른쪽	RIGHT
 	_player.weapon = PLAYERWAEPON_NONE;						// 무기			NONE
-	_player.sight = 5;										// 시야 값		7
+	_player.sight = 6;										// 시야 값		7
 	_player.damage = 1;										// 데미지        1
 	_player.idx = idx;										// 인덱스 X
 	_player.idy = idy;										// 인덱스 Y
@@ -53,9 +53,9 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_isKeyDown = false;      // KEY 입력 판단
 
 	// 초기 세팅 장비 값 
-	//makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
-	//_player.weapon = PLAYERWAEPON_DAGGER;
-	//makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
+	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
+	_player.weapon = PLAYERWAEPON_DAGGER;
+	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
 
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
@@ -87,6 +87,7 @@ void player::update()
 		cout << " 지금 체력 : " << _player.hp << endl;
 		_player.hp--;
 	}
+	playerDie();
 }
 
 void player::render()
@@ -113,6 +114,7 @@ void player::playerMove()
 
 	//200정도의 거리를 2초에 걸쳐서 도달해야한다면 속도값을 구해줌
 	float moveSpeed = (elapsedTime / _time) * _distance;
+
 
 	if (_reversMove)
 	{
@@ -452,6 +454,11 @@ void player::tileCheck()
 				{
 					playerEffect_Attack();
 					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
+					if ((int)_miPlayerdeathMetalTile->second->getBoss_Direction() ==
+						(int)_player.direction)
+					{
+						_miPlayerdeathMetalTile->second->setBoss_Shield_Hit_True();
+					}
 				}
 				action = true;
 				break;
@@ -926,6 +933,14 @@ void player::itemUse()
 	//}
 	//if (countNum > 0) _player.potion = false;
 
+}
+
+void player::playerDie()
+{
+	if (_player.hp <= 0)
+	{
+		OPTION->setPlayerDie(true);
+	}
 }
 
 

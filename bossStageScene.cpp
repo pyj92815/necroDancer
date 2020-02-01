@@ -63,7 +63,7 @@ void bossStageScene::update()
 
 	// 플레이어 인덱스 출력
 	cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
-
+	endScene();
 	// 보스 등장 씬이 끝나면 플레이가 가능하다.
 	bossSceneStart();
 
@@ -78,7 +78,7 @@ void bossStageScene::update()
 		// 플레이어가 보스방문을 열고 안으로 들어오면 이 값이 true로 바뀐다.
 		if (_scene_Starter.isDoorOpen)
 		{
-			if(!_deathMetal->getBoss_Dead()) _deathMetal->update();
+			if (!_deathMetal->getBoss_Dead()) _deathMetal->update();
 			if (!_deathMetal->getBoss_Dead())  boss_PhaseMove();	// 보스 페이즈 연산
 			_ui->update();
 			_sm->update();
@@ -96,7 +96,7 @@ void bossStageScene::update()
 			slave_Move_Player();
 
 			//cout << _deathMetal->getBoss_Index().x << ": y:" << _deathMetal->getBoss_Index().y << endl;
-		
+
 			// 슬레이브 테스트용 소환
 			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
 			{
@@ -124,62 +124,8 @@ void bossStageScene::update()
 
 			if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
 			{
-				// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
-				int tempX, tempY;
-				tempX = tempY = 0;
-				int rndX, rndY;
-				rndX = rndY = 0;
-			
-				// 2마리를 소환해야 하기 때문에 2번을 돈다.
-				for (int i = 0; i < 2; ++i)
-				{
-					rndX = RND->getInt(9) + 8;
-					rndY = RND->getInt(8) + 10;
-					// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
-					for (int j = 0; j < _vTotalList.size(); ++j)
-					{
-						// 보스방 범위에서만 소환이 가능해야 한다.
-						if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
-							_vTotalList[j]->idY >= 10 && _vTotalList[j]->idY <= 18)
-						{
-							// 보스가 있는 위치에는 나오면 안돼
-							if (_deathMetal->getBoss_Index().x != rndX &&
-								_deathMetal->getBoss_Index().y != rndY)
-							{
-								tempX = rndX;
-								tempY = rndY;
+				_deathMetal->setBoss_Shield_Hit_True();
 
-								break;
-							}
-			
-							// 기존에 슬레이브가 있는 위치에는 나오면 안돼
-							for (int k = 0; j < _sm->get_SlaveList().size(); ++k)
-							{
-								if (_sm->get_SlaveList()[k]->get_Slave()->pos.index.x != rndX &&
-									_sm->get_SlaveList()[j]->get_Slave()->pos.index.y != rndY)
-								{
-									tempX = rndX;
-									tempY = rndY;
-									break;
-								}
-							}
-			
-							// 플레이어 위치에는 나오면 안돼
-							if (_player->getPlayer().idx != rndX &&
-								_player->getPlayer().idy != rndY)
-							{
-								tempX = rndX;
-								tempY = rndY;
-								break;
-							}
-						}
-			
-						if (tempX && tempY) break;
-					}
-			
-					// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
-					if(tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
-				}
 			}
 
 			if (KEYMANAGER->isOnceKeyDown('O'))
@@ -189,25 +135,24 @@ void bossStageScene::update()
 		}
 
 		BEATMANAGER->update();
-		
+
 		if (_deathMetal->getBoss_HP() <= 0)
 		{
 			bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 			_deathMetal->setBoss_Index(0, 0);
 			_deathMetal->settingBossPos(0, 0, TILESIZE, TILESIZE);
 		}
+		_player->setDeathMetal(_collision.collision_player_Metal_tile(_deathMetal, _player));
+		_player->setSlaveTile(_collision.collision_player_slave_tile(&_sm->get_SlaveList(), _player));
 
-	
+		_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player, _sm, _deathMetal);
+		_zOrder->update();
+		_player->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _player));
+		_floodFill->setVision(_tiles, _player->getPlayer().idx, _player->getPlayer().idy, _player->getPlayer().sight);
+
 
 	}
-	_player->setDeathMetal(_collision.collision_player_Metal_tile(_deathMetal, _player));
-	_player->setSlaveTile(_collision.collision_player_slave_tile(&_sm->get_SlaveList(), _player));
 
-
-	_zOrder->zOrderSetup(_player->getPlayer().idx, _player->getPlayer().idy, _tiles, _player,_sm,_deathMetal);
-	_zOrder->update();
-	_floodFill->setVision(_tiles, _player->getPlayer().idx, _player->getPlayer().idy, _player->getPlayer().sight);
-	_player->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _player));
 }
 
 void bossStageScene::render()
@@ -217,18 +162,86 @@ void bossStageScene::render()
 	{
 		for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); _viTotalList++)
 		{
+			if ((*_viTotalList)->type == TYPE_NONE) continue;
 			// 타일의 타입이 TYPE_NONE이 아니라면 그려준다.
 			if ((*_viTotalList)->type != TYPE_NONE)
 			{
 				// 타일의 속성에 따라 이미지를 뿌린다.		
-				RECT temp;
-				if (IntersectRect(&temp, &CAMERAMANAGER->getCamera_Rect(), &(*_viTotalList)->rc))
-				{
-					if((*_viTotalList)->alphaValue <= 0) findTileImage();
 
+				findTileImage();
+			}
+		}
+
+		for (_viTotalList = _vTotalList.begin(); _viTotalList != _vTotalList.end(); _viTotalList++)
+		{
+			if ((*_viTotalList)->type == TYPE_NONE) continue;
+			if ((*_viTotalList)->alphaValue <= 0)
+			{
+				// 벽이 NONE이 아니라면 출력
+				if ((*_viTotalList)->wall != W_NONE)
+				{
+					//	W_WALL, W_ITEM_WALL, W_WALL2, W_SHOP_WALL,
+					//	W_END_WALL, W_BOSS_WALL,
+					//	W_DOOR, W_TORCH, W_FIRE_WALL,
+					//	W_NONE
+					IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
+						(*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30,
+						(*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
+					continue;
+				}
+
+				// 함정이 NONE이 아니라면 출력
+				if ((*_viTotalList)->trap != TRAP_NONE)
+				{
+					//	TRAP_FAST_BEAT, TRAP_SLOW_BEAT, TRAP_MUTE,
+					//	TRAP_LT_JUMP, TRAP_T_JUMP, TRAP_RT_JUMP,
+					//	TRAP_L_JUMP, TRAP_R_JUMP,
+					//	TRAP_LB_JUMP, TRAP_B_JUMP, TRAP_RB_JUMP,
+					//	TRAP_CONFUSE,
+					//	TRAP_BOMB,
+					//	TRAP_NIDDLE,
+					//	TRAP_SHADOW, TRAP_NIDDLE_SHADOW,
+					//	TRAP_NONE
+					IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
+						(*_viTotalList)->rc.left, (*_viTotalList)->rc.top,
+						(*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY);
+					continue;
 				}
 			}
-	
+			else
+			{
+				// 벽이 NONE이 아니라면 출력
+				if ((*_viTotalList)->wall != W_NONE)
+				{
+					//	W_WALL, W_ITEM_WALL, W_WALL2, W_SHOP_WALL,
+					//	W_END_WALL, W_BOSS_WALL,
+					//	W_DOOR, W_TORCH, W_FIRE_WALL,
+					//	W_NONE
+					IMAGEMANAGER->findImage("wallTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(),
+						(*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30,
+						(*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY, (*_viTotalList)->alphaValue);
+					continue;
+				}
+
+				// 함정이 NONE이 아니라면 출력
+				if ((*_viTotalList)->trap != TRAP_NONE)
+				{
+					//	TRAP_FAST_BEAT, TRAP_SLOW_BEAT, TRAP_MUTE,
+					//	TRAP_LT_JUMP, TRAP_T_JUMP, TRAP_RT_JUMP,
+					//	TRAP_L_JUMP, TRAP_R_JUMP,
+					//	TRAP_LB_JUMP, TRAP_B_JUMP, TRAP_RB_JUMP,
+					//	TRAP_CONFUSE,
+					//	TRAP_BOMB,
+					//	TRAP_NIDDLE,
+					//	TRAP_SHADOW, TRAP_NIDDLE_SHADOW,
+					//	TRAP_NONE
+					IMAGEMANAGER->findImage("trapTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(),
+						(*_viTotalList)->rc.left, (*_viTotalList)->rc.top,
+						(*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY, (*_viTotalList)->alphaValue);
+					continue;
+				}
+			}
+
 		}
 	}
 
@@ -280,6 +293,10 @@ void bossStageScene::bossStageMap_Load()
 		// 타일의 타입이 NONE이 아니라면 벡터에 담는다.
 		if (_tiles[i].type != TYPE_NONE)
 		{
+			if (_tiles[i].type== TYPE_TERRAIN)
+			{
+				_tiles[i].wall == W_NONE;
+			}
 			_tiles[i].alphaValue = 255;
 
 			if (_tiles[i].character == CHAR_BOSS)
@@ -294,6 +311,11 @@ void bossStageScene::bossStageMap_Load()
 				_player->PlayerAddress()->idy = _tiles[i].idY;
 			}
 
+			if (_tiles[i].terrain == TR_STAIR)
+			{
+				_endX = _tiles[i].idX;
+				_endY = _tiles[i].idY;
+			}
 			_vTotalList.push_back(&_tiles[i]);
 		}
 
@@ -305,49 +327,32 @@ void bossStageScene::bossStageMap_Load()
 
 void bossStageScene::findTileImage()
 {
-	// 지형이 NONE이 아니라면 출력
-	if ((*_viTotalList)->terrain != TR_NONE)
+	RECT temp;
+	if (IntersectRect(&temp, &CAMERAMANAGER->getCamera_Rect(), &(*_viTotalList)->rc))
 	{
-		//	TR_BASIC_STAGE_TILE, TR_BASIC_COMBO_TILE,
-		//	TR_BOSS_STAGE_TILE, TR_BOSS_COMBO_TILE,
-		//	TR_STAIR, TR_SHOP,
-		//	TR_NONE,
-		//	TR_END,
-		//	TR_CEMENT, TR_DESERT, TR_GRASS, TR_WATER
-		IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
-			(*_viTotalList)->rc.left, (*_viTotalList)->rc.top,
-			(*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY);
+		// 지형이 NONE이 아니라면 출력
+		if ((*_viTotalList)->terrain != TR_NONE)
+		{
+			//	TR_BASIC_STAGE_TILE, TR_BASIC_COMBO_TILE,
+			//	TR_BOSS_STAGE_TILE, TR_BOSS_COMBO_TILE,
+			//	TR_STAIR, TR_SHOP,
+			//	TR_NONE,
+			//	TR_END,
+			//	TR_CEMENT, TR_DESERT, TR_GRASS, TR_WATER
+			if ((*_viTotalList)->alphaValue <= 0)
+			{
+				IMAGEMANAGER->frameRender("terrainTiles", CAMERAMANAGER->getWorldDC(),
+					(*_viTotalList)->rc.left, (*_viTotalList)->rc.top,
+					(*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY);
+			}
+			else
+			{
+				IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(),
+					(*_viTotalList)->rc.left, (*_viTotalList)->rc.top,
+					(*_viTotalList)->terrainFrameX, (*_viTotalList)->terrainFrameY, (*_viTotalList)->alphaValue);
+			}
+		}
 	}
-
-	// 벽이 NONE이 아니라면 출력
-	if ((*_viTotalList)->wall != W_NONE)
-	{
-		//	W_WALL, W_ITEM_WALL, W_WALL2, W_SHOP_WALL,
-		//	W_END_WALL, W_BOSS_WALL,
-		//	W_DOOR, W_TORCH, W_FIRE_WALL,
-		//	W_NONE
-		IMAGEMANAGER->frameRender("wallTiles", CAMERAMANAGER->getWorldDC(),
-			(*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30,
-			(*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
-	}
-	
-	// 함정이 NONE이 아니라면 출력
-	if ((*_viTotalList)->trap != TRAP_NONE)
-	{
-		//	TRAP_FAST_BEAT, TRAP_SLOW_BEAT, TRAP_MUTE,
-		//	TRAP_LT_JUMP, TRAP_T_JUMP, TRAP_RT_JUMP,
-		//	TRAP_L_JUMP, TRAP_R_JUMP,
-		//	TRAP_LB_JUMP, TRAP_B_JUMP, TRAP_RB_JUMP,
-		//	TRAP_CONFUSE,
-		//	TRAP_BOMB,
-		//	TRAP_NIDDLE,
-		//	TRAP_SHADOW, TRAP_NIDDLE_SHADOW,
-		//	TRAP_NONE
-		IMAGEMANAGER->frameRender("trapTiles", CAMERAMANAGER->getWorldDC(),
-			(*_viTotalList)->rc.left, (*_viTotalList)->rc.top,
-			(*_viTotalList)->trapFrameX, (*_viTotalList)->trapFrameY);
-	}
-
 }
 
 void bossStageScene::z_Order_Player_Boss()
@@ -472,7 +477,7 @@ void bossStageScene::closePlayer(player* player, deathMetal* deathMetal)
 				//deathMetal->ChangeAni();
 			}
 		}
-	
+
 		if (distanceCheck)
 		{
 			// 플레이어가 인식 범위 안에 없다면 쉐도우를 입는다. 인식범위 예외처리를 해준다.
@@ -602,7 +607,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 
 
 	// x가 짧다면 flase, y가 짧다면 true의 값을 저장한다.
-	bool x_OR_y = false; 
+	bool x_OR_y = false;
 
 	// 부호를 없애서 어느 방향이 더 짧은지를 찾아준다. (짧은 방향부터 먼저 찾게 된다.)
 	if (abs(x) > abs(y))
@@ -639,7 +644,7 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 
 				// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
 				deathMetal->setBoss_Direction(BD_LEFT);
-				
+
 				//// 플레이어의 중점 좌표를 받아온다.
 				//deathMetal->setBoss_BaseAttack_Pos(player->getPlayer().x, player->getPlayer().y);
 				//
@@ -670,6 +675,8 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 
 				// 다음 이동을 위해 무브 카운트를 다시 채워준다.
 				deathMetal->setBoss_Move_Count(deathMetal->getBoss_Move_Count_Value());
+
+				deathMetal->setBoss_Angle(PI);
 			}
 		}
 		// x가 음수라면 플레이어는 오른쪽에 있다.
@@ -723,6 +730,8 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 
 				// 다음 이동을 위해 무브 카운트를 다시 채워준다.
 				deathMetal->setBoss_Move_Count(deathMetal->getBoss_Move_Count_Value());
+
+				deathMetal->setBoss_Angle(0);
 			}
 		}
 	}
@@ -781,6 +790,8 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 
 				// 다음 이동을 위해 무브 카운트를 다시 채워준다.
 				deathMetal->setBoss_Move_Count(deathMetal->getBoss_Move_Count_Value());
+
+				deathMetal->setBoss_Angle(PI / 2.f);
 			}
 		}
 		// y가 음수라면 플레이어는 아래쪽에 있다.
@@ -835,6 +846,8 @@ void bossStageScene::findPlayer(player* player, deathMetal* deathMetal, UImanage
 
 				// 다음 이동을 위해 무브 카운트를 다시 채워준다.
 				deathMetal->setBoss_Move_Count(deathMetal->getBoss_Move_Count_Value());
+
+				deathMetal->setBoss_Angle(PI + PI / 2);
 			}
 		}
 	}
@@ -850,7 +863,7 @@ SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 	// x, y 중 짧은것을 선택한다.
 
 	// 이동 시 이동 불가능 오브젝트를 찾는다.
-	
+
 	// 막히면 다른 방향으로
 
 	// x, y 중 같은 라인에 도착한다면 남은 라인으로만 이동을 한다.
@@ -904,11 +917,11 @@ SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 
 	// x가 짧다.
 	if (range.x < range.y)
-	short_XY = SHORT_XY::SHORT_X;
+		short_XY = SHORT_XY::SHORT_X;
 
 	// y가 짧다.
 	if (range.x > range.y)
-	short_XY = SHORT_XY::SHORT_Y;
+		short_XY = SHORT_XY::SHORT_Y;
 
 
 	// 슬레이브와 플레이어의 인덱스 중 같은게 있다면 그 방향은 제외 하고 찾는다.
@@ -944,17 +957,17 @@ SLAVE_DIRECTION bossStageScene::findPlayer(player* player, SLAVE_INFO* slave)
 		// x, y 중 짧은 방향으로 찾는다.
 		switch (short_XY)
 		{
-			case SHORT_XY::SHORT_X:
-					// 플레이어 방향에 따라서 왼쪽이나 오른쪽으로 이동한다.
-					if (find_Angle == FIND_ANGLE::FA_TL || find_Angle == FIND_ANGLE::FA_LB)		return SLAVE_DIRECTION::SD_LEFT;
-					if (find_Angle == FIND_ANGLE::FA_RT || find_Angle == FIND_ANGLE::FA_BR)		return SLAVE_DIRECTION::SD_RIGHT;
-				break;
+		case SHORT_XY::SHORT_X:
+			// 플레이어 방향에 따라서 왼쪽이나 오른쪽으로 이동한다.
+			if (find_Angle == FIND_ANGLE::FA_TL || find_Angle == FIND_ANGLE::FA_LB)		return SLAVE_DIRECTION::SD_LEFT;
+			if (find_Angle == FIND_ANGLE::FA_RT || find_Angle == FIND_ANGLE::FA_BR)		return SLAVE_DIRECTION::SD_RIGHT;
+			break;
 
-			case SHORT_XY::SHORT_Y:
-					// 플레이어 방향에 따라서 위나 아래로 이동 한다.
-					if (find_Angle == FIND_ANGLE::FA_RT || find_Angle == FIND_ANGLE::FA_TL) 	return SLAVE_DIRECTION::SD_UP;
-					if (find_Angle == FIND_ANGLE::FA_LB || find_Angle == FIND_ANGLE::FA_BR)     return SLAVE_DIRECTION::SD_DOWN;
-				break;
+		case SHORT_XY::SHORT_Y:
+			// 플레이어 방향에 따라서 위나 아래로 이동 한다.
+			if (find_Angle == FIND_ANGLE::FA_RT || find_Angle == FIND_ANGLE::FA_TL) 	return SLAVE_DIRECTION::SD_UP;
+			if (find_Angle == FIND_ANGLE::FA_LB || find_Angle == FIND_ANGLE::FA_BR)     return SLAVE_DIRECTION::SD_DOWN;
+			break;
 		}
 	}
 
@@ -1006,7 +1019,7 @@ void bossStageScene::boss_Move_Player()
 		{
 			// 플레이어와 데스메탈의 정보를 이용하여 이동 할 방향을 정한다.
 			findPlayer(_player, _deathMetal, _ui);
-		}  
+		}
 	}
 
 
@@ -1034,7 +1047,7 @@ void bossStageScene::slave_Move_Player()
 			{
 				// 슬레이브가 이동 해야 하는 방향을 받아온다.
 				_sm->get_SlaveList()[i]->get_Slave()->operation.move_Count = _sm->get_SlaveList()[i]->get_Slave()->operation.save_Move_Count;
-				
+
 				// 플레이어가 있는 방향을 찾는다.
 				// 근처에 플레이어가 있는지 찾는다.
 				// 있으면 공격
@@ -1044,7 +1057,7 @@ void bossStageScene::slave_Move_Player()
 				_sm->get_SlaveList()[i]->get_Slave()->status.direction = findPlayer(_player, _sm->get_SlaveList()[i]->get_Slave());
 
 				// 플레이어가 근처에 있는지 찾는다. 만약 있다면 공격
-				if(_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+				if (_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
 					!_sm->get_SlaveList()[i]->get_Slave()->b_Value.ghostJonYha)
 				{
 					_player->playerHit(_sm->get_SlaveList()[i]->get_Slave()->status.attack);
@@ -1095,65 +1108,83 @@ void bossStageScene::slave_Move_Player()
 							_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
 						}
 					}
-
 					else _sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
 				}
 
-				// 플레이어나 데스메탈이 근처에 있다면 이동 하지 않는다. (이동 불가능 true 이동가능 false)
-				//if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
-				//	!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
-				//	!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
-				//	!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
-				//{
-				//	// 플레이어가 고스트를 바라 볼때는 움직이면 안된다.
-				//	if (_sm->get_SlaveList()[i]->get_Slave()->status.type == SLAVE_TYPE::SLAVE_GHOST)
-				//	{
-				//		if (_sm->get_SlaveList()[i]->get_Slave()->status.direction == SLAVE_DIRECTION::SD_LEFT &&
-				//			_player->getPlayer().direction == PLAYERDIRECTION_RIGHT ||
-				//			_sm->get_SlaveList()[i]->get_Slave()->status.direction == SLAVE_DIRECTION::SD_RIGHT &&
-				//			_player->getPlayer().direction == PLAYERDIRECTION_LEFT ||
-				//			_sm->get_SlaveList()[i]->get_Slave()->status.direction == SLAVE_DIRECTION::SD_UP &&
-				//			_player->getPlayer().direction == PLAYERDIRECTION_DOWN ||
-				//			_sm->get_SlaveList()[i]->get_Slave()->status.direction == SLAVE_DIRECTION::SD_DOWN &&
-				//			_player->getPlayer().direction == PLAYERDIRECTION_UP)
-				//		{
-				//			// 움직이면 안돼
-				//		}
-				//		
-				//		else _sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
-				//	}
-				//	else
-				//	{
-				//		_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
-				//
-				//		// 플레이어가 근처에 있다면 공격
-				//		if (_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()))
-				//		{
-				//			_player->playerHit(_sm->get_SlaveList()[i]->get_Slave()->status.attack);
-				//			_ui->set_HP();
-				//			// 플레이어에게 근접 공격 이펙트를 그려준다.
-				//			boss_Base_Attack_Render("base_Attack", _player);
-				//		}
-				//	}
-				//}
-				//
-				//else
-				//{
-				//	_sm->get_SlaveList()[i]->get_Slave()->status.direction = temp_Direction;
-				//}
-				//
-				//// 플레이어가 고스트를 바라 볼때는 움직이면 안된다.
-				//if (_sm->get_SlaveList()[i]->get_Slave()->status.type == SLAVE_TYPE::SLAVE_GHOST)
-				//{
-				//	// 플레이어가 근처에 있다면 공격
-				//	if (_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()))
-				//	{
-				//		_player->playerHit(_sm->get_SlaveList()[i]->get_Slave()->status.attack);
-				//		_ui->set_HP();
-				//		// 플레이어에게 근접 공격 이펙트를 그려준다.
-				//		boss_Base_Attack_Render("base_Attack", _player);
-				//	}
-				//}
+				// 만약 박쥐라면 벽을 제외한 방향을 
+				if (_sm->get_SlaveList()[i]->get_Slave()->status.type == SLAVE_TYPE::SLAVE_BAT)
+				{
+					for (; ; )
+					{
+						// 랜덤으로 값을 받고, 그 방향에 에너미, 보스, 벽이 없다면 그 방향으로 이동하ㅔ 한다.
+						int rndNum = RND->getInt(4);
+						bool exit_For = false;
+
+						switch (rndNum)
+						{
+							// 왼쪽
+						case 0:
+							_sm->get_SlaveList()[i]->get_Slave()->status.direction = SLAVE_DIRECTION::SD_LEFT;
+							// 이동 가능한 방향을 찾으면 박쥐 무브에 방향을 보내준다.
+							if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+							{
+								_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								exit_For = true;
+							}
+							break;
+
+							// 위
+						case 1:
+							_sm->get_SlaveList()[i]->get_Slave()->status.direction = SLAVE_DIRECTION::SD_UP;
+							// 이동 가능한 방향을 찾으면 박쥐 무브에 방향을 보내준다.
+							if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+							{
+								_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								exit_For = true;
+							}
+							break;
+
+							// 오른쪽
+						case 2:
+							_sm->get_SlaveList()[i]->get_Slave()->status.direction = SLAVE_DIRECTION::SD_RIGHT;
+							// 이동 가능한 방향을 찾으면 박쥐 무브에 방향을 보내준다.
+							if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+							{
+								_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								exit_For = true;
+							}
+							break;
+
+							// 아래
+						case 3:
+							_sm->get_SlaveList()[i]->get_Slave()->status.direction = SLAVE_DIRECTION::SD_DOWN;
+							// 이동 가능한 방향을 찾으면 박쥐 무브에 방향을 보내준다.
+							if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave()) &&
+								!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList()))
+							{
+								_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								exit_For = true;
+							}
+							break;
+						}
+
+						// 방향을 찾았다면 나간다.
+						if (exit_For) break;
+					}
+				}
+
+
 
 			}
 		}
@@ -1354,7 +1385,7 @@ void bossStageScene::bossSceneDoorOpen()
 	}
 
 
-		// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
+	// 플레이어가 문을 지나 가면 문이 있던 자리에 벽이 생긴다.
 	if (_player->getPlayer().idx == 12 && _player->getPlayer().idy == 19 ||
 		_player->getPlayer().idx == 13 && _player->getPlayer().idy == 19 ||
 		_player->getPlayer().idx == 14 && _player->getPlayer().idy == 19)
@@ -1377,7 +1408,7 @@ void bossStageScene::bossSceneDoorOpen()
 		// 보스방에 있는 아이들이 움직이기 시작한다.
 		_scene_Starter.isDoorOpen = true;
 	}
-	
+
 }
 
 void bossStageScene::bossClear()
@@ -1448,6 +1479,7 @@ void bossStageScene::boss_PhaseMove()
 
 				break;
 			}
+
 			// 보스 주변으로 랜덤으로 박쥐 소환 (2마리)
 			int tempX, tempY;
 			tempX = tempY = 0;
@@ -1457,14 +1489,16 @@ void bossStageScene::boss_PhaseMove()
 			// 2마리를 소환해야 하기 때문에 2번을 돈다.
 			for (int i = 0; i < 2; ++i)
 			{
-				rndX = RND->getInt(19)+ 8;
-				rndY = RND->getInt(19)+ 10;
+
+				rndX = RND->getInt(9) + 8;
+				rndY = RND->getInt(7) + 11;
+
 				// 타일맵에서 오브젝트가 아닌 부분을 찾는다.
 				for (int j = 0; j < _vTotalList.size(); ++j)
 				{
 					// 보스방 범위에서만 소환이 가능해야 한다.
 					if (_vTotalList[j]->idX >= 8 && _vTotalList[j]->idX <= 18 &&
-						_vTotalList[j]->idY >= 10 && _vTotalList[j]->idY <= 18)
+						_vTotalList[j]->idY >= 11 && _vTotalList[j]->idY <= 18)
 					{
 						// 보스가 있는 위치에는 나오면 안돼
 						if (_deathMetal->getBoss_Index().x != rndX &&
@@ -1472,6 +1506,8 @@ void bossStageScene::boss_PhaseMove()
 						{
 							tempX = rndX;
 							tempY = rndY;
+
+							break;
 						}
 
 						// 기존에 슬레이브가 있는 위치에는 나오면 안돼
@@ -1482,6 +1518,7 @@ void bossStageScene::boss_PhaseMove()
 							{
 								tempX = rndX;
 								tempY = rndY;
+								break;
 							}
 						}
 
@@ -1491,6 +1528,7 @@ void bossStageScene::boss_PhaseMove()
 						{
 							tempX = rndX;
 							tempY = rndY;
+							break;
 						}
 					}
 
@@ -1498,13 +1536,17 @@ void bossStageScene::boss_PhaseMove()
 				}
 
 				// 소환 가능한 인덱스를 찾았다면 그곳에 소환한다. 
-				_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
+				if (tempX && tempY)	_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, tempX, tempY);
+
+
 			}
 
 
 			// 연산이 끝나면 피격을 false로 수정한다.
 			_deathMetal->setBoss_isShield_Hit(false);
 		}
+
+		// 방패 맞았을때는 보스 체력이 달면 안돼
 
 		break;
 
@@ -1535,5 +1577,13 @@ void bossStageScene::setVolumeBossStage()
 	else
 	{
 		SOUNDMANAGER->setVolume("BGM_BOSS", 0.1f);
+	}
+}
+
+void bossStageScene::endScene()
+{
+	if (_player->getPlayer().idx == _endX && _player->getPlayer().idy == _endY)
+	{
+		SCENEMANAGER->changeScene("End");
 	}
 }
