@@ -46,6 +46,9 @@ void Beat::update()
     
     // Pitch값 조절
     update_PitchControl();
+    
+    // 한 번만 시운드를 실행하는 함수
+    ControlPlayOnceSound();
 }
 
 void Beat::render()
@@ -81,7 +84,7 @@ void Beat::render()
         (*_viEffect)->render(_backBuffer->getMemDC());
     }
     IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
-    render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
+    //render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
 
 void Beat::HitNoteEffect(float x, float y)
@@ -107,6 +110,20 @@ void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
     SOUNDMANAGER->addSound("NPC_Stage_1_1_shopkeeper", "sound/Music/zone1_1_shopkeeper.ogg", true, false);
     SOUNDMANAGER->addSound("NPC_Stage_1_2_shopkeeper", "sound/Music/zone1_2_shopkeeper.ogg", true, false);
     SOUNDMANAGER->addSound("NPC_Stage_1_3_shopkeeper", "sound/Music/zone1_3_shopkeeper.ogg", true, false);
+
+    // SFX 사운드
+    SOUNDMANAGER->addSound("sfx_item_food", "sound/ETC/UI/sfx_item_food.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_missedbeat", "sound/ETC/UI/sfx_missedbeat.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_ui_select_down", "sound/ETC/UI/sfx_ui_select_down.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_ui_select_up", "sound/ETC/UI/sfx_ui_select_up.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_pickup_armor", "sound/ETC/UI/sfx_pickup_armor.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_pickup_weapon", "sound/ETC/UI/sfx_pickup_weapon.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_pickup_gold_02", "sound/ETC/UI/sfx_pickup_gold_02.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_pickup_diamond", "sound/ETC/UI/sfx_pickup_diamond.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_pickup_general_ST", "sound/ETC/UI/sfx_pickup_general_ST.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_ui_back", "sound/ETC/UI/sfx_ui_back.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_ui_start", "sound/ETC/UI/sfx_ui_start.ogg", false, false);
+    SOUNDMANAGER->addSound("sfx_ui_toggle", "sound/ETC/UI/sfx_ui_toggle.ogg", false, false);
 
     // 오브젝트 사운드 추가
     SOUNDMANAGER->addSound("obj_door_metal_open", "sound/ETC/Obj/obj_door_metal_open.ogg", false, false);
@@ -138,7 +155,11 @@ void Beat::init_AddSoundAndImg() // 사운드 & 이미지 추가
     // 데스메탈 사운드 추가
     SOUNDMANAGER->addSound("deathmetal_intro", "sound/Enemy/boss_Sound/deathmetal_intro.ogg", false, false);
     SOUNDMANAGER->addSound("deathmetal_welcome", "sound/Enemy/boss_Sound/deathmetal_welcome.ogg", false, false);
+    SOUNDMANAGER->addSound("deathmetal_hit", "sound/Enemy/boss_Sound/deathmetal_hit.ogg", false, false);
     SOUNDMANAGER->addSound("deathmetal_death", "sound/Enemy/boss_Sound/deathmetal_death.ogg", false, false);
+    SOUNDMANAGER->addSound("deathmetal_shieldhit", "sound/Enemy/boss_Sound/deathmetal_shieldhit.ogg", false, false);
+    SOUNDMANAGER->addSound("deathmetal_skels", "sound/Enemy/boss_Sound/deathmetal_skels.ogg", false, false);
+    SOUNDMANAGER->addSound("deathmetal_skels2", "sound/Enemy/boss_Sound/deathmetal_skels2.ogg", false, false);
 
     // 인트로 사운드 추가
     SOUNDMANAGER->addSound("Intro", "sound/ETC/Intro/Intro.ogg", false, false);
@@ -157,8 +178,8 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     _currentStage = STAGE_LOBBY;
 
     _noteFileName = _currentSongName = _oldSongName = ""; // 불러올 파일 이름, 현재 곡 이름, 이전 곡 이름 초기화
-    noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount = _isBeating
-        = _countNote = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = 0;
+     noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount 
+        = _isBeating = _countNote = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = 0;
 
     musicID = 0;
     musicID_Temp = -1;
@@ -221,9 +242,8 @@ void Beat::update_SongAndNoteControl() // 곡과 노트 제어
             _oldStageID = _currentStageID;
             TIMEMANAGER->setCountTimeResetSwitch(true); // 세는 시간 리셋
             TIMEMANAGER->setCountTimeSwitch(true); // 시간 세기 ON
-
-
             _deltaTime = TIMEMANAGER->getElapsedTime();
+
             CreateNewNote(true);
             CreateNewNote(false);
         }
@@ -318,35 +338,32 @@ void Beat::update_PitchControl() // 곡 속도 제어
 
 void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
 {
-    char display_songPos[256];
-    sprintf_s(display_songPos, sizeof(display_songPos), "%f", TIMEMANAGER->getCountLoadingTime());
-    TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
-    //if (_currentSongName != "")
-    //{
-    //    char display_Pitch[128];
-    //    sprintf_s(display_Pitch, sizeof(display_Pitch), "%f", SOUNDMANAGER->getPitch(_currentSongName, _pitch));
-    //    TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
-    //
-    //    char display_songPos[256];
-    //    sprintf_s(display_songPos, sizeof(display_songPos), "%d", _countNote);
-    //    TextOut(getMemDC, 100, 120, display_songPos, strlen(display_songPos));
-    //
-    //    char display_endVec[256];
-    //    sprintf_s(display_endVec, sizeof(display_endVec), "%f", inputIntervalCount);
-    //    TextOut(getMemDC, 100, 140, display_endVec, strlen(display_endVec));
-    //
-    //    char display_songLength[256];
-    //    sprintf_s(display_songLength, sizeof(display_songLength), "%d", _oldStageID);
-    //    TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
-    //
-    //    char display_checkInfo[256];
-    //    sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _currentStageID);
-    //    TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
-    //
-    //    char display_checkAverSpeed[256];
-    //    sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "(_vMsTimeInfo[i + 1] - _vMsTimeInfo[i]) / 1000.0f : %f", (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f);
-    //    TextOut(getMemDC, 100, 220, display_checkAverSpeed, strlen(display_checkAverSpeed));
-    //}
+    if (_currentSongName != "")
+    {
+        char display_Pitch[128];
+        sprintf_s(display_Pitch, sizeof(display_Pitch), "%f", SOUNDMANAGER->getPitch(_currentSongName, _pitch));
+        TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
+    
+        char display_countNote[256];
+        sprintf_s(display_countNote, sizeof(display_countNote), "%d", _countNote);
+        TextOut(getMemDC, 100, 120, display_countNote, strlen(display_countNote));
+    
+        char display_inputIntervalCount[256];
+        sprintf_s(display_inputIntervalCount, sizeof(display_inputIntervalCount), "%f", inputIntervalCount);
+        TextOut(getMemDC, 100, 140, display_inputIntervalCount, strlen(display_inputIntervalCount));
+    
+        char display_songLength[256];
+        sprintf_s(display_songLength, sizeof(display_songLength), "%d", _oldStageID);
+        TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
+    
+        char display_checkInfo[256];
+        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _currentStageID);
+        TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
+    
+        char display_checkAverSpeed[256];
+        sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "(_vMsTimeInfo[i + 1] - _vMsTimeInfo[i]) / 1000.0f : %f", (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f);
+        TextOut(getMemDC, 100, 220, display_checkAverSpeed, strlen(display_checkAverSpeed));
+    }
 }
 
 void Beat::Load() // 노트 파일 로드
@@ -526,7 +543,6 @@ void Beat::Move()
 				}
                 _vNoteRight.erase(_vNoteRight.begin() + i);
                 _vNoteLeft.erase(_vNoteLeft.begin() + i);
-
                 break;
             }
         }
@@ -552,4 +568,37 @@ void Beat::AllStopMusic()
 
     // Credit
     SOUNDMANAGER->stop("credit_music");
+}
+
+void Beat::ControlPlayOnceSound()
+{
+    for (int i = 0; i < _vPlayOnceSound.size(); i++)
+    {
+        if (!_vPlayOnceSound[i].isPlayAgain) continue;
+        if (SOUNDMANAGER->isPlaySound(_vPlayOnceSound[i].soundKeyName)) continue;
+
+        if (_vPlayOnceSound[i].isPlayAgain)
+        {
+            _vPlayOnceSound.erase(_vPlayOnceSound.begin() + i);
+            break;
+        }
+    }
+}
+
+void Beat::AddPlay_vPlayOnceSound_INLOOP(const char* _soundKeyName, bool _isPlayAgain, float _volume)
+{
+    for (int i = 0; i < _vPlayOnceSound.size(); i++)
+    {
+        if (_vPlayOnceSound[i].soundKeyName == _soundKeyName) break;
+        if (i == _vPlayOnceSound.size() - 1)
+        {
+            tagPlayOnceSound sound;
+            sound.isPlayAgain = _isPlayAgain;
+            sound.soundKeyName = _soundKeyName;
+            sound.volume = _volume;
+            _vPlayOnceSound.push_back(sound);
+            SOUNDMANAGER->play(_vPlayOnceSound[_vPlayOnceSound.size() - 1].soundKeyName);
+            break;
+        }
+    }
 }

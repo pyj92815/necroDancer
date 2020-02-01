@@ -60,6 +60,7 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	// 콤보
 
 	_combo = 0;
+	playerAttackSoundID = 0;
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
 }
@@ -310,10 +311,12 @@ void player::keyControl()
 			if (BEATMANAGER->getInterval())
 			{
 				_isKeyDown = true;
+				SOUNDMANAGER->play("sfx_item_food", 1.5f);
 				itemUse();
 			}
 			else
 			{
+				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
 
@@ -326,6 +329,7 @@ void player::keyControl()
 			}
 			else
 			{
+				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
 		}
@@ -339,6 +343,7 @@ void player::keyControl()
 			}
 			else
 			{
+				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
 		}
@@ -352,6 +357,7 @@ void player::keyControl()
 			}
 			else
 			{
+				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
 		}
@@ -365,6 +371,7 @@ void player::keyControl()
 			}
 			else
 			{
+				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
 		}
@@ -378,6 +385,7 @@ void player::keyControl()
 			}
 			else
 			{
+				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
 		}
@@ -439,6 +447,16 @@ void player::tileCheck()
 					_combo = true;
 					playerEffect_Attack();
 					_miPlayerEnemyTile->second->Hit(_player.damage);
+
+					if (playerAttackSoundID == 0) SOUNDMANAGER->play("vo_cad_melee_1");
+					else if (playerAttackSoundID == 1) SOUNDMANAGER->play("vo_cad_melee_2");
+					else if (playerAttackSoundID == 2) SOUNDMANAGER->play("vo_cad_melee_3");
+					else
+					{
+						SOUNDMANAGER->play("vo_cad_melee_4");
+						playerAttackSoundID = 0;
+					}
+					playerAttackSoundID++;
 				}
 				action = true;
 				break;
@@ -466,6 +484,7 @@ void player::tileCheck()
 					{
 						_miPlayerdeathMetalTile->second->setBoss_Shield_Hit_True();
 						action = true;
+						SOUNDMANAGER->play("deathmetal_shieldhit");
 						break;
 					}
 					_miPlayerdeathMetalTile->second->setBoss_HP_Hit(_player.damage);
@@ -490,6 +509,16 @@ void player::tileCheck()
 					_combo = true;
 					playerEffect_Attack();
 					_miPlayerSlaveTile->second->slave_Hit(_player.damage);
+
+					if (playerAttackSoundID == 0) SOUNDMANAGER->play("vo_cad_melee_1");
+					else if (playerAttackSoundID == 1) SOUNDMANAGER->play("vo_cad_melee_2");
+					else if (playerAttackSoundID == 2) SOUNDMANAGER->play("vo_cad_melee_3");
+					else
+					{
+						SOUNDMANAGER->play("vo_cad_melee_4");
+						playerAttackSoundID = 0;
+					}
+					playerAttackSoundID++;
 				}
 				action = true;
 				break;
@@ -575,6 +604,7 @@ void player::itempCheck()
 			KEYANIMANAGER->findAnimation("bodyRight")->setPlayFrame(&bodyRight, 4, true);
 			makeItem(WP_NONE, A_ARMOR_1, ST_NONE, 0, 1, 0, 0, 1, 0);
 			_player.guard = 1;
+			SOUNDMANAGER->play("sfx_pickup_armor");
 			break;
 		case A_ARMOR_2:
 			bodyLeft = { 23,22,21,20 };
@@ -583,6 +613,7 @@ void player::itempCheck()
 			KEYANIMANAGER->findAnimation("bodyRight")->setPlayFrame(&bodyRight, 4, true);
 			makeItem(WP_NONE, A_ARMOR_2, ST_NONE, 1, 1, 0, 0, 2, 0);
 			_player.guard = 2;
+			SOUNDMANAGER->play("sfx_pickup_armor");
 			break;
 		case A_ARMOR_3:
 			bodyLeft = { 31,30,29,28 };
@@ -591,6 +622,7 @@ void player::itempCheck()
 			KEYANIMANAGER->findAnimation("bodyRight")->setPlayFrame(&bodyRight, 4, true);
 			makeItem(WP_NONE, A_ARMOR_3, ST_NONE, 2, 1, 0, 0, 3, 0);
 			_player.guard = 3;
+			SOUNDMANAGER->play("sfx_pickup_armor");
 			break;
 		case A_ARMOR_4:
 			bodyLeft = { 39,38,37,36 };
@@ -599,6 +631,7 @@ void player::itempCheck()
 			KEYANIMANAGER->findAnimation("bodyRight")->setPlayFrame(&bodyRight, 4, true);
 			makeItem(WP_NONE, A_ARMOR_4, ST_NONE, 3, 1, 0, 0, 4, 0);
 			_player.guard = 4;
+			SOUNDMANAGER->play("sfx_pickup_armor");
 			break;
 		case A_BOOTS:
 			break;
@@ -607,14 +640,17 @@ void player::itempCheck()
 		case A_TORCH_1:
 			makeItem(WP_NONE, A_TORCH_1, ST_NONE, 0, 4, 1, 0, 0, 0);
 			_player.sight = 5;
+			SOUNDMANAGER->play("sfx_pickup_general_ST");
 			break;
 		case A_TORCH_2:
 			makeItem(WP_NONE, A_TORCH_2, ST_NONE, 1, 4, 2, 0, 0, 0);
 			_player.sight = 6;
+			SOUNDMANAGER->play("sfx_pickup_general_ST");
 			break;
 		case A_TORCH_3:
 			makeItem(WP_NONE, A_TORCH_3, ST_NONE, 2, 4, 3, 0, 0, 0);
 			_player.sight = 7;
+			SOUNDMANAGER->play("sfx_pickup_general_ST");
 			break;
 		case A_NONE:
 			return;
@@ -659,22 +695,27 @@ void player::itempCheck()
 		case WP_DAGGER_1:
 			makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
 			_player.weapon = PLAYERWAEPON_DAGGER;
+			SOUNDMANAGER->play("sfx_pickup_weapon");
 			break;
 		case WP_DAGGER_2:
 			makeItem(WP_DAGGER_2, A_NONE, ST_NONE, 1, 0, 0, 1, 0, 0);
 			_player.weapon = PLAYERWAEPON_DAGGER;
+			SOUNDMANAGER->play("sfx_pickup_weapon");
 			break;
 		case WP_RAPIER:
 			makeItem(WP_RAPIER, A_NONE, ST_NONE, 2, 0, 0, 1, 0, 0);
 			_player.weapon = PLAYERWAEPON_RAPIER;
+			SOUNDMANAGER->play("sfx_pickup_weapon");
 			break;
 		case WP_BROAD_SWORD:
 			makeItem(WP_BROAD_SWORD, A_NONE, ST_NONE, 2, 2, 0, 1, 0, 0);
 			_player.weapon = PLAYERWAEPON_BROADSWORD;
+			SOUNDMANAGER->play("sfx_pickup_weapon");
 			break;
 		case WP_LONG_SWORD:
 			makeItem(WP_LONG_SWORD, A_NONE, ST_NONE, 3, 0, 0, 1, 0, 0);
 			_player.weapon = PLAYERWAEPON_LONGSWORD;
+			SOUNDMANAGER->play("sfx_pickup_weapon");
 			break;
 		case WP_BOMB: // 구현하지 못함 
 			break;
@@ -721,6 +762,7 @@ void player::itempCheck()
 		{
 		case ST_DIAMOND:
 			_player.diamond++;
+			SOUNDMANAGER->play("sfx_pickup_diamond");
 			break;
 		case ST_ONE_COIN:
 			// 코인 
@@ -730,18 +772,23 @@ void player::itempCheck()
 			break;
 		case ST_COINS:
 			_player.coin += 5;
+			SOUNDMANAGER->play("sfx_pickup_gold_02");
 			break;
 		case ST_MORE_COINS:
 			_player.coin += 15;
+			SOUNDMANAGER->play("sfx_pickup_gold_02");
 			break;
 		case ST_APPLE:
 			makeItem(WP_NONE, A_NONE, ST_APPLE, 0, 3, 0, 0, 0, 1);
+			SOUNDMANAGER->play("sfx_pickup_general_ST");
 			break;
 		case ST_CHEESE:
 			makeItem(WP_NONE, A_NONE, ST_CHEESE, 1, 3, 0, 0, 0, 2);
+			SOUNDMANAGER->play("sfx_pickup_general_ST");
 			break;
 		case ST_MEAT:
 			makeItem(WP_NONE, A_NONE, ST_MEAT, 2, 3, 0, 0, 0, 3);
+			SOUNDMANAGER->play("sfx_pickup_general_ST");
 			break;
 		case ST_NONE:
 			return;
@@ -958,6 +1005,7 @@ void player::playerDie()
 	if (_player.hp <= 0)
 	{
 		OPTION->setPlayerDie(true);
+		BEATMANAGER->AllStopMusic();
 	}
 }
 
