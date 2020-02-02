@@ -43,6 +43,7 @@ struct EnemyInfo
 	bool down;
 	bool object;
 	bool correction;
+	bool attackEffect;
 };
 struct playerInfo
 {

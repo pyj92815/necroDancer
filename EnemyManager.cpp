@@ -334,35 +334,35 @@ void EnemyManager::Enemy_Skeleton_Create(float x, float y)
 {
 	Enemy* Skeleton;
 	Skeleton = new Enemy_Skeleton;
-	Skeleton->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_skeleton", "skeleton_L_IDLE_Ani");
+	Skeleton->EnemyCreate(x, y, 1.0f, 1.f, "Enemy_skeleton", "skeleton_L_IDLE_Ani");
 	_vEnemy.push_back(Skeleton);
 }
 void EnemyManager::Enemy_Skeleton_Yellow_Create(float x, float y)
 {
 	Enemy* Skeleton_Yellow;
 	Skeleton_Yellow = new Enemy_Skeleton_Yellow;
-	Skeleton_Yellow->EnemyCreate(x, y, 2.0f, 3.0f, "Enemy_skeleton_yellow", "skeleton_yellow_L_IDLE_Ani");
+	Skeleton_Yellow->EnemyCreate(x, y, 2.0f, 3.f, "Enemy_skeleton_yellow", "skeleton_yellow_L_IDLE_Ani");
 	_vEnemy.push_back(Skeleton_Yellow);
 }
 void EnemyManager::Enemy_Slime_Blue_Create(float x, float y)
 {
 	Enemy* Slime_Blue;
 	Slime_Blue = new Enemy_Slime_Blue;
-	Slime_Blue->EnemyCreate(x, y, 2.0f, 2.0f, "Enemy_slime_blue", "Enemy_slime_blue_IDLE_Ani", Direction::UP);
+	Slime_Blue->EnemyCreate(x, y, 2.0f, 2.f, "Enemy_slime_blue", "Enemy_slime_blue_IDLE_Ani", Direction::UP);
 	_vEnemy.push_back(Slime_Blue);
 }
 void EnemyManager::Enemy_Slime_Orange_Create(float x, float y)
 {
 	Enemy* Slime_Orange;
 	Slime_Orange = new Enemy_Slime_Orange;
-	Slime_Orange->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_slime_orange", "Enemy_slime_orange_IDLE_Ani", Direction::RIGHT);
+	Slime_Orange->EnemyCreate(x, y, 1.0f, 1.f, "Enemy_slime_orange", "Enemy_slime_orange_IDLE_Ani", Direction::RIGHT);
 	_vEnemy.push_back(Slime_Orange);
 }
 void EnemyManager::Enemy_Wraith_Create(float x, float y)
 {
 	Enemy* Wraith;
 	Wraith = new Enemy_Warith;
-	Wraith->EnemyCreate(x, y, 1.0f, 1.0f, "Enemy_wraith", "Enemy_wraith_L_IDLE_Ani");
+	Wraith->EnemyCreate(x, y, 1.0f, 1.f, "Enemy_wraith", "Enemy_wraith_L_IDLE_Ani");
 	_vEnemy.push_back(Wraith);
 }
 
