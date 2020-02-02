@@ -42,6 +42,8 @@ HRESULT stageScene::init()
 	BEATMANAGER->AllStopMusic();
 	BEATMANAGER->SetMusicID(1);
 
+	IMAGEMANAGER->addImage("Shopkeeper", "image/ETC/Shopkeeper.bmp", 52, 52, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Shopkeeper_Shadow", "image/ETC/Shopkeeper_Shadow.bmp", 52, 52, true, RGB(255, 0, 255));
 	return S_OK;
 }
 
@@ -156,7 +158,7 @@ void stageScene::render()
 			{
 				if ((*_viTotalList)->alphaValue <= 0)
 				{
-
+					
 					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
 					continue;
 				}
@@ -167,7 +169,31 @@ void stageScene::render()
 				}
 			}
 		}
+
+		if ((*_viTotalList)->type == TYPE_CHARACTER)
+		{
+			if ((*_viTotalList)->character == CHAR_SHOPKEEPER)
+			{
+				if (!BEATMANAGER->Get_FindShopkeeperPos())
+				{
+					_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.x = 1744;
+					_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.y = 1172;
+					//BEATMANAGER->Set_ShopkeeperPos({ (_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.right + _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.left) / 2 ,
+					//	(_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.bottom + _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.top) / 2 });
+					BEATMANAGER->Set_ShopkeeperPos({ _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.x,
+						_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.y });
+					BEATMANAGER->Set_FindShopkeeperPos(true);
+				}
+				else
+				{
+					//RECT temp = RectMakeCenter(BEATMANAGER->Get_ShopkeeperPos().x, BEATMANAGER->Get_ShopkeeperPos().y, 52, 52);
+					//Rectangle(CAMERAMANAGER->getWorldDC(), temp);
+					IMAGEMANAGER->findImage("Shopkeeper")->render(CAMERAMANAGER->getWorldDC(), BEATMANAGER->Get_ShopkeeperPos().x - (IMAGEMANAGER->findImage("Shopkeeper")->getWidth() / 2), BEATMANAGER->Get_ShopkeeperPos().y - (IMAGEMANAGER->findImage("Shopkeeper")->getHeight() / 2));
+				}
+			}
+		}
 	}
+
 	_zOrder->render();
 	//플레이어 렌더 
 	/*pm->render();*/
@@ -484,12 +510,21 @@ void stageScene::stageMapLoad(const char* fileName)
 			case CHAR_SHOPKEEPER:
 				if (!BEATMANAGER->Get_FindShopkeeperPos())
 				{
-					BEATMANAGER->Set_ShopkeeperPos({ ((float)_tiles[i].rc.right + _tiles[i].rc.left) / 2, ((float)_tiles[i].rc.bottom + _tiles[i].rc.top) / 2 } );
-					BEATMANAGER->Set_FindShopkeeperPos(true);
-				}
+					BEATMANAGER->Set_ShopkeeperID({ _tiles[i].idX, _tiles[i].idY });				}
 				break;
 			}
 		}
+		if (_tiles[i].type == TYPE_TERRAIN)
+		{
+			switch (_tiles[i].terrain)
+			{
+				case TR_SHOP:
+					break;
+				default:
+					break;
+			}
+		}
+
 		if (_tiles[i].terrain == TR_BOSS_STAIR)
 		{
 			_bossIdx = _tiles[i].idX;

@@ -48,8 +48,8 @@ void Beat::update()
 void Beat::render()
 {
     //Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
+    //Rectangle(_backBuffer->getMemDC(), shopKeeperRC);
     IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
-
     if (_vNoteLeft.size() > 0) // 왼쪽 노트 렌더
     {
         for (int i = 0; i < _vNoteLeft.size(); i++)
@@ -74,7 +74,7 @@ void Beat::render()
         (*_viEffect)->render(_backBuffer->getMemDC());
     }
     IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
-    //render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
+    render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
 
 void Beat::HitNoteEffect(float x, float y)
@@ -174,17 +174,11 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     musicID = 0;
     musicID_Temp = -1;
 
-    shopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
-    test_ShopKeeper = RectMakeCenter(shopKeeperPos.x, shopKeeperPos.y, 50, 50);
-
-    playerPos = { (WINSIZEX / 2) - 100, WINSIZEY / 2 };
-    test_Player = RectMakeCenter(playerPos.x, playerPos.y, 25, 25);
-
-    test_SlowPlatformPos = { (WINSIZEX / 2) - 100, (WINSIZEY / 2) - 200 };
-    test_slowPlatform = RectMakeCenter(test_SlowPlatformPos.x, test_SlowPlatformPos.y, 48, 48);
-
-    test_FastPlatformPos = { (WINSIZEX / 2) + 100, (WINSIZEY / 2) - 200 };
-    test_fastPlatform = RectMakeCenter(test_FastPlatformPos.x, test_FastPlatformPos.y, 48, 48);
+    //test_SlowPlatformPos = { (WINSIZEX / 2) - 100, (WINSIZEY / 2) - 200 };
+    //test_slowPlatform = RectMakeCenter(test_SlowPlatformPos.x, test_SlowPlatformPos.y, 48, 48);
+    //
+    //test_FastPlatformPos = { (WINSIZEX / 2) + 100, (WINSIZEY / 2) - 200 };
+    //test_fastPlatform = RectMakeCenter(test_FastPlatformPos.x, test_FastPlatformPos.y, 48, 48);
 
     heartImg = IMAGEMANAGER->findImage("Heart");
     heartImg->setFrameY(0), heartImg->setFrameX(0);
@@ -310,13 +304,24 @@ void Beat::update_BeatEffect() // 심장 박동 시 변경할 심장 이미지와 변경할 이외�
 
 void Beat::update_SoundDistanceControl() // 거리에 따라 소리크기 제어
 {
+    //if (isFindShopkeeperPos) // 상점 주인의 위치를 찾았으면
+    //{
+    //    shopKeeperRC = RectMakeCenter(shopKeeperPos.x, shopKeeperPos.y, 50, 50);
+    //    playerPos = { ((float)_player->getPlayer().rc.right + _player->getPlayer().rc.left) / 2, ((float)_player->getPlayer().rc.bottom + _player->getPlayer().rc.top) / 2 };
+    //    float getDistaceTemp = getDistance(playerPos.x, playerPos.y, shopKeeperPos.x, shopKeeperPos.y);
+    //    if (getDistaceTemp < WINSIZEX_HALF) SOUNDMANAGER->setVolume(_currentShopkeeper, 1);
+    //    else if (getDistaceTemp >= WINSIZEX_HALF && getDistaceTemp < WINSIZEX_HALF * 2) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.75f);
+    //    else if (getDistaceTemp >= WINSIZEX_HALF * 2 && getDistaceTemp < WINSIZEX_HALF * 2 + 300) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.30f);
+    //    else SOUNDMANAGER->setVolume(_currentShopkeeper, 0.0f);
+    //}
     if (isFindShopkeeperPos) // 상점 주인의 위치를 찾았으면
     {
+        shopKeeperRC = RectMakeCenter(shopKeeperPos.x, shopKeeperPos.y, 50, 50);
         playerPos = { ((float)_player->getPlayer().rc.right + _player->getPlayer().rc.left) / 2, ((float)_player->getPlayer().rc.bottom + _player->getPlayer().rc.top) / 2 };
         float getDistaceTemp = getDistance(playerPos.x, playerPos.y, shopKeeperPos.x, shopKeeperPos.y);
-        if (getDistaceTemp < WINSIZEX_HALF) SOUNDMANAGER->setVolume(_currentShopkeeper, 1);
-        else if (getDistaceTemp >= WINSIZEX_HALF && getDistaceTemp < WINSIZEX_HALF * 2) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.75f);
-        else if (getDistaceTemp >= WINSIZEX_HALF * 2 && getDistaceTemp < WINSIZEX_HALF * 2 + 300) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.30f);
+        if (getDistaceTemp < 200) SOUNDMANAGER->setVolume(_currentShopkeeper, 1);
+        else if (getDistaceTemp >= 200 && getDistaceTemp < 400) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.75f);
+        else if (getDistaceTemp >= 400 && getDistaceTemp < 600) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.30f);
         else SOUNDMANAGER->setVolume(_currentShopkeeper, 0.0f);
     }
 }
@@ -331,32 +336,35 @@ void Beat::update_PitchControl() // 곡 속도 제어
 
 void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
 {
-    if (_currentSongName != "")
-    {
-        char display_Pitch[128];
-        sprintf_s(display_Pitch, sizeof(display_Pitch), "%f", SOUNDMANAGER->getPitch(_currentSongName, _pitch));
-        TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
-    
-        char display_countNote[256];
-        sprintf_s(display_countNote, sizeof(display_countNote), "%d", _countNote);
-        TextOut(getMemDC, 100, 120, display_countNote, strlen(display_countNote));
-    
-        char display_inputIntervalCount[256];
-        sprintf_s(display_inputIntervalCount, sizeof(display_inputIntervalCount), "%f", inputIntervalCount);
-        TextOut(getMemDC, 100, 140, display_inputIntervalCount, strlen(display_inputIntervalCount));
-    
-        char display_songLength[256];
-        sprintf_s(display_songLength, sizeof(display_songLength), "%d", _oldStageID);
-        TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
-    
-        char display_checkInfo[256];
-        sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _currentStageID);
-        TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
-    
-        char display_checkAverSpeed[256];
-        sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "(_vMsTimeInfo[i + 1] - _vMsTimeInfo[i]) / 1000.0f : %f", (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f);
-        TextOut(getMemDC, 100, 220, display_checkAverSpeed, strlen(display_checkAverSpeed));
-    }
+    //if (isFindShopkeeperPos)
+    //{
+    //    char display_Pitch[128];
+    //    sprintf_s(display_Pitch, sizeof(display_Pitch), "%d", shopKeeperPos.x);
+    //    TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
+    //
+    //    char display_countNote[256];
+    //    sprintf_s(display_countNote, sizeof(display_countNote), "%d", shopKeeperPos.y);
+    //    TextOut(getMemDC, 100, 120, display_countNote, strlen(display_countNote));
+    //}
+    //if (_currentSongName != "")
+    //{
+    //
+    //    char display_inputIntervalCount[256];
+    //    sprintf_s(display_inputIntervalCount, sizeof(display_inputIntervalCount), "%f", inputIntervalCount);
+    //    TextOut(getMemDC, 100, 140, display_inputIntervalCount, strlen(display_inputIntervalCount));
+    //
+    //    char display_songLength[256];
+    //    sprintf_s(display_songLength, sizeof(display_songLength), "%d", _oldStageID);
+    //    TextOut(getMemDC, 100, 180, display_songLength, strlen(display_songLength));
+    //
+    //    char display_checkInfo[256];
+    //    sprintf_s(display_checkInfo, sizeof(display_checkInfo), "%d", _currentStageID);
+    //    TextOut(getMemDC, 100, 200, display_checkInfo, strlen(display_checkInfo));
+    //
+    //    char display_checkAverSpeed[256];
+    //    sprintf_s(display_checkAverSpeed, sizeof(display_checkAverSpeed), "(_vMsTimeInfo[i + 1] - _vMsTimeInfo[i]) / 1000.0f : %f", (_vMsTimeInfo[_countNote + 1] - _vMsTimeInfo[_countNote]) / 1000.0f);
+    //    TextOut(getMemDC, 100, 220, display_checkAverSpeed, strlen(display_checkAverSpeed));
+    //}
 }
 
 void Beat::Load() // 노트 파일 로드
