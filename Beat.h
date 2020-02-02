@@ -69,7 +69,9 @@ private:
 	float _pitch; // 현재 곡의 pitch값 (1이 기본 값, 1미만 시 곡이 느려짐, 1이상 시 빨라짐)
 
 	RECT heartRC, heartSmallRC, test_ShopKeeper, test_Player, test_slowPlatform, test_fastPlatform; // RECT들(심장, 심장 가운데에 넣을 작은 렉트(아직은 수정중), 플레이어, 느려지는 발판, 빨라지는 발판)
-	POINTFLOAT test_ShopKeeperPos, test_PlayerPos, test_SlowPlatformPos, test_FastPlatformPos; // X,Y좌표들(상점 주인, 플레이어, 느려지는 발판, 빨라지는 발판)
+	POINTFLOAT shopKeeperPos, playerPos, test_SlowPlatformPos, test_FastPlatformPos; // X,Y좌표들(상점 주인, 플레이어, 느려지는 발판, 빨라지는 발판)
+	bool isFindPlayerPos;
+	bool isFindShopkeeperPos;
 
 	image* heartImg; // 심장 이미지
 	int heartFrameCount; // 현재 심장 프레임
@@ -81,9 +83,6 @@ private:
 	bool Interval;
 	player* _player;
 	bool _effect;
-
-	vector<tagPlayOnceSound> _vPlayOnceSound; // 한 번만 실행할 사운드
-	int checkLoop;
 
 	int musicID; // 음악의 인덱스를 정해주는 변수
 	int musicID_Temp;
@@ -131,8 +130,9 @@ public:
 	bool getTurnOnOff() { return _tileOnOff; }
 	void AllStopMusic();
 
-	void ControlPlayOnceSound();
+	void Set_PlayerPos(POINTFLOAT _playerPos) { playerPos = _playerPos; }
+	void Set_ShopkeeperPos(POINTFLOAT _shopkeeperPos) { shopKeeperPos = _shopkeeperPos; }
 
-	void AddPlay_vPlayOnceSound_INLOOP(const char* _soundKeyName, bool _isPlayAgain, float _volume);
-	void CheckLooping() { checkLoop++; }
+	void Set_FindShopkeeperPos(bool isFind) { isFindShopkeeperPos = isFind; }
+	bool Get_FindShopkeeperPos() { return isFindShopkeeperPos; }
 };

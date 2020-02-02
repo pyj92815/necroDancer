@@ -30,9 +30,6 @@ void Beat::update()
     // 씬 체크
     update_SetSceneMusic();
     
-    // 플레이어 움직임
-    // update_PlayerMoveTest();
-    
     // 노래 & 노트 조절
     update_SongAndNoteControl();
     
@@ -46,17 +43,10 @@ void Beat::update()
     
     // Pitch값 조절
     update_PitchControl();
-    
-    // 한 번만 시운드를 실행하는 함수
-    ControlPlayOnceSound();
 }
 
 void Beat::render()
 {
-    //Rectangle(_backBuffer->getMemDC(), test_slowPlatform);
-    //Rectangle(_backBuffer->getMemDC(), test_fastPlatform);
-    //Rectangle(_backBuffer->getMemDC(), test_ShopKeeper);
-    //Rectangle(_backBuffer->getMemDC(), test_Player);
     //Rectangle(_backBuffer->getMemDC(), heartRC); // 심장 렉트 렌더
     IMAGEMANAGER->frameRender("Heart", _backBuffer->getMemDC(), heartImg->getX(), heartImg->getY()); // 심장 렌더
 
@@ -178,17 +168,17 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     _currentStage = STAGE_LOBBY;
 
     _noteFileName = _currentSongName = _oldSongName = ""; // 불러올 파일 이름, 현재 곡 이름, 이전 곡 이름 초기화
-     noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount 
-        = _isBeating = _countNote = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = 0;
+     noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount =
+     isFindShopkeeperPos = isFindPlayerPos = _isBeating = _countNote = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = 0;
 
     musicID = 0;
     musicID_Temp = -1;
 
-    test_ShopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
-    test_ShopKeeper = RectMakeCenter(test_ShopKeeperPos.x, test_ShopKeeperPos.y, 50, 50);
+    shopKeeperPos = { WINSIZEX / 2, WINSIZEY / 2 };
+    test_ShopKeeper = RectMakeCenter(shopKeeperPos.x, shopKeeperPos.y, 50, 50);
 
-    test_PlayerPos = { (WINSIZEX / 2) - 100, WINSIZEY / 2 };
-    test_Player = RectMakeCenter(test_PlayerPos.x, test_PlayerPos.y, 25, 25);
+    playerPos = { (WINSIZEX / 2) - 100, WINSIZEY / 2 };
+    test_Player = RectMakeCenter(playerPos.x, playerPos.y, 25, 25);
 
     test_SlowPlatformPos = { (WINSIZEX / 2) - 100, (WINSIZEY / 2) - 200 };
     test_slowPlatform = RectMakeCenter(test_SlowPlatformPos.x, test_SlowPlatformPos.y, 48, 48);
@@ -200,7 +190,6 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
     heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 60, heartImg->getFrameHeight());
-
 }
 
 void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
@@ -214,11 +203,11 @@ void Beat::update_SetSceneMusic() // 씬 정보를 받아올 함수
 
 void Beat::update_PlayerMoveTest() // 테스트용 플레이어
 {
-    if (KEYMANAGER->isStayKeyDown(VK_UP)) test_PlayerPos.y -= 3;
-    if (KEYMANAGER->isStayKeyDown(VK_LEFT)) test_PlayerPos.x -= 3;
-    if (KEYMANAGER->isStayKeyDown(VK_DOWN)) test_PlayerPos.y += 3;
-    if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) test_PlayerPos.x += 3;
-    test_Player = RectMakeCenter(test_PlayerPos.x, test_PlayerPos.y, 25, 25);
+    if (KEYMANAGER->isStayKeyDown(VK_UP)) playerPos.y -= 3;
+    if (KEYMANAGER->isStayKeyDown(VK_LEFT)) playerPos.x -= 3;
+    if (KEYMANAGER->isStayKeyDown(VK_DOWN)) playerPos.y += 3;
+    if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) playerPos.x += 3;
+    test_Player = RectMakeCenter(playerPos.x, playerPos.y, 25, 25);
 }
 
 void Beat::update_SongAndNoteControl() // 곡과 노트 제어
@@ -321,11 +310,15 @@ void Beat::update_BeatEffect() // 심장 박동 시 변경할 심장 이미지와 변경할 이외�
 
 void Beat::update_SoundDistanceControl() // 거리에 따라 소리크기 제어
 {
-    float getDistaceTemp = getDistance(test_PlayerPos.x, test_PlayerPos.y, test_ShopKeeperPos.x, test_ShopKeeperPos.y);
-    if (getDistaceTemp < 40) SOUNDMANAGER->setVolume(_currentShopkeeper, 1);
-    else if (getDistaceTemp >= 40 && getDistaceTemp < 80) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.75f);
-    else if (getDistaceTemp >= 80 && getDistaceTemp < 120) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.50f);
-    else SOUNDMANAGER->setVolume(_currentShopkeeper, 0.25f);
+    if (isFindShopkeeperPos) // 상점 주인의 위치를 찾았으면
+    {
+        playerPos = { ((float)_player->getPlayer().rc.right + _player->getPlayer().rc.left) / 2, ((float)_player->getPlayer().rc.bottom + _player->getPlayer().rc.top) / 2 };
+        float getDistaceTemp = getDistance(playerPos.x, playerPos.y, shopKeeperPos.x, shopKeeperPos.y);
+        if (getDistaceTemp < WINSIZEX_HALF) SOUNDMANAGER->setVolume(_currentShopkeeper, 1);
+        else if (getDistaceTemp >= WINSIZEX_HALF && getDistaceTemp < WINSIZEX_HALF * 2) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.75f);
+        else if (getDistaceTemp >= WINSIZEX_HALF * 2 && getDistaceTemp < WINSIZEX_HALF * 2 + 300) SOUNDMANAGER->setVolume(_currentShopkeeper, 0.30f);
+        else SOUNDMANAGER->setVolume(_currentShopkeeper, 0.0f);
+    }
 }
 
 void Beat::update_PitchControl() // 곡 속도 제어
@@ -568,37 +561,4 @@ void Beat::AllStopMusic()
 
     // Credit
     SOUNDMANAGER->stop("credit_music");
-}
-
-void Beat::ControlPlayOnceSound()
-{
-    for (int i = 0; i < _vPlayOnceSound.size(); i++)
-    {
-        if (!_vPlayOnceSound[i].isPlayAgain) continue;
-        if (SOUNDMANAGER->isPlaySound(_vPlayOnceSound[i].soundKeyName)) continue;
-
-        if (_vPlayOnceSound[i].isPlayAgain)
-        {
-            _vPlayOnceSound.erase(_vPlayOnceSound.begin() + i);
-            break;
-        }
-    }
-}
-
-void Beat::AddPlay_vPlayOnceSound_INLOOP(const char* _soundKeyName, bool _isPlayAgain, float _volume)
-{
-    for (int i = 0; i < _vPlayOnceSound.size(); i++)
-    {
-        if (_vPlayOnceSound[i].soundKeyName == _soundKeyName) break;
-        if (i == _vPlayOnceSound.size() - 1)
-        {
-            tagPlayOnceSound sound;
-            sound.isPlayAgain = _isPlayAgain;
-            sound.soundKeyName = _soundKeyName;
-            sound.volume = _volume;
-            _vPlayOnceSound.push_back(sound);
-            SOUNDMANAGER->play(_vPlayOnceSound[_vPlayOnceSound.size() - 1].soundKeyName);
-            break;
-        }
-    }
 }

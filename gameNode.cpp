@@ -57,7 +57,6 @@ void gameNode::release()
 {
 	if (_managerInit)
 	{
-	
 		KEYMANAGER->release();
 		KEYMANAGER->releaseSingleton();
 		IMAGEMANAGER->release();

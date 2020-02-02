@@ -481,6 +481,13 @@ void stageScene::stageMapLoad(const char* fileName)
 			case CHAR_DRAGON:
 				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_DRAGON, PointMake(_tiles[i].idX, _tiles[i].idY)));
 				break;
+			case CHAR_SHOPKEEPER:
+				if (!BEATMANAGER->Get_FindShopkeeperPos())
+				{
+					BEATMANAGER->Set_ShopkeeperPos({ ((float)_tiles[i].rc.right + _tiles[i].rc.left) / 2, ((float)_tiles[i].rc.bottom + _tiles[i].rc.top) / 2 } );
+					BEATMANAGER->Set_FindShopkeeperPos(true);
+				}
+				break;
 			}
 		}
 		if (_tiles[i].terrain == TR_BOSS_STAIR)

@@ -943,7 +943,6 @@ void mapTool::setMap()
 					_tiles[i].type = TYPE_CHARACTER;
 					_tiles[i].characterFrameX = _currentTile.x;
 					_tiles[i].characterFrameY = _currentTile.y;
-
 					_tiles[i].character = characterSelect(_currentTile.x, _currentTile.y);
 				}
 				else if (_crtSelect == CTRL_TRAP)
