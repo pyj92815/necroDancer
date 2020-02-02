@@ -63,7 +63,7 @@ void bossStageScene::update()
 	if (!OPTION->getplayerDie())
 	{
 		// 플레이어 인덱스 출력
-		cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
+		//cout << _player->getPlayer().idx << ", " << _player->getPlayer().idy << endl;
 		endScene();
 		// 보스 등장 씬이 끝나면 플레이가 가능하다.
 		bossSceneStart();

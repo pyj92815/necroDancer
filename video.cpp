@@ -57,7 +57,9 @@ void video::render()
 		{
 			Mat frame;			     // opencv에서 사용하는 구조체  
 			frame.setTo(Scalar(0));	 // 초기값 초기화 
-			cap >> frame;			 // cap(동영상파일) -> frame이라는 구조체에 넣는다.		 
+			cap >> frame;			 // cap(동영상파일) -> frame이라는 구조체에 넣는다.		
+			double fps = cap.get(CAP_PROP_FPS);
+			int delay = cvRound(1000 / fps);
 			//if (cap.get(CAP_PROP_POS_FRAMES) == cap.get(CAP_PROP_FRAME_COUNT)) ( 현재 프레임 == 최대 프레임 )  // 나중에 쓸수도 있으니 주석처리 
 			// 만약 동영상이 비어있으면 
 			if (frame.empty())
@@ -104,6 +106,7 @@ void video::render()
 				return;
 			}
 			imshow(WINNAME, frame);  // 윈도우창에 프레임을 띄운다 -> 실제로 동영상을 띄우는 코드 
+			waitKey(delay);
 		}
 	}
 

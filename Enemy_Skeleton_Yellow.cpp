@@ -15,7 +15,12 @@ void Enemy_Skeleton_Yellow::Action()
 		}
 		break;
 	case enemyState::STATE_ATTACK:
-		Attack();
+		if (_enemyInfo->beatCount >= 2)
+		{
+			Attack();
+			_enemyInfo->beatCount = 0;
+		}
+
 		break;
 	case enemyState::STATE_DIE:
 		break;
