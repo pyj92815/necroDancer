@@ -36,7 +36,7 @@ HRESULT bossStageScene::init()
 	_sm = new slaveManager;
 	_sm->init();
 
-	//start_Slave_Create();													// 기본으로 보스방에 있는 슬레이브 생성
+	start_Slave_Create();													// 기본으로 보스방에 있는 슬레이브 생성
 
 	_zOrder = new zOrder;
 	_zOrder->init();
@@ -101,10 +101,10 @@ void bossStageScene::update()
 				searchSlave(_sm->get_SlaveList(), _player);
 
 				// 보스 움직임 연산
-				if (KEYMANAGER->isToggleKey(VK_NUMPAD9))
-				{
+				//if (KEYMANAGER->isToggleKey(VK_NUMPAD9))
+				//{
 					if (!_deathMetal->getBoss_Dead())  boss_Move_Player();
-				}
+				//}
 
 				// 슬레이브 움직임 연산
 				
@@ -1729,7 +1729,7 @@ void bossStageScene::boss_PhaseMove()
 		if (!_deathMetal->boss_SummonSkill()->isCasting && _sm->get_SlaveList().size() < 8)
 		{
 			// 랜덤으로 숫자를 받는다. 0 ~ 2
-			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(150);
+			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(50);
 
 			cout << _deathMetal->boss_SummonSkill()->rnd << endl;
 
@@ -1828,7 +1828,7 @@ void bossStageScene::boss_PhaseMove()
 		if (!_deathMetal->boss_SummonSkill()->isCasting && _sm->get_SlaveList().size() < 4)
 		{
 			// 랜덤으로 숫자를 받는다. 0 ~ 2
-			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(150);
+			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(50);
 
 			cout << _deathMetal->boss_SummonSkill()->rnd << endl;
 
