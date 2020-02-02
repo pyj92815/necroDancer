@@ -1729,7 +1729,7 @@ void bossStageScene::boss_PhaseMove()
 		if (!_deathMetal->boss_SummonSkill()->isCasting && _sm->get_SlaveList().size() < 8)
 		{
 			// 랜덤으로 숫자를 받는다. 0 ~ 2
-			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(50);
+			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(150);
 
 			cout << _deathMetal->boss_SummonSkill()->rnd << endl;
 
@@ -1828,7 +1828,7 @@ void bossStageScene::boss_PhaseMove()
 		if (!_deathMetal->boss_SummonSkill()->isCasting && _sm->get_SlaveList().size() < 4)
 		{
 			// 랜덤으로 숫자를 받는다. 0 ~ 2
-			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(50);
+			_deathMetal->boss_SummonSkill()->rnd = RND->getInt(150);
 
 			cout << _deathMetal->boss_SummonSkill()->rnd << endl;
 
