@@ -94,7 +94,7 @@ void playGround::render()
 	//===========================================================
 	
 	_sm->render();
-	TIMEMANAGER->render(getMemDC());
+	//TIMEMANAGER->render(getMemDC());
 	//===========================================================
 	if (!SCENEMANAGER->getVideoPlay()) _backBuffer->render(getHDC(), 0, 0);
 

@@ -74,6 +74,9 @@ struct SLAVE_BOOL
 	bool				beat;						// 비트를 받았다면 ture
 
 	bool				isAttack;					// 공격 가능할때 true
+
+	bool				skelY_NoHead;				// 옐로우 스켈레톤이 머리가 없을때
+	bool				noHead_NoMove;				// 머리가 없을때 이동 불가능 지형에는 못가게
 };
 
 // 슬레이브의 연산 변수
@@ -90,6 +93,9 @@ struct SLAVE_OPERATION
 	float				move_Speed;					// 다음 타일까지 이동하는 속도
 	float				move_Distance;				// 다음 타일까지의 거리
 	float				worldTime;					// 월드 타임
+
+	// 세이브용
+	int					save_Hp;					// 슬레이브 체력 비교용
 
 };
 
@@ -152,6 +158,7 @@ public:
 		slave->b_Value.ghostMoveStop = false;
 		slave->b_Value.ghostImgDirection = false;
 		slave->b_Value.ghostJonYha = false;
+		slave->b_Value.skelY_NoHead = false;
 
 		// 이미지, 애니메이션 할당
 		slave->image.img = new image;
@@ -203,6 +210,7 @@ public:
 			slave->status.type = SLAVE_TYPE::SLAVE_SKELETON_YELLOW;					// 슬레이브의 타입을 정해준다.
 			slave->status.direction = SLAVE_DIRECTION::SD_DOWN;						// 기본 방향은 아래를 향한다.
 			slave->status.hp = 2;													// 기본 체력을 정해준다.
+			slave->operation.save_Hp = 2;											// 최대 체력(비교용)
 			slave->image.img = IMAGEMANAGER->findImage("boss_Skeleton_Yellow");		// 슬레이브의 이미지를 찾아서 넣어준다.
 			slave->image.animation = KEYANIMANAGER->findAnimation("sSkelY_Left");	// 슬레이브의 애니메이션을 찾아서 넣어준다.
 			slave->operation.move_Count = 2;										// 슬레이브의 이동 박자

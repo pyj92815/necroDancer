@@ -50,6 +50,7 @@ protected:
 
 	BOSS_BOOL	boss_Bool;						// 보스에 사용하는 bool을 모아두었다.
 	BOSS_SUMMONS_SKILL	slave_Summon;			// 슬레이브 소환 스킬
+	BOSS_Magic_SKILL	boss_FireBall;			// 보스 파이어볼 스킬
 
 	BOSS_DIRECTION save_Direction;				// 보스의 방향을 저장해둔다.
 	bool		   change_Ani;					// 애니메이션 체인지가 가능한지 여부
@@ -100,6 +101,9 @@ public:
 	bool getBoss_ClosePlayer() { return isClosePlayer; }
 	BOSS_SUMMONS_SKILL getBoss_SummonSkill() { return slave_Summon; }												// 슬레이브 소환에 필요한 변수들 모음
 	BOSS_SUMMONS_SKILL* boss_SummonSkill() { return &slave_Summon; }
+	BOSS_Magic_SKILL* boss_FireBallSkill() { return &boss_FireBall; }
+	BOSS_BOOL* getBoss_Bool() { return &boss_Bool; }
+
 
 	// 보스 정보 셋터 함수
 	void setBoss_HP(int _hp) { hp = _hp; if (hp > 9) hp = 9; if (hp < 0) hp = 0; }									// 보스의 HP를 수정한다. (hp가 최대치 최소치를 넘어가지 않게 예외처리)
@@ -167,6 +171,8 @@ public:
 	void setBoss_SummonSkill(int num) { slave_Summon.rnd = num; }													// 랜덤값을 저장한다.
 
 	void setBoss_isCasting(bool value) { isCasting = value; }														// 캐스팅 유무 설정
+
+	void setBoss_HP_1() { hp = 1; }
 
 	// 업데이트 함수
 	void Info_Update();																								// 정보 갱신 함수
