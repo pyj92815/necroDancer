@@ -147,17 +147,17 @@ void miniMap::render()
 				448 + _playerY / 10);
 		}
 	}
-	//몬스터 미니맵 출력
-	vector<Enemy*> vec = _em->getVEnemy();
-	vector<Enemy*>::iterator ins = vec.begin();
-	if ((*ins)->getEnemyInfo()->Light)
-	{
-		for (; ins != vec.end();)
-		{
-			IMAGEMANAGER->findImage("min_enemy")->render(getMemDC(),
-				750 + (*ins)->getEnemyInfo()->rc.left / 10,
-				450 + (*ins)->getEnemyInfo()->rc.top / 10);
-			ins++;
-		}
-	}
+	////몬스터 미니맵 출력
+	//vector<Enemy*> vec = _em->getVEnemy();
+	//vector<Enemy*>::iterator ins = vec.begin();
+	//if ((*ins)->getEnemyInfo()->Light)
+	//{
+	//	for (; ins != vec.end();)
+	//	{
+	//		IMAGEMANAGER->findImage("min_enemy")->render(getMemDC(),
+	//			750 + (*ins)->getEnemyInfo()->rc.left / 10,
+	//			450 + (*ins)->getEnemyInfo()->rc.top / 10);
+	//		ins++;
+	//	}
+	//}
 }

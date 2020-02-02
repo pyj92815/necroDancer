@@ -16,13 +16,17 @@ void Enemy_Skeleton::Action()
 		}
 		break;
 	case enemyState::STATE_ATTACK:
-		
 		if (_enemyInfo->beatCount >= 2)
 		{
-			Attack();
+			_enemyInfo->attackEffect = true;
 			_enemyInfo->beatCount = 0;
 		}
-
+		if (_enemyInfo->beatCount = 0)
+		{
+			_enemyInfo->attackEffect = false;
+		}
+			Attack();
+		
 		
 		break;
 	case enemyState::STATE_DIE:

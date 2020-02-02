@@ -106,7 +106,7 @@ void Enemy::render()
 {
 	_enemyInfo->Image->aniRender(CAMERAMANAGER->getWorldDC(), _enemyInfo->x, _enemyInfo->y - (_enemyInfo->Image->getFrameHeight() / 4), _enemyInfo->Animation);
 	if(KEYMANAGER->isToggleKey(VK_F9))Rectangle(CAMERAMANAGER->getWorldDC(), _enemyInfo->rc);
-	if(_enemyInfo->Attack)
+	if(_enemyInfo->Attack && _enemyInfo->attackEffect)
 	_enemyInfo->attackImage->aniRender(CAMERAMANAGER->getWorldDC(), _playerInfo->x, _playerInfo->y, _enemyInfo->attackAnimation);
 }
 
