@@ -174,6 +174,8 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     musicID = 0;
     musicID_Temp = -1;
 
+    _pitchTemp = 1;
+
     //test_SlowPlatformPos = { (WINSIZEX / 2) - 100, (WINSIZEY / 2) - 200 };
     //test_slowPlatform = RectMakeCenter(test_SlowPlatformPos.x, test_SlowPlatformPos.y, 48, 48);
     //
@@ -328,14 +330,28 @@ void Beat::update_SoundDistanceControl() // 거리에 따라 소리크기 제어
 
 void Beat::update_PitchControl() // 곡 속도 제어
 {
-    RECT temp;
-    if (IntersectRect(&temp, &test_Player, &test_slowPlatform)) SOUNDMANAGER->setPitch(_currentShopkeeper, 0.875f), SOUNDMANAGER->setPitch(_currentSongName, 0.875f);
-    else if ((IntersectRect(&temp, &test_Player, &test_fastPlatform))) SOUNDMANAGER->setPitch(_currentShopkeeper, 1.125f), SOUNDMANAGER->setPitch(_currentSongName, 1.125f);
-    else SOUNDMANAGER->setPitch(_currentShopkeeper, 1), SOUNDMANAGER->setPitch(_currentSongName, 1);
+    //RECT temp;
+    //if (IntersectRect(&temp, &test_Player, &test_slowPlatform)) SOUNDMANAGER->setPitch(_currentShopkeeper, 0.875f), SOUNDMANAGER->setPitch(_currentSongName, 0.875f);
+    //else if ((IntersectRect(&temp, &test_Player, &test_fastPlatform))) SOUNDMANAGER->setPitch(_currentShopkeeper, 1.125f), SOUNDMANAGER->setPitch(_currentSongName, 1.125f);
+    //else SOUNDMANAGER->setPitch(_currentShopkeeper, 1), SOUNDMANAGER->setPitch(_currentSongName, 1);
+
+    //if (KEYMANAGER->isOnceKeyDown('N'))
+    //{
+    //    _pitchTemp -= 0.1f;
+    //    SOUNDMANAGER->setPitch(_currentShopkeeper, _pitchTemp), SOUNDMANAGER->setPitch(_currentSongName, _pitchTemp);
+    //}
+    //if (KEYMANAGER->isOnceKeyDown('M'))
+    //{
+    //    _pitchTemp += 0.1f;
+    //    SOUNDMANAGER->setPitch(_currentShopkeeper, _pitchTemp), SOUNDMANAGER->setPitch(_currentSongName, _pitchTemp);
+    //}
 }
 
 void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
 {
+    //char display_Pitch[128];
+    //sprintf_s(display_Pitch, sizeof(display_Pitch), "현재 pitch값 : %f", _pitchTemp);
+    //TextOut(getMemDC, 100, 100, display_Pitch, strlen(display_Pitch));
     //if (isFindShopkeeperPos)
     //{
     //    char display_Pitch[128];
@@ -369,11 +385,9 @@ void Beat::render_DebugLog(HDC getMemDC) // 디버그용 함수
 
 void Beat::Load() // 노트 파일 로드
 {
-    // 선형 보간 이동시 _noteInfo[0]과 _noteInfo.size() - 1요소는 의미없는 값이므로 제외한다. 단, _noteInfo[0]은 애니메이션이 움직여야하니 애니메이션 흘러가는 값에는 추가
     if (_vMsTimeInfo.size() > 0)
     {
         _vMsTimeInfo.clear(); // 벡터 재사용을 위한 클리어
-        //_countNote = _countComma = 0; // 노트 정보를 새로 받아오기 위해 초기화
         _countNote = 0;
     }
     _songLength = 0; // 곡의 길이 값 초기화
@@ -390,18 +404,16 @@ void Beat::Load() // 노트 파일 로드
             readFile.get(temp); // 문자 하나 뽑기 
             if (temp == ',')
             {
-                //++_countComma; // 콤마 세기
                 _vMsTimeInfo.push_back(atoi(tempWord.c_str())); // 변환 순서 : 문자열 -> char*로 변환 -> atoi는 char*을 int로 변환
                 tempWord = ""; // string 초기화
                 continue;
             }
             tempWord += temp; // 한 글자씩 string에 합침
         }
-        //_msTimeInfo.erase(_msTimeInfo.begin() + (_msTimeInfo.size() - 1)); // 현재 구조상 맨 마지막 부분에 0을 항상 저장하므로 맨 마지막 요소를 제거함
         readFile.close(); // 파일 닫기
     }
-
-    for (int i = 0; i < _vMsTimeInfo.size() - 2; i++) // FMOD::SOUND에 getLength() 함수가 망가져서 만들었음 ㅠㅠ... 아마 원인이 함수도 음악 파일 확장자에 따라서 잘 작동되는 함수가 있는 반면 아닌 함수도 있다. 예를 들어 getVolume함수 같은 경우에도 일부 확장자만 함수 사용이 가능함
+    // FMOD::SOUND에 getLength() 함수가 망가져서 만들었음 ㅠㅠ... 아마 원인이 함수도 음악 파일 확장자에 따라서 잘 작동되는 함수가 있는 반면 아닌 함수도 있다. 예를 들어 getVolume함수 같은 경우에도 일부 확장자만 함수 사용이 가능함
+    for (int i = 0; i < _vMsTimeInfo.size() - 2; i++)
     {
         int getMS = _vMsTimeInfo[i + 1] - _vMsTimeInfo[i]; // 한 개의 비트 간격을 받아오기 위해서..
         _songLength += getMS; // 길이를 담아준다. 나중엔 _songLength가 곡의 총 길이가 된다.
@@ -478,7 +490,7 @@ void Beat::CreateNewNoteWhilePlay(bool dirRight) // 노트 생성, 곡 시작 중 (오른�
     else _vNoteLeft.push_back(newNote), ++_countNote; // 노트를 셀 때, 양쪽 다 세면 값이 2씩 증가하므로 한 쪽만 세준다.
 }
 
-float Beat::GetSongVariousTime(unsigned int playTime, unsigned int songLength) // 곡의 여러가지 조건을 뽑아오기 위한 함수
+float Beat::GetSongVariousTime(unsigned int playTime, unsigned int songLength)
 {
     float songLeftLength = songLength - playTime;
     songLeftLength /= 1000;

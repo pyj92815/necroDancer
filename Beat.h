@@ -67,6 +67,7 @@ private:
 	float _deltaTime;	// TIMEMANAGER에서 getElapsedTime()은 매번 값이 바뀌고 자주 호출하기 힘들기 때문에 곡이 시작되기 전, 한 번만 getElapsedTime()호출하고 그 값을 저장하는 용도의 변수
 	float _songLeftTime; // 현재 곡의 남은 시간
 	float _pitch; // 현재 곡의 pitch값 (1이 기본 값, 1미만 시 곡이 느려짐, 1이상 시 빨라짐)
+	float _pitchTemp;
 
 	RECT heartRC, heartSmallRC, shopKeeperRC, test_Player, test_slowPlatform, test_fastPlatform; // RECT들(심장, 심장 가운데에 넣을 작은 렉트(아직은 수정중), 플레이어, 느려지는 발판, 빨라지는 발판)
 	POINTFLOAT playerPos, test_SlowPlatformPos, test_FastPlatformPos; // X,Y좌표들(상점 주인, 플레이어, 느려지는 발판, 빨라지는 발판)

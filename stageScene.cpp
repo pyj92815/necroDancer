@@ -42,8 +42,8 @@ HRESULT stageScene::init()
 	BEATMANAGER->AllStopMusic();
 	BEATMANAGER->SetMusicID(1);
 
-	IMAGEMANAGER->addImage("Shopkeeper", "image/ETC/Shopkeeper.bmp", 52, 52, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("Shopkeeper_Shadow", "image/ETC/Shopkeeper_Shadow.bmp", 52, 52, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Shopkeeper", "image/ETC/Shopkeeper.bmp", 104, 104, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Shopkeeper_Shadow", "image/ETC/Shopkeeper_Shadow.bmp", 104, 104, true, RGB(255, 0, 255));
 	return S_OK;
 }
 
@@ -176,8 +176,8 @@ void stageScene::render()
 			{
 				if (!BEATMANAGER->Get_FindShopkeeperPos())
 				{
-					_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.x = 1744;
-					_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.y = 1172;
+					_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.x = 1740;
+					_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.y = 1152;
 					//BEATMANAGER->Set_ShopkeeperPos({ (_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.right + _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.left) / 2 ,
 					//	(_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.bottom + _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.top) / 2 });
 					BEATMANAGER->Set_ShopkeeperPos({ _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.x,
