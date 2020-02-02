@@ -35,13 +35,27 @@ public:
 	// 매개변수 : 플레이어 정보, 슬레이브 정보
 	bool collision_Slave_Find_Player(player* playerInfo, SLAVE_INFO* slave);
 
+	// 슬레이브의 반대 방향 1칸 근처에 플레이어가 있다면 true, 없다면 false로 반환한다.	
+	// 매개변수 : 플레이어 정보, 슬레이어 정보, 리버스 유무
+	bool collision_Slave_Find_Player(player* playerInfo, SLAVE_INFO* slave, bool reverse);
+
 	// 슬레이브의 1칸 근처에 데스메탈이 있으면 true, 없다면 false를 반환한다.
 	// 매개변수 : 데스메탈 정보, 슬레이브 정보.
 	bool collision_Slave_Find_DeathMetal(deathMetal* deathMetal, SLAVE_INFO* slave);
 
+	// 슬레이브의 반대 방향 1칸 근처에 데스메탈이 있으면 true, 없다면 false를 반환한다.
+	// 매개변수 : 데스메탈 정보, 슬레이브 정보. 리버스 유무
+	bool collision_Slave_Find_DeathMetal(deathMetal* deathMetal, SLAVE_INFO* slave, bool reverse);
+
 	// 슬레이브의 근처에 슬레이브가 있다면 true, 없다면 false를 반환한다.
 	// 매개변수 : 슬레이브 정보, 슬레이브 벡터
 	bool collision_Slave_Find_Slave(SLAVE_INFO* _slave, vector<slave*> _vSlaveList);
+
+	// 슬레이브의 반대 방향 근처에 슬레이브가 있다면 true, 없다면 false를 반환한다.
+	// 매개변수 : 슬레이브 정보, 슬레이브 벡터 리버스 유무
+	bool collision_Slave_Find_Slave(SLAVE_INFO* _slave, vector<slave*> _vSlaveList, bool reverse);
+
+		
 
 
 
@@ -79,6 +93,9 @@ public:
 
 	// 맵 정보, 슬레이브 정보를 가져와서 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
 	bool collision_Charactor_Object(vector<tagTile*>* mapInfo, SLAVE_INFO* slave);
+
+	// 맵 정보, 슬레이브 정보를 가져와서 반대 방향에 이동 불가능 오브젝트를 연산해준다. (이동 가능 true, 이동 불가능 false 반환)
+	bool collision_Charactor_Object(vector<tagTile*>* mapInfo, SLAVE_INFO* slave, bool reverse);
 
 	// 맵 정보, 데스메탈 정보를 가져와서 뒤쪽에 오브젝트가 있는지 찾아준다. (이동 가능 true, 이동 불가능 false)
 	bool collision_Charactor_Object_Back(vector<tagTile*>* mapInfo, deathMetal* deathMetalInfo);

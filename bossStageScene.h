@@ -95,7 +95,9 @@ public:
 	void boss_Base_Attack_Render();
 	void boss_Base_Attack_Render(string skillName, player* player);				// 보스의 근접 공격 애니메이션을 그려준다.
 
-	void start_Slave_Create();												
+	void start_Slave_Create();				
+
+	void boss_Phase_4_Move();													// 보스 페이즈4 이동
 
 	// 스테이지 씬과의 링크
 	void stageSceneAddressLink(stageScene* stageScene) { _stageScene = stageScene; }

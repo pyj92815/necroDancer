@@ -195,7 +195,7 @@ void deathMetal::deathMetal_ChangeAnimation()
 				boss::index.y = 17;
 				boss::direction = BD_LEFT;
 			}
-
+	
 			// 보스의 위치가 2시 였다면
 			else if (boss::index.x >= 13 && boss::index.x <= 18 &&
 				boss::index.y >= 10 && boss::index.y <= 14)
@@ -204,7 +204,7 @@ void deathMetal::deathMetal_ChangeAnimation()
 				boss::index.y = 17;
 				boss::direction = BD_RIGHT;
 			}
-
+	
 			// 보스의 위치가 7시 였다면
 			else if (boss::index.x >= 8 && boss::index.x <= 13 &&
 				boss::index.y >= 14 && boss::index.y <= 18)
@@ -213,7 +213,7 @@ void deathMetal::deathMetal_ChangeAnimation()
 				boss::index.y = 11;
 				boss::direction = BD_LEFT;
 			}
-
+	
 			// 보스의 위치가 5시 였다면
 			else if (boss::index.x >= 13 && boss::index.x <= 18 &&
 				boss::index.y >= 14 && boss::index.y <= 18)
@@ -222,13 +222,13 @@ void deathMetal::deathMetal_ChangeAnimation()
 				boss::index.y = 11;
 				boss::direction = BD_RIGHT;
 			}
-
+	
 		}
-
+	
 		// 마법 또는 슬레이브 소환 캐스팅 도중에 맞으면 끊김
 		boss::slave_Summon.cTime = boss::slave_Summon.cTime_M;
 		boss::slave_Summon.isCasting = false;
-
+	
 		boss::save_HP = boss::hp;
 		boss::isChangeAni = true;
 		boss::change_Ani = true;
@@ -555,10 +555,15 @@ void deathMetal::deathMetal_ChangePhase()
 	// 보스 페이즈가 4이고, 보스 페이즈 셋팅을 하지 않았다면 이곳으로 들어간다.
 	if (boss::phase == BP_PHASE_4 && !boss::boss_Bool.PHASE_BOOL.PHASE_4_Set)
 	{
-		boss::move.set_BossMoveCount(1);	// 4페이즈에서는 1박자 마다 이동을 한다.
+		boss::move.set_BossMoveCount(2);	// 4페이즈에서는 1박자 마다 이동을 한다.
 		boss::move_Count = boss::move.get_BossMoveCount();	// 이동에 필요한 박자를 저장한다.
 		boss::boss_Bool.PHASE_BOOL.PHASE_4_Set = true;	// 셋팅이 끝났으면 ture의 값을 주고 다시 이곳에 들어오지 않도록 한다.
 		SOUNDMANAGER->play("deathmetal_skels2");
+			
+		// 파이어볼 쿨타임
+		boss::boss_FireBall.cTime = 4;						// 스킬 쿨타임
+		boss::boss_FireBall.cTime_M = 4;					// 콘스트 스킬 쿨타임
+		boss::boss_FireBall.isCasting = false;				// 스킬 사용을 할때 true
 	}
 
 	// 만약 보스 페이즈가 2로 바뀌었고, 실드를 아직 던지지 않았다면 실행한다. (실드 던지는 애니메이션 함수)
