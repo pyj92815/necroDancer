@@ -28,8 +28,9 @@ HRESULT timer::init()
 	_worldTime = 0;
 	_daehunWorldTime = 0;
 	_countTime = 0;
+	_countLoadingTime = 0;
 
-	_countTimeResetSwitch = _countTimeSwitch = false;
+	_countLoadingTimeSwitch = _countTimeResetSwitch = _countTimeSwitch = false;
 
 	return S_OK;
 }
@@ -80,6 +81,11 @@ void timer::tick(float lockFPS)
 	{
 		_countTimeResetSwitch = false;
 		_countTime = 0;
+	}
+
+	if (_countLoadingTimeSwitch)
+	{
+		_countLoadingTime += _timeElapsed;
 	}
 }
 

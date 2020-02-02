@@ -56,6 +56,7 @@ private:
 
 	bool _combo;
 	float _comboCountTime;
+	int playerAttackSoundID;
 	//tagItem* currentWeapon;
 	//tagItem* currentPotion;
 	//tagItem* currenttorch;

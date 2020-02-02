@@ -82,15 +82,18 @@ void Option::update()
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
 			_isDeadDirection--;
+			SOUNDMANAGER->play("sfx_ui_select_up");
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
 			_isDeadDirection++;
+			SOUNDMANAGER->play("sfx_ui_select_down");
 		}
 
 
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 		{
+			SOUNDMANAGER->play("sfx_ui_start");
 			if (_isDeadDirection == 0)
 			{
 				

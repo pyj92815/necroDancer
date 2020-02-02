@@ -183,6 +183,7 @@ void deathMetal::deathMetal_ChangeAnimation()
 	// 데스메탈의 체력에 변화가 있다면 애니메이션을 바꿔준다.
 	if (boss::save_HP != boss::hp)
 	{
+		SOUNDMANAGER->play("deathmetal_hit", 1.5f);
 		// 만약 1페이즈가 아니라면 순간이동을 실행한다.
 		if (boss::phase != BP_PHASE_1)
 		{
@@ -538,7 +539,8 @@ void deathMetal::deathMetal_ChangePhase()
 		boss::boss_Bool.PHASE_BOOL.PHASE_2_Set = true;		// 셋팅이 끝났으면 ture의 값을 주고 다시 이곳에 들어오지 않도록 한다.
 
 		boss::slave_Summon.cTime = 4;						// 스킬 쿨타임
-		boss::slave_Summon.cTime_M = 4;						// 콘스트 스킬 쿨타임 
+		boss::slave_Summon.cTime_M = 4;						// 콘스트 스킬 쿨타임
+		SOUNDMANAGER->play("deathmetal_skels");
 	}
 
 	// 보스 페이즈가 3이고, 보스 페이즈 셋팅을 하지 않았다면 이곳으로 들어간다.
@@ -556,6 +558,7 @@ void deathMetal::deathMetal_ChangePhase()
 		boss::move.set_BossMoveCount(1);	// 4페이즈에서는 1박자 마다 이동을 한다.
 		boss::move_Count = boss::move.get_BossMoveCount();	// 이동에 필요한 박자를 저장한다.
 		boss::boss_Bool.PHASE_BOOL.PHASE_4_Set = true;	// 셋팅이 끝났으면 ture의 값을 주고 다시 이곳에 들어오지 않도록 한다.
+		SOUNDMANAGER->play("deathmetal_skels2");
 	}
 
 	// 만약 보스 페이즈가 2로 바뀌었고, 실드를 아직 던지지 않았다면 실행한다. (실드 던지는 애니메이션 함수)

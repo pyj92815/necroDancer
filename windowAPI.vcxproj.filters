@@ -67,9 +67,6 @@
     <Filter Include="2DGameFramework\video">
       <UniqueIdentifier>{0d3642fe-ba18-4ab0-bab4-7ebd096f9641}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\MapTool">
-      <UniqueIdentifier>{cd7060e9-3639-49b0-a374-5f738b819ffe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="playGround\boss">
       <UniqueIdentifier>{22ada17d-d20c-4e65-9e82-ae5522171c9c}</UniqueIdentifier>
     </Filter>
@@ -96,6 +93,9 @@
     </Filter>
     <Filter Include="playGround\Collision">
       <UniqueIdentifier>{6425a4cd-9763-49c8-91c9-5e3cb0cdd5c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\GameSettingManager\Option\MapTool">
+      <UniqueIdentifier>{cd7060e9-3639-49b0-a374-5f738b819ffe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -246,11 +246,8 @@
     <ClInclude Include="mapToolScene.h">
       <Filter>playGround\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Beat.h">
-      <Filter>playGround\GameSettingManager\Beat</Filter>
-    </ClInclude>
     <ClInclude Include="mapTool.h">
-      <Filter>playGround\MapTool</Filter>
+      <Filter>playGround\GameSettingManager\Option\MapTool</Filter>
     </ClInclude>
     <ClInclude Include="cameraManager.h">
       <Filter>2DGameFramework\Manager</Filter>
@@ -319,7 +316,7 @@
       <Filter>playGround\GameSettingManager\Option</Filter>
     </ClInclude>
     <ClInclude Include="mapTool_Library.h">
-      <Filter>playGround\MapTool</Filter>
+      <Filter>playGround\GameSettingManager\Option\MapTool</Filter>
     </ClInclude>
     <ClInclude Include="playerLibrary.h">
       <Filter>playGround\player</Filter>
@@ -347,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="Enemy_Zombie.h">
       <Filter>playGround\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Beat.h">
+      <Filter>playGround\GameSettingManager\Beat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -486,7 +486,7 @@
       <Filter>playGround\GameSettingManager\Beat</Filter>
     </ClCompile>
     <ClCompile Include="mapTool.cpp">
-      <Filter>playGround\MapTool</Filter>
+      <Filter>playGround\GameSettingManager\Option\MapTool</Filter>
     </ClCompile>
     <ClCompile Include="cameraManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
