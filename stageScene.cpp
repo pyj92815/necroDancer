@@ -66,9 +66,9 @@ void stageScene::update()
 		stageCollision();
 
 		_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
-		//_minimap->getStageMap(_vTotalList);
-		//_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y);
-		//_minimap->getEnemyPoint(_em);
+		_minimap->getStageMap(_vTotalList);
+		_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y);
+		_minimap->getEnemyPoint(_em);
 		_ui->setInven(_pm->getPlayerInfo()->getVInven());
 		nextPage();
 		tileOnOff();
