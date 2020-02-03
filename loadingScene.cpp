@@ -3,7 +3,7 @@
 #include "progressBar.h"
 
 loadingScene::loadingScene()
-	: _background(nullptr),			//init보다 훨씬 앞선 초기화 개념인듯?
+	: _background(nullptr),			//init보다 앞서 초기화
 	_currentCount(0)
 {
 }
@@ -57,7 +57,7 @@ void loadingScene::render()
 DWORD CALLBACK threadFunction(LPVOID lpParameter)
 {
 	loadingScene* loadHealper = (loadingScene*)lpParameter;	//굳이 로딩씬 안에서 로딩씬클래스에 포인터를 사용한건
-															//아마 스타틱함수 안에 넣기 위함일듯(전체적으로 공유하니까?)
+															//아마 스타틱함수 안에 넣기 위함
 
 	while (loadHealper->_currentCount != LOADINGMAX)		//로딩카운트가 맥스가 아닐 시
 	{
