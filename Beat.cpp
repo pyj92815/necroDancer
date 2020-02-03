@@ -69,7 +69,7 @@ void Beat::render()
         }
     }
 
-    for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+    for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect) // 이펙트 렌더
     {
         (*_viEffect)->render(_backBuffer->getMemDC());
     }
@@ -77,7 +77,7 @@ void Beat::render()
     render_DebugLog(_backBuffer->getMemDC()); // 디버그 텍스트 렌더
 }
 
-void Beat::HitNoteEffect(float x, float y)
+void Beat::HitNoteEffect(float x, float y) // 플레이어가 노트를 맞힐시 노트가 사라지는 효과를 준다
 {
     alphaImageEffect* noteHitEffect;
     noteHitEffect = new alphaImageEffect;
@@ -168,13 +168,16 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     _currentStage = STAGE_LOBBY;
 
     _noteFileName = _currentSongName = _oldSongName = ""; // 불러올 파일 이름, 현재 곡 이름, 이전 곡 이름 초기화
+
+    // 초기화(노트 시간 간격, 인풋 시간 간격, 곡의 남은 시간, 심장 프레임 카운팅, 상점 주인 추적 판단 유무, 플레이어 위치 추적 판단 유무, 비트가 울렸는지 판단 유무, 노트 카운팅, 이전 스테이지 인덱스
+    // 현재 스테이지 인덱스, 노래 길이, 노래 위치, 노래 pitch값);
      noteTimeIntervalCount = inputIntervalCount = _songLeftTime = heartFrameCount =
      isFindShopkeeperPos = isFindPlayerPos = _isBeating = _countNote = _oldStageID = _currentStageID = _songLength = _songPos = _pitch = 0;
 
-    musicID = 0;
-    musicID_Temp = -1;
+    musicID = 0; // 음악 아이디 값
+    musicID_Temp = -1; // 음악 아이디 값 임시 저장
 
-    _pitchTemp = 1;
+    _pitchTemp = 1; // pitch값 테스팅용
 
     //test_SlowPlatformPos = { (WINSIZEX / 2) - 100, (WINSIZEY / 2) - 200 };
     //test_slowPlatform = RectMakeCenter(test_SlowPlatformPos.x, test_SlowPlatformPos.y, 48, 48);
@@ -182,7 +185,7 @@ void Beat::init_SetObjs() // Beat 클래스에서 제어하고 사용할 여러 변수들 초기화 
     //test_FastPlatformPos = { (WINSIZEX / 2) + 100, (WINSIZEY / 2) - 200 };
     //test_fastPlatform = RectMakeCenter(test_FastPlatformPos.x, test_FastPlatformPos.y, 48, 48);
 
-    heartImg = IMAGEMANAGER->findImage("Heart");
+    heartImg = IMAGEMANAGER->findImage("Heart"); // 심장 렌더
     heartImg->setFrameY(0), heartImg->setFrameX(0);
     heartImg->setX((float)WINSIZEX_HALF - heartImg->getFrameWidth() / 2), heartImg->setY(((float)WINSIZEY - heartImg->getFrameHeight()) - heartImg->getFrameHeight() / 2);
     heartRC = RectMakeCenter(heartImg->getX() + heartImg->getFrameWidth() / 2, heartImg->getY() + heartImg->getFrameHeight() / 2, heartImg->getFrameWidth() + 60, heartImg->getFrameHeight());
@@ -532,7 +535,7 @@ void Beat::Move()
                     inputIntervalCount = 0;
                 }
             }
-            if (_vNoteLeft[i].pos.x > WINSIZEX_HALF)
+            if (_vNoteLeft[i].pos.x > WINSIZEX_HALF) 
             {
                 _vNoteLeft[i].isRender = false;
                 _vNoteRight[i].isRender = false;

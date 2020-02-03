@@ -12,6 +12,7 @@ Option::~Option()
 
 HRESULT Option::init()
 {
+	// 옵션 이미지 추가
 	IMAGEMANAGER->addImage("Brightness", "image/UI/Option/Brightness.bmp", WINSIZEX, WINSIZEY, 0, RGB(255, 255, 255), 1);
 	IMAGEMANAGER->addImage("overlay_BG", "image/UI/Option/overlay_black.bmp", WINSIZEX, WINSIZEY, 0, RGB(255, 255, 255), 0);
 
