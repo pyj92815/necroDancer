@@ -166,6 +166,7 @@ public:
 
 
 
+
 		// ¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á ½ºÄÌ·¹Åæ(¿»·Î¿ì) ¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á
 		// ½ºÄÌ·¹Åæ ¿»·Î¿ì ¿ÞÂÊ ¾Ö´Ï¸ÞÀÌ¼Ç Ãß°¡
 		int skelY_Left[] = { 0, 1, 2, 3, 4, 5, 6, 7};
@@ -182,5 +183,21 @@ public:
 		// ½ºÄÌ·¹Åæ ¿»·Î¿ì ½¦µµ¿ì ¿À¸¥ÂÊ ¾Ö´Ï¸ÞÀÌ¼Ç Ãß°¡
 		int sSkelY_Right[] = {28, 29, 30, 31, 32, 33, 34, 35 };
 		KEYANIMANAGER->addArrayFrameAnimation("sSkelY_Right", "boss_Skeleton_Yellow", sSkelY_Right, 8, 10, true);
+
+		// ½ºÄÌ·¹Åæ ¸Ó¸® ¾ø´Â ¿ÞÂÊ 
+		int skelY_Left_NoHead[] = { 8 };
+		KEYANIMANAGER->addArrayFrameAnimation("skelY_Left_No", "boss_Skeleton", skelY_Left_NoHead, 1, 10, true);
+
+		// ½ºÄÌ·¹Åæ ½¦µµ¿ì ¸Ó¸® ¾ø´Â ¿ÞÂÊ
+		int sSkelY_Left_NoHead[] = { 17 };
+		KEYANIMANAGER->addArrayFrameAnimation("sSkelY_Left_No", "boss_Skeleton", sSkelY_Left_NoHead, 1, 10, true);
+
+		// ½ºÄÌ·¹Åæ ¸Ó¸® ¾ø´Â ¿À¸¥ÂÊ
+		int skelY_Right_NoHead[] = { 18 };
+		KEYANIMANAGER->addArrayFrameAnimation("skelY_Right_No", "boss_Skeleton", skelY_Right_NoHead, 1, 10, true);
+
+		// ½ºÄÌ·¹Åæ  ½¦µµ¿ì ¸Ó¸® ¾ø´Â ¿À¸¥ÂÊ
+		int sSkelY_Right_NoHead[] = { 27 };
+		KEYANIMANAGER->addArrayFrameAnimation("sSkelY_Right_No", "boss_Skeleton", sSkelY_Right_NoHead, 1, 10, true);
 	};
 };

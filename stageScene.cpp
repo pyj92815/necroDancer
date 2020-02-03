@@ -5,73 +5,83 @@
 
 HRESULT stageScene::init()
 {
-	stageMapLoad(fileName);
+	stageMapLoad(fileName);			 // 스테이지 맵 로드 
+
+	// 만약 플레이어의 위치가 없으면 
 	if (_playerIdx <0 || _playerIdy <0 || _playerIdx > TILEX || _playerIdy> TILEY)
 	{
 		_playerIdx = 10;
 		_playerIdy = 10;
 	}
+
 	_pm = new playerManager;
 	_pm->init(_playerIdx, _playerIdy);
-	CAMERAMANAGER->set_CameraXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y, true);
 
-
+	CAMERAMANAGER->set_CameraXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y, true);  // 플레이어의 위치 셋팅 
+	// Enemy
 	_em = new EnemyManager;
 	_em->init(_mEnemyPoint);
-
 	_em->AddressLink(_pm->getPlayerInfo());
-	_pm->getPlayerInfo()->collisionSettingBoss();
 
+	_pm->getPlayerInfo()->collisionSettingBoss();
+	//UI
 	_ui = new UImanager;
 	_ui->setPlayerInfo(_pm->getPlayerInfo()->PlayerAddress());
 	_ui->init();
-
+	//MiniMap
 	_minimap = new miniMap;
 	_minimap->init();
-
 	_minimap->getEnemyPoint(_em);
-
+	//Z-Order
 	_zOrder = new zOrder;
 	_zOrder->init();
-
+	//시야처리 
 	_floodFill = new visionFloodFill;
 	_floodFill->init();
 
-	TIMEMANAGER->setCountLoadingTimeSwitch(true);
 	_pm->getPlayerInfo()->setStage();
+
+	TIMEMANAGER->setCountLoadingTimeSwitch(true);
 	BEATMANAGER->AllStopMusic();
 	BEATMANAGER->SetMusicID(1);
 
+	IMAGEMANAGER->addImage("Shopkeeper", "image/ETC/Shopkeeper.bmp", 104, 104, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("Shopkeeper_Shadow", "image/ETC/Shopkeeper_Shadow.bmp", 104, 104, true, RGB(255, 0, 255));
 	return S_OK;
 }
 
 void stageScene::release()
 {
-	_vTotalList.clear();
+	_vTotalList.clear(); // 맵 삭제
 }
 
 void stageScene::update()
 {
-
 	if (!OPTION->getplayerDie())
 	{
 		_pm->update();
+		//enemy
 		_em->setVtile(_vTotalList);
 		_em->update();
 
 		BEATMANAGER->update();
-		_ui->update();
+		//Z-order
 		_zOrder->zOrderSetup(_pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _tiles, _pm, _em);
 		_zOrder->update();
+
 		stageCollision();
 
 		_floodFill->setVision(_tiles, _pm->getPlayerInfo()->getPlayer().idx, _pm->getPlayerInfo()->getPlayer().idy, _pm->getPlayerInfo()->getPlayer().sight);
+		// 미니맵 
 		_minimap->getStageMap(_vTotalList);
 		_minimap->setPlayerXY(_pm->getPlayerInfo()->getPlayer().x, _pm->getPlayerInfo()->getPlayer().y);
 		_minimap->getEnemyPoint(_em);
+		// UI
+		_ui->update();
 		_ui->setInven(_pm->getPlayerInfo()->getVInven());
-		nextPage();
-		tileOnOff();
+		
+		nextPage(); // 다음 스테이지로 넘어가기 위한 값 
+		tileOnOff();// 타일  
 	}
 
 }
@@ -156,7 +166,7 @@ void stageScene::render()
 			{
 				if ((*_viTotalList)->alphaValue <= 0)
 				{
-
+					
 					IMAGEMANAGER->findImage("wallTiles")->frameRender(CAMERAMANAGER->getWorldDC(), (*_viTotalList)->rc.left, (*_viTotalList)->rc.top - 30, (*_viTotalList)->wallFrameX, (*_viTotalList)->wallFrameY);
 					continue;
 				}
@@ -167,158 +177,46 @@ void stageScene::render()
 				}
 			}
 		}
+
+		if ((*_viTotalList)->type == TYPE_CHARACTER)
+		{
+			if ((*_viTotalList)->character == CHAR_SHOPKEEPER)
+			{
+				if (!BEATMANAGER->Get_FindShopkeeperPos())
+				{
+					_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.x = 1740;
+					_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.y = 1152;
+					//BEATMANAGER->Set_ShopkeeperPos({ (_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.right + _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.left) / 2 ,
+					//	(_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.bottom + _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].rc.top) / 2 });
+					BEATMANAGER->Set_ShopkeeperPos({ _tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.x,
+						_tiles[BEATMANAGER->Get_ShopkeeperID().y * BEATMANAGER->Get_ShopkeeperID().x].XY.y });
+					BEATMANAGER->Set_FindShopkeeperPos(true);
+				}
+				else
+				{
+					//RECT temp = RectMakeCenter(BEATMANAGER->Get_ShopkeeperPos().x, BEATMANAGER->Get_ShopkeeperPos().y, 52, 52);
+					//Rectangle(CAMERAMANAGER->getWorldDC(), temp);
+					IMAGEMANAGER->findImage("Shopkeeper")->render(CAMERAMANAGER->getWorldDC(), BEATMANAGER->Get_ShopkeeperPos().x - (IMAGEMANAGER->findImage("Shopkeeper")->getWidth() / 2), BEATMANAGER->Get_ShopkeeperPos().y - (IMAGEMANAGER->findImage("Shopkeeper")->getHeight() / 2));
+				}
+			}
+		}
 	}
+
 	_zOrder->render();
-	//플레이어 렌더 
-	/*pm->render();*/
-	//몬스터 렌더 
-
-
-	//제트오더 랜더 
-	//for (int i = 0; i < _zOrderVector.size(); ++i)
-	//{
-	//	if (_zOrderVector[i]->Object->tile != NULL)
-	//	{
-	//		if (_zOrderVector[i]->Object->tile->terrain != TR_NONE)
-	//		{
-	//			IMAGEMANAGER->findImage("terrainTiles")->alphaFrameRender(CAMERAMANAGER->getWorldDC(), _zOrderVector[i]->Object->tile->rc.left, _zOrderVector[i]->Object->tile->rc.top, _zOrderVector[i]->Object->tile->terrainFrameX, _zOrderVector[i]->Object->tile->terrainFrameY, _zOrderVector[i]->Object->tile->alphaValue);
-	//		}
-	//	}
-	//}
-	//제트오더 랜더 
 	EFFECTMANAGER->render(CAMERAMANAGER->getWorldDC());
 	_em->render();
 	_pm->effectRender();
 	CAMERAMANAGER->getWorldImage()->render(getMemDC(), 0, 0, CAMERAMANAGER->get_CameraX(), CAMERAMANAGER->get_CameraY(), WINSIZEX, WINSIZEY);
-	//ENEMYMANAGER->render(getMemDC());
 	BEATMANAGER->render();
 	_ui->render();
 	_minimap->render();
 	OPTION->render(getMemDC());
 }
-//
-//// 제트오더 사이즈 설정하기 
-//void stageScene::ZorderSetup()
-//{
-//	_zOrderVector.clear();
-//	int startX = _pm->getPlayerInfo()->getPlayer().idx;
-//	int startY = _pm->getPlayerInfo()->getPlayer().idy - 10;
-//	if (_pm->getPlayerInfo()->getPlayer().idx < 0) startX = 0;
-//	if (_pm->getPlayerInfo()->getPlayer().idy - 10 < 0) startY = 0;
-//
-//	// 2n+ 1 개 만큼
-//	for (int i = startY; i < startY + 21; i++)
-//	{
-//		for (int j = startX; j < startX + 1; j++)
-//		{
-//			if (i > TILEY) continue;
-//			if (j > TILEX) continue;
-//
-//			tagClass* tile;
-//			tile = new tagClass;
-//			ZeroMemory(tile, sizeof(tile));
-//			tile->player = NULL;
-//			tile->enemy = NULL;
-//			tile->tile = &_tiles[i * TILEX + j];
-//			float* ins = new float;
-//			*ins = (float)_tiles[i * TILEX + j].rc.bottom;
-//			_zOrderVector.push_back(new zOrder(ins, tile));
-//		}
-//	}
-//
-//	tagClass* player;
-//	player = new tagClass;
-//	ZeroMemory(player, sizeof(player));
-//	player->player = _pm;
-//	player->enemy = NULL;
-//	player->tile = NULL;
-//	_zOrderVector.push_back(new zOrder(_pm->getPlayerY(), player));
-//
-//	//제트오더 
-//	/*for (int i = 0; i < 400;++i)
-//	{
-//		tagClass* tile;
-//		tile = new tagClass;
-//		ZeroMemory(tile, sizeof(tile));
-//		tile->player = NULL;
-//		tile->enemy = NULL;
-//		tile->tile = &_tiles[i];
-//		float* ins = new float;
-//		*ins = (float)_tiles[i].rc.bottom;
-//		_zOrderVector.push_back(new zOrder(ins, tile));
-//	}
-//
-//	tagClass* player;
-//	player = new tagClass;
-//	ZeroMemory(player, sizeof(player));
-//	player = new tagClass;
-//	player->player = _pm;
-//	player->enemy = NULL;
-//	player->tile = NULL;
-//	_zOrderVector.push_back(new zOrder(_pm->getPlayerY(), player));*/
-//
-//
-//}
-//vector<zOrder*> stageScene::ZorderUpdate(vector<zOrder*> num)
-//{
-//	zOrder* instance = new zOrder();
-//	for (int j = 0;j < num.size();j++)
-//	{
-//		for (int i = j + 1;i < num.size();i++)
-//		{
-//			if (*(num[j]->y) > * (num[i]->y))
-//			{
-//				if (num[i]->Object->player != NULL
-//					&& num[i]->y +
-//					(num[i]->Object->player->getPlayerInfo()->getPlayer().rc.top -
-//						num[i]->Object->player->getPlayerInfo()->getPlayer().rc.bottom))
-//				{
-//					instance = num[j];
-//					num[j] = num[i];
-//					num[i] = instance;
-//				}
-//				else
-//				{
-//					instance = num[j];
-//					num[j] = num[i];
-//					num[i] = instance;
-//				}
-//			}
-//		}
-//	}
-//
-//	return num;
-//}
 
 void stageScene::stageCollision()
 {
 	_pm->getPlayerInfo()->setPlayerTile(_collision.collision_player_tile(&_vTotalList, _pm->getPlayerInfo()));
 	_pm->getPlayerInfo()->setPlayerEnemyTile(_collision.collision_player_Enemy_tile(&_em->getVEnemy(), _pm->getPlayerInfo()));
-}
-
-void stageScene::setVision(POINT index, int sight)
-{
-	// 재귀함수 
-	// 초기 예외처리 
-	if (0 > index.x || 0 > index.y || index.x > TILEX || index.y > TILEY) return;
-	if (sight <= 0) return;
-
-	bool recursionContinue = true;  // 초기 조건값 
-	recursionContinue &= (_tiles[index.y * TILEX + index.x].wall == W_NONE);  // 맞춰야 하는 조건 
-	//if (_tiles[index.y * TILEX + index.x].type == TYPE_WALL) sight = sight - 3;	// 시야처리에 따른 값 조정할 예정 
-
-	if (recursionContinue)
-	{
-		_tiles[index.y * TILEX + index.x].alphaValue = 0;
-		_tiles[index.y * TILEX + index.x].alphaEyesight = true;
-		setVision(PointMake(index.x, index.y - 1), sight - 1);
-		setVision(PointMake(index.x, index.y + 1), sight - 1);
-		setVision(PointMake(index.x - 1, index.y), sight - 1);
-		setVision(PointMake(index.x + 1, index.y), sight - 1);
-	}
-	else _tiles[index.y * TILEX + index.x].alphaValue = 0;
-	// 1. 벽 넘어서 까지 시야처리를 어떻게 해야할지 
-	// 2. 알파블렌더가 렉에 원인인데 어떻게 할지
 }
 
 void stageScene::nextPage()
@@ -341,9 +239,9 @@ void stageScene::nextPage()
 
 }
 
+//바닥 타일 값을 변하기 위한 함수 
 void stageScene::tileOnOff()
 {
-	// 01 11 타일 그리고   42 52
 	if (_pm->getPlayerInfo()->getCombo())
 	{
 		if (BEATMANAGER->getTurnOnOff())
@@ -481,8 +379,24 @@ void stageScene::stageMapLoad(const char* fileName)
 			case CHAR_DRAGON:
 				_mEnemyPoint.insert(pair<CHARACTER, POINT>(CHAR_DRAGON, PointMake(_tiles[i].idX, _tiles[i].idY)));
 				break;
+			case CHAR_SHOPKEEPER:
+				if (!BEATMANAGER->Get_FindShopkeeperPos())
+				{
+					BEATMANAGER->Set_ShopkeeperID({ _tiles[i].idX, _tiles[i].idY });				}
+				break;
 			}
 		}
+		if (_tiles[i].type == TYPE_TERRAIN)
+		{
+			switch (_tiles[i].terrain)
+			{
+				case TR_SHOP:
+					break;
+				default:
+					break;
+			}
+		}
+
 		if (_tiles[i].terrain == TR_BOSS_STAIR)
 		{
 			_bossIdx = _tiles[i].idX;

@@ -48,22 +48,22 @@ struct tagPlayer				//플레이어의 정보
 	int score;					// 점수
 	int coin;					// 돈
 	int diamond;				// 다이아 
-	bool isWeapon;
-	bool isArmor;
-	bool potion;
-	bool torch;
+	bool isWeapon;				// 아이템을 들고 있는 Bool 값  
+	bool isArmor;				// 방어구
+	bool potion;				// 물약
+	bool torch;					// 횟불 
 };
 
-struct tagItem
+struct tagItem			// 아이템
 {
-	TYPE type;
-	WEAPON weapon;
-	ARMOR armor;
-	STUFF stuff;
+	TYPE type;			// 타입 
+	WEAPON weapon;		// 무기 타입
+	ARMOR armor;		// 방어구 타입
+	STUFF stuff;		// 소모품 타입
 	int frameX;			//아이템 번호
 	int frameY;			//아이템 번호
 	int sight;			// 시야값
 	int damege;			// 공격력
-	float guard;			// 방어력 
-	float hp;				// 체력 
+	float guard;		// 방어력 
+	float hp;			// 체력 
 };

@@ -87,7 +87,9 @@ void bossStageScene::update()
 			// 플레이어가 보스방문을 열고 안으로 들어오면 이 값이 true로 바뀐다.
 			if (_scene_Starter.isDoorOpen)
 			{
+				
 				if (!_deathMetal->getBoss_Dead()) _deathMetal->update();
+				
 				if (!_deathMetal->getBoss_Dead())  boss_PhaseMove();	// 보스 페이즈 연산
 				_ui->update();
 				_sm->update();
@@ -99,48 +101,24 @@ void bossStageScene::update()
 				searchSlave(_sm->get_SlaveList(), _player);
 
 				// 보스 움직임 연산
-				if (!_deathMetal->getBoss_Dead())  boss_Move_Player();
+				//if (KEYMANAGER->isToggleKey(VK_NUMPAD9))
+				//{
+					if (!_deathMetal->getBoss_Dead())  boss_Move_Player();
+				//}
 
 				// 슬레이브 움직임 연산
+				
 				slave_Move_Player();
+				
 
-				//cout << _deathMetal->getBoss_Index().x << ": y:" << _deathMetal->getBoss_Index().y << endl;
 
 				// 슬레이브 테스트용 소환
-				if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
-				{
-					_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-					//_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-				}
+				//if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
+				//{
+				//	_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, 13, 13);
+				//	//_sm->create_Slave(SLAVE_TYPE::SLAVE_BAT, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
+				//}
 
-				if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD2))
-				{
-					_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-					_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-				}
-
-				if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD3))
-				{
-					_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-					_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-				}
-
-				if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
-				{
-					_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y - 1);
-					_sm->create_Slave(SLAVE_TYPE::SLAVE_SKELETON_YELLOW, _deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y - 1);
-				}
-
-				if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
-				{
-					_deathMetal->setBoss_Shield_Hit_True();
-
-				}
-
-				if (KEYMANAGER->isOnceKeyDown('O'))
-				{
-					_deathMetal->setBoss_HP_Hit();
-				}
 			}
 
 			BEATMANAGER->update();
@@ -159,7 +137,7 @@ void bossStageScene::update()
 
 			if (_deathMetal->getBoss_HP() <= 0)
 			{
-
+			
 				if (!boss_Dead)
 				{
 					// 보스 죽는 사운드를 켜준다.
@@ -167,7 +145,7 @@ void bossStageScene::update()
 					SOUNDMANAGER->play("vo_cad_yeah_02", 1.5f);
 					boss_Dead = true;
 				}
-
+			
 				bossClear();	// 보스 체력이 0이라면 클리어라는 뜻이다.
 				_deathMetal->setBoss_Index(0, 0);
 				_deathMetal->settingBossPos(0, 0, TILESIZE, TILESIZE);
@@ -1037,9 +1015,12 @@ void bossStageScene::boss_Move_Player()
 		if (!_collision.collision_Charactor_Object(&_vTotalList, _deathMetal) &&
 			!_collision.collision_DeathMetal_Find_Slave(_deathMetal, _sm->get_SlaveList()))
 		{
-			// 플레이어와 데스메탈의 정보를 이용하여 이동 할 방향을 정한다.
+			// 플레이어와 데스메탈의 정보를 이용하여 이동 할 방향을 정한다. (4페이즈 때는 다른 움직임으로)
+			//if (_deathMetal->getBoss_Phase() != BP_PHASE_4)  findPlayer(_player, _deathMetal, _ui);
 			findPlayer(_player, _deathMetal, _ui);
 		}
+
+		//if (_deathMetal->getBoss_Phase() == BP_PHASE_4); boss_Phase_4_Move();
 	}
 
 
@@ -1080,11 +1061,15 @@ void bossStageScene::slave_Move_Player()
 				if (_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave()) &&
 					!_sm->get_SlaveList()[i]->get_Slave()->b_Value.ghostJonYha)
 				{
-					_player->playerHit(_sm->get_SlaveList()[i]->get_Slave()->status.attack);
-					//_ui->set_HP();
-					// 플레이어에게 근접 공격 이펙트를 그려준다.
-					boss_Base_Attack_Render("base_Attack", _player);
-					CAMERAMANAGER->Camera_WorldDC_Shake();
+
+					if (!_sm->get_SlaveList()[i]->get_Slave()->b_Value.skelY_NoHead)
+					{
+						_player->playerHit(_sm->get_SlaveList()[i]->get_Slave()->status.attack);
+						//_ui->set_HP();
+						// 플레이어에게 근접 공격 이펙트를 그려준다.
+						boss_Base_Attack_Render("base_Attack", _player);
+						CAMERAMANAGER->Camera_WorldDC_Shake();
+					}
 				}
 
 				// 데스메탈이 근처에 있는지 찾는다. 만약 있다면 이동 안함
@@ -1128,7 +1113,35 @@ void bossStageScene::slave_Move_Player()
 							_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
 						}
 					}
-					else _sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+
+					else
+					{
+						_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+
+						// 만약 스켈레톤 옐로우 타입이고, 머리가 없는 상태라면 플레이어에게 도망가는 상황이기 때문에
+						// 도망갈 방향에 벽이 있는지 체크도 해야한다.
+						if (_sm->get_SlaveList()[i]->get_Slave()->status.type == SLAVE_TYPE::SLAVE_SKELETON_YELLOW)
+						{
+							// 머리가 없는 상황이라면
+							if (_sm->get_SlaveList()[i]->get_Slave()->b_Value.skelY_NoHead)
+							{
+								// 도망가야 하는 방향에 모든 장애물이 없다면 true로 넣어준다.
+								if (!_collision.collision_Slave_Find_Player(_player, _sm->get_SlaveList()[i]->get_Slave(), true) &&
+									!_collision.collision_Slave_Find_DeathMetal(_deathMetal, _sm->get_SlaveList()[i]->get_Slave(), true) &&
+									!_collision.collision_Charactor_Object(&_vTotalList, _sm->get_SlaveList()[i]->get_Slave(), true) &&
+									!_collision.collision_Slave_Find_Slave(_sm->get_SlaveList()[i]->get_Slave(), _sm->get_SlaveList(), true))
+								{
+									// 움직이면 안돼
+									_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = true;
+								}
+
+								else
+								{
+									_sm->get_SlaveList()[i]->get_Slave()->b_Value.isMove = false;
+								}
+							}
+						}
+					}
 				}
 
 				// 만약 박쥐라면 벽을 제외한 방향을 
@@ -1258,6 +1271,129 @@ void bossStageScene::start_Slave_Create()
 	_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 2, _deathMetal->getBoss_Index().y - 2);
 	_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x - 2, _deathMetal->getBoss_Index().y + 2);
 	_sm->create_Slave(SLAVE_TYPE::SLAVE_GHOST, _deathMetal->getBoss_Index().x + 2, _deathMetal->getBoss_Index().y + 2);
+}
+
+void bossStageScene::boss_Phase_4_Move()
+{
+	// x 좌표가 왼쪽 벽에 가까운지 오른쪽 벽에 가까운지에 따라서 벽쪽으로 이동을 먼저 한다.
+	// 벽에 닿았으면 플레이어가 있는 y방향을 따라서 이동을 한다.
+	// 플레이어를 발견했다면 스킬을 캐스팅하고 3박자 뒤에 한줄 전체 공격을 시작한다.
+
+	// 타일에서 벽을 찾는다. 벽을 만날때까지 x를 움직여준다.
+
+	// 짧은쪽을 찾는다.
+	// 왼쪽 벽이 더 가까운 경우
+	if (_deathMetal->getBoss_Index().x - 8 < 18 - _deathMetal->getBoss_Index().x && !_deathMetal->getBoss_Bool()->phase4_MoveX_Direction_Find)
+	{
+		_deathMetal->getBoss_Bool()->phase4_MoveX_Direction = false;		// false는 x가 더 짧다는 뜻
+		_deathMetal->getBoss_Bool()->phase4_MoveX_Direction_Find = true;	// 방향을 찾았다.
+	}
+
+	// 오른쪽 벽이 더 가까운 경우
+	if (_deathMetal->getBoss_Index().x - 8 > 18 - _deathMetal->getBoss_Index().x && !_deathMetal->getBoss_Bool()->phase4_MoveX_Direction_Find)
+	{
+		_deathMetal->getBoss_Bool()->phase4_MoveX_Direction = false;		// false는 y가 더 짧다는 뜻
+		_deathMetal->getBoss_Bool()->phase4_MoveX_Direction_Find = true;	// 방향을 찾았다.
+	}
+
+	// x 이동이 끝나지 않았고, 방향을 잡았을때만 실행한다.
+	if (!_deathMetal->getBoss_Bool()->phase4_MoveX_End && _deathMetal->getBoss_Bool()->phase4_MoveX_Direction_Find)
+	{
+		for (int i = 0; i < _vTotalList.size(); ++i)
+		{
+			// 왼쪽 벽이 더 가까운 경우
+			if (!_deathMetal->getBoss_Bool()->phase4_MoveX_Direction)
+			{
+				// 보스의 왼쪽이 벽이 아닐 경우에는 이동을 한다.
+				if (_deathMetal->getBoss_Index().x - 1 == _vTotalList[i]->idX &&
+					_deathMetal->getBoss_Index().y == _vTotalList[i]->idY &&
+					_vTotalList[i]->wall != W_WALL)
+				{
+					_deathMetal->setBoss_Index(_deathMetal->getBoss_Index().x - 1, _deathMetal->getBoss_Index().y);
+
+					// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
+					_deathMetal->setBoss_Direction(BD_LEFT);
+					
+					// 선형보간에서 사용할 현재 시간을 셋팅 해준다.
+					_deathMetal->setBoss_WorldTime(TIMEMANAGER->getWorldTime());
+					//
+					// 이동 연산에 필요한 bool 값을 true로 바꿔주는 함수
+					_deathMetal->setBoss_Move_BoolValue_Ture();
+					//
+					// 다음 이동을 위해 무브 카운트를 다시 채워준다.
+					_deathMetal->setBoss_Move_Count(_deathMetal->getBoss_Move_Count_Value());
+					//
+					_deathMetal->setBoss_Angle(PI);
+
+					// 이동이 끝났다면 나가준다.
+					break;
+				}
+
+				// 만약 벽일 경우 x방향 이동이 끝났다는 값을 넣는다.
+				else
+				{
+					_deathMetal->getBoss_Bool()->phase4_MoveX_End = true;
+				}
+			}
+
+			// 오른쪽 벽이 더 가까운 경우
+			if (_deathMetal->getBoss_Bool()->phase4_MoveX_Direction)
+			{
+				// 보스의 왼쪽이 벽이 아닐 경우에는 이동을 한다.
+				if (_deathMetal->getBoss_Index().x + 1 == _vTotalList[i]->idX &&
+					_deathMetal->getBoss_Index().y == _vTotalList[i]->idY &&
+					_vTotalList[i]->wall != W_WALL)
+				{
+					_deathMetal->setBoss_Index(_deathMetal->getBoss_Index().x + 1, _deathMetal->getBoss_Index().y);
+
+					// 여기서 방향을 정해주고, 무브 bool 값을 켜준다.
+					_deathMetal->setBoss_Direction(BD_RIGHT);
+
+					// 선형보간에서 사용할 현재 시간을 셋팅 해준다.
+					_deathMetal->setBoss_WorldTime(TIMEMANAGER->getWorldTime());
+					//
+					// 이동 연산에 필요한 bool 값을 true로 바꿔주는 함수
+					_deathMetal->setBoss_Move_BoolValue_Ture();
+					//
+					// 다음 이동을 위해 무브 카운트를 다시 채워준다.
+					_deathMetal->setBoss_Move_Count(_deathMetal->getBoss_Move_Count_Value());
+					//
+					_deathMetal->setBoss_Angle(0);
+
+					// 이동이 끝났다면 나가준다.
+					break;
+				}
+
+				// 만약 벽일 경우 x방향 이동이 끝났다는 값을 넣는다.
+				else
+				{
+					_deathMetal->getBoss_Bool()->phase4_MoveX_End = true;
+				}
+			}
+		}
+	}
+
+	// x방향 이동이 모두 끝났다면 플레이어가 있는 y축을 따라간다.
+	if (_deathMetal->getBoss_Bool()->phase4_MoveX_End)
+	{
+		// 만약 플레이어와 보스의 y 좌표가 같다면 마법 캐스팅을 시작한다.
+		if (_deathMetal->getBoss_Index().y == _player->getPlayer().idy && !_deathMetal->boss_FireBallSkill()->isCasting)
+		{
+			_deathMetal->boss_FireBallSkill()->isCasting = true;
+		}
+
+		// 만약 0보다 작다면 플레이어는 아래에 있다.
+		if (_deathMetal->getBoss_Index().y - _player->getPlayer().idy < 0)
+		{
+			_deathMetal->setBoss_Index(_deathMetal->getBoss_Index().x, _deathMetal->getBoss_Index().y + 1);
+		}
+
+		// 만약 0보다 크다면 플레이어는 위에 있다.
+		if (_deathMetal->getBoss_Index().y - _player->getPlayer().idy > 0)
+		{
+			_deathMetal->setBoss_Index(_deathMetal->getBoss_Index().x, _deathMetal->getBoss_Index().y - 1);
+		}
+	}
 }
 
 void bossStageScene::bossSceneSetting()

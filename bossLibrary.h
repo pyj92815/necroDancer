@@ -64,8 +64,13 @@ struct BOSS_BOOL
 {
 	BOSS_PHASE_SETTING_BOOL		PHASE_BOOL;
 
-	bool						get_Beat;		// 박자를 받았으면 true로 변한다.
-	bool						boss_Die;		// 보스가 죽었다면 true의 값을 가진다.
+	bool						get_Beat;			// 박자를 받았으면 true로 변한다.
+	bool						boss_Die;			// 보스가 죽었다면 true의 값을 가진다.
+
+	bool                        phase4_MoveX_Direction;			// 어느방향 x로 움직이는지
+	bool						phase4_MoveX_Direction_Find;	// 방향을 찾았다.
+	bool						phase4_MoveX_End;				// 페이즈4에서 x 좌표 이동이 끝났다.
+	bool						phase4_MagicRangeSave;			// 마법 범위 저장 완료
 };
 
 struct BOSS_SUMMONS_SKILL
@@ -75,4 +80,11 @@ struct BOSS_SUMMONS_SKILL
 	int							cTime_M;		// 콘스트 쿨타임
 
 	int							rnd;			// 랜덤 값
+};
+
+struct BOSS_Magic_SKILL
+{
+	bool						isCasting;		// 스킬 캐스팅
+	int							cTime;			// 쿨타임
+	int							cTime_M;		// 콘스트 쿨타임
 };

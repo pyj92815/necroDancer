@@ -62,7 +62,7 @@ HRESULT Option::init()
 	_isDead = false;
 	keyId = _isDeadDirection = 0;
 
-	for (int i = 0; i < 3;i++)
+	for (int i = 0; i < 3; i++)
 	{
 		_frameY[i] = 0;
 	}

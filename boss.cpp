@@ -105,6 +105,10 @@ void boss::settingBossVariable()
 	boss_Bool.PHASE_BOOL.PHASE_4_Set = false;
 
 	boss_Bool.boss_Die = false;
+	boss_Bool.phase4_MoveX_Direction = false;
+	boss_Bool.phase4_MoveX_End = false;
+	boss_Bool.phase4_MoveX_Direction_Find = false;
+	boss_Bool.phase4_MagicRangeSave = false;
 
 	move_Count = 0;
 
@@ -112,6 +116,11 @@ void boss::settingBossVariable()
 	slave_Summon.cTime = 0;
 	slave_Summon.cTime_M = 0;
 	slave_Summon.rnd = 0;
+
+	boss_FireBall.isCasting = false;
+	boss_FireBall.cTime = 0;
+	boss_FireBall.cTime_M = 0;
+
 }
 
 void boss::showBossHP()

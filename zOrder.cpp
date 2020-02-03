@@ -278,7 +278,7 @@ void zOrder::zOrderSetup(int idx, int idy, tagTile* tagTile, player* user, slave
 	deathmetal->slaveEnemy = NULL;
 	float* ins = new float;
 	*ins = deathmetal->deathMetalboss->getBoss_Rect().bottom;
-
+	
 	_zOrderVector.push_back(new tagzOrder(ins, deathmetal));
 	
 	
