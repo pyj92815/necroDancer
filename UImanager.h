@@ -68,25 +68,19 @@ private:
 	invenTag _upLeft;
 
 	//하트
-	heartTag _heart[3];
+	heartTag _heart[3];				
+	animation* _FrameWork;			//애니메이션
+	bool _heartinterval;			//비트에 따라 바뀌는 불값
+	int _heartBeatCnt;				//카운트
 
-	animation* _FrameWork;
+	//스코어 & 다이아
 	image* _scoreNum;
 	image* _scoreX;
 	image* _daiaNum;
-
-	int _coinvalue;				//나중에 플레이어가 코인 충돌시 숫자로 받아오는 함수로 바꿔주면 될듯
+	int _coinvalue;	
 	int _diavalue;
 
-	int _hp;
-
-	bool _heartinterval;
-	int _heartBeatCnt;
-	
-	int _currentFrameSpeed;
-	int _frameCount;
-
-	float tx;
+	int _hp;						//플레이어 HP
 
 	//슬롯 고정할 위치 좌표
 	float _x1Slot , _y1Slot;
@@ -104,10 +98,10 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
-	void set_HP() { _hp--; }
-
-	void setInven(vector<tagItem*> inven) { _vInven = inven; }
-	void setPlayerInfo(tagPlayer* player) { _player  = player; }
+	
+	void set_HP() { _hp--; }												//플레이어 HP
+	void setInven(vector<tagItem*> inven) { _vInven = inven; }				//인벤 아이템
+	void setPlayerInfo(tagPlayer* player) { _player  = player; }			//플레이어
 	
 
 };

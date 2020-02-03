@@ -24,7 +24,8 @@ HRESULT miniMap::init()
 	IMAGEMANAGER->addImage("min_wall2", "./image/UI/min_rect_wall2.bmp", 6, 6, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("min_wall3", "./image/UI/min_rect_wall3.bmp", 6, 6, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("min_shoping_rc", "./image/UI/min_rect_shopingRect.bmp", 6, 6, true, RGB(255, 0, 255));
-
+	
+	//플레이어 위치 정보 초기화
 	_playerX = 0;
 	_playerY = 0;
 	return S_OK;
@@ -40,17 +41,17 @@ void miniMap::update()
 
 void miniMap::render()
 {
-	//미니맵 타일 이미지 네임 초기화
+	//미니맵 타일 정보에 따른 이미지 키값 삽입
 	for (_viStageMap = _vStageMap.begin(); _viStageMap != _vStageMap.end(); ++_viStageMap)
 	{
 		if ((*_viStageMap)->type == TYPE_NONE) continue; //타입이 없을 경우 넘기도록
 
 		switch ((*_viStageMap)->type)
 		{
-		case TYPE_TERRAIN:
+		case TYPE_TERRAIN:								//지형 타입
 			if ((*_viStageMap)->terrain == TR_STAIR || (*_viStageMap)->terrain == TR_BOSS_STAIR)
 			{
-				_imageName = "min_stair";
+				_imageName = "min_stair";				//init에서 초기화한 이미지 키값을 찾아서 넣어준다
 			}
 			else if ((*_viStageMap)->terrain == TR_SHOP )
 			{
@@ -65,7 +66,7 @@ void miniMap::render()
 				_imageName = "min_normal";
 			}
 			break;
-		case TYPE_WALL:
+		case TYPE_WALL:									//벽 타입
 			if ((*_viStageMap)->wall == W_ITEM_WALL || (*_viStageMap)->wall == W_SHOP_WALL)
 			{
 				_imageName = "min_wall3";
@@ -87,7 +88,7 @@ void miniMap::render()
 				_imageName = "min_end_else";
 			}
 			break;
-		case TYPE_TRAP:
+		case TYPE_TRAP:									//함정 타입
 			if ((*_viStageMap)->trap == TRAP_SHADOW || (*_viStageMap)->trap == TRAP_NIDDLE_SHADOW)
 			{
 			}
@@ -96,7 +97,7 @@ void miniMap::render()
 				_imageName = "min_trap";
 			}
 			break;
-		case TYPE_ITEM_ARMOR:
+		case TYPE_ITEM_ARMOR:							//갑옷 아이템 타입
 			if ((*_viStageMap)->armor == A_NONE)
 			{
 			}
@@ -106,7 +107,7 @@ void miniMap::render()
 			}
 			break;
 		case TYPE_ITEM_WEAPON:
-			if ((*_viStageMap)->weapon == WP_NONE)
+			if ((*_viStageMap)->weapon == WP_NONE)		//무기 아이템 타입
 			{
 			}
 			else
@@ -115,7 +116,7 @@ void miniMap::render()
 			}
 			break;
 		case TYPE_ITEM_STUFF:
-			if ((*_viStageMap)->stuff == ST_NONE)
+			if ((*_viStageMap)->stuff == ST_NONE)		//소비 아이템 타입
 			{
 			}
 			else
@@ -124,7 +125,7 @@ void miniMap::render()
 			}
 			break;
 		case TYPE_OBJECT:
-			if ((*_viStageMap)->obj == OBJ_FALLING_DOOR)
+			if ((*_viStageMap)->obj == OBJ_FALLING_DOOR)//떨어지는 문 타입
 			{
 				_imageName = "min_fallingdoor";
 			}
@@ -135,7 +136,7 @@ void miniMap::render()
 			break;
 		}
 		//시야에 들어온 존재만 보이도록
-		if ((*_viStageMap)->alphaValue <= 0)
+		if ((*_viStageMap)->alphaValue <= 0)								//알파랜더링값이 0인 타일의 경우(시야에 들어온 타일)
 		{
 			//타일 미니맵 출력
 			IMAGEMANAGER->findImage(_imageName)->render(getMemDC(),
@@ -147,17 +148,17 @@ void miniMap::render()
 				448 + _playerY / 10);
 		}
 	}
-	////몬스터 미니맵 출력
-	//vector<Enemy*> vec = _em->getVEnemy();
-	//vector<Enemy*>::iterator ins = vec.begin();
-	//if ((*ins)->getEnemyInfo()->Light)
-	//{
-	//	for (; ins != vec.end();)
-	//	{
-	//		IMAGEMANAGER->findImage("min_enemy")->render(getMemDC(),
-	//			750 + (*ins)->getEnemyInfo()->rc.left / 10,
-	//			450 + (*ins)->getEnemyInfo()->rc.top / 10);
-	//		ins++;
-	//	}
-	//}
+	//몬스터 미니맵 출력
+	vector<Enemy*> vec = _em->getVEnemy();									//에너미 벡터 
+	vector<Enemy*>::iterator ins = vec.begin();								//에너미 이터레이터
+	if ((*ins)->getEnemyInfo()->Light)										//에너미 위치 확인 불값
+	{
+		for (; ins != vec.end();)											//이터레이터가 백터의 끝이 아닐 경우
+		{
+			IMAGEMANAGER->findImage("min_enemy")->render(getMemDC(),		//에너미 미니맵 이미지 출력 
+				750 + (*ins)->getEnemyInfo()->rc.left / 10,
+				450 + (*ins)->getEnemyInfo()->rc.top / 10);
+			ins++;															//백터를 계속 돌리도록
+		}
+	}
 }
