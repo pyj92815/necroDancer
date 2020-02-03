@@ -7,24 +7,13 @@
 class miniMap : public gameNode
 {
 private:
-	//tagTile								_minTiles[MINTILEX * MINTILEY];
-	//vector<tagTile*>					_vMinTotalList;
-	//vector<tagTile*>::iterator			_viMinTotalList;
+	vector<tagTile*>					_vStageMap;									//타일 정보 벡터
+	vector<tagTile*>::iterator			_viStageMap;								//타일 정보 이터레이터
 
-	vector<tagTile*>					_vStageMap;
-	vector<tagTile*>::iterator			_viStageMap;
+	EnemyManager* _em;																//에너미
+	playerManager* _pm;																//플레이어
 
-	vector<Enemy*>   _vEnemyTile;
-
-	EnemyManager* _em;
-	playerManager* _pm;
-
-
-	int _r;
-	int _g;
-	int _b;
-	const char* _imageName;
-
+	const char* _imageName;															//미니맵 이미지 넣을 키값 변수
 	float _playerX;
 	float _playerY;
 
@@ -37,10 +26,9 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void getStageMap(vector<tagTile*> stageMap) { _vStageMap = stageMap; }
-	void getEnemyPoint(EnemyManager* em) { _em = em; }
-	void setEnemyXY(vector<Enemy*> vEnemy) { _vEnemyTile = vEnemy;	}
-	void setPlayerXY(float x, float y) 
+	void getStageMap(vector<tagTile*> stageMap) { _vStageMap = stageMap; }			//타일 정보
+	void getEnemyPoint(EnemyManager* em) { _em = em; }								//에너미 위치 정보
+	void setPlayerXY(float x, float y)												//플레이어 위치 좌표 정보
 	{
 		_playerX = x; 
 		_playerY = y;

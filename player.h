@@ -52,15 +52,11 @@ private:
 	array<int,4> bodyRight; // 장비 바꾸기 위한 배열 
 	array<int,4> bodyLeft;	// 
 
-	tagItem* currentItem;
+	tagItem* currentItem;   // 먹은 아이템을 떨어트리기 위한 temp값 
 
-	bool _combo;
-	float _comboCountTime;
-	int playerAttackSoundID;
-	//tagItem* currentWeapon;
-	//tagItem* currentPotion;
-	//tagItem* currenttorch;
-
+	bool _combo;			// 콤보값 
+	float _comboCountTime;	// 콤보 시간 값 
+	int playerAttackSoundID;// 플레이어 콤보시 공격 음성을 변경하기 위한 값 
 public:
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 콤보 설정 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	player();
@@ -76,6 +72,7 @@ public:
 	void keyControl();	 // 사용키
 	void playerMove();	 // 이동 
 	void setJump() { _jump->setJumping(); }
+
 	// 이펙트 관련 함수 
 	void playerEffect_Miss();					
 	void playerEffect_Shovel(tagTile* tile);
@@ -86,39 +83,36 @@ public:
 
 	bool getCombo() {return _combo;}
 	void setCombo() { _combo = false; }
-	// 타일검출
-	void tileCheck();	
+	
+	void tileCheck();	 // 타일 검출 
 	void wallCheck();	 // 벽판단
 	void enemyCheck();	 // 몬스터 판단
 	void trapCheck();	 // 함정 판단
 	void itempCheck();   // 아이템 판단
 
-	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey ,int sight,int damege, float guard, float hp);
-
-	void playerHit(int damage) { _player.hp = _player.hp - damage; }
-	//플레이어 상태판단
+	void makeItem(WEAPON weapon, ARMOR armor, STUFF stuff, int framex, int framey ,int sight,int damege, float guard, float hp);  //인벤토리에  아이템 생성 
+	void playerHit(int damage) { _player.hp = _player.hp - damage; }  // 피격 
 	void StateMove();		// 이동 판단		
 
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 접근자 설정자■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	tagPlayer			getPlayer()			{ return _player; }			   //  전역 사용 
+	tagPlayer*		    PlayerAddress()	    { return &_player; }
 	PLAYERDIRECTION		getDirection()		{ return _player.direction; }  //  방향 
 	bool   getPlayerKey()	{ return _isKeyPress;}	  // 비트매니저 사용 
 	float* getPlayerY()		{ return &_shadow; }	  // 제트오더 사용 
-	tagPlayer* PlayerAddress() { return &_player; }
 
 	void setPlayerKeyDown()				  { _isKeyDown = false; }  // 비트매니저 KEY초기화
 	void setPlayerKey(bool value = false) {	_isKeyPress = value;}  // 비트매니저 사용  
 
-	//벽 타일 세팅
+	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 충돌 처리를 위한 MAP값 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	void setPlayerTile(map<PLAYERDIRECTION, tagTile*> tile)		 { _mPlayerTile = tile; }
 	void setPlayerEnemyTile(map<PLAYERDIRECTION, Enemy*> tile)	 { _mPlayerEnemyTile = tile; }
 	void setSlaveTile(map<PLAYERDIRECTION, slave*> tile) { _mPlayerSlaveTile = tile; }
 	void setDeathMetal(map<PLAYERDIRECTION, deathMetal*> tile) { _mPlayerdeathMetalTile = tile; }
 	
 	//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 인벤토리 상호 작용  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	//void setEnemyAddressLink(EnemyManager* enemyManager) { }
-	void itemUse();
-	vector<tagItem*> getVInven() { return _vInven; }
+	void itemUse();		 // 아이템 삭제 
+	vector<tagItem*> getVInven() { return _vInven; }    // UI로 보내기 위한 접근자 
 
 	//이미지 세팅
 	void imageSetting()
@@ -156,13 +150,6 @@ public:
 
 	}
 	void itemRemove(int num) { _vInven.erase(_vInven.begin() + num); }
-	void itemRemove()  // 시험용 안될 가능성 높음 
-	{
-		for (int i = 0; i < _vInven.size(); ++i)
-		{
-			if (_vInven[i]->type != W_NONE) this->itemRemove(i);
-		}
-	}
 
 	// 보스에서 몬스터 타일 초기화 
 	void collisionSettingStage() 
@@ -177,10 +164,10 @@ public:
 		if(!_mPlayerdeathMetalTile.empty())_mPlayerdeathMetalTile.clear();
 	}
 
-	void setStage() { _nowStage = NOWSTAGE_STAGE; }
-	void setBossStage() { _nowStage = NOWSTAGE_BOSS; }
-	void playerDie();
-	void setPlayerHP(int hp) { _player.hp = hp; }
-};
+	void setStage() { _nowStage = NOWSTAGE_STAGE; }			// 스테이지 
+	void setBossStage() { _nowStage = NOWSTAGE_BOSS; }		// 보스 
+	void playerDie();										// 플레이어 사망시 
+	void setPlayerHP(int hp) { _player.hp = hp; }			// 체력 세팅 
+};	
 
 
