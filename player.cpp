@@ -45,22 +45,22 @@ HRESULT player::init(int idx, int idy, int tileSizeX, int tileSizeY)
 	_player.potion = false;
 	_player.hp = 6;
 	_player.maxHp = 6;
-	_reversMove = false;
+
 	_distance = tileSizeY;			//  타일 중점 거리
 	_time = 0.15;					//  MOVE 시간 
+	_reversMove = false;	 // 무기 없을 때 되돌아 오기 위한 값 
 	_isMoving = false;		 // MOVE 판단
 	_isKeyPress = false;     // 노트 판단 
 	_isKeyDown = false;      // KEY 입력 판단
 	_comboCountTime = 0;
+
 	// 초기 세팅 장비 값 
-	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);
-	_player.weapon = PLAYERWAEPON_DAGGER;
-	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);
-
-	// 콤보
-
-	_combo = 0;
-	playerAttackSoundID = 0;
+	_player.weapon = PLAYERWAEPON_DAGGER;							// 
+	makeItem(WP_DAGGER_1, A_NONE, ST_NONE, 0, 0, 0, 1, 0, 0);		// 무기 
+	makeItem(WP_NONE, A_SHOVEL, ST_NONE, 1, 0, 0, 0, 0, 0);			// 삽 
+	
+	_combo = 0;							//콤보 
+	playerAttackSoundID = 0;			//사운드 번호 
 	destroyAllWindows(); // 임시 설정
 	return S_OK;
 }
@@ -77,24 +77,14 @@ void player::update()
 	keyControl();					// KEY
 	playerMove();					// MOVE
 
-	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
+	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect) // 이펙트 
 	{
 		(*_viEffect)->update();
 	}
+
 	CAMERAMANAGER->set_CameraXY(_player.idx * _distance + (_distance / 2), _player.idy * _distance + (_distance / 3)); // 카메라 세팅
 
-	if (KEYMANAGER->isOnceKeyUp('A'))
-	{
-		char str[256];
-		sprintf(str, "지금 스테이지 : %d", (int)_nowStage);
-		cout << str << endl;
-		cout << " 지금 체력 : " << _player.hp << endl;
-		_player.hp--;
-		_comboCountTime = TIMEMANAGER->getWorldTime();
-		_combo = true;
-		cout << _combo << endl;
-	}
-	playerDie();
+	playerDie(); // 플레이어 사망 판단 
 }
 
 void player::render()
@@ -103,7 +93,7 @@ void player::render()
 	_player.headImage->aniRender(CAMERAMANAGER->getWorldDC(), _player.x, _player.y, _player.headAni);	// 얼굴 
 }
 
-void player::effectRender()
+void player::effectRender()	// 이펙트 렌더 
 {
 	for (_viEffect = _vEffect.begin(); _viEffect != _vEffect.end(); ++_viEffect)
 	{
@@ -123,7 +113,7 @@ void player::playerMove()
 	float moveSpeed = (elapsedTime / _time) * _distance;
 
 
-	if (_reversMove)
+	if (_reversMove) // 무기가 없을 때 몬스터를 공격하면 
 	{
 		if ((_time / 2) + _worldTimeCount <= TIMEMANAGER->getWorldTime())
 		{
@@ -147,14 +137,12 @@ void player::playerMove()
 			_player.y = _player.idy * _distance + (_distance / 3);
 
 			_isMoving = false;	    // 선형 보간 
-			//_isKeyDown = false;
-			//_isKeyPress = false;  // key 입력 초기화 
-			_reversMove = false;
+			_reversMove = false;	// 초기화 
 			return;
 		}
 
 	}
-	else
+	else // 기본 이동이면 
 	{
 		//이미지를 도착지점까지 각도와 속도를 맞춰서 원하는 시간에 도달케 한다
 		_player.x = _player.x + cosf(_angle) * moveSpeed;
@@ -169,8 +157,6 @@ void player::playerMove()
 			_player.y = _player.idy * _distance + (_distance / 3);
 
 			_isMoving = false;	    // 선형 보간 
-			//_isKeyDown = false;
-			//_isKeyPress = false;  // key 입력 초기화 
 			return;
 		}
 	}
@@ -195,33 +181,16 @@ void player::playerEffect_Shovel(tagTile* tile)
 	CAMERAMANAGER->Camera_WorldDC_Shake(); // 문제는 예외처리 때문에 카메라 0,0에서는 작동 안함 
 }
 
-// 타일 위치
-void player::playerEffect_Attack(const char* imageName, tagTile* tile, int frameY)
-{
-	alphaImageEffect* effect;
-	effect = new alphaImageEffect;
-	effect->init(imageName, tile->rc.left, tile->rc.top, 0, frameY, FRAMEIMAGE);
-	_vEffect.push_back(effect);
-}
 // 좌표값 x,y의 위치
 void player::playerEffect_Attack(const char* imageName, float x, float y, int frameY)
 {
-
 	alphaImageEffect* effect;
 	effect = new alphaImageEffect;
 	effect->init(imageName, x, y, 0, frameY, FRAMEIMAGE);
 	_vEffect.push_back(effect);
 }
 
-// idx, idy의 위치
-void player::playerEffect_Attack(const char* imageName, int x, int y, int frameY)
-{
-	alphaImageEffect* effect;
-	effect = new alphaImageEffect;
-	effect->init(imageName, x, y, 0, frameY, FRAMEIMAGE);
-	_vEffect.push_back(effect);
-}
-
+// 무기의 이펙트 위치 
 void player::playerEffect_Attack()
 {
 	float x;
@@ -433,16 +402,14 @@ void player::tileCheck()
 	{
 		for (_miPlayerEnemyTile = _mPlayerEnemyTile.begin(); _miPlayerEnemyTile != _mPlayerEnemyTile.end(); ++_miPlayerEnemyTile)
 		{
-			// 1. 이펙트와 몬스터 데미지다는것만 하기
-			// 2. 타일 지우는거 확인하기 
 			if (_miPlayerEnemyTile->first == _player.direction)
 			{
-				if (_player.weapon == PLAYERWAEPON_NONE)
+				if (_player.weapon == PLAYERWAEPON_NONE) // 무기가 없으면 
 				{
 					_reversMove = true;
 					StateMove();
 				}
-				else
+				else // 무기가 있으면 
 				{
 					_combo = true;
 					playerEffect_Attack();
@@ -479,7 +446,7 @@ void player::tileCheck()
 				{
 					_combo = true;
 					playerEffect_Attack();
-					if ((int)_miPlayerdeathMetalTile->second->getBoss_Direction() ==
+					if ((int)_miPlayerdeathMetalTile->second->getBoss_Direction() ==    // 보스의 페이즈일 때 공격하면 
 						(int)_player.direction && _miPlayerdeathMetalTile->second->getBoss_Phase() == BP_PHASE_1)
 					{
 						_miPlayerdeathMetalTile->second->setBoss_Shield_Hit_True();
@@ -536,14 +503,14 @@ void player::wallCheck()
 	switch (_miPlayerTile->second->wall)
 	{
 	case W_WALL:
-	case W_WALL2: // 부숴지는 벽
+	case W_WALL2: 
 		SOUNDMANAGER->play("vo_cad_dig_01");
 		SOUNDMANAGER->play("mov_dig_dirt", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
 		_miPlayerTile->second->type = TYPE_TERRAIN;
 		_miPlayerTile->second->wall = W_NONE;
 		break;
-	case W_ITEM_WALL: // 부숴지는 벽
+	case W_ITEM_WALL: 
 		SOUNDMANAGER->play("vo_cad_dig_01");
 		SOUNDMANAGER->play("mov_dig_dirt", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
@@ -564,7 +531,7 @@ void player::wallCheck()
 		break;
 	case  W_END_WALL:
 	case  W_BOSS_WALL:
-	case  W_SHOP_WALL: // 부숴지지 않는 벽
+	case  W_SHOP_WALL: 
 		SOUNDMANAGER->play("vo_cad_dig_01");
 		SOUNDMANAGER->play("mov_dig_fail", 1.5f);
 		playerEffect_Shovel(_miPlayerTile->second);
@@ -595,7 +562,7 @@ void player::itempCheck()
 	{
 		switch (_miPlayerTile->second->armor)
 		{
-		case A_HELMET:  // 구현해야함 
+		case A_HELMET:
 			break;
 		case A_ARMOR_1:
 			bodyLeft = { 15,14,13,12 };
@@ -606,7 +573,7 @@ void player::itempCheck()
 			_player.guard = 1;
 			SOUNDMANAGER->play("sfx_pickup_armor");
 			break;
-		case A_ARMOR_2:
+		case A_ARMOR_2:  
 			bodyLeft = { 23,22,21,20 };
 			bodyRight = { 16,17,18,19 };
 			KEYANIMANAGER->findAnimation("bodyLeft")->setPlayFrame(&bodyLeft, 4, true);
@@ -985,19 +952,6 @@ void player::itemUse()
 			break;
 		}
 	}
-
-	//int countNum = 0;
-	//for (int i = 0; i < _vInven.size(); ++i)
-	//{
-	//	if (_vInven[i]->stuff == ST_APPLE
-	//		|| _vInven[i]->stuff == ST_CHEESE
-	//		|| _vInven[i]->stuff == ST_MEAT)
-	//	{
-	//		countNum++;
-	//	}
-	//}
-	//if (countNum > 0) _player.potion = false;
-
 }
 
 void player::playerDie()
