@@ -302,58 +302,70 @@ void player::keyControl()
 				playerEffect_Miss();
 			}
 		}
-		else if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		else if (KEYMANAGER->isOnceKeyDown(VK_UP))	
 		{
+			//위 방향
 			_player.direction = PLAYERDIRECTION_UP;
 			_isKeyDown = true;
 			if (BEATMANAGER->getInterval())
 			{
+				//박자안에 들어오면 타일검출
 				tileCheck();
 			}
 			else
 			{
+				//박자가 아니면 MISS
 				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
+			//아래 방향
 			_player.direction = PLAYERDIRECTION_DOWN;
 			_isKeyDown = true;
 			if (BEATMANAGER->getInterval())
 			{
+				//박자안에 들어오면 타일검출
 				tileCheck();
 			}
 			else
 			{
+				//박자가 아니면 MISS
 				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
 		}
 		else if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
+			//왼쪽 방향
 			_player.direction = PLAYERDIRECTION_LEFT;
 			_isKeyDown = true;
 			if (BEATMANAGER->getInterval())
 			{
+				//박자안에 들어오면 타일검출
 				tileCheck();
 			}
 			else
 			{
+				//박자가 아니면 MISS
 				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
-		}
+		}			
 		else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
+			//오른쪽
 			_player.direction = PLAYERDIRECTION_RIGHT;
 			_isKeyDown = true;
 			if (BEATMANAGER->getInterval())
 			{
+				//박자안에 들어오면 타일검출
 				tileCheck();
 			}
 			else
 			{
+				//박자가 아니면 MISS
 				SOUNDMANAGER->play("sfx_missedbeat", 1.5f);
 				playerEffect_Miss();
 			}
@@ -375,15 +387,15 @@ void player::tileCheck()
 			//타일의 종류를 판단
 			switch (_miPlayerTile->second->type)
 			{
-			case TYPE_WALL:
+			case TYPE_WALL: // 벽이면
 				wallCheck();
 				action = true;
 				break;
-			case TYPE_TRAP:
+			case TYPE_TRAP: // 함정이면
 				trapCheck();
 				action = true;
 				break;
-			case TYPE_ITEM_ARMOR:
+			case TYPE_ITEM_ARMOR:  // 아이템이면
 			case TYPE_ITEM_WEAPON:
 			case TYPE_ITEM_STUFF:
 				itempCheck();

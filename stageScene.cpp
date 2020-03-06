@@ -284,22 +284,23 @@ void stageScene::tileOnOff()
 
 	}
 
+	//바닥을 검사 
 	for (int i = 0; i < TILEY; ++i)
 	{
 		for (int j = 0;j < TILEX; ++j)
 		{
-			if (_tiles[i * TILEX + j].type == TYPE_NONE) continue;
-			if (_tiles[i * TILEX + j].terrain != TR_BASIC_STAGE_TILE &&
-				_tiles[i * TILEX + j].terrain != TR_BASIC_COMBO_TILE) continue;
+			if (_tiles[i * TILEX + j].type == TYPE_NONE) continue;              // 바닥 속성이 없으면 다음으로
+			if (_tiles[i * TILEX + j].terrain != TR_BASIC_STAGE_TILE &&			
+				_tiles[i * TILEX + j].terrain != TR_BASIC_COMBO_TILE) continue; // 바닥이 스테이지가 아니면 다음으로 
 
-			if (j % 2 == 0)
+			if (j % 2 == 0)		
 			{
-				if (i % 2 == 1)
+				if (i % 2 == 1)	
 				{
 					_tiles[i * TILEX + j].terrainFrameX = _tileFirstX;
 					_tiles[i * TILEX + j].terrainFrameY = _tileFirstY;
 				}
-				else
+				else 
 				{
 					_tiles[i * TILEX + j].terrainFrameX = _tileSecondX;
 					_tiles[i * TILEX + j].terrainFrameY = _tileSecondY;
@@ -318,9 +319,6 @@ void stageScene::tileOnOff()
 					_tiles[i * TILEX + j].terrainFrameY = _tileFirstY;
 				}
 			}
-
-
-
 		}
 	}
 
